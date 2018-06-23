@@ -1,0 +1,40 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rsgauges:indicator_small_oblong_block",
+    "textures": {
+      "lamp": "rsgauges:blocks/indicator/indicator_fg_red_on_texture",
+      "side":  "rsgauges:blocks/indicator/indicator_side_texture"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {"y": 0 },
+      "south": {"y": 180 },
+      "west": {"y": -90 },
+      "east": {"y": 90 },
+      "up": {"x": -90 },
+      "down": {"x": 90 }
+    },
+    "power": {
+      "0":  { "textures": { "lamp": "rsgauges:blocks/indicator/indicator_fg_red_off_texture" } },
+      "1":  {},
+      "2":  {},
+      "3":  {},
+      "4":  {},
+      "5":  {},
+      "6":  {},
+      "7":  {},
+      "8":  {},
+      "9":  {},
+      "10": {},
+      "11": {},
+      "12": {},
+      "13": {},
+      "14": {},
+      "15":  {}
+    }
+  }
+}

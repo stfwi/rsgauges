@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NGN",
+    "NRN"
+  ],
+  "key": {
+    "N": { "item": "minecraft:iron_nugget", "data": 0 },
+    "R": { "item": "minecraft:redstone", "data": 0 },
+    "G": { "item": "minecraft:glowstone_dust", "data": 0 }
+  },
+  "result": { "item": "rsgauges:indicator1", "data":0 }
+}
