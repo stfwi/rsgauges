@@ -31,15 +31,16 @@ redstone power to the game:
 
 - Green framed: The currently implemented gauges, five analog and one digital display.
   Topmost row: unpowered, row 2: powered by comparators behind the wall blocks (power
-  10 to 7).
+  12 to 7).
 
 - Blue framed: Indicators, bottom row: powered with redstone torches under the wall
-  blocks, row 3, unpowered. The alarm lamp (column 4) is always blinking, the small
-  square lights have steady and blinking variants.
+  blocks, row 3, unpowered. The alarm lamp (column 4) is always blinking when powered, 
+  the small square lights have steady and blinking variants.
   
 - Yellow framed: Pulse switches (well, "the" pulse switch).
 
-- Orange framed: Bistable switches.
+- Orange framed: Bistable switches. Note that the ESTOP is inverted - it switches off
+  when pushed (it's an emergency stop button after all ;) ).
 
 ![Summary of meters and switches](documentation/annotated-rsgauges-summary.png) 
 
@@ -47,7 +48,7 @@ redstone power to the game:
 
 Development gamesave (flat world) invoked from the IDE. Each gauge and indicator
 is installed with each power level, different kind of blocks are used to attach
-the gauges to, etc. Should not differ much from the way others do it ;)
+the gauges to, etc. Should not differ much from the way others do it.
 
 ![Screenshot of the testing grounds](documentation/annotated-testing-grounds.png)
 
@@ -103,7 +104,7 @@ don't mind.
 
 ## Community references
 
-Mods covering similar:
+Mods covering similar features:
 
 - [Automated Redstone (CD4017BE)](https://minecraft.curseforge.com/projects/automated-redstone) has redstone a display and an oscilloscope block.
 
