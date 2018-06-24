@@ -1,0 +1,18 @@
+{
+    "parent": "block/cube",
+    "textures": { "particle": "#front" },
+    "elements": [
+        {   
+            "from": [ 2, 2, 15 ],
+            "to": [ 14, 14, 16 ],
+            "faces": {
+                "down":  { "texture": "#side" },
+                "up":    { "texture": "#side" },
+                "north": { "texture": "#front" },
+                "south": { "texture": "#side" },
+                "west":  { "texture": "#side" },
+                "east":  { "texture": "#side" }
+            }
+        }
+    ]
+}

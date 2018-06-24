@@ -1,0 +1,29 @@
+{
+    "parent": "block/cube",
+    "textures": { "particle": "#front" },
+    "elements": [
+        {
+            "from": [  5,  5, 15 ],
+            "to"  : [ 11, 11, 16 ],
+            "faces": {
+                "down":  { "texture": "#side" },
+                "up":    { "texture": "#side" },
+                "north": { "texture": "#front" },
+                "south": { "texture": "#side" },
+                "west":  { "texture": "#side" },
+                "east":  { "texture": "#side" }
+            }
+        },
+        {
+            "from": [ 7, 7, 14.4 ],
+            "to"  : [ 9, 9, 15 ],
+            "faces": {
+                "down":  { "texture": "#handle" },
+                "up":    { "texture": "#handle" },
+                "north": { "texture": "#handle" },
+                "west":  { "texture": "#handle" },
+                "east":  { "texture": "#handle" }
+            }
+        }
+    ]
+}

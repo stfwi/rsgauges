@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [ { "item": "rsgauges:indicator3" } ],
+  "result": { "item": "rsgauges:indicator4", "data": 0 }
+}
