@@ -119,7 +119,7 @@ public abstract class RsBlock extends Block {
   public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
     BlockPos blockpos = pos.offset(side.getOpposite());
     IBlockState state = world.getBlockState(blockpos);
-    if(side == EnumFacing.UP) return state.isSideSolid(world, pos, EnumFacing.UP);
+    if(side == EnumFacing.UP) return (state.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
     return !isExceptBlockForAttachWithPiston(state.getBlock()) && (state.getBlockFaceShape(world, blockpos, side) == BlockFaceShape.SOLID);
   }
 
@@ -139,15 +139,11 @@ public abstract class RsBlock extends Block {
 
   public AxisAlignedBB getUnrotatedBB() { return unrotatedBB; }
 
-  protected boolean neighborChangedCheck(IBlockState state, World world, BlockPos pos, Block neighborBlock,
-      BlockPos neighborPos) {
-    if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos))
-      return false;
+  protected boolean neighborChangedCheck(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
+    if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos)) return false;
     IBlockState neighborState = world.getBlockState(neighborPos);
-    if(neighborState == null)
-      return false;
-    if(((neighborState.getMaterial() == Material.AIR) || (neighborState.getMaterial() == Material.WATER)
-        || (neighborState.getMaterial() == Material.LAVA))) {
+    if(neighborState == null) return false;
+    if(((neighborState.getMaterial() == Material.AIR) || (neighborState.getMaterial() == Material.WATER) || (neighborState.getMaterial() == Material.LAVA))) {
       if(!world.isRemote) {
         this.dropBlockAsItem(world, pos, state, 0);
         world.setBlockToAir(pos);
@@ -189,19 +185,8 @@ public abstract class RsBlock extends Block {
         return false;
       }
     }
-    world.setBlockState(pos, state.withProperty(FACING, facing), applyFlags ? (1 | 2 | 16) : 0);
+    world.setBlockState(pos, state.withProperty(FACING, facing), applyFlags ? (1|2|16) : 0);
     return true;
   }
 
-
-  /* Currently not needed and method marked deprecated.
-   *
-   * @Override public IBlockState getActualState(IBlockState state, IBlockAccess
-   * world, BlockPos pos) { state = super.getActualState(state, world, pos);
-   * if(!this.hasTileEntity(state)) return state; TileEntity te = (world
-   * instanceof ChunkCache) ? ((ChunkCache)world).getTileEntity(pos,
-   * Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(pos); return ((te ==
-   * null) || (!(te instanceof RsTileEntity))) ? state :
-   * ((RsTileEntity)te).getCompletedBlockState(state, world, pos); }
-   */
 }

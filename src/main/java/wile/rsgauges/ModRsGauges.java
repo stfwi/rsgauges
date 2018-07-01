@@ -28,7 +28,7 @@ public class ModRsGauges {
 
   public static final String MODID = "rsgauges";
   public static final String MODNAME = "Redstone gauges";
-  public static final String MODVERSION = "1.0.0-rc1";
+  public static final String MODVERSION = "1.0.0-rc2";
   public static Logger logger;
 
   @SidedProxy(clientSide = "wile.rsgauges.proxy.ClientProxy", serverSide = "wile.rsgauges.proxy.ServerProxy")
