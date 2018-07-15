@@ -19,14 +19,9 @@ public class Config {
 
   private static Configuration fileConfig = null;
   private static int gaugeUpdateInterval = 20;
-  private static boolean withCabinet = false;
 
   public static int getGaugeUpdateInterval() {
     return gaugeUpdateInterval;
-  }
-
-  public static boolean wichCabinetBasedObjects() {
-    return withCabinet;
   }
 
   public static void onPreInit(FMLPreInitializationEvent event) {
@@ -49,9 +44,6 @@ public class Config {
       gaugeUpdateInterval = fileConfig.getInt("defaultGaugeUpdateInterval",
           "general", gaugeUpdateInterval, 5, 200,
           "The sample interval of the gauges in ticks.");
-      withCabinet = fileConfig.getBoolean("withCabinet",
-          "general", withCabinet,
-          "Enables registration of cabinet block under test.");
     } catch(Exception e1) {
       ModRsGauges.logger.log(Level.ERROR, "Problem loading config file.", e1);
     } finally {

@@ -19,13 +19,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import wile.rsgauges.blocks.*;
-
-import net.minecraft.block.BlockRedstoneComparator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 
 public class ModBlocks {
 
@@ -49,7 +52,7 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch4")    public static final BistableInputBlock bistableSwitch4Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch5")    public static final BistableInputBlock bistableSwitch5Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch1")       public static final PulseInputBlock pulseSwitch1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:emptycabinet")       public static final CabinetBlock emptyCabinetBlock = null;
+
 
   // For loop based initialisation
   private static final GaugeBlock gauges[] = {
@@ -114,23 +117,6 @@ public class ModBlocks {
       new PulseInputBlock("pulseswitch1", new AxisAlignedBB((5d/16),(5d/16),(0d/16),(11d/16),(11d/16),(1d/16)) )
   };
 
-  // Invoked from ClientProxy.registerModels()
-  @SideOnly(Side.CLIENT)
-  public static final void initModels() {
-    for(GaugeBlock e:gauges) e.initModel();
-    for(GaugeBlock e:indicators) e.initModel();
-    for(GaugeBlock e:blinkIndicators) e.initModel();
-    for(BistableInputBlock e:bistableSwitches) e.initModel();
-    for(PulseInputBlock e:pulseSwitches) e.initModel();
-
-    if(Config.wichCabinetBasedObjects()) {
-      // Cabinet based blocks are for future versions. Unfortunately
-      // no #ifdef in Java and I certainly don't want to use frameworks
-      // for @Inject
-      emptyCabinetBlock.initModel();
-    }
-  }
-
   // Invoked from CommonProxy.registerBlocks()
   public static final void registerBlocks(RegistryEvent.Register<Block> event) {
     GameRegistry.registerTileEntity(GaugeBlock.UpdateTileEntity.class, ModRsGauges.MODID + "_gauge_entity");
@@ -140,13 +126,16 @@ public class ModBlocks {
     for(BistableInputBlock e:bistableSwitches) event.getRegistry().register(e);
     GameRegistry.registerTileEntity(PulseInputBlock.UpdateTileEntity.class, ModRsGauges.MODID + "_pulseswitch_entity");
     for(PulseInputBlock e:pulseSwitches) event.getRegistry().register(e);
+  }
 
-    if(Config.wichCabinetBasedObjects()) {
-      GameRegistry.registerTileEntity(CabinetTileEntity.class, ModRsGauges.MODID + "_cabinet_entity");
-      event.getRegistry().register(new CabinetBlock("emptycabinet",
-          new AxisAlignedBB((3d/16),(3d/16),(0d/16),(13d/16),(13d/16),(3d/16))
-      ));
-    }
+  // Invoked from ClientProxy.registerModels()
+  @SideOnly(Side.CLIENT)
+  public static final void initModels() {
+    for(GaugeBlock e:gauges) e.initModel();
+    for(GaugeBlock e:indicators) e.initModel();
+    for(GaugeBlock e:blinkIndicators) e.initModel();
+    for(BistableInputBlock e:bistableSwitches) e.initModel();
+    for(PulseInputBlock e:pulseSwitches) e.initModel();
   }
 
   // Invoked from CommonProxy.registerItems()
@@ -156,9 +145,5 @@ public class ModBlocks {
     for(GaugeBlock e:blinkIndicators) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
     for(BistableInputBlock e:bistableSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
     for(PulseInputBlock e:pulseSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
-
-    if(Config.wichCabinetBasedObjects()) {
-      event.getRegistry().register(new ItemBlock(emptyCabinetBlock).setRegistryName(emptyCabinetBlock.getRegistryName()));
-    }
   }
 }

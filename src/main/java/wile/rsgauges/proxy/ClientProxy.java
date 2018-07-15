@@ -10,7 +10,9 @@ package wile.rsgauges.proxy;
 
 import wile.rsgauges.ModBlocks;
 import wile.rsgauges.ModRsGauges;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

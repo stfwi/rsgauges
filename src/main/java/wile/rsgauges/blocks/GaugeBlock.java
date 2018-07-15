@@ -19,6 +19,9 @@ package wile.rsgauges.blocks;
 import wile.rsgauges.Config;
 import wile.rsgauges.ModBlocks;
 import wile.rsgauges.blocks.RsBlock;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -95,26 +98,29 @@ public class GaugeBlock extends RsBlock {
 
   public void updateBlock(IBlockState state, World world, BlockPos pos, BlockPos neighborPos) {
     if(!(world instanceof World)) return;
-    IBlockState neighborState = world.getBlockState(neighborPos);
-    if(neighborState == null) return;
-    int p = 0;
-    if(neighborState.canProvidePower()) {
-      p = Math.max(
-          neighborState.getWeakPower(world, neighborPos, state.getValue(FACING).getOpposite()),
-          neighborState.getStrongPower(world, neighborPos, state.getValue(FACING).getOpposite())
-      );
-    } else {
-      p = getIndirectlyMeasuredPower(world, neighborPos);
-    }
-    if(world.isRemote) {
+    if(!world.isRemote) {
+      IBlockState neighborState = world.getBlockState(neighborPos);
+      if(neighborState == null) return;
+      int p = 0;
+      if(neighborState.canProvidePower()) {
+        p = Math.max(
+            neighborState.getWeakPower(world, neighborPos, state.getValue(FACING).getOpposite()),
+            neighborState.getStrongPower(world, neighborPos, state.getValue(FACING).getOpposite())
+        );
+      } else {
+        p = getIndirectlyMeasuredPower(world, neighborPos);
+      }
       if(this.alternationTimeBase > 4) {
         long interval = this.alternationOnTime + this.alternationOffTime;
         boolean alternation_power_off = (((((World)world).getTotalWorldTime() / this.alternationTimeBase) % interval) > (this.alternationOnTime));
         if(alternation_power_off) p = 0;
       }
+      world.setBlockState(pos, state.withProperty(POWER, p), 0);
+      world.markAndNotifyBlock(pos, null, state, state, 2);
     }
-    world.setBlockState(pos, state.withProperty(POWER, p), 1|2|16);
-    if(world.isRemote) world.markBlockRangeForRenderUpdate(pos, pos);
+    if(world.isRemote) {
+      world.markBlockRangeForRenderUpdate(pos, pos);
+    }
   }
 
   @Override
@@ -184,7 +190,7 @@ public class GaugeBlock extends RsBlock {
       GaugeBlock block = (GaugeBlock) ckblock;
       BlockPos neighbourPos = getPos().offset((EnumFacing)state.getValue(GaugeBlock.FACING), -1);
       if(!world.isBlockLoaded(neighbourPos)) return; // Gauge is placed on a chunk boundary, don't forge loading of neighbour chunk.
-      if(world.isRemote) {
+      if(!world.isRemote) {
         int T = block.getAlternationTimeBase();
         if(T <= 2) T = Config.getGaugeUpdateInterval();
         trigger_time  = ((block.alternationTimeBase > 4)) ? ((((t + T - 1) / T) + 1) * T) : (t + Config.getGaugeUpdateInterval());
