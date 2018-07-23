@@ -19,10 +19,6 @@ package wile.rsgauges.blocks;
 
 import wile.rsgauges.Config;
 import wile.rsgauges.blocks.RsBlock;
-import wile.rsgauges.blocks.GaugeBlock.UpdateTileEntity;
-
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -42,6 +38,7 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import java.util.Random;
 
 public class PulseInputBlock extends RsBlock {
 

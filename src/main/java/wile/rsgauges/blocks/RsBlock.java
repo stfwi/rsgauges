@@ -14,6 +14,8 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.client.JitModelBakery;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -63,7 +65,11 @@ public abstract class RsBlock extends Block {
   public RsBlock(String registryName) { this(registryName, new AxisAlignedBB((0d/16),(1d/16),(0d/16), (8d/16),(12d/16),(2d/16))); }
 
   @SideOnly(Side.CLIENT)
-  public void initModel() { ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory")); }
+  public void initModel() {
+    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+    JitModelBakery.JitBakedModel jitbakedmodel = this.getJitBakedModel();
+    if(jitbakedmodel != null) JitModelBakery.initModelRegistrations(this, jitbakedmodel);
+  }
 
   @Override
   public boolean isOpaqueCube(IBlockState state) { return false; }
@@ -99,6 +105,9 @@ public abstract class RsBlock extends Block {
 
   @Override
   protected BlockStateContainer createBlockState() { return new BlockStateContainer(this, FACING); }
+
+  @Override
+  public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) { return state; }
 
   @Override
   public boolean hasTileEntity(IBlockState state) { return false; }
@@ -138,6 +147,8 @@ public abstract class RsBlock extends Block {
   }
 
   public AxisAlignedBB getUnrotatedBB() { return unrotatedBB; }
+
+  public JitModelBakery.JitBakedModel getJitBakedModel() { return null; }
 
   protected boolean neighborChangedCheck(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
     if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos)) return false;

@@ -97,6 +97,11 @@ Diesel generator is currently running or not.
 
 - Bug reports: Yes, please let me know. Drop a mail or better open an issue for the repository.
 
+## Revision history
+
+- v1.0.0rc1 Initial feature complete version.
+- v1.0.0rc2 Fix: Server based gauge processing to measure indirect weak power. 
+- v1.0.0rc3 Fix: Tile entity based gauge handling to prevent display glitches on network clients. 
 
 ## Functional details
 

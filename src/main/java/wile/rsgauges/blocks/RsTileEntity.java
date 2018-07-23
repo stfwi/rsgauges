@@ -29,7 +29,7 @@ public class RsTileEntity<BlockType extends RsBlock> extends TileEntity {
 
   @Override
   public boolean shouldRefresh(World world, BlockPos pos, IBlockState os, IBlockState ns) {
-    return super.shouldRefresh(world, pos, os, ns) || (!(os.getBlock() instanceof RsBlock)) || (!(ns.getBlock() instanceof RsBlock));
+    return (os.getBlock() != ns.getBlock()) || (!(os.getBlock() instanceof RsBlock)) || (!(ns.getBlock() instanceof RsBlock));
   }
 
   @Override
@@ -64,5 +64,13 @@ public class RsTileEntity<BlockType extends RsBlock> extends TileEntity {
   public SPacketUpdateTileEntity getUpdatePacket() {
     return new SPacketUpdateTileEntity(pos, NBT_ENTITY_TYPE, getUpdateTag());
   }
+
+  @Override
+  public void handleUpdateTag(NBTTagCompound tag) {
+    this.readFromNBT(tag);
+  }
+
+  @Override
+  public void onLoad() {}
 
 }

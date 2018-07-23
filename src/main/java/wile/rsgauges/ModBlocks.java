@@ -68,21 +68,24 @@ public class ModBlocks {
       // square LED
       new GaugeBlock("indicator1",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-          5
+          5,  // light level scaling
+          0   // blink frequency
       ),
       new GaugeBlock("indicator2",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-          5 // light level scaling
+          5, // light level scaling
+          0  // blink frequency
       ),
       new GaugeBlock("indicator3",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-          5 // light level scaling
+          5, // light level scaling
+          0  // blink frequency
       ),
       // alarm lamp
       new GaugeBlock("indicator4",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(4d/16)),
-          8,     // light level scaling
-          5,2,6  // alternation time base, on time, off time
+          8, // light level scaling
+          1000  // blink frequency
       )
   };
 
@@ -90,18 +93,18 @@ public class ModBlocks {
       // Blinking square LEDs
       new GaugeBlock("indicator1blink1",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-          5,     // light level scaling
-          10,2,2 // alternation time base, on time, off time
+          5,    // light level scaling
+          1000  // blink frequency
       ),
       new GaugeBlock("indicator2blink1",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-          5,     // light level scaling
-          10,2,2 // alternation time base, on time, off time
+          5,    // light level scaling
+          1000  // blink frequency
       ),
       new GaugeBlock("indicator3blink1",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-          5,     // light level scaling
-          10,2,2 // alternation time base, on time, off time
+          5,    // light level scaling
+          1000  // blink frequency
       )
   };
 
@@ -119,7 +122,7 @@ public class ModBlocks {
 
   // Invoked from CommonProxy.registerBlocks()
   public static final void registerBlocks(RegistryEvent.Register<Block> event) {
-    GameRegistry.registerTileEntity(GaugeBlock.UpdateTileEntity.class, ModRsGauges.MODID + "_gauge_entity");
+    GameRegistry.registerTileEntity(GaugeBlock.GaugeTileEntity.class, ModRsGauges.MODID + "_gauge_entity");
     for(GaugeBlock e:gauges)  event.getRegistry().register(e);
     for(GaugeBlock e:indicators) event.getRegistry().register(e);
     for(GaugeBlock e:blinkIndicators) event.getRegistry().register(e);

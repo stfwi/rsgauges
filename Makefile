@@ -8,7 +8,7 @@
 # to use all build targets, so this file is  
 # not "official".
 #
-.PHONY: mod init clean all install
+.PHONY: mod init clean clean-all all install
 MOD_JAR=$(filter-out %-sources.jar,$(wildcard build/libs/*.jar))
 
 ifeq ($(OS),Windows_NT)
@@ -19,13 +19,17 @@ GRADLE=./gradle
 INSTALL_DIR=~/.minecraft
 endif
 
-all: mod
+all: clean mod
 
 mod:
 	@echo "Building mod using gradle ..."
 	@$(GRADLE) build
   
-clean:  
+clean:
+	@echo "Cleaning ..."
+	@rm -f build/libs/*
+  
+clean-all: clean
 	@echo "Cleaning using gradle ..."
 	@$(GRADLE) clean
 
