@@ -85,7 +85,7 @@ public class ModBlocks {
       new GaugeBlock("indicator4",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(4d/16)),
           8, // light level scaling
-          1000  // blink frequency
+          1500  // blink frequency
       )
   };
 
@@ -94,17 +94,17 @@ public class ModBlocks {
       new GaugeBlock("indicator1blink1",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
           5,    // light level scaling
-          1000  // blink frequency
+          2000  // blink frequency
       ),
       new GaugeBlock("indicator2blink1",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
           5,    // light level scaling
-          1000  // blink frequency
+          2000  // blink frequency
       ),
       new GaugeBlock("indicator3blink1",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
           5,    // light level scaling
-          1000  // blink frequency
+          2000  // blink frequency
       )
   };
 

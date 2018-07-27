@@ -85,7 +85,7 @@ public class GaugeBlock extends RsBlock {
   public GaugeBlock(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval) {
     super(registryName, unrotatedBB);
     this.lightValueScaling = (powerToLightValueScaling0To15 < 0) ? (0) : ((powerToLightValueScaling0To15 > 15) ? 15 : powerToLightValueScaling0To15);
-    this.blinkInterval = (blinkInterval < 500) ? (500) : ((blinkInterval > 2500) ? 2500 : blinkInterval);
+    this.blinkInterval = (blinkInterval <= 0) ? (0) : ((blinkInterval < 500) ? (500) : ((blinkInterval > 3000) ? 3000 : blinkInterval));
     setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWER, 0));
   }
 
@@ -137,13 +137,9 @@ public class GaugeBlock extends RsBlock {
       }
       if(te.power() != p) forcesync = true;
       te.power(p);
-      {
-        // Test for server based blinking state change
-        if(this.blinkInterval > 500) {
-          int T = this.blinkInterval * 50/1000;
-          T = ((T+6)/10)*10;
-          if((world.getTotalWorldTime() % T) > (T/2))
-          te.power(0);
+      if(this.blinkInterval > 0) {
+        if((te.power() != 0)) {
+          if(te.force_off()) te.power(0);
           forcesync = true;
         }
       }
@@ -161,6 +157,7 @@ public class GaugeBlock extends RsBlock {
   @Override
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
     state = super.getActualState(state, world, pos);
+    if((world instanceof World) && (((World)world).isRemote)) return state;
     if(!(state.getBlock() instanceof GaugeBlock)) return state; // no idea if that can happen
     GaugeBlock.GaugeTileEntity te = ((GaugeBlock)state.getBlock()).getTe(state, world, pos, true);
     if(te == null) return state;
@@ -207,12 +204,13 @@ public class GaugeBlock extends RsBlock {
    */
   public static final class GaugeTileEntity extends RsTileEntity<GaugeBlock> implements ITickable {
 
-    private long trigger_time = 0;
+    private long trigger_timer_ = 0;
     private int power_ = 0;
-    private int ticktrack = 0;
+    private boolean force_off_ = false;
 
     public int power() { return this.power_; }
     public void power(int p) { this.power_ = p; }
+    public boolean force_off() { return this.force_off_; }
 
     @Override
     public void update() { update(false); }
@@ -230,11 +228,10 @@ public class GaugeBlock extends RsBlock {
     }
 
     private void update(boolean force) {
+      if((!force) && (--this.trigger_timer_ > 0)) return;
       if(!hasWorld()) return;
       World world = getWorld();
-      long t = world.getTotalWorldTime();
-      if((!force) && (t < this.trigger_time)) return;
-      this.trigger_time = t + 50; // in case of early return
+      this.trigger_timer_ = 50; // in case of early return
       if(!world.isBlockLoaded(getPos())) return;
       IBlockState state = world.getBlockState(getPos());
       if(state == null) return;
@@ -246,12 +243,13 @@ public class GaugeBlock extends RsBlock {
 
       if(block.blinkInterval > 0) {
         // server based indicator state change. Can be removed if client based gauge rendering update approved.
-        this.trigger_time = t + 10;
+        this.trigger_timer_ = 5;
+        this.force_off_ = (System.currentTimeMillis() % block.blinkInterval) > (block.blinkInterval/2);
       } else {
-        this.trigger_time = t +  (world.isRemote ? 10 : Config.getGaugeUpdateInterval());
+        this.force_off_ = false;
+        this.trigger_timer_ = Config.getGaugeUpdateInterval();
       }
-
-      block.updateBlock(state, world, getPos(), neighbourPos, ((++ticktrack < 5) || force));
+      block.updateBlock(state, world, getPos(), neighbourPos, force);
     }
   }
 
