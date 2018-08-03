@@ -17,3 +17,4 @@ tile.rsgauges.indicator4.name=Redstone indicator (red alarm lamp)
 tile.rsgauges.indicator1blink1.name=Redstone indicator (blinking small square green light)
 tile.rsgauges.indicator2blink1.name=Redstone indicator (blinking small square yellow light)
 tile.rsgauges.indicator3blink1.name=Redstone indicator (blinking small square red light)
+rsgauges.config.title=Redstone Gauges and Switches Config

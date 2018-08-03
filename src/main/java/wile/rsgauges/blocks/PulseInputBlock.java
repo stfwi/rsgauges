@@ -17,7 +17,7 @@
 **/
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.Config;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.blocks.RsBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyBool;

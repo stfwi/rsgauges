@@ -16,7 +16,7 @@
 **/
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.Config;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModBlocks;
 import wile.rsgauges.blocks.RsBlock;
 import wile.rsgauges.client.JitModelBakery;
@@ -227,7 +227,7 @@ public class GaugeBlock extends RsBlock {
     @Override
     public void update() {
       if(--trigger_timer_ > 0) return;
-      trigger_timer_ = Config.getGaugeUpdateInterval();
+      trigger_timer_ = ModConfig.gauge_update_interval;
       if(world.isRemote) {
         IBlockState state = world.getBlockState(pos).withProperty(POWER, power());
         if(lastState != state) {

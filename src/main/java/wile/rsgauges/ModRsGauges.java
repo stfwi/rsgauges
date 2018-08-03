@@ -40,19 +40,16 @@ public class ModRsGauges {
   @Mod.EventHandler
   public void preInit(FMLPreInitializationEvent event) {
     logger = event.getModLog();
-    Config.onPreInit(event);
     proxy.preInit(event);
   }
 
   @Mod.EventHandler
   public void init(FMLInitializationEvent event) {
     proxy.init(event);
-    Config.update();
   }
 
   @Mod.EventHandler
   public void postInit(FMLPostInitializationEvent event) {
-    Config.onPostInit(event);
     proxy.postInit(event);
   }
 }

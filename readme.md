@@ -100,9 +100,13 @@ Diesel generator is currently running or not.
 ## Revision history
 
 - v1.0.0rc1 Initial feature complete version.
+
 - v1.0.0rc2 Fix: Server based gauge processing to measure indirect weak power. 
+
 - v1.0.0rc3 Fix: Tile entity based gauge handling to prevent display glitches on network clients. 
-- v1.0.0rc4 Fix: Network client: Gauge display zero when hit or activated. Performance improvments.
+
+- v1.0.0rc4 Performance improvments, startup screen config options added.
+            Fix: Network client: Gauge display zero when hit or activated. 
 
 ## Functional details
 

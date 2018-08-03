@@ -80,12 +80,6 @@ public class ModBlocks {
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
           5, // light level scaling
           0  // blink frequency
-      ),
-      // alarm lamp
-      new GaugeBlock("indicator4",
-          new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(4d/16)),
-          8, // light level scaling
-          1500  // blink frequency
       )
   };
 
@@ -105,6 +99,12 @@ public class ModBlocks {
           new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
           5,    // light level scaling
           2000  // blink frequency
+      ),
+      // alarm lamp
+      new GaugeBlock("indicator4",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(4d/16)),
+          8, // light level scaling
+          1500  // blink frequency
       )
   };
 
@@ -122,31 +122,35 @@ public class ModBlocks {
 
   // Invoked from CommonProxy.registerBlocks()
   public static final void registerBlocks(RegistryEvent.Register<Block> event) {
-    GameRegistry.registerTileEntity(GaugeBlock.GaugeTileEntity.class, ModRsGauges.MODID + "_gauge_entity");
-    for(GaugeBlock e:gauges)  event.getRegistry().register(e);
-    for(GaugeBlock e:indicators) event.getRegistry().register(e);
-    for(GaugeBlock e:blinkIndicators) event.getRegistry().register(e);
-    for(BistableInputBlock e:bistableSwitches) event.getRegistry().register(e);
-    GameRegistry.registerTileEntity(PulseInputBlock.UpdateTileEntity.class, ModRsGauges.MODID + "_pulseswitch_entity");
-    for(PulseInputBlock e:pulseSwitches) event.getRegistry().register(e);
+    if((!ModConfig.without_gauges) || (!ModConfig.without_indicators) || (!ModConfig.without_blinking_indicators)) {
+      GameRegistry.registerTileEntity(GaugeBlock.GaugeTileEntity.class, ModRsGauges.MODID + "_gauge_entity");
+    }
+    if(!ModConfig.without_gauges) { for(GaugeBlock e:gauges) event.getRegistry().register(e); }
+    if(!ModConfig.without_indicators) { for(GaugeBlock e:indicators) event.getRegistry().register(e); }
+    if(!ModConfig.without_blinking_indicators) { for(GaugeBlock e:blinkIndicators) event.getRegistry().register(e); }
+    if(!ModConfig.without_bistable_switches) { for(BistableInputBlock e:bistableSwitches) event.getRegistry().register(e); }
+    if(!ModConfig.without_pulse_switches) {
+      GameRegistry.registerTileEntity(PulseInputBlock.UpdateTileEntity.class, ModRsGauges.MODID + "_pulseswitch_entity");
+      for(PulseInputBlock e:pulseSwitches) event.getRegistry().register(e);
+    }
   }
 
   // Invoked from ClientProxy.registerModels()
   @SideOnly(Side.CLIENT)
   public static final void initModels() {
-    for(GaugeBlock e:gauges) e.initModel();
-    for(GaugeBlock e:indicators) e.initModel();
-    for(GaugeBlock e:blinkIndicators) e.initModel();
-    for(BistableInputBlock e:bistableSwitches) e.initModel();
-    for(PulseInputBlock e:pulseSwitches) e.initModel();
+    if(!ModConfig.without_gauges) { for(GaugeBlock e:gauges) e.initModel(); }
+    if(!ModConfig.without_indicators) { for(GaugeBlock e:indicators) e.initModel(); }
+    if(!ModConfig.without_blinking_indicators) { for(GaugeBlock e:blinkIndicators) e.initModel(); }
+    if(!ModConfig.without_bistable_switches) { for(BistableInputBlock e:bistableSwitches) e.initModel(); }
+    if(!ModConfig.without_pulse_switches) { for(PulseInputBlock e:pulseSwitches) e.initModel(); }
   }
 
   // Invoked from CommonProxy.registerItems()
   public static final void registerItemBlocks(RegistryEvent.Register<Item> event) {
-    for(GaugeBlock e:gauges) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
-    for(GaugeBlock e:indicators) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
-    for(GaugeBlock e:blinkIndicators) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
-    for(BistableInputBlock e:bistableSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
-    for(PulseInputBlock e:pulseSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
+    if(!ModConfig.without_gauges) { for(GaugeBlock e:gauges) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
+    if(!ModConfig.without_indicators) { for(GaugeBlock e:indicators) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
+    if(!ModConfig.without_blinking_indicators) { for(GaugeBlock e:blinkIndicators) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
+    if(!ModConfig.without_bistable_switches) { for(BistableInputBlock e:bistableSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
+    if(!ModConfig.without_pulse_switches) { for(PulseInputBlock e:pulseSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
   }
 }
