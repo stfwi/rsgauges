@@ -19,10 +19,10 @@ public class Config {
 
   private static Configuration fileConfig = null;
   private static int gaugeUpdateInterval = 20;
+  private static boolean with_gauge_jit_model = false;
 
-  public static int getGaugeUpdateInterval() {
-    return gaugeUpdateInterval;
-  }
+  public static int getGaugeUpdateInterval() { return gaugeUpdateInterval; }
+  public static boolean withGaugeJitModelRendering() { return with_gauge_jit_model; }
 
   public static void onPreInit(FMLPreInitializationEvent event) {
     fileConfig = new Configuration(new File(event.getModConfigurationDirectory().getPath(), ModRsGauges.MODID + ".cfg"));

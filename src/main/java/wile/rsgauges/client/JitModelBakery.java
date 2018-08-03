@@ -1,3 +1,6 @@
+//
+// Rendering tests using baked models and TESR
+//
 package wile.rsgauges.client;
 
 import java.util.Arrays;
@@ -10,6 +13,8 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.opengl.GL11;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.UnmodifiableIterator;
@@ -21,6 +26,10 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -28,6 +37,8 @@ import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.creativetab.CreativeTabs;
@@ -42,6 +53,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
@@ -57,6 +69,7 @@ import wile.rsgauges.ModBlocks;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.blocks.GaugeBlock;
 import wile.rsgauges.blocks.RsBlock;
+import wile.rsgauges.blocks.RsTileEntity;
 
 @SideOnly(Side.CLIENT)
 public class JitModelBakery {
@@ -89,8 +102,9 @@ public class JitModelBakery {
   }
 
   /**
-   *
-   *
+   * Loads the mapped JIT model locations (blockstate JSONS), returning the
+   * JitModels corresponding to the original (JSON) models without "_jit"
+   * suffix.
    */
   public static class JitModelLoader implements ICustomModelLoader {
     private IResourceManager manager = null;
@@ -116,6 +130,12 @@ public class JitModelBakery {
     @Override public void onResourceManagerReload(IResourceManager rm) { manager = rm; }
   }
 
+  /**
+   * Passthrough model, baking a JitBakedModel that corresponds to the JSON model resource path.
+   * The original model will be baked and registered at startup as normal. The JitBakedModel
+   * will allow to override getQuads(), where it is ensured that all state combinations of the
+   * original models are loaded.
+   */
   public static class JitModel implements IModel {
     protected final ModelResourceLocation modelrl;
     protected JitBakedModel jitbakedmodel;
@@ -146,6 +166,15 @@ public class JitModelBakery {
     }
   }
 
+  /**
+   * Baked JIT model generated and returned by JitBakedModel.
+   * All model states are pre-baked by the variant loader and bakery at startup.
+   * This model corresponds to the model that would loaded anyway if no JIT model
+   * would be used at all.
+   *
+   * -> means this is the one where getQuads() can be overridden to customise the
+   *    model rendering.
+   */
   public static class JitBakedModel implements IBakedModel {
     protected HashMap<Integer,IBakedModel> baked;
     protected IBakedModel firstbaked = null;
@@ -176,6 +205,36 @@ public class JitModelBakery {
     public List<BakedQuad> getQuads(@Nullable IBlockState blockstate, @Nullable EnumFacing side, long rand) {
       if(blockstate instanceof IExtendedBlockState) blockstate = ((IExtendedBlockState)blockstate).getClean();
       return baked.getOrDefault(this.getStateVariantHash(blockstate), firstbaked).getQuads(blockstate, side, rand);
+    }
+  }
+
+  /**
+   * TESR applying the model corresponding to the actual block state.
+   */
+  public static class JitModelTesr<TeType extends RsTileEntity> extends TileEntitySpecialRenderer<TeType> {
+    @Override
+    public void render(TeType te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+      BlockRendererDispatcher mcbrd = Minecraft.getMinecraft().getBlockRendererDispatcher();
+      BlockPos pos = te.getPos();
+      IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
+      IBlockState state = world.getBlockState(pos).getActualState(world, pos);
+      IBakedModel model = mcbrd.getBlockModelShapes().getModelForState(state);
+      GlStateManager.pushAttrib();
+      GlStateManager.pushMatrix();
+      RenderHelper.disableStandardItemLighting();
+      GlStateManager.translate(-te.getPos().getX(), -te.getPos().getY(), -te.getPos().getZ());
+      try {
+        Tessellator tessellator = Tessellator.getInstance();
+        tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        mcbrd.getBlockModelRenderer().renderModel(world, model, state, pos, tessellator.getBuffer(), false);
+        tessellator.draw();
+      } catch(Exception e) {
+        ModRsGauges.logger.error("TESR exception for model " + model.toString() + ": " + e.toString());
+      }
+      RenderHelper.enableStandardItemLighting();
+      GlStateManager.translate(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+      GlStateManager.popMatrix();
+      GlStateManager.popAttrib();
     }
   }
 

@@ -51,35 +51,22 @@ public class PulseInputBlock extends RsBlock {
   }
 
   @Override
-  public IBlockState getStateFromMeta(int meta) {
-    return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 0x7)).withProperty(POWERED,
-        ((meta & 0x8) != 0));
-  }
+  public IBlockState getStateFromMeta(int meta) { return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 0x7)).withProperty(POWERED, ((meta & 0x8) != 0)); }
 
   @Override
-  public int getMetaFromState(IBlockState state) {
-    return (state.getValue(FACING).getIndex() & 0x07) | ((state.getValue(POWERED)) ? 0x8 : 0x0);
-  }
+  public int getMetaFromState(IBlockState state) { return (state.getValue(FACING).getIndex() & 0x07) | ((state.getValue(POWERED)) ? 0x8 : 0x0); }
 
   @Override
-  protected BlockStateContainer createBlockState() {
-    return new BlockStateContainer(this, FACING, POWERED);
-  }
+  protected BlockStateContainer createBlockState() { return new BlockStateContainer(this, FACING, POWERED); }
 
   @Override
-  public boolean canProvidePower(IBlockState state) {
-    return true;
-  }
+  public boolean canProvidePower(IBlockState state) { return true; }
 
   @Override
-  public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-    return getStrongPower(state, world, pos, side);
-  }
+  public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) { return getStrongPower(state, world, pos, side); }
 
   @Override
-  public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-    return (!(state.getValue(POWERED)) || (state.getValue(FACING) != side)) ? 0 : 15;
-  }
+  public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) { return (!(state.getValue(POWERED)) || (state.getValue(FACING) != side)) ? 0 : 15; }
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
@@ -89,8 +76,8 @@ public class PulseInputBlock extends RsBlock {
     world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), this, false);
     if(world.isRemote) return;
     TileEntity te = world.getTileEntity(pos);
-    if((te == null) || (!(te instanceof PulseInputBlock.UpdateTileEntity))) return;
-    ((PulseInputBlock.UpdateTileEntity)te).offTimerReset();
+    if(!(te instanceof PulseInputBlock.UpdateTileEntity)) return;
+    ((PulseInputBlock.UpdateTileEntity)te).off_timer_reset();
   }
 
   @Override
@@ -102,8 +89,8 @@ public class PulseInputBlock extends RsBlock {
     world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), this, false);
     world.scheduleUpdate(pos, this, this.tickRate(world));
     TileEntity te = world.getTileEntity(pos);
-    if((te == null) || (!(te instanceof PulseInputBlock.UpdateTileEntity))) return true;
-    ((PulseInputBlock.UpdateTileEntity)te).offTimerExtend();
+    if(!(te instanceof PulseInputBlock.UpdateTileEntity)) return true;
+    ((PulseInputBlock.UpdateTileEntity)te).off_timer_extend();
     return true;
   }
 
@@ -118,8 +105,8 @@ public class PulseInputBlock extends RsBlock {
     world.notifyNeighborsOfStateChange(pos, this, false);
     world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), this, false);
     TileEntity te = world.getTileEntity(pos);
-    if((te == null) || (!(te instanceof PulseInputBlock.UpdateTileEntity))) return;
-    ((PulseInputBlock.UpdateTileEntity)te).offTimerReset();
+    if((!(te instanceof PulseInputBlock.UpdateTileEntity))) return;
+    ((PulseInputBlock.UpdateTileEntity)te).off_timer_reset();
   }
 
   @Override
@@ -131,58 +118,41 @@ public class PulseInputBlock extends RsBlock {
   }
 
   @Override
-  public int tickRate(World world) {
-    return 5;
-  }
+  public int tickRate(World world) { return 5; }
 
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
     if((world.isRemote) || (!state.getValue(POWERED))) return;
     TileEntity te = world.getTileEntity(pos);
-    int t_off = 0;
-    if((te != null) && (te instanceof PulseInputBlock.UpdateTileEntity)) t_off = ((PulseInputBlock.UpdateTileEntity)te).offTimerTick();
-    if(t_off <= 0) {
-      world.setBlockState(pos, state.withProperty(POWERED, Boolean.valueOf(false)));
-      world.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, 0.82f);
-      world.notifyNeighborsOfStateChange(pos, this, false);
-      world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), this, false);
-      world.markBlockRangeForRenderUpdate(pos, pos);
-    } else {
-      world.scheduleUpdate(pos, this, this.tickRate(world));
-    }
+    int t_off = (!(te instanceof PulseInputBlock.UpdateTileEntity)) ? 0 : ((PulseInputBlock.UpdateTileEntity)te).off_timer_tick();
+    if(t_off > 0) { world.scheduleUpdate(pos, this, this.tickRate(world)); return; }
+    world.setBlockState(pos, state.withProperty(POWERED, Boolean.valueOf(false)));
+    world.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, 0.82f);
+    world.notifyNeighborsOfStateChange(pos, this, false);
+    world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), this, false);
+    world.markBlockRangeForRenderUpdate(pos, pos);
   }
 
   @Override
-  public boolean hasTileEntity(IBlockState state) {
-    return true;
-  }
+  public boolean hasTileEntity(IBlockState state) { return true; }
 
   @Override
-  public TileEntity createTileEntity(World world, IBlockState state) {
-    return new PulseInputBlock.UpdateTileEntity();
-  }
+  public TileEntity createTileEntity(World world, IBlockState state) { return new PulseInputBlock.UpdateTileEntity(); }
 
   /**
    * Tile entity for on-time extension.
    */
   public static final class UpdateTileEntity extends RsTileEntity<PulseInputBlock> {
-    private int off_timer = 0;
+    private int off_timer_ = 0;
+    public void off_timer_reset() { off_timer_ = 0; }
+    public int off_timer_tick() { return  ((--off_timer_ <= 0) ? 0 : off_timer_); }
 
-    public void offTimerReset() {
-      off_timer = 0;
-    }
-
-    public int offTimerTick() {
-      if(--off_timer <= 0) off_timer = 0;
-      return off_timer;
-    }
-
-    public void offTimerExtend() {
-      if(off_timer > 35) off_timer = 80;
-      else if(off_timer > 15) off_timer = 40;
-      else if(off_timer > 8) off_timer = 20;
-      else if(off_timer > 3) off_timer = 10;
-      else off_timer = 5;
+    public void off_timer_extend() {
+      if(off_timer_ > 35) off_timer_ = 80;
+      else if(off_timer_ > 15) off_timer_ = 40;
+      else if(off_timer_ > 8) off_timer_ = 20;
+      else if(off_timer_ > 3) off_timer_ = 10;
+      else off_timer_ = 5;
     }
   }
 

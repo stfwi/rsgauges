@@ -57,8 +57,9 @@ public abstract class RsBlock extends Block {
     setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);
     setLightLevel(0);
-    setHardness(0.5f);
+    setHardness(0.3f);
     setResistance(2.0f);
+    setTickRandomly(false);
     this.unrotatedBB = unrotatedBoundingBox;
   }
 
