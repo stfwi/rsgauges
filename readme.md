@@ -108,6 +108,9 @@ Diesel generator is currently running or not.
 - v1.0.0rc4 Performance improvments, startup screen config options added.
             Fix: Network client: Gauge display zero when hit or activated. 
 
+- v1.0.0rc5 Using existing minecraft functionality to determine the placement facing of gauges 
+            and switches.
+
 ## Functional details
 
 #### Gauges and indicators

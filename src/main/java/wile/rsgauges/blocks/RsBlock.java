@@ -117,7 +117,7 @@ public abstract class RsBlock extends Block {
   public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) { this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos); }
 
   @Override
-  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) { this.onBlockPlacedByCheck(world, pos, state, placer, stack, true, true); }
+  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) { this.onBlockPlacedByCheck(world, pos, state, placer, stack); }
 
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) { return true; }
@@ -131,6 +131,11 @@ public abstract class RsBlock extends Block {
     IBlockState state = world.getBlockState(blockpos);
     if(side == EnumFacing.UP) return (state.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
     return !isExceptBlockForAttachWithPiston(state.getBlock()) && (state.getBlockFaceShape(world, blockpos, side) == BlockFaceShape.SOLID);
+  }
+
+  @Override
+  public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+    return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(FACING, facing);
   }
 
   @Override
@@ -165,40 +170,13 @@ public abstract class RsBlock extends Block {
     return true;
   }
 
-  protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack, boolean allowUpDown, boolean applyFlags) {
-    EnumFacing facing = EnumFacing.NORTH;
-    Vec2f py = placer.getPitchYaw();
-    if(allowUpDown && (py.x >= 80)) {
-      facing = EnumFacing.UP;
-    } else if(allowUpDown && (py.x <= -80)) {
-      facing = EnumFacing.DOWN;
-    } else {
-      switch((int)Math.round((((placer.getPitchYaw().y + 360) / 90.0)) % 4) * 90) {
-        case 270: facing = EnumFacing.WEST; break;
-        case 180: facing = EnumFacing.SOUTH; break;
-        case 90:  facing = EnumFacing.EAST; break;
-        case 0: facing = EnumFacing.NORTH;
-      }
-    }
-    if(!canPlaceBlockOnSide(world, pos, facing)) {
-      // try to find a corrected facing
-      boolean found = false;
-      for(EnumFacing side : EnumFacing.values()) {
-        if((!allowUpDown) && ((side == EnumFacing.UP) | (side == EnumFacing.DOWN)))
-          continue;
-        if(canPlaceBlockOnSide(world, pos, side)) {
-          facing = side;
-          found = true;
-        }
-      }
-      if(!found) {
-        this.dropBlockAsItem(world, pos, state, 0);
-        world.setBlockToAir(pos);
-        return false;
-      }
-    }
-    world.setBlockState(pos, state.withProperty(FACING, facing), applyFlags ? (1|2|16) : 0);
-    return true;
+  protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    if(canPlaceBlockOnSide(world, pos, state.getValue(FACING))) return true;
+    if(world.isRemote) return false;
+    this.dropBlockAsItem(world, pos, state, 0);
+    world.setBlockToAir(pos);
+    return false;
   }
+
 
 }

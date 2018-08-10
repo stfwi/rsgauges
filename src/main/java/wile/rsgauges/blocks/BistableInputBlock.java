@@ -58,7 +58,7 @@ public class BistableInputBlock extends RsBlock {
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-    if(!super.onBlockPlacedByCheck(world, pos, state, placer, stack, true, false)) return;
+    if(!super.onBlockPlacedByCheck(world, pos, state, placer, stack)) return;
     world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, false), 1|2);
     world.notifyNeighborsOfStateChange(pos, this, false);
     world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), this, false);

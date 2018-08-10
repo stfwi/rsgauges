@@ -166,7 +166,7 @@ public class GaugeBlock extends RsBlock {
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-    if(this.onBlockPlacedByCheck(world, pos, state, placer, stack, true, false)) world.scheduleBlockUpdate(pos, state.getBlock(), 0, 1);
+    if(this.onBlockPlacedByCheck(world, pos, state, placer, stack)) world.scheduleBlockUpdate(pos, state.getBlock(), 0, 1);
   }
 
   @Override
@@ -226,16 +226,26 @@ public class GaugeBlock extends RsBlock {
 
     @Override
     public void update() {
-      if(--trigger_timer_ > 0) return;
-      trigger_timer_ = ModConfig.gauge_update_interval;
       if(world.isRemote) {
         IBlockState state = world.getBlockState(pos).withProperty(POWER, power());
         if(lastState != state) {
           lastState = state;
+          if(state != null) {
+            world.setBlockState(pos, state, 1|16);
+            world.markBlockRangeForRenderUpdate(pos, pos);
+          }
+          trigger_timer_ = 10;
+        } if(--trigger_timer_ > 0) {
+          return;
+        } else if(trigger_timer_ == 0) {
           world.setBlockState(pos, state, 1|16);
           world.markBlockRangeForRenderUpdate(pos, pos);
+        } else {
+          trigger_timer_ = 0;
         }
       } else {
+        if(--trigger_timer_ > 0) return;
+        trigger_timer_ = ModConfig.gauge_update_interval;
         try {
           IBlockState state = world.getBlockState(pos);
           GaugeBlock block = (GaugeBlock) state.getBlock();
