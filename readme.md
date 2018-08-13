@@ -110,6 +110,8 @@ Diesel generator is currently running or not.
 
 - v1.0.0rc5 Using existing minecraft functionality to determine the placement facing of gauges 
             and switches.
+            
+- v1.0.0    Recipes for gauges and lamp indicator adapted.            
 
 ## Functional details
 

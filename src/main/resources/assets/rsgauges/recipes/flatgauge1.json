@@ -2,12 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "NNN",
-    "NRN",
+    "NCN",
     "NRN"
   ],
   "key": {
     "N": { "item": "minecraft:iron_nugget", "data": 0 },
-    "R": { "item": "minecraft:redstone", "data": 0 }
+    "R": { "item": "minecraft:redstone", "data": 0 },
+    "C": { "item": "minecraft:comparator", "data": 0 }
   },
   "result": { "item": "rsgauges:flatgauge1", "data": 0 }
 }
