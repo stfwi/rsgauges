@@ -14,6 +14,8 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.client.JitModelBakery;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -55,15 +57,20 @@ public abstract class RsBlock extends Block {
     setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);
     setLightLevel(0);
-    setHardness(0.5f);
+    setHardness(0.3f);
     setResistance(2.0f);
+    setTickRandomly(false);
     this.unrotatedBB = unrotatedBoundingBox;
   }
 
   public RsBlock(String registryName) { this(registryName, new AxisAlignedBB((0d/16),(1d/16),(0d/16), (8d/16),(12d/16),(2d/16))); }
 
   @SideOnly(Side.CLIENT)
-  public void initModel() { ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory")); }
+  public void initModel() {
+    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+    JitModelBakery.JitBakedModel jitbakedmodel = this.getJitBakedModel();
+    if(jitbakedmodel != null) JitModelBakery.initModelRegistrations(this, jitbakedmodel);
+  }
 
   @Override
   public boolean isOpaqueCube(IBlockState state) { return false; }
@@ -101,13 +108,16 @@ public abstract class RsBlock extends Block {
   protected BlockStateContainer createBlockState() { return new BlockStateContainer(this, FACING); }
 
   @Override
+  public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) { return state; }
+
+  @Override
   public boolean hasTileEntity(IBlockState state) { return false; }
 
   @Override
   public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) { this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos); }
 
   @Override
-  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) { this.onBlockPlacedByCheck(world, pos, state, placer, stack, true, true); }
+  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) { this.onBlockPlacedByCheck(world, pos, state, placer, stack); }
 
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) { return true; }
@@ -119,8 +129,13 @@ public abstract class RsBlock extends Block {
   public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
     BlockPos blockpos = pos.offset(side.getOpposite());
     IBlockState state = world.getBlockState(blockpos);
-    if(side == EnumFacing.UP) return state.isSideSolid(world, pos, EnumFacing.UP);
+    if(side == EnumFacing.UP) return (state.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
     return !isExceptBlockForAttachWithPiston(state.getBlock()) && (state.getBlockFaceShape(world, blockpos, side) == BlockFaceShape.SOLID);
+  }
+
+  @Override
+  public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+    return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(FACING, facing);
   }
 
   @Override
@@ -139,15 +154,13 @@ public abstract class RsBlock extends Block {
 
   public AxisAlignedBB getUnrotatedBB() { return unrotatedBB; }
 
-  protected boolean neighborChangedCheck(IBlockState state, World world, BlockPos pos, Block neighborBlock,
-      BlockPos neighborPos) {
-    if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos))
-      return false;
+  public JitModelBakery.JitBakedModel getJitBakedModel() { return null; }
+
+  protected boolean neighborChangedCheck(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
+    if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos)) return false;
     IBlockState neighborState = world.getBlockState(neighborPos);
-    if(neighborState == null)
-      return false;
-    if(((neighborState.getMaterial() == Material.AIR) || (neighborState.getMaterial() == Material.WATER)
-        || (neighborState.getMaterial() == Material.LAVA))) {
+    if(neighborState == null) return false;
+    if(((neighborState.getMaterial() == Material.AIR) || (neighborState.getMaterial() == Material.WATER) || (neighborState.getMaterial() == Material.LAVA))) {
       if(!world.isRemote) {
         this.dropBlockAsItem(world, pos, state, 0);
         world.setBlockToAir(pos);
@@ -157,51 +170,13 @@ public abstract class RsBlock extends Block {
     return true;
   }
 
-  protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack, boolean allowUpDown, boolean applyFlags) {
-    EnumFacing facing = EnumFacing.NORTH;
-    Vec2f py = placer.getPitchYaw();
-    if(allowUpDown && (py.x >= 80)) {
-      facing = EnumFacing.UP;
-    } else if(allowUpDown && (py.x <= -80)) {
-      facing = EnumFacing.DOWN;
-    } else {
-      switch((int)Math.round((((placer.getPitchYaw().y + 360) / 90.0)) % 4) * 90) {
-        case 270: facing = EnumFacing.WEST; break;
-        case 180: facing = EnumFacing.SOUTH; break;
-        case 90:  facing = EnumFacing.EAST; break;
-        case 0: facing = EnumFacing.NORTH;
-      }
-    }
-    if(!canPlaceBlockOnSide(world, pos, facing)) {
-      // try to find a corrected facing
-      boolean found = false;
-      for(EnumFacing side : EnumFacing.values()) {
-        if((!allowUpDown) && ((side == EnumFacing.UP) | (side == EnumFacing.DOWN)))
-          continue;
-        if(canPlaceBlockOnSide(world, pos, side)) {
-          facing = side;
-          found = true;
-        }
-      }
-      if(!found) {
-        this.dropBlockAsItem(world, pos, state, 0);
-        world.setBlockToAir(pos);
-        return false;
-      }
-    }
-    world.setBlockState(pos, state.withProperty(FACING, facing), applyFlags ? (1 | 2 | 16) : 0);
-    return true;
+  protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    if(canPlaceBlockOnSide(world, pos, state.getValue(FACING))) return true;
+    if(world.isRemote) return false;
+    this.dropBlockAsItem(world, pos, state, 0);
+    world.setBlockToAir(pos);
+    return false;
   }
 
 
-  /* Currently not needed and method marked deprecated.
-   *
-   * @Override public IBlockState getActualState(IBlockState state, IBlockAccess
-   * world, BlockPos pos) { state = super.getActualState(state, world, pos);
-   * if(!this.hasTileEntity(state)) return state; TileEntity te = (world
-   * instanceof ChunkCache) ? ((ChunkCache)world).getTileEntity(pos,
-   * Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(pos); return ((te ==
-   * null) || (!(te instanceof RsTileEntity))) ? state :
-   * ((RsTileEntity)te).getCompletedBlockState(state, world, pos); }
-   */
 }

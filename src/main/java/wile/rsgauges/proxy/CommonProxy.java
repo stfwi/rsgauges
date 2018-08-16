@@ -26,9 +26,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class CommonProxy {
 
   public void preInit(FMLPreInitializationEvent e) {}
-
   public void init(FMLInitializationEvent e) {}
-
   public void postInit(FMLPostInitializationEvent e) {}
 
   @SubscribeEvent

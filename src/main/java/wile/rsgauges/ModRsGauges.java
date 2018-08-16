@@ -28,7 +28,7 @@ public class ModRsGauges {
 
   public static final String MODID = "rsgauges";
   public static final String MODNAME = "Redstone gauges";
-  public static final String MODVERSION = "1.0.0-rc1";
+  public static final String MODVERSION = "1.0.0";
   public static Logger logger;
 
   @SidedProxy(clientSide = "wile.rsgauges.proxy.ClientProxy", serverSide = "wile.rsgauges.proxy.ServerProxy")
@@ -40,19 +40,16 @@ public class ModRsGauges {
   @Mod.EventHandler
   public void preInit(FMLPreInitializationEvent event) {
     logger = event.getModLog();
-    Config.onPreInit(event);
     proxy.preInit(event);
   }
 
   @Mod.EventHandler
   public void init(FMLInitializationEvent event) {
     proxy.init(event);
-    Config.update();
   }
 
   @Mod.EventHandler
   public void postInit(FMLPostInitializationEvent event) {
-    Config.onPostInit(event);
     proxy.postInit(event);
   }
 }
