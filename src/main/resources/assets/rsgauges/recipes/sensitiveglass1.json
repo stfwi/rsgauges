@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "rsgauges:sensitiveglass",
+    "data": 0,
+    "count": 8
+  },
+  "pattern": [
+    "NGN",
+    "GRG",
+    "NGN"
+  ],
+  "key": {
+    "N": { "item": "minecraft:iron_nugget", "data": 0 },
+    "R": { "item": "minecraft:redstone", "data": 0 },
+    "G": { "item": "minecraft:glass", "data": 0 }
+  }
+}

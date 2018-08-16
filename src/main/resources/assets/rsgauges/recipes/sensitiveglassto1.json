@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [ { "item": "rsgauges:sensitiveglass_blue" } ],
+  "result": { "item": "rsgauges:sensitiveglass", "data": 0 }
+}
