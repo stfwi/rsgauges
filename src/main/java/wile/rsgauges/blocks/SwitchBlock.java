@@ -14,6 +14,7 @@ import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModResources;
 import wile.rsgauges.blocks.RsBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHopper;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -56,28 +57,34 @@ public class SwitchBlock extends RsBlock {
   public static final int SWITCH_CONFIG_PROJECTILE_SENSE_ON = 0x01000000;
   public static final int SWITCH_CONFIG_PROJECTILE_SENSE_OFF= 0x02000000;
   public static final int SWITCH_CONFIG_PROJECTILE_SENSE    = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
+  public static final int SWITCH_CONFIG_HOPPER_MOUNTBALE    = 0x04000000;
+
 
   public static final PropertyBool POWERED = PropertyBool.create("powered");
 
   public final int config;
+  @Nullable protected final AxisAlignedBB unrotated_bb_powered;
   @Nullable protected final ModResources.BlockSoundEvent power_on_sound;
   @Nullable protected final ModResources.BlockSoundEvent power_off_sound;
 
-  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBB, int config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
-    super(registryName, unrotatedBB);
+  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, int config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
+    super(registryName, unrotatedBBUnpowered);
     this.config = config;
     if((powerOnSound==null) && (powerOffSound==null)) {
       powerOnSound = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.3f, 0.92f);
       powerOffSound = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.3f, 0.82f);
     }
+    unrotated_bb_powered = unrotatedBBPowered;
     power_on_sound = powerOnSound;
     power_off_sound = powerOffSound;
     setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));
   }
 
-  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBB, int config) {
-    this(registryName, unrotatedBB, config, null, null);
-  }
+  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, int config) { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, null, null); }
+  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBB, int config) { this(registryName, unrotatedBB, null, config, null, null); }
+
+  @Override
+  public AxisAlignedBB getUnrotatedBB(IBlockState state) { return ((unrotated_bb_powered==null) || (state==null) || (state.getBlock()!=this) || (!state.getValue(POWERED))) ? super.getUnrotatedBB() : unrotated_bb_powered; }
 
   @Override
   public boolean isWallMount() { return ((config & SWITCH_CONFIG_FLOOR_MOUNT) == 0); }
@@ -126,6 +133,17 @@ public class SwitchBlock extends RsBlock {
     } else {
       world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING)), this, false);
       world.notifyNeighborsOfStateChange(pos.down(), this, false);
+    }
+  }
+
+  @Override
+  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+    if((config & SWITCH_CONFIG_HOPPER_MOUNTBALE)==0) {
+      return super.canPlaceBlockOnSide(world, pos, side);
+    } else {
+      return super.canPlaceBlockOnSide(world, pos, side, (Block block)->{
+        return (block instanceof BlockHopper);
+      }, null);
     }
   }
 

@@ -53,9 +53,15 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch3")      public static final SwitchBlock bistableSwitch3Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch4")      public static final SwitchBlock bistableSwitch4Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch5")      public static final SwitchBlock bistableSwitch5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch6")      public static final SwitchBlock bistableSwitch6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch7")      public static final SwitchBlock bistableSwitch7Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch8")      public static final SwitchBlock bistableSwitch8Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch1")         public static final SwitchBlock pulseSwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch2")         public static final SwitchBlock pulseSwitch2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:arrowtarget")          public static final SwitchBlock pulseSwitch4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch3")         public static final SwitchBlock pulseSwitch3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch5")         public static final SwitchBlock pulseSwitch5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch6")         public static final SwitchBlock pulseSwitch6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:arrowtarget")          public static final SwitchBlock pulseSwitchArrowTargetBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:contactmat1")          public static final ContactSwitchBlock contactSwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:contactmat2")          public static final ContactSwitchBlock contactSwitch2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:automaticswitch1")     public static final AutoSwitchBlock automaticSwitch1Block = null;
@@ -111,8 +117,9 @@ public class ModBlocks {
   };
 
   private static final GaugeBlock soundIndicators[] = {
+      // Alarm siren
       new GaugeBlock("soundindicator1",
-          new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(4d/16)),
+          new AxisAlignedBB((4d/16),(6.5d/16),(0d/16), (11.5d/16),(9.5d/16),(4d/16)),
           1, 1500, // light level scaling, blink frequency
           new ModResources.BlockSoundEvent(ModResources.alarm_siren_sound),
           null
@@ -120,51 +127,103 @@ public class ModBlocks {
   };
 
   private static final SwitchBlock bistableSwitches[] = {
+      // Rotary machine switch
       new SwitchBlock("bistableswitch1",
           new AxisAlignedBB((4d/16),(4d/16),(0d/16),(12d/16),(12d/16),(1d/16)),
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       ),
+      // Contact lever switch
       new SwitchBlock("bistableswitch2",
-          new AxisAlignedBB((6d/16),(2d/16),(0d/16),(10d/16),(14d/16),(1.5d/16)),
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(14d/16),(1.5d/16)),
+          new AxisAlignedBB((6d/16),(2d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)),
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       ),
+      // two-button machine switch
       new SwitchBlock("bistableswitch3",
           new AxisAlignedBB((4d/16),(4d/16),(0d/16),(12d/16),(12d/16),(1d/16)),
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       ),
+      // Light flip switch
       new SwitchBlock("bistableswitch4",
           new AxisAlignedBB((7d/16),(6d/16),(0d/16),(9d/16),(10d/16),(1.5d/16)),
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       ),
+      // ESTOP button
       new SwitchBlock("bistableswitch5",
-          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(3d/16)),
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)),
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)),
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
           SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE_OFF
+      ),
+      // Hopper blocking switch
+      new SwitchBlock("bistableswitch6",
+          new AxisAlignedBB((4.8d/16),(10d/16),(0d/16), (11.2d/16),(11d/16),(6d/16)), // bb when off
+          new AxisAlignedBB((4.8d/16),(10d/16),(0d/16), (11.2d/16),(11d/16),(3d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE|SwitchBlock.SWITCH_DATA_WEAK
+      ),
+      // mechanical rotary lever
+      new SwitchBlock("bistableswitch7",
+          new AxisAlignedBB((2.5d/16),(9.5d/16),(0d/16), (12.3d/16),(13d/16),(2.7d/16)), // bb when off
+          new AxisAlignedBB((8.7d/16),( 3d/16),(0d/16), (12.3d/16),(13d/16),(2.7d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
+      ),
+      // mechanical lever
+      new SwitchBlock("bistableswitch8",
+          new AxisAlignedBB((6.5d/16),(6.5d/16),(0d/16), (9.7d/16),(14.0d/16),(3d/16)), // bb when off
+          new AxisAlignedBB((6.5d/16),(5.0d/16),(0d/16), (9.7d/16),(12.5d/16),(3d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       )
   };
 
   private static final SwitchBlock pulseSwitches[] = {
+      // Square machine pulse switch
       new SwitchBlock("pulseswitch1",
           new AxisAlignedBB((5d/16),(5d/16),(0d/16),(11d/16),(11d/16),(1d/16)),
           SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
           SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       ),
+      // Fenced round machine pulse switch
       new SwitchBlock("pulseswitch2",
           new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
           SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
           SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       ),
+      // Mechanical spring reset pull handle
+      new SwitchBlock("pulseswitch3",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(2d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Arrow target
       new SwitchBlock("arrowtarget",
           new AxisAlignedBB((5d/16),(5d/16),(0d/16),(11d/16),(11d/16),(1d/16)),
           SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
           SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Mechanical spring reset push button
+      new SwitchBlock("pulseswitch5",
+          new AxisAlignedBB((5.5d/16),(0.5d/16),(0d/16),(10.5d/16),(5.0d/16),(4d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Retro double pole switch
+      new SwitchBlock("pulseswitch6",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(4d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       )
   };
 
   private static final ContactSwitchBlock contactSwitches[] = {
+      // Door contact mat
       new ContactSwitchBlock("contactmat1",
           new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.5d/16),(12d/16)),
           SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_DATA_WEAK|
@@ -173,6 +232,7 @@ public class ModBlocks {
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
       ),
+      // Sensitive full size contact mat
       new ContactSwitchBlock("contactmat2",
           new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)),
           SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
@@ -192,6 +252,7 @@ public class ModBlocks {
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
       ),
+      // Linear laser motion sensor
       new AutoSwitchBlock("automaticswitch2",
           new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
           SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_LINEAR|
@@ -203,7 +264,9 @@ public class ModBlocks {
   };
 
   private static final SensitiveGlassBlock sensitiveGlassBlocks[] = {
+      // Black/white stained sensitive glass
       new SensitiveGlassBlock("sensitiveglass", 0x000f|0x0010), // light value if on 0xf | off 0x1
+      // Blue stained sensitive glass
       new SensitiveGlassBlock("sensitiveglass_blue", 0x000f|0x0010)
   };
 

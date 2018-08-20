@@ -3,8 +3,8 @@
   "defaults": {
     "model": "rsgauges:pulseswitch2block_s00",
     "textures": {
-      "front": "rsgauges:blocks/common/darkroughmetal",
-      "side":  "rsgauges:blocks/common/darkgraymetal",
+      "front": "rsgauges:blocks/common/lightmachinemetal",
+      "side":  "rsgauges:blocks/common/darkmachinemetal",
       "handle": "rsgauges:blocks/indicator/indicator_fg_yellow_on_texture"
     }
   },

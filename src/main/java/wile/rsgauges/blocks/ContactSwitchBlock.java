@@ -49,7 +49,7 @@ import java.util.Random;
 public class ContactSwitchBlock extends SwitchBlock {
 
   public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, int config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
-    super(registryName, unrotatedBB, config, powerOnSound, powerOffSound);
+    super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound);
   }
 
   public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, int config) {

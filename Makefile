@@ -6,18 +6,31 @@
 # up the development a bit.
 # You very likely need some tools installed 
 # to use all build targets, so this file is  
-# not "official".
+# not "official". If you work on windows and
+# install GIT with complete shell PATH (the
+# red marked option in the GIT installer) you
+# should have the needed unix tools available.
+# For image stripping install imagemagick and
+# also put the "magick" executable in the PATH.
 #
-.PHONY: mod init clean clean-all all install
 MOD_JAR=$(filter-out %-sources.jar,$(wildcard build/libs/*.jar))
 
 ifeq ($(OS),Windows_NT)
 GRADLE=gradlew.bat
 INSTALL_DIR=$(realpath ${APPDATA}/.minecraft)
+DJS=djs
 else
 GRADLE=./gradle
 INSTALL_DIR=~/.minecraft
+DJS=djs
 endif
+
+wildcardr=$(foreach d,$(wildcard $1*),$(call wildcardr,$d/,$2) $(filter $(subst *,%,$2),$d))
+
+#
+# Targets
+#
+.PHONY: mod init clean clean-all all install texture-infos
 
 all: clean mod
 
@@ -28,7 +41,7 @@ mod:
 clean:
 	@echo "Cleaning ..."
 	@rm -f build/libs/*
-  
+
 clean-all: clean
 	@echo "Cleaning using gradle ..."
 	@$(GRADLE) clean
@@ -44,3 +57,5 @@ install: $(MOD_JAR)
 	@[ -d "$(INSTALL_DIR)/mods" ] || mkdir "$(INSTALL_DIR)/mods"
 	@cp -f "$(MOD_JAR)" "$(INSTALL_DIR)/mods/"
 
+texture-infos:
+	djs scripts/texture-processing.js src/main/resources/assets/rsgauges/textures

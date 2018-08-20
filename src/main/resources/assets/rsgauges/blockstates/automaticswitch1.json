@@ -3,7 +3,7 @@
   "defaults": {
     "model": "rsgauges:automaticswitch1block",
     "textures": {
-      "front": "rsgauges:blocks/common/graymetal",
+      "front": "rsgauges:blocks/common/darkmachinemetal",
       "side":  "rsgauges:blocks/common/darkgraymetal",
       "parts":  "rsgauges:blocks/common/darkroughmetal",
       "led": "rsgauges:blocks/indicator/indicator_fg_red_off_texture",

@@ -50,7 +50,7 @@ import net.minecraft.entity.monster.*;
 public class AutoSwitchBlock extends SwitchBlock {
 
   public AutoSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, int config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
-    super(registryName, unrotatedBB, config, powerOnSound, powerOffSound);
+    super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound);
   }
 
   @Override

@@ -90,25 +90,26 @@ redstone power to the game:
 
 ## Revision history
 
-  - v1.0.0rc1 - Initial feature complete version.
+  - v1.0.1b2  - Added bistable mechanical/retro style hopper blocker switch.
+              - Added bistable mechanical/retro style rotary lever switch.
+              - Added bistable mechanical/retro style lever switch.
+              - Added pulse mechanical/retro style pull switch.
+              - Added pulse mechanical/retro style push switch.
+              - Added pulse mechanical/retro style double pole push switch.
+              - Added power state dependent construction time bounding box definitions for switches.
+              - Changed recipe order for light flip switch (to end of style selection list).
+              - Changed ring-fenced-pulse-switch front texture.
+              - Fixed localisation name of arrow target pulse switch. 
+              - Fixed texture bleeding, UV scaling, and bounding box of the alarm siren.
 
-  - v1.0.0rc2 - Fix: Server based gauge processing to measure indirect weak power. 
-
-  - v1.0.0rc3 - Fix: Tile entity based gauge handling to prevent display glitches on network clients. 
-
-  - v1.0.0rc4 - Performance improvments, startup screen config options added.
-              - Fix: Network client: Gauge display zero when hit or activated. 
-
-  - v1.0.0    - Final recipe adaptions (gauge and lamp indicator).
-
-  - v1.0.1b1  - Added configurable infrared motion sensor (volume range automatic switch)
+  - v1.0.1b1  - Added configurable infrared motion sensor (volume range automatic switch).
               - Added configurable sensor (linear range automatic switch).
-              - Added configurable door contact mat
-              - Added sensitive floor contact mat
-              - Added fenced pulse switch
-              - Added arror target pulse switch
-              - Added alarm siren (sound indicator)
-              - Added redstone sensitive glass (color change black->white, light source)
+              - Added configurable door contact mat.
+              - Added sensitive floor contact mat.
+              - Added fenced pulse switch.
+              - Added arror target pulse switch.
+              - Added alarm siren (sound indicator).
+              - Added redstone sensitive glass (color change black->white, light source).
               - Added feature to switches: Empty handed multi-leftclick cycles through
                 (strong -> weak -> weak inverted -> strong inverted -> strong etc).
               - Door contact mat, infrared and laser sensor have a keypad to configure
@@ -117,6 +118,17 @@ redstone power to the game:
               - Machine pulse switch can be activated with projectiles (but not the fenced one).
               - ESTOP switch can be switched off with projectiles, but not on.
               - Sensitive contact mat reacts to hitting projectiles and objects dropped on.
+
+  - v1.0.0    - Final recipe tuning (gauge and lamp indicator).
+
+  - v1.0.0rc4 - Performance improvements, startup screen config options added.
+              - Fix: Network client: Gauge display zero when hit or activated. 
+
+  - v1.0.0rc3 - Fix: Tile entity based gauge handling to prevent display glitches on network clients. 
+
+  - v1.0.0rc2 - Fix: Server based gauge processing to measure indirect weak power. 
+              
+  - v1.0.0rc1 - Initial feature complete version.
             
 ## Functional details
 

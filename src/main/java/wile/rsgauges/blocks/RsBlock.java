@@ -16,9 +16,6 @@ package wile.rsgauges.blocks;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.client.JitModelBakery;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -50,6 +47,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.world.chunk.*;
 import net.minecraft.world.ChunkCache;
+import com.google.common.base.Predicate;
+import java.util.List;
+import javax.annotation.Nullable;
+
 
 public abstract class RsBlock extends Block {
 
@@ -140,15 +141,19 @@ public abstract class RsBlock extends Block {
   public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {}
 
   @Override
-  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) { return canPlaceBlockOnSide(world, pos, side, null, null); }
+
+  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, @Nullable Predicate<Block> blockWhiteListFilter, @Nullable Predicate<Block> blockBlackListFilter) {
     if(isFloorMount()) {
       if(side != EnumFacing.UP) return false;
       return (world.getBlockState(pos.down()).getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
     } else {
       BlockPos blockpos = pos.offset(side.getOpposite());
       IBlockState state = world.getBlockState(blockpos);
+      if((blockBlackListFilter!=null) && (blockBlackListFilter.apply(state.getBlock()))) return false;
       if(side == EnumFacing.UP) return (state.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
-      return !isExceptBlockForAttachWithPiston(state.getBlock()) && (state.getBlockFaceShape(world, blockpos, side) == BlockFaceShape.SOLID);
+      if((blockWhiteListFilter!=null) && (blockWhiteListFilter.apply(state.getBlock()))) return true;
+      return (!isExceptBlockForAttachWithPiston(state.getBlock())) && (state.getBlockFaceShape(world, blockpos, side) == BlockFaceShape.SOLID);
     }
   }
 
@@ -168,7 +173,7 @@ public abstract class RsBlock extends Block {
    */
   @Override
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-    AxisAlignedBB bb = getUnrotatedBB();
+    AxisAlignedBB bb = getUnrotatedBB(state);
     if(isWallMount()) {
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(1-bb.maxX, 1-bb.maxZ, 1-bb.maxY, 1-bb.minX, 1-bb.minZ, 1-bb.minY); // D
@@ -209,6 +214,7 @@ public abstract class RsBlock extends Block {
    * data.
    */
   public AxisAlignedBB getUnrotatedBB() { return unrotatedBB; }
+  public AxisAlignedBB getUnrotatedBB(IBlockState state) { return getUnrotatedBB(); }
 
   /**
    * Returns the JIT model bakery instance for custom rendering, or null
