@@ -55,4 +55,29 @@ public class ModAuxiliaries {
     }
   }
 
+  /**
+   * Returns the localised message for a given fixed English message.
+   */
+  public static String localized(String message) { return message; } // later.
+
+  /**
+   * Returns a time string in 24:00 hour format.
+   */
+  public static String daytimeToString(long t) {
+    t = (t + 6000) % 24000; // day starts at 06:00 with t==0.
+    // @check: java must have string formatting somehow.
+    String sh = Long.toString((t/1000));
+    String sm = Long.toString((t%1000)*60/1000);
+    if(sh.length() < 2) sh = "0" + sh;
+    if(sm.length() < 2) sm = "0" + sm;
+    return sh + ":" + sm;
+  }
+
+  /**
+   * Returns a string, where ticks are converted to seconds.
+   */
+  public static String ticksToSecondsString(long t) {
+    return String.format("%.02f", ((double)t)/20.0);
+  }
+
 }

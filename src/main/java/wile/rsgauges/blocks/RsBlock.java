@@ -296,9 +296,6 @@ public abstract class RsBlock extends Block {
     @Override
     public void handleUpdateTag(NBTTagCompound tag) { this.readFromNBT(tag); }
 
-    @Override
-    public void onLoad() {}
-
     @SideOnly(Side.CLIENT)
     @Override
     public double getMaxRenderDistanceSquared() { return 48 * 48; } // TESR

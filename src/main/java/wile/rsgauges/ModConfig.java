@@ -104,7 +104,7 @@ public class ModConfig {
                   "The block has to be at least clicked two times withing the timeout to differ configuration from block " +
                   "breaking, and prevent misconfiguration on unintended left-clicking.")
   @Config.Name("Config left multi-click timeout")
-  public static int config_left_click_timeout = 1200;
+  public static int config_left_click_timeout = 700;
 
 
   @Mod.EventBusSubscriber(modid=ModRsGauges.MODID)

@@ -66,6 +66,11 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:contactmat2")          public static final ContactSwitchBlock contactSwitch2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:automaticswitch1")     public static final AutoSwitchBlock automaticSwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:automaticswitch2")     public static final AutoSwitchBlock automaticSwitch2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch3")     public static final AutoSwitchBlock automaticSwitch3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch4")     public static final AutoSwitchBlock automaticSwitch4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch5")     public static final AutoSwitchBlock automaticSwitch5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch6")     public static final AutoSwitchBlock automaticSwitch6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch7")     public static final AutoSwitchBlock automaticSwitch7Block = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")       public static final SensitiveGlassBlock sensitiveGlassBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_blue")  public static final SensitiveGlassBlock blueSensitiveGlassBlock = null;
 
@@ -260,7 +265,53 @@ public class ModBlocks {
           SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+      ),
+      // Local light sensor
+      new AutoSwitchBlock("automaticswitch3",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+          SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_LIGHT|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+      ),
+      // Day time switch
+      new AutoSwitchBlock("automaticswitch4",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+          SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_TIMER_DAYTIME|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+      ),
+      // Rain sensor switch
+      new AutoSwitchBlock("automaticswitch5",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+          SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_RAIN|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+      ),
+      // Lightning sensor switch
+      new AutoSwitchBlock("automaticswitch6",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+          SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_LIGHTNING|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+      ),
+      // Interval signal timer
+      new AutoSwitchBlock("automaticswitch7",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+          SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_TIMER_INTERVAL|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
       )
+
   };
 
   private static final SensitiveGlassBlock sensitiveGlassBlocks[] = {
@@ -291,6 +342,9 @@ public class ModBlocks {
     }
     if(!ModConfig.without_automatic_switches) {
       GameRegistry.registerTileEntity(AutoSwitchBlock.AutoSwitchTileEntity.class, ModRsGauges.MODID + "_autoswitch_entity");
+      GameRegistry.registerTileEntity(AutoSwitchBlock.DetectorSwitchTileEntity.class, ModRsGauges.MODID + "_detectorswitch_entity");
+      GameRegistry.registerTileEntity(AutoSwitchBlock.EnvironmentalSensorSwitchTileEntity.class, ModRsGauges.MODID + "_sensorswitch_entity");
+      GameRegistry.registerTileEntity(AutoSwitchBlock.IntervalTimerSwitchTileEntity.class, ModRsGauges.MODID + "_timerswitch_entity");
       for(SwitchBlock e:automaticSwitches) event.getRegistry().register(e);
     }
   }

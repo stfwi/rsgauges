@@ -90,6 +90,14 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.1b3  - Added local light sensor switch
+              - Added rain sensor switch
+              - Added lightning potential sensor switch
+              - Added (day) timer clock
+              - Added interval timer
+              - Prepared translation/localisation for text messages.
+              - Changed multi-left-click config default timeout from 1200ms to 700ms.
+
   - v1.0.1b2  - Added bistable mechanical/retro style hopper blocker switch.
               - Added bistable mechanical/retro style rotary lever switch.
               - Added bistable mechanical/retro style lever switch.
@@ -99,7 +107,7 @@ redstone power to the game:
               - Added power state dependent construction time bounding box definitions for switches.
               - Changed recipe order for light flip switch (to end of style selection list).
               - Changed ring-fenced-pulse-switch front texture.
-              - Fixed localisation name of arrow target pulse switch. 
+              - Fixed localisation name of arrow target pulse switch.
               - Fixed texture bleeding, UV scaling, and bounding box of the alarm siren.
 
   - v1.0.1b1  - Added configurable infrared motion sensor (volume range automatic switch).

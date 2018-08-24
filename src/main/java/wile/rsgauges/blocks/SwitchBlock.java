@@ -26,6 +26,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
@@ -33,41 +34,51 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.util.Random;
 import javax.annotation.Nullable;
 
 public class SwitchBlock extends RsBlock {
 
-  public static final int SWITCH_DATA_POWERED_POWER_MASK    = 0x0000000f;
-  public static final int SWITCH_DATA_UNPOWERED_POWER_MASK  = 0x000000f0;
-  public static final int SWITCH_DATA_INVERTED              = 0x00000100;
-  public static final int SWITCH_DATA_WEAK                  = 0x00000200;
-  public static final int SWITCH_CONFIG_INVERTABLE          = 0x00001000;
-  public static final int SWITCH_CONFIG_WEAKABLE            = 0x00002000;
-  public static final int SWITCH_CONFIG_POWER_SETTABLE      = 0x00004000;
-  public static final int SWITCH_CONFIG_BISTABLE            = 0x00008000;
-  public static final int SWITCH_CONFIG_PULSE               = 0x00010000;
-  public static final int SWITCH_CONFIG_PULSE_EXTENDABLE    = 0x00020000;
-  public static final int SWITCH_CONFIG_LCLICK_RESETTABLE   = 0x00040000;
-  public static final int SWITCH_CONFIG_TOUCH_CONFIGURABLE  = 0x00080000;
-  public static final int SWITCH_CONFIG_AUTOMATIC           = 0x00100000;
-  public static final int SWITCH_CONFIG_SENSOR_VOLUME       = 0x00200000;
-  public static final int SWITCH_CONFIG_SENSOR_LINEAR       = 0x00400000;
-  public static final int SWITCH_CONFIG_FLOOR_MOUNT         = 0x00800000;
-  public static final int SWITCH_CONFIG_PROJECTILE_SENSE_ON = 0x01000000;
-  public static final int SWITCH_CONFIG_PROJECTILE_SENSE_OFF= 0x02000000;
-  public static final int SWITCH_CONFIG_PROJECTILE_SENSE    = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
-  public static final int SWITCH_CONFIG_HOPPER_MOUNTBALE    = 0x04000000;
+  public static final long SWITCH_DATA_POWERED_POWER_MASK    = 0x0000000f;
+  public static final long SWITCH_DATA_UNPOWERED_POWER_MASK  = 0x000000f0;
+  public static final long SWITCH_DATA_INVERTED              = 0x00000100;
+  public static final long SWITCH_DATA_WEAK                  = 0x00000200;
+  public static final long SWITCH_CONFIG_INVERTABLE          = 0x00001000;
+  public static final long SWITCH_CONFIG_WEAKABLE            = 0x00002000;
+  public static final long SWITCH_CONFIG_POWER_SETTABLE      = 0x00004000;
+  public static final long SWITCH_CONFIG_BISTABLE            = 0x00008000;
+  public static final long SWITCH_CONFIG_PULSE               = 0x00010000;
+  public static final long SWITCH_CONFIG_PULSE_EXTENDABLE    = 0x00020000;
+  public static final long SWITCH_CONFIG_LCLICK_RESETTABLE   = 0x00040000;
+  public static final long SWITCH_CONFIG_TOUCH_CONFIGURABLE  = 0x00080000;
+  public static final long SWITCH_CONFIG_AUTOMATIC           = 0x00100000;
+  public static final long SWITCH_CONFIG_SENSOR_VOLUME       = 0x00200000;
+  public static final long SWITCH_CONFIG_SENSOR_LINEAR       = 0x00400000;
+  public static final long SWITCH_CONFIG_FLOOR_MOUNT         = 0x00800000;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON = 0x01000000;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF= 0x02000000;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE    = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
+  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE    = 0x04000000;
+  public static final long SWITCH_CONFIG_SENSOR_LIGHT        = 0x08000000;
+  public static final long SWITCH_CONFIG_TIMER_DAYTIME       = 0x10000000;
+  public static final long SWITCH_CONFIG_SENSOR_RAIN         = 0x20000000;
+  public static final long SWITCH_CONFIG_SENSOR_LIGHTNING    = 0x40000000;
+  public static final long SWITCH_CONFIG_SENSOR_ENVIRONMENTAL= SWITCH_CONFIG_SENSOR_LIGHT|
+                           SWITCH_CONFIG_TIMER_DAYTIME|SWITCH_CONFIG_SENSOR_RAIN|
+                           SWITCH_CONFIG_SENSOR_LIGHTNING;
+  public static final long SWITCH_CONFIG_TIMER_INTERVAL      = 0x80000000;
+  public final long config;
 
-
-  public static final PropertyBool POWERED = PropertyBool.create("powered");
-
-  public final int config;
   @Nullable protected final AxisAlignedBB unrotated_bb_powered;
   @Nullable protected final ModResources.BlockSoundEvent power_on_sound;
   @Nullable protected final ModResources.BlockSoundEvent power_off_sound;
 
-  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, int config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
+  public static final PropertyBool POWERED = PropertyBool.create("powered");
+
+  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
     super(registryName, unrotatedBBUnpowered);
     this.config = config;
     if((powerOnSound==null) && (powerOffSound==null)) {
@@ -80,8 +91,8 @@ public class SwitchBlock extends RsBlock {
     setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));
   }
 
-  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, int config) { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, null, null); }
-  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBB, int config) { this(registryName, unrotatedBB, null, config, null, null); }
+  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config) { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, null, null); }
+  public SwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config) { this(registryName, unrotatedBB, null, config, null, null); }
 
   @Override
   public AxisAlignedBB getUnrotatedBB(IBlockState state) { return ((unrotated_bb_powered==null) || (state==null) || (state.getBlock()!=this) || (!state.getValue(POWERED))) ? super.getUnrotatedBB() : unrotated_bb_powered; }
@@ -252,19 +263,17 @@ public class SwitchBlock extends RsBlock {
    */
   public static class SwitchTileEntity extends RsTileEntity<SwitchBlock> {
     protected int off_timer_ = 0;
-    protected int scd_ = 0; // encoded state and configuration data
+    protected int scd_ = 0; // encoded state data
     protected long click_config_time_lastclicked_ = 0;
 
     @Override
-    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) {
-      nbt.setInteger("scd", scd_);
-    }
+    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) { nbt.setInteger("scd", scd_); }
 
     @Override
-    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
-      scd_ = nbt.getInteger("scd");
-      if((!updatePacket) && (scd_==0)) reset();
-    }
+    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  { scd_ = nbt.getInteger("scd"); if((!updatePacket) && (scd_==0)) reset(); }
+
+    @Override
+    protected void setWorldCreate(World world) { this.reset(world); }
 
     public int scd() { return scd_; }
     public int off_timer() { return off_timer_; }
@@ -273,7 +282,6 @@ public class SwitchBlock extends RsBlock {
     public int off_timer_tick() { return  ((--off_timer_ <= 0) ? 0 : off_timer_); }
 
     public void off_timer_extend() {
-      // make conf lookup?
       if(off_timer_ > 35) off_timer_ = 80;
       else if(off_timer_ > 15) off_timer_ = 40;
       else if(off_timer_ > 8) off_timer_ = 20;
@@ -291,13 +299,15 @@ public class SwitchBlock extends RsBlock {
     public void inverted(boolean val) { if(val) scd_ |= ((int)0x0100); else scd_ &= ~((int)0x0100); }
     public void weak(boolean val)     { if(val) scd_ |= ((int)0x0200); else scd_ &= ~((int)0x0200); }
 
-    public void reset() {
+    public void reset() { reset(getWorld()); }
+
+    public void reset(World world) {
       off_timer_ = 0;
       click_config_time_lastclicked_ = 0;
       try {
         // If the world is not yet available or the block not loaded let it run with the head
         // into the wall and say 0.
-        scd_ = ((SwitchBlock)(getWorld().getBlockState(getPos()).getBlock())).config;
+        scd_ = (int)((((SwitchBlock)(world.getBlockState(getPos()).getBlock())).config) & 0x0fff);
       } catch(Exception e) {
         scd_ = 0;
       }
@@ -309,7 +319,6 @@ public class SwitchBlock extends RsBlock {
      * Returns the current power depending on the block settings.
      */
     public int power(IBlockState state, boolean strong) {
-      if((scd_ & 0xff)==0) scd_ |= 15;
       return (strong && weak()) ? (0) : ( (inverted() == state.getValue(POWERED)) ? off_power() : on_power() );
     }
 
@@ -357,9 +366,10 @@ public class SwitchBlock extends RsBlock {
 
     @Override
     public String toString() {
-      return "switch power:" + Integer.toString(on_power())
-      + ((off_power()>0) ? (" off:" + Integer.toString(off_power())) : (""))
-      + (weak() ? " weak":" strong") + (inverted() ? " inverted":"");
+      return ModAuxiliaries.localize("switch power") + ":" + Integer.toString(on_power())
+      + ((off_power()>0) ? ("/"+ ModAuxiliaries.localize("off") + ":" + Integer.toString(off_power())) : (""))
+      + (weak() ? (" " + ModAuxiliaries.localize("weak")) : (" " + ModAuxiliaries.localize("strong")))
+      + (inverted() ? (" " + ModAuxiliaries.localize("inverted")) : "");
     }
 
     public String toString(SwitchBlock block) {

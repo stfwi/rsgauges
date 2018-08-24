@@ -48,11 +48,11 @@ import java.util.Random;
 
 public class ContactSwitchBlock extends SwitchBlock {
 
-  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, int config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
+  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
     super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound);
   }
 
-  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, int config) {
+  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config) {
     super(registryName, unrotatedBB, config);
   }
 
@@ -186,23 +186,23 @@ public class ContactSwitchBlock extends SwitchBlock {
       switch(field) {
         case 1: {
           this.high_sensitivity(direction > 0);
-          ModAuxiliaries.playerMessage(player, "switch weight threshold: " + (this.high_sensitivity() ? "high sensitivity" : "normal sensitivity") );
+          ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("switch weight threshold") + ": " + ModAuxiliaries.localize(this.high_sensitivity() ? "high sensitivity" : "normal sensitivity") );
           break;
         }
         case 2: {
           this.entity_count_threshold(this.entity_count_threshold() + direction);
-          ModAuxiliaries.playerMessage(player, "switch entity threshold: " + Integer.toString(this.entity_count_threshold()));
+          ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("switch entity threshold") + ": " + Integer.toString(this.entity_count_threshold()));
           break;
         }
         case 3: {
           this.filter(this.filter() + direction);
-          ModAuxiliaries.playerMessage(player, "switch entity type: " + filter_class_names[filter_]);
+          ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("switch entity type") + ": " + ModAuxiliaries.localize(filter_class_names[filter_]));
           break;
         }
         case 4: {
           this.on_power(this.on_power() + direction);
           if(this.on_power() < 1) this.on_power(1);
-          ModAuxiliaries.playerMessage(player, "switch power: " + Integer.toString(this.on_power()));
+          ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("switch power") + ": " + Integer.toString(this.on_power()));
           break;
         }
       }

@@ -3,9 +3,10 @@
   "defaults": {
     "model": "rsgauges:bistableswitch8block_s00",
     "textures": {
-      "base": "rsgauges:blocks/common/graymetal",
       "side": "rsgauges:blocks/common/darkmachinemetal",
-      "handle": "rsgauges:blocks/common/iestylewood"
+      "parts": "rsgauges:blocks/common/darkroughmetal",   
+      "handle": "rsgauges:blocks/common/iestylewood",
+      "base": "rsgauges:blocks/common/graymetal"
     }
   },
   "variants": {
