@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rsgauges:automaticswitch2block",
+    "textures": {
+      "front": "rsgauges:blocks/common/darkmachinemetal",
+      "side":  "rsgauges:blocks/common/darkgraymetal",
+      "parts":  "rsgauges:blocks/common/darkroughmetal",
+      "led": "rsgauges:blocks/indicator/indicator_fg_red_off_texture",
+      "ui": "rsgauges:blocks/automaticswitch/automaticswitch_uis"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": { "north": {"y":0}, "south": {"y":180}, "west": {"y":-90}, "east": {"y":90}, "up": {"x":-90}, "down": {"x":90} },
+    "powered": { "false":{}, "true":{ "textures": { "led": "rsgauges:blocks/indicator/indicator_fg_red_on_texture" } } }    
+  }
+}

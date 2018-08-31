@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [ { "item": "rsgauges:automaticswitch6" } ],
+  "result": { "item": "rsgauges:automaticswitch3", "data": 0 }
+}

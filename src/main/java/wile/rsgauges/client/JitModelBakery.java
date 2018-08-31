@@ -3,22 +3,6 @@
 //
 package wile.rsgauges.client;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.UnmodifiableIterator;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -69,7 +53,20 @@ import wile.rsgauges.ModBlocks;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.blocks.GaugeBlock;
 import wile.rsgauges.blocks.RsBlock;
-import wile.rsgauges.blocks.RsTileEntity;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.opengl.GL11;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.UnmodifiableIterator;
 
 @SideOnly(Side.CLIENT)
 public class JitModelBakery {
@@ -211,7 +208,7 @@ public class JitModelBakery {
   /**
    * TESR applying the model corresponding to the actual block state.
    */
-  public static class JitModelTesr<TeType extends RsTileEntity> extends TileEntitySpecialRenderer<TeType> {
+  public static class JitModelTesr<TeType extends RsBlock.RsTileEntity> extends TileEntitySpecialRenderer<TeType> {
     @Override
     public void render(TeType te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
       BlockRendererDispatcher mcbrd = Minecraft.getMinecraft().getBlockRendererDispatcher();

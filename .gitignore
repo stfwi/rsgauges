@@ -21,4 +21,5 @@ build
 eclipse
 run
 tests
-*.takeouts.txt
+src/main/java/archive
+src/main/resources/assets/minecraft

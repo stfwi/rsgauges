@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NDN",
+    "NRN"
+  ],
+  "key": {
+    "N": { "item": "minecraft:iron_nugget", "data": 0 },
+    "R": { "item": "minecraft:redstone", "data": 0 },
+    "D": { "item": "minecraft:daylight_detector", "data": 0 }
+  },
+  "result": { "item": "rsgauges:automaticswitch3", "data": 0 }
+}

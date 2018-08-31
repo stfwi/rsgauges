@@ -17,6 +17,7 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModConfig;
+import wile.rsgauges.ModResources;
 import wile.rsgauges.ModBlocks;
 import wile.rsgauges.blocks.RsBlock;
 import wile.rsgauges.client.JitModelBakery;
@@ -37,6 +38,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,9 +48,12 @@ import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -80,35 +85,88 @@ public class GaugeBlock extends RsBlock {
   // weak power, of the target block it is attached to.
   private final boolean measureTargetWeakPower = true;
   private final int blinkInterval;
+  @Nullable private final ModResources.BlockSoundEvent power_on_sound;
+  @Nullable private final ModResources.BlockSoundEvent power_off_sound;
 
-  public GaugeBlock(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval) {
+  public GaugeBlock(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
     super(registryName, unrotatedBB);
     this.lightValueScaling = (powerToLightValueScaling0To15 < 0) ? (0) : ((powerToLightValueScaling0To15 > 15) ? 15 : powerToLightValueScaling0To15);
     this.blinkInterval = (blinkInterval <= 0) ? (0) : ((blinkInterval < 500) ? (500) : ((blinkInterval > 3000) ? 3000 : blinkInterval));
+    this.power_on_sound = powerOnSound;
+    this.power_off_sound = powerOffSound;
     setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWER, 0));
   }
 
+  public GaugeBlock(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval) { this(registryName, unrotatedBB, powerToLightValueScaling0To15, blinkInterval, null, null); }
+
   public GaugeBlock(String registryName, AxisAlignedBB boundingBox) { this(registryName, boundingBox, 0, 0); }
+
+  @Override
+  public boolean isWallMount() { return true; }
 
   @Override
   @SideOnly(Side.CLIENT)
   public void initModel() { super.initModel(); }
 
-  @Override
   @SideOnly(Side.CLIENT)
-  public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, net.minecraft.client.particle.ParticleManager manager) { return true; }
+  @Override
+  public BlockRenderLayer getBlockLayer() { return (lightValueScaling>0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
 
   @Override
-  @SideOnly(Side.CLIENT)
-  public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.ParticleManager manager) { return true; }
+  public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+    GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
+    return super.getActualState(state, world, pos).withProperty(POWER, (te==null) ? 0 : te.power());
+  }
 
+  @Override
+  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
+    if(!this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos)) return;
+    GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
+    if(te != null) te.reset_timer();
+  }
+
+  @Override
+  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    if(this.onBlockPlacedByCheck(world, pos, state, placer, stack)) world.scheduleBlockUpdate(pos, state.getBlock(), 0, 1);
+  }
+
+  @Override
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    RsBlock.WrenchActivationCheck ck = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
+    update(state, world, pos);
+    return true;
+  }
+
+  @Override
+  public int getLightValue(IBlockState state) { int v = (int)((this.lightValueScaling * state.getValue(POWER)) / 15); return (v < 0) ? (0) : ((v > 15) ? 15 : v); }
+
+  @Override
+  public boolean getWeakChanges(IBlockAccess world, BlockPos pos) { return true; }
+
+  @Override
+  protected BlockStateContainer createBlockState() { return new BlockStateContainer(this, FACING,POWER); }
+
+  @Override
+  public boolean hasTileEntity(IBlockState state) { return true; }
+
+  @Override
+  public TileEntity createTileEntity(World world, IBlockState state) { return new GaugeBlock.GaugeTileEntity(); }
+
+  /**
+   * Block update.
+   *
+   * Server: Measures direct/indirect, stores the new measured power value
+   *         in the tile entity and synchronises state/nbt on change.
+   *
+   * Client: Block state/render update if the tile entity power does not
+   *         match the current block state power.
+   */
   public void update(IBlockState state, World world, BlockPos pos) {
-    boolean sync = false;
     GaugeBlock.GaugeTileEntity te = getTe(state, world, pos, true);
     if(te == null) return;
     if(state == null) state = world.getBlockState(pos);
     if(world.isRemote) {
-      if(sync || (state.getValue(POWER) != te.power())) {
+      if(state.getValue(POWER) != te.power()) {
         world.setBlockState(pos, state.withProperty(POWER, te.power()), 1|2|16);
         world.markBlockRangeForRenderUpdate(pos, pos);
       }
@@ -138,7 +196,12 @@ public class GaugeBlock extends RsBlock {
         }
       }
       if((this.blinkInterval > 0) && te.force_off()) p = 0;
-      if(te.power() != p) sync = true;
+      boolean sync = (te.power() != p);
+      if((this.power_on_sound != null) && (te.power() == 0) && (p > 0)) {
+        this.power_on_sound.play(world, pos);
+      } else if((this.power_off_sound != null) && (te.power() > 0) && (p == 0)) {
+        this.power_off_sound.play(world, pos);
+      }
       te.power(p);
       IBlockState newState = state.withProperty(POWER, p);
       if(sync) {
@@ -151,47 +214,17 @@ public class GaugeBlock extends RsBlock {
     }
   }
 
-  @Override
-  public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-    GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
-    return super.getActualState(state, world, pos).withProperty(POWER, (te==null) ? 0 : te.power());
-  }
-
-  @Override
-  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
-    if(!this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos)) return;
-    GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
-    if(te != null) te.reset_timer();
-  }
-
-  @Override
-  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-    if(this.onBlockPlacedByCheck(world, pos, state, placer, stack)) world.scheduleBlockUpdate(pos, state.getBlock(), 0, 1);
-  }
-
-  @Override
-  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) { update(state, world, pos); return true; }
-
-  @Override
-  public int getLightValue(IBlockState state) { int v = (int)((this.lightValueScaling * state.getValue(POWER)) / 15); return (v < 0) ? (0) : ((v > 15) ? 15 : v); }
-
-  @Override
-  public boolean getWeakChanges(IBlockAccess world, BlockPos pos) { return true; }
-
-  @Override
-  protected BlockStateContainer createBlockState() { return new BlockStateContainer(this, FACING,POWER); }
-
-  @Override
-  public boolean hasTileEntity(IBlockState state) { return true; }
-
-  @Override
-  public TileEntity createTileEntity(World world, IBlockState state) { return new GaugeBlock.GaugeTileEntity(); }
-
+  /**
+   * Readwrite TE getter.
+   */
   public GaugeBlock.GaugeTileEntity getTe(IBlockState state, IBlockAccess world, BlockPos pos) {
     TileEntity te = world.getTileEntity(pos);
     return (!(te instanceof GaugeBlock.GaugeTileEntity)) ? (null) : ((GaugeBlock.GaugeTileEntity)te);
   }
 
+  /**
+   * Readwrite/readonly (chunk cache) tile entity getter.
+   */
   public GaugeBlock.GaugeTileEntity getTe(IBlockState state, IBlockAccess world, BlockPos pos, boolean nocache) {
     TileEntity te;
     if(nocache) {
@@ -207,7 +240,7 @@ public class GaugeBlock extends RsBlock {
   /**
    * Tile entity to update the gauge block frequently.
    */
-  public static final class GaugeTileEntity extends RsTileEntity<GaugeBlock> implements ITickable {
+  public static final class GaugeTileEntity extends RsBlock.RsTileEntity<GaugeBlock> implements ITickable {
     private long trigger_timer_ = 0;
     private int power_ = 0;
     private boolean force_off_ = false;
@@ -262,5 +295,6 @@ public class GaugeBlock extends RsBlock {
         }
       }
     }
+
   }
 }

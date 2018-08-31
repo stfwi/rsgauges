@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NPN",
+    "NRN"
+  ],
+  "key": {
+    "N": { "item": "minecraft:iron_nugget", "data": 0 },
+    "R": { "item": "minecraft:redstone", "data": 0 },
+    "P": { "item": "minecraft:wooden_pressure_plate", "data": 0 }
+  },
+  "result": { "item": "rsgauges:contactmat1", "data": 0 }
+}
