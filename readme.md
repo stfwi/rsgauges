@@ -90,6 +90,8 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.1    - Release based on v1.0.1b3.
+
   - v1.0.1b3  - Added local light sensor switch
               - Added rain sensor switch
               - Added lightning potential sensor switch
