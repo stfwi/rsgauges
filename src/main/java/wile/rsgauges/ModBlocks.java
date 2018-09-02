@@ -33,48 +33,12 @@ import net.minecraft.init.SoundEvents;
 
 public class ModBlocks {
 
-  // Object holder injection fields for own blocks
-  @GameRegistry.ObjectHolder("rsgauges:flatgauge1")           public static final GaugeBlock flatgauge1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:flatgauge2")           public static final GaugeBlock flatgauge2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:flatgauge3")           public static final GaugeBlock flatgauge3Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:flatgauge4")           public static final GaugeBlock flatgauge4Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:flatgauge5")           public static final GaugeBlock flatgauge5Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:flatgauge6")           public static final GaugeBlock flatgauge6Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:indicator1")           public static final GaugeBlock indicator1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:indicator2")           public static final GaugeBlock indicator2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:indicator3")           public static final GaugeBlock indicator3Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:indicator1blink1")     public static final GaugeBlock indicator1Blink1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:indicator2blink1")     public static final GaugeBlock indicator2Blink1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:indicator3blink1")     public static final GaugeBlock indicator3Blink1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:indicator4")           public static final GaugeBlock indicator4Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:soundindicator1")      public static final GaugeBlock soundIndicator1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:bistableswitch1")      public static final SwitchBlock bistableSwitch1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:bistableswitch2")      public static final SwitchBlock bistableSwitch2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:bistableswitch3")      public static final SwitchBlock bistableSwitch3Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:bistableswitch4")      public static final SwitchBlock bistableSwitch4Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:bistableswitch5")      public static final SwitchBlock bistableSwitch5Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:bistableswitch6")      public static final SwitchBlock bistableSwitch6Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:bistableswitch7")      public static final SwitchBlock bistableSwitch7Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:bistableswitch8")      public static final SwitchBlock bistableSwitch8Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:pulseswitch1")         public static final SwitchBlock pulseSwitch1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:pulseswitch2")         public static final SwitchBlock pulseSwitch2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:pulseswitch3")         public static final SwitchBlock pulseSwitch3Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:pulseswitch5")         public static final SwitchBlock pulseSwitch5Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:pulseswitch6")         public static final SwitchBlock pulseSwitch6Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:arrowtarget")          public static final SwitchBlock pulseSwitchArrowTargetBlock = null;
-  @GameRegistry.ObjectHolder("rsgauges:contactmat1")          public static final ContactSwitchBlock contactSwitch1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:contactmat2")          public static final ContactSwitchBlock contactSwitch2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch1")     public static final AutoSwitchBlock automaticSwitch1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch2")     public static final AutoSwitchBlock automaticSwitch2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch3")     public static final AutoSwitchBlock automaticSwitch3Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch4")     public static final AutoSwitchBlock automaticSwitch4Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch5")     public static final AutoSwitchBlock automaticSwitch5Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch6")     public static final AutoSwitchBlock automaticSwitch6Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch7")     public static final AutoSwitchBlock automaticSwitch7Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")       public static final SensitiveGlassBlock sensitiveGlassBlock = null;
-  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_blue")  public static final SensitiveGlassBlock blueSensitiveGlassBlock = null;
-
-  // For loop based initialisation
+  @GameRegistry.ObjectHolder("rsgauges:flatgauge1")               public static final GaugeBlock flatgauge1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:flatgauge2")               public static final GaugeBlock flatgauge2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:flatgauge3")               public static final GaugeBlock flatgauge3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:flatgauge4")               public static final GaugeBlock flatgauge4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:flatgauge5")               public static final GaugeBlock flatgauge5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:flatgauge6")               public static final GaugeBlock flatgauge6Block = null;
   private static final GaugeBlock gauges[] = {
       new GaugeBlock("flatgauge1", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) ),
       new GaugeBlock("flatgauge2", new AxisAlignedBB((4d/16),(2d/16),(0d/16), (12d/16),(14d/16),(1d/16)) ),
@@ -84,6 +48,9 @@ public class ModBlocks {
       new GaugeBlock("flatgauge6", new AxisAlignedBB((2d/16),(4d/16),(0d/16), (14d/16),(12d/16),(1d/16)) )
   };
 
+  @GameRegistry.ObjectHolder("rsgauges:indicator1")               public static final GaugeBlock indicator1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:indicator2")               public static final GaugeBlock indicator2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:indicator3")               public static final GaugeBlock indicator3Block = null;
   private static final GaugeBlock indicators[] = {
       // square LED
       new GaugeBlock("indicator1",
@@ -100,6 +67,10 @@ public class ModBlocks {
       )
   };
 
+  @GameRegistry.ObjectHolder("rsgauges:indicator1blink1")         public static final GaugeBlock indicator1Blink1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:indicator2blink1")         public static final GaugeBlock indicator2Blink1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:indicator3blink1")         public static final GaugeBlock indicator3Blink1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:indicator4")               public static final GaugeBlock indicator4Block = null;
   private static final GaugeBlock blinkIndicators[] = {
       // Blinking square LEDs
       new GaugeBlock("indicator1blink1",
@@ -121,6 +92,7 @@ public class ModBlocks {
       )
   };
 
+  @GameRegistry.ObjectHolder("rsgauges:soundindicator1")          public static final GaugeBlock soundIndicator1Block = null;
   private static final GaugeBlock soundIndicators[] = {
       // Alarm siren
       new GaugeBlock("soundindicator1",
@@ -131,6 +103,24 @@ public class ModBlocks {
       )
   };
 
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch1")          public static final SwitchBlock bistableSwitch1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch2")          public static final SwitchBlock bistableSwitch2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch3")          public static final SwitchBlock bistableSwitch3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch4")          public static final SwitchBlock bistableSwitch4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch5")          public static final SwitchBlock bistableSwitch5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch6")          public static final SwitchBlock bistableSwitch6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch7")          public static final SwitchBlock bistableSwitch7Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch8")          public static final SwitchBlock bistableSwitch8Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_oldfancy1") public static final SwitchBlock bistableSwitchOldFancy1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_oldfancy2") public static final SwitchBlock bistableSwitchOldFancy2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_oldfancy3") public static final SwitchBlock bistableSwitchOldFancy3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_oldfancy4") public static final SwitchBlock bistableSwitchOldFancy4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_oldfancy5") public static final SwitchBlock bistableSwitchOldFancy5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_oldfancy6") public static final SwitchBlock bistableSwitchOldFancy6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_oldfancy7") public static final SwitchBlock bistableSwitchOldFancy7Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic1")   public static final SwitchBlock bistableSwitchRustic1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic2")   public static final SwitchBlock bistableSwitchRustic2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic3")   public static final SwitchBlock bistableSwitchRustic3Block = null;
   private static final SwitchBlock bistableSwitches[] = {
       // Rotary machine switch
       new SwitchBlock("bistableswitch1",
@@ -179,9 +169,79 @@ public class ModBlocks {
           new AxisAlignedBB((6.5d/16),(6.5d/16),(0d/16), (9.7d/16),(14.0d/16),(3d/16)), // bb when off
           new AxisAlignedBB((6.5d/16),(5.0d/16),(0d/16), (9.7d/16),(12.5d/16),(3d/16)), // bb when on
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy gold decorated lever
+      new SwitchBlock("bistableswitch_oldfancy1",
+          new AxisAlignedBB((6d/16),(6.5d/16),(0d/16), (10.3d/16),(13.5d/16),(4.5d/16)), // bb when off
+          new AxisAlignedBB((6d/16),(3.5d/16),(0d/16), (10.3d/16),(10.0d/16),(4.5d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy angular lever
+      new SwitchBlock("bistableswitch_oldfancy2",
+          new AxisAlignedBB((2.5d/16),(6.0d/16),(0d/16), (9.7d/16),(10.0d/16),(4.5d/16)), // bb when off
+          new AxisAlignedBB((4.5d/16),(3.5d/16),(0d/16), (9.2d/16),(10.0d/16),(4.5d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
+      ),
+      // Old fancy bent lever
+      new SwitchBlock("bistableswitch_oldfancy3",
+          new AxisAlignedBB((4.5d/16),(5.0d/16),(0d/16), (12.0d/16),(11.0d/16),(4.5d/16)), // bb when off
+          new AxisAlignedBB((4.5d/16),(5.0d/16),(0d/16), (12.0d/16),(11.0d/16),(4.5d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy gold decorated manual slide sphere connector
+      new SwitchBlock("bistableswitch_oldfancy4",
+          new AxisAlignedBB((5.0d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy gold decorated rotary sphere connector
+      new SwitchBlock("bistableswitch_oldfancy5",
+          new AxisAlignedBB((5.0d/16),(5.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
+          new AxisAlignedBB((5.0d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy gold decorated rotary sphere connector 2
+      new SwitchBlock("bistableswitch_oldfancy6",
+          new AxisAlignedBB((5.0d/16),(5.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy gold decorated manual contactor
+      new SwitchBlock("bistableswitch_oldfancy7",
+          new AxisAlignedBB((2.0d/16),(6.0d/16),(0d/16), (11.7d/16),(14.0d/16),(4.5d/16)), // bb when off
+          new AxisAlignedBB((3.5d/16),(3.5d/16),(0d/16), (11.2d/16),(14.0d/16),(4.5d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Rustic lever 1
+      new SwitchBlock("bistableswitch_rustic1",
+          new AxisAlignedBB((6d/16),(5.0d/16),(0d/16), (10.3d/16),(15.0d/16),(4.5d/16)), // bb when off
+          new AxisAlignedBB((6d/16),(2.0d/16),(0d/16), (10.3d/16),(11.0d/16),(4.5d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Rustic lever 2 (bolted)
+      new SwitchBlock("bistableswitch_rustic2",
+          new AxisAlignedBB((4d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)), // bb when off
+          new AxisAlignedBB((4d/16),(4.0d/16),(0d/16), (13.0d/16),(10.0d/16),(4.5d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Rustic lever 3 (latch slide)
+      new SwitchBlock("bistableswitch_rustic3",
+          new AxisAlignedBB((3d/16),(6.0d/16),(0d/16), (13.0d/16),(12.0d/16),(4.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       )
   };
 
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch1")             public static final SwitchBlock pulseSwitch1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch2")             public static final SwitchBlock pulseSwitch2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch3")             public static final SwitchBlock pulseSwitch3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch5")             public static final SwitchBlock pulseSwitch5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch6")             public static final SwitchBlock pulseSwitch6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:arrowtarget")              public static final SwitchBlock pulseSwitchArrowTargetBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_oldfancy1")    public static final SwitchBlock pulseSwitchOldFancy1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_oldfancy2")    public static final SwitchBlock pulseSwitchOldFancy2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_oldfancy3")    public static final SwitchBlock pulseSwitchOldFancy3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_oldfancy4")    public static final SwitchBlock pulseSwitchOldFancy4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic1")      public static final SwitchBlock pulseSwitchRustic1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic2")      public static final SwitchBlock pulseSwitchRustic2Block = null;
   private static final SwitchBlock pulseSwitches[] = {
       // Square machine pulse switch
       new SwitchBlock("pulseswitch1",
@@ -220,13 +280,59 @@ public class ModBlocks {
       ),
       // Retro double pole switch
       new SwitchBlock("pulseswitch6",
-          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(4d/16)),
+          new AxisAlignedBB((7d/16),(6d/16),(0d/16),(12d/16),(10d/16),(4d/16)),
           SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
           SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy (golden decorated) button
+      new SwitchBlock("pulseswitch_oldfancy1",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy (golden decorated) chain pulse switch
+      new SwitchBlock("pulseswitch_oldfancy2",
+          new AxisAlignedBB((6.5d/16),(4.8d/16),(0d/16),(9.5d/16),(13d/16),(4d/16)),
+          new AxisAlignedBB((6.5d/16),(3.8d/16),(0d/16),(9.5d/16),(12d/16),(4d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy (golden decorated) crank
+      new SwitchBlock("pulseswitch_oldfancy3",
+          new AxisAlignedBB((6.5d/16),(4.8d/16),(0d/16),(9.5d/16),(13d/16),(4d/16)),
+          new AxisAlignedBB((6.5d/16),(3.8d/16),(0d/16),(9.5d/16),(12d/16),(4d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Old fancy (golden decorated) tiny button
+      new SwitchBlock("pulseswitch_oldfancy4",
+          new AxisAlignedBB((7d/16),(7d/16),(0d/16),(9d/16),(9d/16),(1.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Rustic button 1
+      new SwitchBlock("pulseswitch_rustic1",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Rustic button 2 (bolted)
+      new SwitchBlock("pulseswitch_rustic2",
+          new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       )
   };
 
+  @GameRegistry.ObjectHolder("rsgauges:contactmat1")  public static final ContactSwitchBlock contactSwitch1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:contactmat2")  public static final ContactSwitchBlock contactSwitch2Block = null;
   private static final ContactSwitchBlock contactSwitches[] = {
       // Door contact mat
       new ContactSwitchBlock("contactmat1",
@@ -247,6 +353,13 @@ public class ModBlocks {
       )
   };
 
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch1") public static final AutoSwitchBlock automaticSwitch1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch2") public static final AutoSwitchBlock automaticSwitch2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch3") public static final AutoSwitchBlock automaticSwitch3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch4") public static final AutoSwitchBlock automaticSwitch4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch5") public static final AutoSwitchBlock automaticSwitch5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch6") public static final AutoSwitchBlock automaticSwitch6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch7") public static final AutoSwitchBlock automaticSwitch7Block = null;
   private static final AutoSwitchBlock automaticSwitches[] = {
       // Infrared motion_sensor
       new AutoSwitchBlock("automaticswitch1",
@@ -314,6 +427,8 @@ public class ModBlocks {
 
   };
 
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")           public static final SensitiveGlassBlock sensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_blue")      public static final SensitiveGlassBlock blueSensitiveGlassBlock = null;
   private static final SensitiveGlassBlock sensitiveGlassBlocks[] = {
       // Black/white stained sensitive glass
       new SensitiveGlassBlock("sensitiveglass", 0x000f|0x0010), // light value if on 0xf | off 0x1

@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [ { "item": "rsgauges:bistableswitch_oldfancy4" } ],
+  "result": { "item": "rsgauges:bistableswitch_oldfancy5", "data": 0 }
+}

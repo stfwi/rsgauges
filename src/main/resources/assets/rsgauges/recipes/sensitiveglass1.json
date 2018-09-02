@@ -7,12 +7,13 @@
   },
   "pattern": [
     "NGN",
-    "GRG",
+    "SRS",
     "NGN"
   ],
   "key": {
     "N": { "item": "minecraft:iron_nugget", "data": 0 },
     "R": { "item": "minecraft:redstone", "data": 0 },
-    "G": { "item": "minecraft:glass", "data": 0 }
+    "G": { "item": "minecraft:glass", "data": 0 },
+    "S": { "item": "minecraft:glowstone", "data": 0 }
   }
 }

@@ -90,6 +90,12 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.2b1  - Added "old fancy" switch series.
+              - Changed sensitive glass recipe.
+              - Fixed automatic switch iterative recipe.
+              - Fixed version update bug (switchtileentity.reset() recursion), thanks to @tenosko.
+              - Added "rustic" switch series (partial).
+
   - v1.0.1    - Release based on v1.0.1b3.
 
   - v1.0.1b3  - Added local light sensor switch
