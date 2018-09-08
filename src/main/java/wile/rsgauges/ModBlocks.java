@@ -121,6 +121,10 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic1")   public static final SwitchBlock bistableSwitchRustic1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic2")   public static final SwitchBlock bistableSwitchRustic2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic3")   public static final SwitchBlock bistableSwitchRustic3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic4")   public static final SwitchBlock bistableSwitchRustic4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic5")   public static final SwitchBlock bistableSwitchRustic5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic6")   public static final SwitchBlock bistableSwitchRustic6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic7")   public static final SwitchBlock bistableSwitchRustic7Block = null;
   private static final SwitchBlock bistableSwitches[] = {
       // Rotary machine switch
       new SwitchBlock("bistableswitch1",
@@ -223,11 +227,35 @@ public class ModBlocks {
           new AxisAlignedBB((4d/16),(4.0d/16),(0d/16), (13.0d/16),(10.0d/16),(4.5d/16)), // bb when on
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       ),
-      // Rustic lever 3 (latch slide)
+      // Rustic lever 3 (big angular)
       new SwitchBlock("bistableswitch_rustic3",
+          new AxisAlignedBB((0.2d/16),(10.0d/16),(0d/16), (13.5d/16),(15.0d/16),(4.5d/16)), // bb when off
+          new AxisAlignedBB((5.5d/16),( 2.0d/16),(0d/16), (13.5d/16),(15.0d/16),(4.5d/16)), // bb when on
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
+      ),
+      // Rustic lever 4 (counter weighted rotary lever)
+      new SwitchBlock("bistableswitch_rustic4",
+          new AxisAlignedBB((0.5d/16),(11.0d/16),(0d/16), (14.0d/16),(15.0d/16),(4.5d/16)), // bb when off
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
+      ),
+      // Rustic lever 5
+      new SwitchBlock("bistableswitch_rustic5",
+          new AxisAlignedBB((3.5d/16),(6.0d/16),(0d/16), (12.5d/16),(11.0d/16),(4.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Rustic lever 6 (latch slide)
+      new SwitchBlock("bistableswitch_rustic6",
           new AxisAlignedBB((3d/16),(6.0d/16),(0d/16), (13.0d/16),(12.0d/16),(4.5d/16)),
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
-      )
+      ),
+      // Rustic lever 7 (The Nail)
+      new SwitchBlock("bistableswitch_rustic7",
+          new AxisAlignedBB((6.0d/16),(7.0d/16),(0d/16), (9.0d/16),(10.0d/16),(3.0d/16)),
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
+      ),
   };
 
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch1")             public static final SwitchBlock pulseSwitch1Block = null;
@@ -242,6 +270,11 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch_oldfancy4")    public static final SwitchBlock pulseSwitchOldFancy4Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic1")      public static final SwitchBlock pulseSwitchRustic1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic2")      public static final SwitchBlock pulseSwitchRustic2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic3")      public static final SwitchBlock pulseSwitchRustic3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic4")      public static final SwitchBlock pulseSwitchRustic4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic5")      public static final SwitchBlock pulseSwitchRustic5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic6")      public static final SwitchBlock pulseSwitchRustic6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic7")      public static final SwitchBlock pulseSwitchRustic7Block = null;
   private static final SwitchBlock pulseSwitches[] = {
       // Square machine pulse switch
       new SwitchBlock("pulseswitch1",
@@ -328,6 +361,41 @@ public class ModBlocks {
           SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
           SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      ),
+      // Rustic button 3 (pull chain)
+      new SwitchBlock("pulseswitch_rustic3",
+          new AxisAlignedBB((6d/16),(6.5d/16),(0d/16),(10d/16),(14.5d/16),(2.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      ),
+      // Rustic button 4 (weight reset pull chain)
+      new SwitchBlock("pulseswitch_rustic4",
+          new AxisAlignedBB((3d/16),(5.5d/16),(0d/16),(14d/16),(15d/16),(2.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      ),
+      // Rustic button 5 (pull handle)
+      new SwitchBlock("pulseswitch_rustic5",
+          new AxisAlignedBB((3.5d/16),(6.0d/16),(0d/16), (12.5d/16),(11.0d/16),(4.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      ),
+      // Rustic button 6 (handle)
+      new SwitchBlock("pulseswitch_rustic6",
+          new AxisAlignedBB((6.0d/16),(5.0d/16),(0d/16), (10.0d/16),(12.0d/16),(3.0d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      ),
+      // Rustic button 7 (pull nail)
+      new SwitchBlock("pulseswitch_rustic7",
+          new AxisAlignedBB((6.0d/16),(7.0d/16),(0d/16), (9.0d/16),(10.0d/16),(3.0d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
       )
   };
 
