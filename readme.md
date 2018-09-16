@@ -90,13 +90,23 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.2    - Release based on v1.0.2b2.
+
+  - v1.0.2b2  - Added "rustic" switch series switches.
+
+  - v1.0.2b1  - Added "old fancy" switch series.
+              - Changed sensitive glass recipe.
+              - Fixed automatic switch iterative recipe.
+              - Fixed version update bug (switchtileentity.reset() recursion), thanks to @tenosko.
+              - Added "rustic" switch series (partial).
+
   - v1.0.1    - Release based on v1.0.1b3.
 
-  - v1.0.1b3  - Added local light sensor switch
-              - Added rain sensor switch
-              - Added lightning potential sensor switch
-              - Added (day) timer clock
-              - Added interval timer
+  - v1.0.1b3  - Added local light sensor switch.
+              - Added rain sensor switch.
+              - Added lightning potential sensor switch.
+              - Added (day) timer clock.
+              - Added interval timer.
               - Prepared translation/localisation for text messages.
               - Changed multi-left-click config default timeout from 1200ms to 700ms.
 
@@ -117,7 +127,7 @@ redstone power to the game:
               - Added configurable door contact mat.
               - Added sensitive floor contact mat.
               - Added fenced pulse switch.
-              - Added arror target pulse switch.
+              - Added arrow target pulse switch.
               - Added alarm siren (sound indicator).
               - Added redstone sensitive glass (color change black->white, light source).
               - Added feature to switches: Empty handed multi-leftclick cycles through

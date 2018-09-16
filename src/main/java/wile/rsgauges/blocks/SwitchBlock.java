@@ -42,34 +42,36 @@ import javax.annotation.Nullable;
 
 public class SwitchBlock extends RsBlock {
 
-  public static final long SWITCH_DATA_POWERED_POWER_MASK    = 0x0000000f;
-  public static final long SWITCH_DATA_UNPOWERED_POWER_MASK  = 0x000000f0;
-  public static final long SWITCH_DATA_INVERTED              = 0x00000100;
-  public static final long SWITCH_DATA_WEAK                  = 0x00000200;
-  public static final long SWITCH_CONFIG_INVERTABLE          = 0x00001000;
-  public static final long SWITCH_CONFIG_WEAKABLE            = 0x00002000;
-  public static final long SWITCH_CONFIG_POWER_SETTABLE      = 0x00004000;
-  public static final long SWITCH_CONFIG_BISTABLE            = 0x00008000;
-  public static final long SWITCH_CONFIG_PULSE               = 0x00010000;
-  public static final long SWITCH_CONFIG_PULSE_EXTENDABLE    = 0x00020000;
-  public static final long SWITCH_CONFIG_LCLICK_RESETTABLE   = 0x00040000;
-  public static final long SWITCH_CONFIG_TOUCH_CONFIGURABLE  = 0x00080000;
-  public static final long SWITCH_CONFIG_AUTOMATIC           = 0x00100000;
-  public static final long SWITCH_CONFIG_SENSOR_VOLUME       = 0x00200000;
-  public static final long SWITCH_CONFIG_SENSOR_LINEAR       = 0x00400000;
-  public static final long SWITCH_CONFIG_FLOOR_MOUNT         = 0x00800000;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON = 0x01000000;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF= 0x02000000;
+  public static final long SWITCH_DATA_POWERED_POWER_MASK    = 0x000000000fl;
+  public static final long SWITCH_DATA_UNPOWERED_POWER_MASK  = 0x00000000f0l;
+  public static final long SWITCH_DATA_INVERTED              = 0x0000000100l;
+  public static final long SWITCH_DATA_WEAK                  = 0x0000000200l;
+  public static final long SWITCH_CONFIG_INVERTABLE          = 0x0000001000l;
+  public static final long SWITCH_CONFIG_WEAKABLE            = 0x0000002000l;
+  public static final long SWITCH_CONFIG_POWER_SETTABLE      = 0x0000004000l;
+  public static final long SWITCH_CONFIG_BISTABLE            = 0x0000008000l;
+  public static final long SWITCH_CONFIG_PULSE               = 0x0000010000l;
+  public static final long SWITCH_CONFIG_PULSE_EXTENDABLE    = 0x0000020000l;
+  public static final long SWITCH_CONFIG_LCLICK_RESETTABLE   = 0x0000040000l;
+  public static final long SWITCH_CONFIG_TOUCH_CONFIGURABLE  = 0x0000080000l;
+  public static final long SWITCH_CONFIG_AUTOMATIC           = 0x0000100000l;
+  public static final long SWITCH_CONFIG_SENSOR_VOLUME       = 0x0000200000l;
+  public static final long SWITCH_CONFIG_SENSOR_LINEAR       = 0x0000400000l;
+  public static final long SWITCH_CONFIG_FLOOR_MOUNT         = 0x0000800000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON = 0x0001000000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF= 0x0002000000l;
   public static final long SWITCH_CONFIG_PROJECTILE_SENSE    = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
-  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE    = 0x04000000;
-  public static final long SWITCH_CONFIG_SENSOR_LIGHT        = 0x08000000;
-  public static final long SWITCH_CONFIG_TIMER_DAYTIME       = 0x10000000;
-  public static final long SWITCH_CONFIG_SENSOR_RAIN         = 0x20000000;
-  public static final long SWITCH_CONFIG_SENSOR_LIGHTNING    = 0x40000000;
+  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE    = 0x0004000000l;
+  public static final long SWITCH_CONFIG_SENSOR_LIGHT        = 0x0008000000l;
+  public static final long SWITCH_CONFIG_TIMER_DAYTIME       = 0x0010000000l;
+  public static final long SWITCH_CONFIG_SENSOR_RAIN         = 0x0020000000l;
+  public static final long SWITCH_CONFIG_SENSOR_LIGHTNING    = 0x0040000000l;
   public static final long SWITCH_CONFIG_SENSOR_ENVIRONMENTAL= SWITCH_CONFIG_SENSOR_LIGHT|
                            SWITCH_CONFIG_TIMER_DAYTIME|SWITCH_CONFIG_SENSOR_RAIN|
                            SWITCH_CONFIG_SENSOR_LIGHTNING;
-  public static final long SWITCH_CONFIG_TIMER_INTERVAL      = 0x80000000;
+  public static final long SWITCH_CONFIG_TIMER_INTERVAL      = 0x0080000000l;
+  public static final long SWITCH_CONFIG_TRANSLUCENT         = 0x0100000000l;
+
   public final long config;
 
   @Nullable protected final AxisAlignedBB unrotated_bb_powered;
@@ -102,6 +104,10 @@ public class SwitchBlock extends RsBlock {
 
   @Override
   public boolean isFloorMount() { return ((config & SWITCH_CONFIG_FLOOR_MOUNT) != 0); }
+
+  @SideOnly(Side.CLIENT)
+  @Override
+  public BlockRenderLayer getBlockLayer() { return ((config & SWITCH_CONFIG_TRANSLUCENT) != 0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
 
   @Override
   public IBlockState getStateFromMeta(int meta) { return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 0x7)).withProperty(POWERED, ((meta & 0x8) != 0)); }
@@ -307,12 +313,13 @@ public class SwitchBlock extends RsBlock {
       try {
         // If the world is not yet available or the block not loaded let it run with the head
         // into the wall and say 0.
+        final int current_scd = scd_;
         scd_ = (int)((((SwitchBlock)(world.getBlockState(getPos()).getBlock())).config) & 0x0fff);
+        if((scd_ & 0xff)==0) scd_ |= 15; // implicitly set on-power if not set yet
+        if(current_scd != scd_) this.markDirty();
       } catch(Exception e) {
-        scd_ = 0;
+        scd_ = 15;
       }
-      if((scd_ & 0xff)==0) scd_ |= 15; // implicitly set on-power if not set yet
-      this.markDirty();
     }
 
     /**
