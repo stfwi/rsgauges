@@ -90,6 +90,8 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.2    - Release based on v1.0.2b2.
+
   - v1.0.2b2  - Added "rustic" switch series switches.
 
   - v1.0.2b1  - Added "old fancy" switch series.
