@@ -64,3 +64,5 @@ tile.rsgauges.pulseswitch_rustic4.name=Pulse redstone switch (rustic weight rese
 tile.rsgauges.pulseswitch_rustic5.name=Pulse redstone switch (rustic pull handle)
 tile.rsgauges.pulseswitch_rustic6.name=Pulse redstone switch (rustic push handle)
 tile.rsgauges.pulseswitch_rustic7.name=Pulse redstone switch (rustic the-nail)
+tile.rsgauges.contactmat_rustic1.name=Contact redstone switch (rustic door floor plate)
+tile.rsgauges.gauge_rustic2.name=Redstone gauge (rustic circular wall meter)

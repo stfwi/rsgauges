@@ -1,10 +1,13 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:flatgauge6block",
+    "model": "rsgauges:flatgauge6block_s00",
     "textures": {
-      "front": "rsgauges:blocks/gauge/flatgauge6texture_s00",
-      "side":  "rsgauges:blocks/common/darkgraymetal"
+      "scale":  "rsgauges:blocks/gauge/flatgauge6bg",
+      "front": "rsgauges:blocks/common/redstonered",
+      "side":  "rsgauges:blocks/common/darkmachinemetal",
+      "bulk":  "rsgauges:blocks/common/lightmachinemetal",
+      "glass":  "rsgauges:blocks/common/cleargrayglass"
     }
   },
   "variants": {
@@ -12,22 +15,22 @@
     "inventory": [{}],
     "facing": { "north":{}, "south":{"y":180}, "west":{"y":270}, "east":{"y":90}, "up":{"x":-90}, "down":{"x":90} },
     "power": {
-      "0":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s00" } },
-      "1":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s01" } },
-      "2":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s02" } },
-      "3":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s03" } },
-      "4":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s04" } },
-      "5":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s05" } },
-      "6":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s06" } },
-      "7":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s07" } },
-      "8":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s08" } },
-      "9":  { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s09" } },
-      "10": { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s10" } },
-      "11": { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s11" } },
-      "12": { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s12" } },
-      "13": { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s13" } },
-      "14": { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s14" } },
-      "15": { "textures": { "front": "rsgauges:blocks/gauge/flatgauge6texture_s15" } }
+      "0":  { "model": "rsgauges:flatgauge6block_s00" },
+      "1":  { "model": "rsgauges:flatgauge6block_s01" },
+      "2":  { "model": "rsgauges:flatgauge6block_s02" },
+      "3":  { "model": "rsgauges:flatgauge6block_s03" },
+      "4":  { "model": "rsgauges:flatgauge6block_s04" },
+      "5":  { "model": "rsgauges:flatgauge6block_s05" },
+      "6":  { "model": "rsgauges:flatgauge6block_s06" },
+      "7":  { "model": "rsgauges:flatgauge6block_s07" },
+      "8":  { "model": "rsgauges:flatgauge6block_s08" },
+      "9":  { "model": "rsgauges:flatgauge6block_s09" },
+      "10": { "model": "rsgauges:flatgauge6block_s10" },
+      "11": { "model": "rsgauges:flatgauge6block_s11" },
+      "12": { "model": "rsgauges:flatgauge6block_s12" },
+      "13": { "model": "rsgauges:flatgauge6block_s13" },
+      "14": { "model": "rsgauges:flatgauge6block_s14" },
+      "15": { "model": "rsgauges:flatgauge6block_s15" }
     }
   }
 }

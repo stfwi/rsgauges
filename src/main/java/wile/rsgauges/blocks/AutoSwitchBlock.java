@@ -67,7 +67,7 @@ public class AutoSwitchBlock extends SwitchBlock {
   }
 
   @Override
-  public int tickRate(World world) { return 100; } // no block based scheduling needed
+  public int tickRate(World world) { return 20; } // no block based scheduling needed
 
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {} // in tile entity update (which is anyway needed)

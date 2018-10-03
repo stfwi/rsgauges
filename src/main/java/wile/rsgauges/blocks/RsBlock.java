@@ -316,6 +316,7 @@ public abstract class RsBlock extends Block {
   {
     public boolean accepted = false;
     public boolean wrenched = false;
+    public int redstone = 0;
     public double x = 0;
     public double y = 0;
 
@@ -336,6 +337,12 @@ public abstract class RsBlock extends Block {
       if(block.isFloorMount() && (facing != EnumFacing.UP)) return ck;
       if(block.isWallMount() && (facing != state.getValue(FACING))) return ck;
       ck.wrenched = wrenched(player);
+      if(!ck.wrenched) {
+        ItemStack item = player.getHeldItemMainhand();
+        if((item != null) && (item.isStackable()) && (item.getItem().getRegistryName().getResourcePath() == "redstone")) {
+          ck.redstone = item.getCount();
+        }
+      }
       double xo=0, yo=0;
       if(block.isWallMount()) {
         switch(facing.getIndex()) {

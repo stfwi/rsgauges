@@ -42,36 +42,40 @@ import javax.annotation.Nullable;
 
 public class SwitchBlock extends RsBlock {
 
-  public static final long SWITCH_DATA_POWERED_POWER_MASK    = 0x000000000fl;
-  public static final long SWITCH_DATA_UNPOWERED_POWER_MASK  = 0x00000000f0l;
-  public static final long SWITCH_DATA_INVERTED              = 0x0000000100l;
-  public static final long SWITCH_DATA_WEAK                  = 0x0000000200l;
-  public static final long SWITCH_CONFIG_INVERTABLE          = 0x0000001000l;
-  public static final long SWITCH_CONFIG_WEAKABLE            = 0x0000002000l;
-  public static final long SWITCH_CONFIG_POWER_SETTABLE      = 0x0000004000l;
-  public static final long SWITCH_CONFIG_BISTABLE            = 0x0000008000l;
-  public static final long SWITCH_CONFIG_PULSE               = 0x0000010000l;
-  public static final long SWITCH_CONFIG_PULSE_EXTENDABLE    = 0x0000020000l;
-  public static final long SWITCH_CONFIG_LCLICK_RESETTABLE   = 0x0000040000l;
-  public static final long SWITCH_CONFIG_TOUCH_CONFIGURABLE  = 0x0000080000l;
-  public static final long SWITCH_CONFIG_AUTOMATIC           = 0x0000100000l;
-  public static final long SWITCH_CONFIG_SENSOR_VOLUME       = 0x0000200000l;
-  public static final long SWITCH_CONFIG_SENSOR_LINEAR       = 0x0000400000l;
-  public static final long SWITCH_CONFIG_FLOOR_MOUNT         = 0x0000800000l;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON = 0x0001000000l;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF= 0x0002000000l;
+  public static final long SWITCH_DATA_POWERED_POWER_MASK    = 0x000000000000000fl;
+  public static final long SWITCH_DATA_UNPOWERED_POWER_MASK  = 0x00000000000000f0l;
+  public static final long SWITCH_DATA_INVERTED              = 0x0000000000000100l;
+  public static final long SWITCH_DATA_WEAK                  = 0x0000000000000200l;
+  public static final long SWITCH_CONFIG_INVERTABLE          = 0x0000000000001000l;
+  public static final long SWITCH_CONFIG_WEAKABLE            = 0x0000000000002000l;
+  public static final long SWITCH_CONFIG_POWER_SETTABLE      = 0x0000000000004000l;
+  public static final long SWITCH_CONFIG_BISTABLE            = 0x0000000000008000l;
+  public static final long SWITCH_CONFIG_PULSE               = 0x0000000000010000l;
+  public static final long SWITCH_CONFIG_PULSE_EXTENDABLE    = 0x0000000000020000l;
+  public static final long SWITCH_CONFIG_LCLICK_RESETTABLE   = 0x0000000000040000l;
+  public static final long SWITCH_CONFIG_TOUCH_CONFIGURABLE  = 0x0000000000080000l;
+  public static final long SWITCH_CONFIG_AUTOMATIC           = 0x0000000000100000l;
+  public static final long SWITCH_CONFIG_SENSOR_VOLUME       = 0x0000000000200000l;
+  public static final long SWITCH_CONFIG_SENSOR_LINEAR       = 0x0000000000400000l;
+  public static final long SWITCH_CONFIG_FLOOR_MOUNT         = 0x0000000000800000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON = 0x0000000001000000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF= 0x0000000002000000l;
   public static final long SWITCH_CONFIG_PROJECTILE_SENSE    = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
-  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE    = 0x0004000000l;
-  public static final long SWITCH_CONFIG_SENSOR_LIGHT        = 0x0008000000l;
-  public static final long SWITCH_CONFIG_TIMER_DAYTIME       = 0x0010000000l;
-  public static final long SWITCH_CONFIG_SENSOR_RAIN         = 0x0020000000l;
-  public static final long SWITCH_CONFIG_SENSOR_LIGHTNING    = 0x0040000000l;
+  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE    = 0x0000000004000000l;
+  public static final long SWITCH_CONFIG_SENSOR_LIGHT        = 0x0000000008000000l;
+  public static final long SWITCH_CONFIG_TIMER_DAYTIME       = 0x0000000010000000l;
+  public static final long SWITCH_CONFIG_SENSOR_RAIN         = 0x0000000020000000l;
+  public static final long SWITCH_CONFIG_SENSOR_LIGHTNING    = 0x0000000040000000l;
   public static final long SWITCH_CONFIG_SENSOR_ENVIRONMENTAL= SWITCH_CONFIG_SENSOR_LIGHT|
                            SWITCH_CONFIG_TIMER_DAYTIME|SWITCH_CONFIG_SENSOR_RAIN|
                            SWITCH_CONFIG_SENSOR_LIGHTNING;
-  public static final long SWITCH_CONFIG_TIMER_INTERVAL      = 0x0080000000l;
-  public static final long SWITCH_CONFIG_TRANSLUCENT         = 0x0100000000l;
+  public static final long SWITCH_CONFIG_TIMER_INTERVAL      = 0x0000000080000000l;
+  public static final long SWITCH_CONFIG_TRANSLUCENT         = 0x0000000100000000l;
+  public static final long SWITCH_CONFIG_PULSETIME_CONFIGURABLE = 0x0000000200000000l;
 
+  public static final int SWITCH_DATA_SVD_ACTIVE_TIME_MASK   = 0x000000ff;
+
+  public static final int base_tick_rate = 2;
   public final long config;
 
   @Nullable protected final AxisAlignedBB unrotated_bb_powered;
@@ -204,7 +208,7 @@ public class SwitchBlock extends RsBlock {
     }
     notifyNeighbours(world, pos, state);
     if((config & SWITCH_CONFIG_PULSE)!=0) {
-      world.scheduleUpdate(pos, this, this.tickRate(world));
+      world.scheduleUpdate(pos, this, this.base_tick_rate);
       if((config & SWITCH_CONFIG_PULSE_EXTENDABLE)==0) te.off_timer_reset();
       te.off_timer_extend();
     }
@@ -218,8 +222,22 @@ public class SwitchBlock extends RsBlock {
     if(!(state.getBlock() instanceof SwitchBlock)) return;
     SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if(te == null) return;
+    if((((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0) {
+      // Redstone dust exact activation timing settings
+      if((player != null) && (player.getHeldItemMainhand() != null)) {
+        ItemStack item = player.getHeldItemMainhand();
+        if(item.getItem().getRegistryName().getResourcePath().toString().equals("redstone")) {
+          te.active_time(item.getCount());
+          ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("Pulse time") + ": "
+              + Double.toString( (((double)(base_tick_rate)*te.active_time()))/20 )
+              + "s (" + Integer.toString(base_tick_rate*te.active_time()) + " ticks)"
+          );
+          return;
+        }
+      }
+    }
     if(RsBlock.WrenchActivationCheck.wrenched(player) && te.click_config(this)) {
-      ModAuxiliaries.playerMessage(player, te.toString());
+      ModAuxiliaries.playerMessage(player, te.toString()); // click-config accepted, nothing to do here.
     } else if((config & (SWITCH_CONFIG_LCLICK_RESETTABLE))!=0) {
       te.off_timer_reset();
       if(!state.getValue(POWERED)) return;
@@ -239,13 +257,13 @@ public class SwitchBlock extends RsBlock {
   }
 
   @Override
-  public int tickRate(World world) { return 5; }
+  public int tickRate(World world) { return 1; }
 
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
     if(((config & SWITCH_CONFIG_BISTABLE)!=0) || (world.isRemote) || (!state.getValue(POWERED))) return;
     SwitchBlock.SwitchTileEntity te = getTe(world, pos);
-    if((te!=null) && (te.off_timer_tick() > 0)) { world.scheduleUpdate(pos, this, this.tickRate(world)); return; }
+    if((te!=null) && (te.off_timer_tick() > 0) && (!world.isUpdateScheduled(pos, this)) ) { world.scheduleUpdate(pos, this, 1); return; }
     world.setBlockState(pos, state.withProperty(POWERED, false));
     power_off_sound.play(world, pos);
     notifyNeighbours(world, pos, state);
@@ -270,29 +288,41 @@ public class SwitchBlock extends RsBlock {
   public static class SwitchTileEntity extends RsTileEntity<SwitchBlock> {
     protected int off_timer_ = 0;
     protected int scd_ = 0; // encoded state data
+    protected int svd_ = 0; // encoded value data
     protected long click_config_time_lastclicked_ = 0;
 
     @Override
-    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) { nbt.setInteger("scd", scd_); }
+    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) {
+      nbt.setInteger("scd", scd_);
+      nbt.setInteger("svd", svd_);
+    }
 
     @Override
-    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  { scd_ = nbt.getInteger("scd"); if((!updatePacket) && (scd_==0)) reset(); }
+    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
+      scd_ = nbt.getInteger("scd");
+      svd_ = nbt.getInteger("svd");
+      if((!updatePacket) && (scd_==0)) reset();
+    }
 
     @Override
     protected void setWorldCreate(World world) { this.reset(world); }
 
-    public int scd() { return scd_; }
-    public int off_timer() { return off_timer_; }
-    public void off_timer_reset() { off_timer_ = 0; }
-    public void off_timer_reset(int preset) { off_timer_ = (preset < 0) ? 0 : preset; }
-    public int off_timer_tick() { return  ((--off_timer_ <= 0) ? 0 : off_timer_); }
+    public int svd()                        { return svd_; }
+    public int scd()                        { return scd_; }
+    public int off_timer()                  { return off_timer_; }
+    public void off_timer_reset()           { off_timer_ = 0; }
+    public int off_timer_tick()             { return  ((--off_timer_ <= 0) ? 0 : off_timer_); }
+    public int active_time()                { return ((svd_ & SWITCH_DATA_SVD_ACTIVE_TIME_MASK) >> 0); }
+    public void active_time(int t)          { svd_ = (svd_ & (~SWITCH_DATA_SVD_ACTIVE_TIME_MASK)) | ((t & SWITCH_DATA_SVD_ACTIVE_TIME_MASK) << 0); }
+    public void off_timer_reset(int preset) { if(preset > 0) off_timer_ = preset; else off_timer_ = 0; }
 
     public void off_timer_extend() {
-      if(off_timer_ > 35) off_timer_ = 80;
-      else if(off_timer_ > 15) off_timer_ = 40;
-      else if(off_timer_ > 8) off_timer_ = 20;
-      else if(off_timer_ > 3) off_timer_ = 10;
-      else off_timer_ = 5;
+      if(active_time() > 0) off_timer_ = (active_time()*base_tick_rate)-1;
+      else if(off_timer_ > (190/base_tick_rate)) off_timer_  = 400/base_tick_rate;
+      else if(off_timer_ > ( 90/base_tick_rate)) off_timer_  = 200/base_tick_rate;
+      else if(off_timer_ > ( 30/base_tick_rate)) off_timer_  = 100/base_tick_rate;
+      else if(off_timer_ > (  1/base_tick_rate)) off_timer_  =  50/base_tick_rate;
+      else off_timer_ = 25/base_tick_rate;
     }
 
     public int on_power()             { return ((scd_ & 0x000f) >> 0); }
@@ -310,6 +340,7 @@ public class SwitchBlock extends RsBlock {
     public void reset(World world) {
       off_timer_ = 0;
       click_config_time_lastclicked_ = 0;
+      svd_ = 0;
       try {
         // If the world is not yet available or the block not loaded let it run with the head
         // into the wall and say 0.

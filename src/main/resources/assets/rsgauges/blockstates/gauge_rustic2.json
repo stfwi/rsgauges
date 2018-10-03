@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rsgauges:gauge_rustic2block_s00",
+    "textures": {
+      "iron": "rsgauges:blocks/common/old_iron",
+      "mark": "rsgauges:blocks/common/redstonered",
+      "iron2": "rsgauges:blocks/common/darkgraymetal"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": { "north":{}, "south":{"y":180}, "west":{"y":270}, "east":{"y":90}, "up":{"x":-90}, "down":{"x":90} },
+    "power": {
+      "0":  { "model": "rsgauges:gauge_rustic2block_s00" },
+      "1":  { "model": "rsgauges:gauge_rustic2block_s01" },
+      "2":  { "model": "rsgauges:gauge_rustic2block_s02" },
+      "3":  { "model": "rsgauges:gauge_rustic2block_s03" },
+      "4":  { "model": "rsgauges:gauge_rustic2block_s04" },
+      "5":  { "model": "rsgauges:gauge_rustic2block_s05" },
+      "6":  { "model": "rsgauges:gauge_rustic2block_s06" },
+      "7":  { "model": "rsgauges:gauge_rustic2block_s07" },
+      "8":  { "model": "rsgauges:gauge_rustic2block_s08" },
+      "9":  { "model": "rsgauges:gauge_rustic2block_s09" },
+      "10": { "model": "rsgauges:gauge_rustic2block_s10" },
+      "11": { "model": "rsgauges:gauge_rustic2block_s11" },
+      "12": { "model": "rsgauges:gauge_rustic2block_s12" },
+      "13": { "model": "rsgauges:gauge_rustic2block_s13" },
+      "14": { "model": "rsgauges:gauge_rustic2block_s14" },
+      "15": { "model": "rsgauges:gauge_rustic2block_s15" }
+    }
+  }
+}
