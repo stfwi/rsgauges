@@ -91,6 +91,10 @@ public class ModConfig {
   @Config.RequiresMcRestart
   public static boolean without_decorative = false;
 
+  @Config.Comment("Disable the 'no output' config option for switches.")
+  @Config.Name("Without switch 'no output' option")
+  public static boolean without_switch_nooutput = true;
+
   @Config.Comment("Comma sepatated list of items names that can be used alter (NBT) configurable blocks of this mod." +
                   "This applies when the display side of the block is right click (activated) with the item in the " +
                   "main hand. Empty hand is 'air'.")

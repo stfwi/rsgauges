@@ -90,6 +90,14 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.3b2  - Mod specific creative tab added.
+              - Industrial bistable switch 1 model improved.
+              - Rustic floor contact switch UI texture added.
+              - Multi-left-click config (weak/inverted) now double-click 
+                for each step.
+              - Added switch left-click option 'no output' (default disabled
+                in mod options, feature for future use).
+
   - v1.0.3b1  - Industrial gauge models improved.
               - Rustic wall gauge added.
               - Exact pulse switch off-timing using redstone-dust-left-clicking added.

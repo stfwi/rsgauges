@@ -131,7 +131,7 @@ public class ModBlocks {
   private static final SwitchBlock bistableSwitches[] = {
       // Rotary machine switch
       new SwitchBlock("bistableswitch1",
-          new AxisAlignedBB((4d/16),(4d/16),(0d/16),(12d/16),(12d/16),(1d/16)),
+          new AxisAlignedBB((4.25d/16),(4.25d/16),(0d/16),(11.75d/16),(11.75d/16),(0.80d/16)),
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
       ),
       // Contact lever switch

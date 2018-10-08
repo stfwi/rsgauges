@@ -59,7 +59,7 @@ public abstract class RsBlock extends Block {
 
   public RsBlock(String registryName, AxisAlignedBB unrotatedBoundingBox) {
     super(Material.CIRCUITS);
-    setCreativeTab(CreativeTabs.REDSTONE);
+    setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(registryName);
     setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);

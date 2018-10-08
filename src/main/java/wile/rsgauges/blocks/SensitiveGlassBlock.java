@@ -52,7 +52,7 @@ public class SensitiveGlassBlock extends Block {
 
   public SensitiveGlassBlock(String registryName, int config) {
     super(Material.REDSTONE_LIGHT);
-    setCreativeTab(CreativeTabs.REDSTONE);
+    setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(registryName);
     setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);

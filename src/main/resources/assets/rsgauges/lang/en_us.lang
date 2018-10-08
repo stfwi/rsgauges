@@ -1,3 +1,4 @@
+itemGroup.tabrsgauges=Redstone Gauges and Switches
 tile.rsgauges.automaticswitch1.name=Automatic redstone switch (infrared motion detector)
 tile.rsgauges.automaticswitch2.name=Automatic redstone switch (linear laser detector)
 tile.rsgauges.automaticswitch3.name=Automatic redstone switch (local light sensor)

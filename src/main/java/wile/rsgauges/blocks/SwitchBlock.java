@@ -42,38 +42,38 @@ import javax.annotation.Nullable;
 
 public class SwitchBlock extends RsBlock {
 
-  public static final long SWITCH_DATA_POWERED_POWER_MASK    = 0x000000000000000fl;
-  public static final long SWITCH_DATA_UNPOWERED_POWER_MASK  = 0x00000000000000f0l;
-  public static final long SWITCH_DATA_INVERTED              = 0x0000000000000100l;
-  public static final long SWITCH_DATA_WEAK                  = 0x0000000000000200l;
-  public static final long SWITCH_CONFIG_INVERTABLE          = 0x0000000000001000l;
-  public static final long SWITCH_CONFIG_WEAKABLE            = 0x0000000000002000l;
-  public static final long SWITCH_CONFIG_POWER_SETTABLE      = 0x0000000000004000l;
-  public static final long SWITCH_CONFIG_BISTABLE            = 0x0000000000008000l;
-  public static final long SWITCH_CONFIG_PULSE               = 0x0000000000010000l;
-  public static final long SWITCH_CONFIG_PULSE_EXTENDABLE    = 0x0000000000020000l;
-  public static final long SWITCH_CONFIG_LCLICK_RESETTABLE   = 0x0000000000040000l;
-  public static final long SWITCH_CONFIG_TOUCH_CONFIGURABLE  = 0x0000000000080000l;
-  public static final long SWITCH_CONFIG_AUTOMATIC           = 0x0000000000100000l;
-  public static final long SWITCH_CONFIG_SENSOR_VOLUME       = 0x0000000000200000l;
-  public static final long SWITCH_CONFIG_SENSOR_LINEAR       = 0x0000000000400000l;
-  public static final long SWITCH_CONFIG_FLOOR_MOUNT         = 0x0000000000800000l;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON = 0x0000000001000000l;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF= 0x0000000002000000l;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE    = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
-  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE    = 0x0000000004000000l;
-  public static final long SWITCH_CONFIG_SENSOR_LIGHT        = 0x0000000008000000l;
-  public static final long SWITCH_CONFIG_TIMER_DAYTIME       = 0x0000000010000000l;
-  public static final long SWITCH_CONFIG_SENSOR_RAIN         = 0x0000000020000000l;
-  public static final long SWITCH_CONFIG_SENSOR_LIGHTNING    = 0x0000000040000000l;
-  public static final long SWITCH_CONFIG_SENSOR_ENVIRONMENTAL= SWITCH_CONFIG_SENSOR_LIGHT|
-                           SWITCH_CONFIG_TIMER_DAYTIME|SWITCH_CONFIG_SENSOR_RAIN|
-                           SWITCH_CONFIG_SENSOR_LIGHTNING;
-  public static final long SWITCH_CONFIG_TIMER_INTERVAL      = 0x0000000080000000l;
-  public static final long SWITCH_CONFIG_TRANSLUCENT         = 0x0000000100000000l;
+  public static final long SWITCH_DATA_POWERED_POWER_MASK       = 0x000000000000000fl;
+  public static final long SWITCH_DATA_UNPOWERED_POWER_MASK     = 0x00000000000000f0l;
+  public static final long SWITCH_DATA_INVERTED                 = 0x0000000000000100l;
+  public static final long SWITCH_DATA_WEAK                     = 0x0000000000000200l;
+  public static final long SWITCH_DATA_NOOUTPUT                 = 0x0000000000000400l;
+  public static final long SWITCH_CONFIG_INVERTABLE             = 0x0000000000001000l;
+  public static final long SWITCH_CONFIG_WEAKABLE               = 0x0000000000002000l;
+  public static final long SWITCH_CONFIG_POWER_SETTABLE         = 0x0000000000004000l;
+  public static final long SWITCH_CONFIG_BISTABLE               = 0x0000000000008000l;
+  public static final long SWITCH_CONFIG_PULSE                  = 0x0000000000010000l;
+  public static final long SWITCH_CONFIG_PULSE_EXTENDABLE       = 0x0000000000020000l;
+  public static final long SWITCH_CONFIG_LCLICK_RESETTABLE      = 0x0000000000040000l;
+  public static final long SWITCH_CONFIG_TOUCH_CONFIGURABLE     = 0x0000000000080000l;
+  public static final long SWITCH_CONFIG_AUTOMATIC              = 0x0000000000100000l;
+  public static final long SWITCH_CONFIG_SENSOR_VOLUME          = 0x0000000000200000l;
+  public static final long SWITCH_CONFIG_SENSOR_LINEAR          = 0x0000000000400000l;
+  public static final long SWITCH_CONFIG_FLOOR_MOUNT            = 0x0000000000800000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON    = 0x0000000001000000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF   = 0x0000000002000000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE       = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
+  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE       = 0x0000000004000000l;
+  public static final long SWITCH_CONFIG_SENSOR_LIGHT           = 0x0000000008000000l;
+  public static final long SWITCH_CONFIG_TIMER_DAYTIME          = 0x0000000010000000l;
+  public static final long SWITCH_CONFIG_SENSOR_RAIN            = 0x0000000020000000l;
+  public static final long SWITCH_CONFIG_SENSOR_LIGHTNING       = 0x0000000040000000l;
+  public static final long SWITCH_CONFIG_SENSOR_ENVIRONMENTAL   = SWITCH_CONFIG_SENSOR_LIGHT|SWITCH_CONFIG_TIMER_DAYTIME|SWITCH_CONFIG_SENSOR_RAIN|SWITCH_CONFIG_SENSOR_LIGHTNING;
+  public static final long SWITCH_CONFIG_TIMER_INTERVAL         = 0x0000000080000000l;
+  public static final long SWITCH_CONFIG_TRANSLUCENT            = 0x0000000100000000l;
   public static final long SWITCH_CONFIG_PULSETIME_CONFIGURABLE = 0x0000000200000000l;
 
-  public static final int SWITCH_DATA_SVD_ACTIVE_TIME_MASK   = 0x000000ff;
+  public static final int SWITCH_DATA_SVD_ACTIVE_TIME_MASK      = 0x000000ff;
+  public static final int SWITCH_DATA_SVD_COLOR_MASK            = 0x00000f00;
 
   public static final int base_tick_rate = 2;
   public final long config;
@@ -321,19 +321,21 @@ public class SwitchBlock extends RsBlock {
       else if(off_timer_ > (190/base_tick_rate)) off_timer_  = 400/base_tick_rate;
       else if(off_timer_ > ( 90/base_tick_rate)) off_timer_  = 200/base_tick_rate;
       else if(off_timer_ > ( 30/base_tick_rate)) off_timer_  = 100/base_tick_rate;
-      else if(off_timer_ > (  1/base_tick_rate)) off_timer_  =  50/base_tick_rate;
-      else off_timer_ = 25/base_tick_rate;
+      else if(off_timer_ > (  1/base_tick_rate)) off_timer_  =  60/base_tick_rate;
+      else off_timer_ = 40/base_tick_rate;
     }
 
-    public int on_power()             { return ((scd_ & 0x000f) >> 0); }
-    public int off_power()            { return ((scd_ & 0x00f0) >> 8); }
-    public boolean inverted()         { return ((scd_ & 0x0100) != 0); }
-    public boolean weak()             { return ((scd_ & 0x0200) != 0); }
+    public int on_power()             { return ((scd_ & ((int)SWITCH_DATA_POWERED_POWER_MASK)) >> 0); }
+    public int off_power()            { return ((scd_ & ((int)SWITCH_DATA_UNPOWERED_POWER_MASK)) >> 8); }
+    public boolean inverted()         { return ((scd_ & ((int)SWITCH_DATA_INVERTED)) != 0); }
+    public boolean weak()             { return ((scd_ & ((int)SWITCH_DATA_WEAK)) != 0); }
+    public boolean nooutput()         { return ((scd_ & ((int)SWITCH_DATA_NOOUTPUT)) != 0); }
 
-    public void on_power(int p)       { scd_ = (scd_ & ~((int)0x000f)) | (int)(((p<0)?0:((p>15)?(15):(p)) & 0x000f)<<0); }
-    public void off_power(int p)      { scd_ = (scd_ & ~((int)0x00f0)) | (int)(((p<0)?0:((p>15)?(15):(p)) & 0x000f)<<8); }
-    public void inverted(boolean val) { if(val) scd_ |= ((int)0x0100); else scd_ &= ~((int)0x0100); }
-    public void weak(boolean val)     { if(val) scd_ |= ((int)0x0200); else scd_ &= ~((int)0x0200); }
+    public void on_power(int p)       { scd_ = (scd_ & ~((int)SWITCH_DATA_POWERED_POWER_MASK)) | (int)(((p<0)?0:((p>15)?(15):(p)) & ((int)SWITCH_DATA_POWERED_POWER_MASK))<<0); }
+    public void off_power(int p)      { scd_ = (scd_ & ~((int)SWITCH_DATA_UNPOWERED_POWER_MASK)) | ((int)(((p<0)?0:((p>15)?(15):(p)) & 0x000f)<<8) & ((int)SWITCH_DATA_UNPOWERED_POWER_MASK)); }
+    public void inverted(boolean val) { if(val) scd_ |= ((int)SWITCH_DATA_INVERTED); else scd_ &= ~((int)SWITCH_DATA_INVERTED); }
+    public void weak(boolean val)     { if(val) scd_ |= ((int)SWITCH_DATA_WEAK); else scd_ &= ~((int)SWITCH_DATA_WEAK); }
+    public void nooutput(boolean val) { if(val) scd_ |= ((int)SWITCH_DATA_NOOUTPUT); else scd_ &= ~((int)SWITCH_DATA_NOOUTPUT); }
 
     public void reset() { reset(getWorld()); }
 
@@ -357,7 +359,7 @@ public class SwitchBlock extends RsBlock {
      * Returns the current power depending on the block settings.
      */
     public int power(IBlockState state, boolean strong) {
-      return (strong && weak()) ? (0) : ( (inverted() == state.getValue(POWERED)) ? off_power() : on_power() );
+      return nooutput() ? (0) : ((strong && weak()) ? (0) : ( (inverted() == state.getValue(POWERED)) ? off_power() : on_power() ));
     }
 
     /**
@@ -374,30 +376,37 @@ public class SwitchBlock extends RsBlock {
     public boolean click_config(@Nullable SwitchBlock block) {
       if(block==null) { click_config_time_lastclicked_ = 0; return false; }
 
-      // Check multiclick
+      // Check double click
       {
         long t = System.currentTimeMillis();
         boolean multiclicked = ((t-click_config_time_lastclicked_) > 0) && ((t-click_config_time_lastclicked_) < ModConfig.config_left_click_timeout);
-        click_config_time_lastclicked_ = t;
+        click_config_time_lastclicked_ = multiclicked ? 0 : t;
         if(!multiclicked) return false;
       }
 
       // Not openable: Settings are changed by cycling through available states.
       if((block.config & (SWITCH_CONFIG_INVERTABLE|SWITCH_CONFIG_WEAKABLE))==(SWITCH_CONFIG_INVERTABLE|SWITCH_CONFIG_WEAKABLE)) {
-        if((!weak()) && (!inverted())) {
-          weak(true);
-        } else if((weak()) && (!inverted())) {
-          inverted(true);
-        } else if((weak()) && (inverted())) {
-          weak(false);
-        } else {
-          weak(false); inverted(false);
+        switch(((weak() ? 1:0) | (inverted() ? 2:0)) | (nooutput() ? 4:0)) {
+          case  0: weak(true);  inverted(false); nooutput(false); break;
+          case  1: weak(false); inverted(true);  nooutput(false); break;
+          case  2: weak(true);  inverted(true);  nooutput(false); break;
+          case  3: weak(false); inverted(false); nooutput(true);  break;
+          default: weak(false); inverted(false); nooutput(false); break;
         }
       } else if((block.config & SWITCH_CONFIG_WEAKABLE) != 0) {
-        weak(!weak());
+        switch((weak() ? 1:0) | (nooutput() ? 2:0)) {
+          case  0: weak(true);  inverted(false); nooutput(false); break;
+          case  1: weak(false); inverted(false); nooutput(true);  break;
+          default: weak(false); inverted(false); nooutput(false); break;
+        }
       } else if((block.config & SWITCH_CONFIG_INVERTABLE) != 0) {
-        inverted(!inverted());
+        switch((inverted() ? 1:0) | (nooutput() ? 2:0)) {
+          case  0: weak(false); inverted(true);  nooutput(false); break;
+          case  1: weak(false); inverted(false); nooutput(true);  break;
+          default: weak(false); inverted(false); nooutput(false); break;
+        }
       }
+      if(ModConfig.without_switch_nooutput) nooutput(false); // override last option, where not weak and not inverted is already set.
       this.markDirty();
       return true;
     }
@@ -406,7 +415,7 @@ public class SwitchBlock extends RsBlock {
     public String toString() {
       return ModAuxiliaries.localize("switch power") + ":" + Integer.toString(on_power())
       + ((off_power()>0) ? ("/"+ ModAuxiliaries.localize("off") + ":" + Integer.toString(off_power())) : (""))
-      + (weak() ? (" " + ModAuxiliaries.localize("weak")) : (" " + ModAuxiliaries.localize("strong")))
+      + (nooutput() ? (" " + ModAuxiliaries.localize("no output")) : ((weak() ? (" " + ModAuxiliaries.localize("weak")) : (" " + ModAuxiliaries.localize("strong")))) )
       + (inverted() ? (" " + ModAuxiliaries.localize("inverted")) : "");
     }
 

@@ -4,7 +4,7 @@
     "model": "rsgauges:contactmat_rustic1block_s00",
     "textures": {
       "metal":  "rsgauges:blocks/common/old_iron",
-      "ui": "rsgauges:blocks/common/old_iron"
+      "ui": "rsgauges:blocks/contactswitch/contactmat_rustic1_ui"
     }
   },
   "variants": {
