@@ -12,16 +12,18 @@
 **/
 package wile.rsgauges;
 
-import java.util.ArrayList;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,7 +31,14 @@ import wile.rsgauges.blocks.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.init.SoundEvents;
+
+import java.util.ArrayList;
+import javax.annotation.Nullable;
 
 public class ModBlocks {
 
@@ -516,16 +525,43 @@ public class ModBlocks {
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
       )
-
   };
 
-  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")           public static final SensitiveGlassBlock sensitiveGlassBlock = null;
-  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_blue")      public static final SensitiveGlassBlock blueSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")             public static final SensitiveGlassBlock sensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_white")       public static final SensitiveGlassBlock whiteSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_red")         public static final SensitiveGlassBlock redSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_green")       public static final SensitiveGlassBlock greenSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_blue")        public static final SensitiveGlassBlock blueSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_yellow")      public static final SensitiveGlassBlock yellowSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_orange")      public static final SensitiveGlassBlock orangeSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_magenta")     public static final SensitiveGlassBlock magentaSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_lightblue")   public static final SensitiveGlassBlock lightblueSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_lime")        public static final SensitiveGlassBlock limeSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_pink")        public static final SensitiveGlassBlock pinkSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_gray")        public static final SensitiveGlassBlock graySensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_lightgray")   public static final SensitiveGlassBlock lightgraySensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_cyan")        public static final SensitiveGlassBlock cyanSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_purple")      public static final SensitiveGlassBlock purpleSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_brown")       public static final SensitiveGlassBlock brownSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_black")       public static final SensitiveGlassBlock blackSensitiveGlassBlock = null;
   private static final SensitiveGlassBlock sensitiveGlassBlocks[] = {
-      // Black/white stained sensitive glass
-      new SensitiveGlassBlock("sensitiveglass", 0x000f|0x0010), // light value if on 0xf | off 0x1
-      // Blue stained sensitive glass
-      new SensitiveGlassBlock("sensitiveglass_blue", 0x000f|0x0010)
+      new SensitiveGlassBlock("sensitiveglass"          , 0x000f|0x0020, 0xffffff), // light value if on 0xf | off 0x1, color multiplier
+      new SensitiveGlassBlock("sensitiveglass_white"    , 0x0000|0x0000, 0xf3f3f3),
+      new SensitiveGlassBlock("sensitiveglass_red"      , 0x0000|0x0000, 0xB02E26),
+      new SensitiveGlassBlock("sensitiveglass_green"    , 0x0000|0x0000, 0x5E7C16),
+      new SensitiveGlassBlock("sensitiveglass_blue"     , 0x0000|0x0000, 0x3C44AA),
+      new SensitiveGlassBlock("sensitiveglass_yellow"   , 0x0000|0x0000, 0xFED83D),
+      new SensitiveGlassBlock("sensitiveglass_orange"   , 0x0000|0x0000, 0xF9801D),
+      new SensitiveGlassBlock("sensitiveglass_magenta"  , 0x0000|0x0000, 0xC74EBD),
+      new SensitiveGlassBlock("sensitiveglass_lightblue", 0x0000|0x0000, 0x3AB3DA),
+      new SensitiveGlassBlock("sensitiveglass_lime"     , 0x0000|0x0000, 0x80C71F),
+      new SensitiveGlassBlock("sensitiveglass_pink"     , 0x0000|0x0000, 0xF38BAA),
+      new SensitiveGlassBlock("sensitiveglass_gray"     , 0x0000|0x0000, 0x474F52),
+      new SensitiveGlassBlock("sensitiveglass_lightgray", 0x0000|0x0000, 0x9D9D97),
+      new SensitiveGlassBlock("sensitiveglass_cyan"     , 0x0000|0x0000, 0x169C9C),
+      new SensitiveGlassBlock("sensitiveglass_purple"   , 0x0000|0x0000, 0x8932B8),
+      new SensitiveGlassBlock("sensitiveglass_brown"    , 0x0000|0x0000, 0x835432),
+      new SensitiveGlassBlock("sensitiveglass_black"    , 0x0000|0x0000, 0x111111),
   };
 
   // Invoked from CommonProxy.registerBlocks()
@@ -582,4 +618,41 @@ public class ModBlocks {
     if(!ModConfig.without_automatic_switches) { for(AutoSwitchBlock e:automaticSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
     if(!ModConfig.without_decorative) { for(SensitiveGlassBlock e:sensitiveGlassBlocks) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
   }
+
+  /**
+   * Encapsulates colour handling for blocks and their item representations.
+   */
+  @Mod.EventBusSubscriber(modid=ModRsGauges.MODID)
+  public static final class Colors {
+
+    public static interface Colored {
+      default public int getColorMultiplierRGBA(@Nullable IBlockState state) { return (int)0xffffffff; }
+    }
+
+    @SubscribeEvent
+    public static void registerBlockColourHandlers(final ColorHandlerEvent.Block event) {
+      final IBlockColor blockSpecifiedColorHandler = (state, blockAccess, pos, tintIndex) -> {
+        return (state==null) ? ((int)0xffffffff) : (((Colored)state.getBlock()).getColorMultiplierRGBA(state));
+      };
+      final BlockColors bc = event.getBlockColors();
+      if(!ModConfig.without_decorative) {
+        for(SensitiveGlassBlock e:sensitiveGlassBlocks) bc.registerBlockColorHandler(blockSpecifiedColorHandler, e);
+      }
+    }
+
+    @SubscribeEvent
+    public static void registerItemColourHandlers(final ColorHandlerEvent.Item event) {
+      final ItemColors ic = event.getItemColors();
+      final IItemColor constantBlockColorHandler = (stack, tintIndex) -> {
+        return (((Colored)((ItemBlock)stack.getItem()).getBlock()).getColorMultiplierRGBA(null));
+      };
+      if(!ModConfig.without_decorative) {
+        for(SensitiveGlassBlock e:sensitiveGlassBlocks) {
+          ic.registerItemColorHandler(constantBlockColorHandler, e);
+        }
+      }
+
+    }
+  }
+
 }

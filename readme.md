@@ -90,6 +90,10 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.3b3  - Stained redstone sensitive glass blocks added, changing from
+                clear to stained-colored, but do not emit light as the clear
+                sensitive glass block.
+
   - v1.0.3b2  - Mod specific creative tab added.
               - Industrial bistable switch 1 model improved.
               - Rustic floor contact switch UI texture added.

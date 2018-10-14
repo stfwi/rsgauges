@@ -625,19 +625,5 @@
 				"down": {"uv": [0.5, 4.5, 0.75, 4.75], "texture": "#base", "rotation": 90}
 			}
 		}
-	],
-	"display": {
-		"gui": {
-			"rotation": [0, 180, 0],
-			"translation": [0, 0.5, 0]
-		},
-		"fixed": {
-			"rotation": [0, 0, 0],
-			"translation": [0, 0, -7]
-		},
-		"ground": {
-			"rotation": [0, 0, 0],
-			"translation": [0, 0, -7]
-		}
-	}
+	]
 }

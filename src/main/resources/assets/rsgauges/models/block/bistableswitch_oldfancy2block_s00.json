@@ -1,16 +1,16 @@
 {
   "parent": "block/cube",
-    "textures": {
-      "1": "rsgauges:blocks/common/old_gold",
-      "3": "rsgauges:blocks/common/old_wood",
-      "5": "rsgauges:blocks/common/old_iron",
-      "particle": "rsgauges:blocks/common/old_iron"
-    },
-    "display": {
-      "gui":    { "rotation": [ 0, 180, 0 ], "translation": [  0.00, 0.50,   0.00 ], "scale": [ 1.20, 1.20, 1.20 ] },
-      "fixed":  { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00, -11.00 ], "scale": [ 1.20, 1.20, 1.20 ] },
-      "ground": { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 0.75, 0.75, 0.75 ] }
-    },
+  "textures": {
+    "1": "rsgauges:blocks/common/old_gold",
+    "3": "rsgauges:blocks/common/old_wood",
+    "5": "rsgauges:blocks/common/old_iron",
+    "particle": "rsgauges:blocks/common/old_iron"
+  },
+  "display": {
+    "gui":    { "rotation": [ 0, 180, 0 ], "translation": [  0.00, 0.50,   0.00 ], "scale": [ 1.20, 1.20, 1.20 ] },
+    "fixed":  { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00, -11.00 ], "scale": [ 1.20, 1.20, 1.20 ] },
+    "ground": { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 0.75, 0.75, 0.75 ] }
+  },
 	"elements": [
 		{
 			"from": [14.25, 7.75, 13.5],

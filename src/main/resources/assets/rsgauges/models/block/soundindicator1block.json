@@ -2,9 +2,9 @@
   "parent": "block/cube",
 	"textures": { "particle": "#metal" },
   "display": {
-      "gui":    { "rotation": [  90,  0, 0  ], "translation": [  0.00, 8.00,   0.00 ], "scale": [ 1.50, 1.50, 1.50 ] },
-      "fixed":  { "rotation": [   0,  0, 0  ], "translation": [  0.00, 0.00,  -8.00 ], "scale": [ 1.50, 1.50, 1.50 ] },
-      "ground": { "rotation": [   0,  0, 0  ], "translation": [  0.00, 0.00,  -8.00 ], "scale": [ 1.00, 1.00, 1.00 ] }
+    "gui":    { "rotation": [  90,  0, 0  ], "translation": [  0.00, 8.00,   0.00 ], "scale": [ 1.50, 1.50, 1.50 ] },
+    "fixed":  { "rotation": [   0,  0, 0  ], "translation": [  0.00, 0.00,  -8.00 ], "scale": [ 1.50, 1.50, 1.50 ] },
+    "ground": { "rotation": [   0,  0, 0  ], "translation": [  0.00, 0.00,  -8.00 ], "scale": [ 1.00, 1.00, 1.00 ] }
   },
 	"elements": [
 		{
@@ -319,21 +319,5 @@
 				"down": {"uv": [10.5, 3, 12.25, 4.5], "texture": "#redmetal"}
 			}
 		}
-	],
-	"display": {
-		"gui": {
-			"rotation": [90, 0, 0],
-			"translation": [0, 8, 0],
-			"scale": [1.5, 1.5, 1.5]
-		},
-		"fixed": {
-			"rotation": [0, 0, 0],
-			"translation": [0, 0, -8],
-			"scale": [1.5, 1.5, 1.5]
-		},
-		"ground": {
-			"rotation": [0, 0, 0],
-			"translation": [0, 0, -8]
-		}
-	}
+	]
 }
