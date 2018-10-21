@@ -63,7 +63,7 @@ public class ContactSwitchBlock extends SwitchBlock {
     te.click_config(null);
     if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
     RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-    if((wac.accepted) && (wac.wrenched) && (state.getBlock() instanceof ContactSwitchBlock)) {
+    if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof ContactSwitchBlock)) {
       te.activation_config((ContactSwitchBlock)state.getBlock(), player, wac.x, wac.y);
     }
     return true;

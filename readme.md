@@ -90,12 +90,18 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.3b4  - Glass bi-stable, pulse, and contact switches added.
+              - Sensitive glass textures edited.
+              - backend: Configuration based block/item block initialisation improved.
+              - backend: Unified switch color tinting support implemented.
+              - backend: Unified switch light emission support implemented.
+
   - v1.0.3b3  - Stained redstone sensitive glass blocks added, changing from
                 clear to stained-colored, but do not emit light as the clear
                 sensitive glass block.
 
   - v1.0.3b2  - Mod specific creative tab added.
-              - Industrial bistable switch 1 model improved.
+              - Industrial bi-stable switch 1 model improved.
               - Rustic floor contact switch UI texture added.
               - Multi-left-click config (weak/inverted) now double-click 
                 for each step.

@@ -11,21 +11,24 @@ package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModAuxiliaries;
+import wile.rsgauges.ModBlocks;
 import wile.rsgauges.ModResources;
+import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.blocks.RsBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHopper;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -36,11 +39,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import java.util.Random;
 import javax.annotation.Nullable;
 
-public class SwitchBlock extends RsBlock {
+public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSupport {
 
   public static final long SWITCH_DATA_POWERED_POWER_MASK       = 0x000000000000000fl;
   public static final long SWITCH_DATA_UNPOWERED_POWER_MASK     = 0x00000000000000f0l;
@@ -71,9 +73,12 @@ public class SwitchBlock extends RsBlock {
   public static final long SWITCH_CONFIG_TIMER_INTERVAL         = 0x0000000080000000l;
   public static final long SWITCH_CONFIG_TRANSLUCENT            = 0x0000000100000000l;
   public static final long SWITCH_CONFIG_PULSETIME_CONFIGURABLE = 0x0000000200000000l;
+  public static final long SWITCH_CONFIG_FAINT_LIGHTSOURCE      = 0x0000000400000000l;
+  public static final long SWITCH_CONFIG_COLOR_TINT_SUPPORT     = 0x0000000800000000l;
 
   public static final int SWITCH_DATA_SVD_ACTIVE_TIME_MASK      = 0x000000ff;
   public static final int SWITCH_DATA_SVD_COLOR_MASK            = 0x00000f00;
+  public static final int SWITCH_DATA_SVD_COLOR_SHIFT           = 8;
 
   public static final int base_tick_rate = 2;
   public final long config;
@@ -112,6 +117,19 @@ public class SwitchBlock extends RsBlock {
   @SideOnly(Side.CLIENT)
   @Override
   public BlockRenderLayer getBlockLayer() { return ((config & SWITCH_CONFIG_TRANSLUCENT) != 0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
+
+  @Override
+  public int getLightValue(IBlockState state) { return ((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) ? 1 : 0; }
+
+  @Override
+  public boolean hasColorMultiplierRGBA() { return (!ModConfig.without_switch_colortinting) && ((config & SWITCH_CONFIG_COLOR_TINT_SUPPORT) != 0); }
+
+  @Override
+  public int getColorMultiplierRGBA(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) {
+    if((pos==null) || (world==null)) return 0xffffffff;
+    TileEntity te = world.getTileEntity(pos);
+    return (te instanceof SwitchBlock.SwitchTileEntity)  ? (EnumDyeColor.byMetadata((((SwitchBlock.SwitchTileEntity)te).color_tint() & 0xf)).getColorValue()) : (0xffffffff);
+  }
 
   @Override
   public IBlockState getStateFromMeta(int meta) { return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 0x7)).withProperty(POWERED, ((meta & 0x8) != 0)); }
@@ -217,26 +235,31 @@ public class SwitchBlock extends RsBlock {
 
   @Override
   public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-    if(world.isRemote) return;
+    if((world.isRemote) || (player == null)) return;
     IBlockState state = world.getBlockState(pos);
     if(!(state.getBlock() instanceof SwitchBlock)) return;
     SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if(te == null) return;
-    if((((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0) {
-      // Redstone dust exact activation timing settings
-      if((player != null) && (player.getHeldItemMainhand() != null)) {
-        ItemStack item = player.getHeldItemMainhand();
-        if(item.getItem().getRegistryName().getResourcePath().toString().equals("redstone")) {
-          te.active_time(item.getCount());
-          ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("Pulse time") + ": "
-              + Double.toString( (((double)(base_tick_rate)*te.active_time()))/20 )
-              + "s (" + Integer.toString(base_tick_rate*te.active_time()) + " ticks)"
-          );
-          return;
-        }
+    RsBlock.WrenchActivationCheck ck = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, null, player, null, null, 0, 0, 0);
+    if((ck.redstone > 0) && (((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0) {
+      if(!ModConfig.without_pulsetime_config) {
+        te.active_time(ck.redstone);
+        ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("Pulse time") + ": "
+            + Double.toString( (((double)(base_tick_rate)*te.active_time()))/20 )
+            + "s (" + Integer.toString(base_tick_rate*te.active_time()) + " ticks)"
+        );
+        return;
+      }
+    } else if((ck.dye >= 0) && (((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_COLOR_TINT_SUPPORT) != 0) {
+      if((!ModConfig.without_switch_colortinting) && (ck.dye <= 15)) {
+        te.color_tint(ck.dye);
+        ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("Tinted ") + ": "
+            + ModAuxiliaries.localize(EnumDyeColor.byMetadata(ck.dye).toString())
+        );
+        return;
       }
     }
-    if(RsBlock.WrenchActivationCheck.wrenched(player) && te.click_config(this)) {
+    if(ck.wrenched && te.click_config(this)) {
       ModAuxiliaries.playerMessage(player, te.toString()); // click-config accepted, nothing to do here.
     } else if((config & (SWITCH_CONFIG_LCLICK_RESETTABLE))!=0) {
       te.off_timer_reset();
@@ -325,12 +348,14 @@ public class SwitchBlock extends RsBlock {
       else off_timer_ = 40/base_tick_rate;
     }
 
+    public int color_tint()           { return ((svd_ & ((int)SWITCH_DATA_SVD_COLOR_MASK)) >> SWITCH_DATA_SVD_COLOR_SHIFT); }
     public int on_power()             { return ((scd_ & ((int)SWITCH_DATA_POWERED_POWER_MASK)) >> 0); }
     public int off_power()            { return ((scd_ & ((int)SWITCH_DATA_UNPOWERED_POWER_MASK)) >> 8); }
     public boolean inverted()         { return ((scd_ & ((int)SWITCH_DATA_INVERTED)) != 0); }
     public boolean weak()             { return ((scd_ & ((int)SWITCH_DATA_WEAK)) != 0); }
     public boolean nooutput()         { return ((scd_ & ((int)SWITCH_DATA_NOOUTPUT)) != 0); }
 
+    public void color_tint(int tint)  { svd_ = (svd_ & ~((int)SWITCH_DATA_SVD_COLOR_MASK)) | ( (tint<<SWITCH_DATA_SVD_COLOR_SHIFT) & SWITCH_DATA_SVD_COLOR_MASK); }
     public void on_power(int p)       { scd_ = (scd_ & ~((int)SWITCH_DATA_POWERED_POWER_MASK)) | (int)(((p<0)?0:((p>15)?(15):(p)) & ((int)SWITCH_DATA_POWERED_POWER_MASK))<<0); }
     public void off_power(int p)      { scd_ = (scd_ & ~((int)SWITCH_DATA_UNPOWERED_POWER_MASK)) | ((int)(((p<0)?0:((p>15)?(15):(p)) & 0x000f)<<8) & ((int)SWITCH_DATA_UNPOWERED_POWER_MASK)); }
     public void inverted(boolean val) { if(val) scd_ |= ((int)SWITCH_DATA_INVERTED); else scd_ &= ~((int)SWITCH_DATA_INVERTED); }

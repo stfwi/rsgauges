@@ -13,11 +13,14 @@
 package wile.rsgauges;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -49,7 +52,6 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:flatgauge5")               public static final GaugeBlock flatgauge5Block = null;
   @GameRegistry.ObjectHolder("rsgauges:flatgauge6")               public static final GaugeBlock flatgauge6Block = null;
   @GameRegistry.ObjectHolder("rsgauges:gauge_rustic2")            public static final GaugeBlock gaugeRustic2Block = null;
-
   private static final GaugeBlock gauges[] = {
       new GaugeBlock("flatgauge1", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) ),
       new GaugeBlock("flatgauge2", new AxisAlignedBB((4d/16),(2d/16),(0d/16), (12d/16),(14d/16),(1d/16)) ),
@@ -137,6 +139,8 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic5")   public static final SwitchBlock bistableSwitchRustic5Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic6")   public static final SwitchBlock bistableSwitchRustic6Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic7")   public static final SwitchBlock bistableSwitchRustic7Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_glass1")    public static final SwitchBlock bistableSwitchGlass1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:bistableswitch_glass2")    public static final SwitchBlock bistableSwitchGlass2Block = null;
   private static final SwitchBlock bistableSwitches[] = {
       // Rotary machine switch
       new SwitchBlock("bistableswitch1",
@@ -268,6 +272,18 @@ public class ModBlocks {
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
           SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
       ),
+      // Thin star shaped glass switch
+      new SwitchBlock("bistableswitch_glass1",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
+      ),
+      // Bistable glass touch switch
+      new SwitchBlock("bistableswitch_glass2",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
+      )
   };
 
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch1")             public static final SwitchBlock pulseSwitch1Block = null;
@@ -287,6 +303,9 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic5")      public static final SwitchBlock pulseSwitchRustic5Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic6")      public static final SwitchBlock pulseSwitchRustic6Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch_rustic7")      public static final SwitchBlock pulseSwitchRustic7Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_glass1")       public static final SwitchBlock pulseSwitchGlass1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_glass2")       public static final SwitchBlock pulseSwitchGlass2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:pulseswitch_glass3")       public static final SwitchBlock pulseSwitchGlass3Block = null;
   private static final SwitchBlock pulseSwitches[] = {
       // Square machine pulse switch
       new SwitchBlock("pulseswitch1",
@@ -419,12 +438,41 @@ public class ModBlocks {
           SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
           SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      ),
+      // Thin star shaped glass button
+      new SwitchBlock("pulseswitch_glass1",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
+      ),
+      // Thin small star shaped glass button
+      new SwitchBlock("pulseswitch_glass2",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
+      ),
+      // Glass touch button
+      new SwitchBlock("pulseswitch_glass3",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
+          SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
+          SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
       )
   };
 
-  @GameRegistry.ObjectHolder("rsgauges:contactmat1")  public static final ContactSwitchBlock contactSwitch1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:contactmat2")  public static final ContactSwitchBlock contactSwitch2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:contactmat_rustic1")  public static final ContactSwitchBlock contactSwitchRustic1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:contactmat1")              public static final ContactSwitchBlock contactSwitch1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:contactmat2")              public static final ContactSwitchBlock contactSwitch2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:contactmat_rustic1")       public static final ContactSwitchBlock contactSwitchRustic1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:contactmat_glass1")        public static final ContactSwitchBlock contactSwitchGlass1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:contactmat_glass2")        public static final ContactSwitchBlock contactSwitchGlass2Block = null;
   private static final ContactSwitchBlock contactSwitches[] = {
       // Door contact mat
       new ContactSwitchBlock("contactmat1",
@@ -451,6 +499,26 @@ public class ModBlocks {
           SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+      ),
+      // Glass plate
+      new ContactSwitchBlock("contactmat_glass1",
+          new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.25d/16),(16d/16)),
+          SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+          SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+      ),
+      // Glass plate
+      new ContactSwitchBlock("contactmat_glass2",
+          new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.25d/16),(16d/16)),
+          SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+          SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
       )
   };
 
@@ -546,77 +614,70 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_black")       public static final SensitiveGlassBlock blackSensitiveGlassBlock = null;
   private static final SensitiveGlassBlock sensitiveGlassBlocks[] = {
       new SensitiveGlassBlock("sensitiveglass"          , 0x000f|0x0020, 0xffffff), // light value if on 0xf | off 0x1, color multiplier
-      new SensitiveGlassBlock("sensitiveglass_white"    , 0x0000|0x0000, 0xf3f3f3),
-      new SensitiveGlassBlock("sensitiveglass_red"      , 0x0000|0x0000, 0xB02E26),
-      new SensitiveGlassBlock("sensitiveglass_green"    , 0x0000|0x0000, 0x5E7C16),
-      new SensitiveGlassBlock("sensitiveglass_blue"     , 0x0000|0x0000, 0x3C44AA),
-      new SensitiveGlassBlock("sensitiveglass_yellow"   , 0x0000|0x0000, 0xFED83D),
-      new SensitiveGlassBlock("sensitiveglass_orange"   , 0x0000|0x0000, 0xF9801D),
-      new SensitiveGlassBlock("sensitiveglass_magenta"  , 0x0000|0x0000, 0xC74EBD),
-      new SensitiveGlassBlock("sensitiveglass_lightblue", 0x0000|0x0000, 0x3AB3DA),
-      new SensitiveGlassBlock("sensitiveglass_lime"     , 0x0000|0x0000, 0x80C71F),
-      new SensitiveGlassBlock("sensitiveglass_pink"     , 0x0000|0x0000, 0xF38BAA),
-      new SensitiveGlassBlock("sensitiveglass_gray"     , 0x0000|0x0000, 0x474F52),
-      new SensitiveGlassBlock("sensitiveglass_lightgray", 0x0000|0x0000, 0x9D9D97),
-      new SensitiveGlassBlock("sensitiveglass_cyan"     , 0x0000|0x0000, 0x169C9C),
-      new SensitiveGlassBlock("sensitiveglass_purple"   , 0x0000|0x0000, 0x8932B8),
-      new SensitiveGlassBlock("sensitiveglass_brown"    , 0x0000|0x0000, 0x835432),
-      new SensitiveGlassBlock("sensitiveglass_black"    , 0x0000|0x0000, 0x111111),
+      new SensitiveGlassBlock("sensitiveglass_white"    , 0x0000|0x0000, EnumDyeColor.WHITE.getColorValue()),       // 0xf3f3f3
+      new SensitiveGlassBlock("sensitiveglass_red"      , 0x0000|0x0000, EnumDyeColor.RED.getColorValue()),         // 0xB02E26
+      new SensitiveGlassBlock("sensitiveglass_green"    , 0x0000|0x0000, EnumDyeColor.GREEN.getColorValue()),       // 0x5E7C16
+      new SensitiveGlassBlock("sensitiveglass_blue"     , 0x0000|0x0000, EnumDyeColor.BLUE.getColorValue()),        // 0x3C44AA
+      new SensitiveGlassBlock("sensitiveglass_yellow"   , 0x0000|0x0000, EnumDyeColor.YELLOW.getColorValue()),      // 0xFED83D
+      new SensitiveGlassBlock("sensitiveglass_orange"   , 0x0000|0x0000, EnumDyeColor.ORANGE.getColorValue()),      // 0xF9801D
+      new SensitiveGlassBlock("sensitiveglass_magenta"  , 0x0000|0x0000, EnumDyeColor.MAGENTA.getColorValue()),     // 0xC74EBD
+      new SensitiveGlassBlock("sensitiveglass_lightblue", 0x0000|0x0000, EnumDyeColor.LIGHT_BLUE.getColorValue()),  // 0x3AB3DA
+      new SensitiveGlassBlock("sensitiveglass_lime"     , 0x0000|0x0000, EnumDyeColor.LIME.getColorValue()),        // 0x80C71F
+      new SensitiveGlassBlock("sensitiveglass_pink"     , 0x0000|0x0000, EnumDyeColor.PINK.getColorValue()),        // 0xF38BAA
+      new SensitiveGlassBlock("sensitiveglass_gray"     , 0x0000|0x0000, EnumDyeColor.GRAY.getColorValue()),        // 0x474F52
+      new SensitiveGlassBlock("sensitiveglass_lightgray", 0x0000|0x0000, EnumDyeColor.SILVER.getColorValue()),      // 0x9D9D97
+      new SensitiveGlassBlock("sensitiveglass_cyan"     , 0x0000|0x0000, EnumDyeColor.CYAN.getColorValue()),        // 0x169C9C
+      new SensitiveGlassBlock("sensitiveglass_purple"   , 0x0000|0x0000, EnumDyeColor.PURPLE.getColorValue()),      // 0x8932B8
+      new SensitiveGlassBlock("sensitiveglass_brown"    , 0x0000|0x0000, EnumDyeColor.BROWN.getColorValue()),       // 0x835432
+      new SensitiveGlassBlock("sensitiveglass_black"    , 0x0000|0x0000, EnumDyeColor.BLACK.getColorValue()),       // 0x111111
   };
+
+  public static ArrayList<Block> registeredBlocks = new ArrayList<Block>();
+
 
   // Invoked from CommonProxy.registerBlocks()
   public static final void registerBlocks(RegistryEvent.Register<Block> event) {
+    // Config based registry selection
     if((!ModConfig.without_gauges) || (!ModConfig.without_indicators) || (!ModConfig.without_blinking_indicators) || (!ModConfig.without_sound_indicators)) {
       GameRegistry.registerTileEntity(GaugeBlock.GaugeTileEntity.class, ModRsGauges.MODID + "_gauge_entity");
     }
-    if(!ModConfig.without_gauges) { for(GaugeBlock e:gauges) event.getRegistry().register(e); }
-    if(!ModConfig.without_indicators) { for(GaugeBlock e:indicators) event.getRegistry().register(e); }
-    if(!ModConfig.without_blinking_indicators) { for(GaugeBlock e:blinkIndicators) event.getRegistry().register(e); }
-    if(!ModConfig.without_sound_indicators) { for(GaugeBlock e:soundIndicators) event.getRegistry().register(e); }
-    if(!ModConfig.without_bistable_switches) { for(SwitchBlock e:bistableSwitches) event.getRegistry().register(e); }
-    if(!ModConfig.without_decorative) { for(SensitiveGlassBlock e:sensitiveGlassBlocks) event.getRegistry().register(e); }
+    if(!ModConfig.without_gauges) { for(GaugeBlock e:gauges) registeredBlocks.add(e); }
+    if(!ModConfig.without_indicators) { for(GaugeBlock e:indicators) registeredBlocks.add(e); }
+    if(!ModConfig.without_blinking_indicators) { for(GaugeBlock e:blinkIndicators) registeredBlocks.add(e); }
+    if(!ModConfig.without_sound_indicators) { for(GaugeBlock e:soundIndicators) registeredBlocks.add(e); }
+    if(!ModConfig.without_bistable_switches) { for(SwitchBlock e:bistableSwitches) registeredBlocks.add(e); }
+    if(!ModConfig.without_decorative) { for(SensitiveGlassBlock e:sensitiveGlassBlocks) registeredBlocks.add(e); }
     if(!ModConfig.without_pulse_switches) {
       GameRegistry.registerTileEntity(SwitchBlock.SwitchTileEntity.class, ModRsGauges.MODID + "_pulseswitch_entity");
-      for(SwitchBlock e:pulseSwitches) event.getRegistry().register(e);
+      for(SwitchBlock e:pulseSwitches) registeredBlocks.add(e);
     }
     if(!ModConfig.without_contact_switches) {
       GameRegistry.registerTileEntity(ContactSwitchBlock.ContactSwitchTileEntity.class, ModRsGauges.MODID + "_contactswitch_entity");
-      for(SwitchBlock e:contactSwitches) event.getRegistry().register(e);
+      for(SwitchBlock e:contactSwitches) registeredBlocks.add(e);
     }
     if(!ModConfig.without_automatic_switches) {
       GameRegistry.registerTileEntity(AutoSwitchBlock.AutoSwitchTileEntity.class, ModRsGauges.MODID + "_autoswitch_entity");
       GameRegistry.registerTileEntity(AutoSwitchBlock.DetectorSwitchTileEntity.class, ModRsGauges.MODID + "_detectorswitch_entity");
       GameRegistry.registerTileEntity(AutoSwitchBlock.EnvironmentalSensorSwitchTileEntity.class, ModRsGauges.MODID + "_sensorswitch_entity");
       GameRegistry.registerTileEntity(AutoSwitchBlock.IntervalTimerSwitchTileEntity.class, ModRsGauges.MODID + "_timerswitch_entity");
-      for(SwitchBlock e:automaticSwitches) event.getRegistry().register(e);
+      for(SwitchBlock e:automaticSwitches) registeredBlocks.add(e);
     }
+    // Register blocks
+    for(Block e:registeredBlocks) event.getRegistry().register(e);
   }
 
   // Invoked from ClientProxy.registerModels()
   @SideOnly(Side.CLIENT)
   public static final void initModels() {
-    if(!ModConfig.without_gauges) { for(GaugeBlock e:gauges) e.initModel(); }
-    if(!ModConfig.without_indicators) { for(GaugeBlock e:indicators) e.initModel(); }
-    if(!ModConfig.without_blinking_indicators) { for(GaugeBlock e:blinkIndicators) e.initModel(); }
-    if(!ModConfig.without_sound_indicators) { for(GaugeBlock e:soundIndicators) e.initModel(); }
-    if(!ModConfig.without_bistable_switches) { for(SwitchBlock e:bistableSwitches) e.initModel(); }
-    if(!ModConfig.without_pulse_switches) { for(SwitchBlock e:pulseSwitches) e.initModel(); }
-    if(!ModConfig.without_contact_switches) { for(ContactSwitchBlock e:contactSwitches) e.initModel(); }
-    if(!ModConfig.without_automatic_switches) { for(AutoSwitchBlock e:automaticSwitches) e.initModel(); }
-    if(!ModConfig.without_decorative) { for(SensitiveGlassBlock e:sensitiveGlassBlocks) e.initModel(); }
+    for(Block e:registeredBlocks) {
+      if(e instanceof RsBlock) ((RsBlock)e).initModel();
+      if(e instanceof SensitiveGlassBlock) ((SensitiveGlassBlock)e).initModel();
+    }
   }
 
   // Invoked from CommonProxy.registerItems()
   public static final void registerItemBlocks(RegistryEvent.Register<Item> event) {
-    if(!ModConfig.without_gauges) { for(GaugeBlock e:gauges) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
-    if(!ModConfig.without_indicators) { for(GaugeBlock e:indicators) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
-    if(!ModConfig.without_blinking_indicators) { for(GaugeBlock e:blinkIndicators) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
-    if(!ModConfig.without_sound_indicators) { for(GaugeBlock e:soundIndicators) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
-    if(!ModConfig.without_bistable_switches) { for(SwitchBlock e:bistableSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
-    if(!ModConfig.without_pulse_switches) { for(SwitchBlock e:pulseSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
-    if(!ModConfig.without_contact_switches) { for(ContactSwitchBlock e:contactSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
-    if(!ModConfig.without_automatic_switches) { for(AutoSwitchBlock e:automaticSwitches) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
-    if(!ModConfig.without_decorative) { for(SensitiveGlassBlock e:sensitiveGlassBlocks) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
+    for(Block e:registeredBlocks) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
   }
 
   /**
@@ -625,18 +686,27 @@ public class ModBlocks {
   @Mod.EventBusSubscriber(modid=ModRsGauges.MODID)
   public static final class Colors {
 
-    public static interface Colored {
-      default public int getColorMultiplierRGBA(@Nullable IBlockState state) { return (int)0xffffffff; }
+    public static interface ColorTintSupport {
+
+      /**
+       * Return true if the specific block shall be registered for tinting.
+       */
+      default public boolean hasColorMultiplierRGBA() { return false; }
+
+      /**
+       * Unified forwarded for items and blocks to retrieve the color filter .
+       */
+      default public int getColorMultiplierRGBA(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) { return (int)0xffffffff; }
     }
 
     @SubscribeEvent
     public static void registerBlockColourHandlers(final ColorHandlerEvent.Block event) {
       final IBlockColor blockSpecifiedColorHandler = (state, blockAccess, pos, tintIndex) -> {
-        return (state==null) ? ((int)0xffffffff) : (((Colored)state.getBlock()).getColorMultiplierRGBA(state));
+        return (state==null) ? ((int)0xffffffff) : (((ColorTintSupport)state.getBlock()).getColorMultiplierRGBA(state, blockAccess, pos));
       };
       final BlockColors bc = event.getBlockColors();
-      if(!ModConfig.without_decorative) {
-        for(SensitiveGlassBlock e:sensitiveGlassBlocks) bc.registerBlockColorHandler(blockSpecifiedColorHandler, e);
+      for(Block e:registeredBlocks) {
+        if((e instanceof Colors.ColorTintSupport) && (((Colors.ColorTintSupport)e).hasColorMultiplierRGBA())) bc.registerBlockColorHandler(blockSpecifiedColorHandler, e);
       }
     }
 
@@ -644,14 +714,11 @@ public class ModBlocks {
     public static void registerItemColourHandlers(final ColorHandlerEvent.Item event) {
       final ItemColors ic = event.getItemColors();
       final IItemColor constantBlockColorHandler = (stack, tintIndex) -> {
-        return (((Colored)((ItemBlock)stack.getItem()).getBlock()).getColorMultiplierRGBA(null));
+        return (((ColorTintSupport)((ItemBlock)stack.getItem()).getBlock()).getColorMultiplierRGBA(null, null, null));
       };
-      if(!ModConfig.without_decorative) {
-        for(SensitiveGlassBlock e:sensitiveGlassBlocks) {
-          ic.registerItemColorHandler(constantBlockColorHandler, e);
-        }
+      for(Block e:registeredBlocks) {
+        if((e instanceof Colors.ColorTintSupport) && (((Colors.ColorTintSupport)e).hasColorMultiplierRGBA())) ic.registerItemColorHandler(constantBlockColorHandler, e);
       }
-
     }
   }
 

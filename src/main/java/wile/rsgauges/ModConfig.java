@@ -91,15 +91,24 @@ public class ModConfig {
   @Config.RequiresMcRestart
   public static boolean without_decorative = false;
 
+  @Config.Comment("Disable pulse time configuration of switches using redstone dust stack clicking.")
+  @Config.Name("Without pulse time configuration")
+  public static boolean without_pulsetime_config = false;
+
   @Config.Comment("Disable the 'no output' config option for switches.")
   @Config.Name("Without switch 'no output' option")
   public static boolean without_switch_nooutput = true;
 
-  @Config.Comment("Comma sepatated list of items names that can be used alter (NBT) configurable blocks of this mod." +
+  @Config.Comment("Disable color tinting for switches.")
+  @Config.Name("Without switch color tinting")
+  @Config.RequiresMcRestart
+  public static boolean without_switch_colortinting = true;
+
+  @Config.Comment("Comma sepatated list of items names that can be used alter configurable blocks of this mod." +
                   "This applies when the display side of the block is right click (activated) with the item in the " +
                   "main hand. Empty hand is 'air'.")
   @Config.Name("Accepted wrenches")
-  public static String accepted_wrenches = "air,redstone_torch";
+  public static String accepted_wrenches = "air";
 
   @Config.Comment("Timeout in milliseconds defining the timeout for left clicking switches or devices in order to " +
                   "configure them. If the device can be opened, it will be opened on 'double-left-click' and closed " +

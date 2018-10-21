@@ -14,6 +14,7 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModConfig;
+import wile.rsgauges.ModResources;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.client.JitModelBakery;
 import net.minecraft.block.Block;
@@ -26,6 +27,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,6 +47,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.DyeUtils;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraft.world.chunk.*;
 import net.minecraft.world.ChunkCache;
 import com.google.common.base.Predicate;
@@ -314,15 +318,16 @@ public abstract class RsBlock extends Block {
    */
   protected static final class WrenchActivationCheck
   {
-    public boolean accepted = false;
+    public boolean touch_configured = false;
     public boolean wrenched = false;
     public int redstone = 0;
+    public int dye = -1;
     public double x = 0;
     public double y = 0;
 
     @Override
     public String toString() {
-      return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",accepted:" + Boolean.toString(accepted) + ",wrenched:" + Boolean.toString(wrenched) + "}";
+      return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",accepted:" + Boolean.toString(touch_configured) + ",wrenched:" + Boolean.toString(wrenched) + "}";
     }
 
     public static boolean wrenched(EntityPlayer player) {
@@ -330,19 +335,29 @@ public abstract class RsBlock extends Block {
       return (item != null) && ((","+ModConfig.accepted_wrenches+",").indexOf(","+item.getItem().getRegistryName().getResourcePath() + ",") >= 0);
     }
 
-    public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float x, float y, float z) {
+    public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z) {
       WrenchActivationCheck ck = new WrenchActivationCheck();
-      if(!(state.getBlock() instanceof RsBlock)) return ck;
+      if((world==null) || (pos==null)) return ck;
+      if(state==null) state = world.getBlockState(pos);
+      if((state==null) || (!(state.getBlock() instanceof RsBlock))) return ck;
       RsBlock block = (RsBlock)(state.getBlock());
-      if(block.isFloorMount() && (facing != EnumFacing.UP)) return ck;
-      if(block.isWallMount() && (facing != state.getValue(FACING))) return ck;
       ck.wrenched = wrenched(player);
       if(!ck.wrenched) {
         ItemStack item = player.getHeldItemMainhand();
-        if((item != null) && (item.isStackable()) && (item.getItem().getRegistryName().getResourcePath() == "redstone")) {
-          ck.redstone = item.getCount();
+        if(item != null) {
+          if(item.getItem().getRegistryName().getResourcePath().toString().equals("redstone")) {
+            ck.redstone = item.getCount();
+          } else {
+            ck.dye = DyeUtils.rawMetaFromStack(item);
+            if(ck.dye > 15) ck.dye = 15;
+          }
         }
       }
+
+      // Touch config check
+      if(facing==null) return ck;
+      if(block.isFloorMount() && (facing != EnumFacing.UP)) return ck;
+      if(block.isWallMount() && (facing != state.getValue(FACING))) return ck;
       double xo=0, yo=0;
       if(block.isWallMount()) {
         switch(facing.getIndex()) {
@@ -374,7 +389,7 @@ public abstract class RsBlock extends Block {
       }
       ck.x = ((xo > 15.0) ? (15.0) : ((xo < 0.0) ? 0.0 : xo));
       ck.y = ((yo > 15.0) ? (15.0) : ((yo < 0.0) ? 0.0 : yo));
-      ck.accepted = true;
+      ck.touch_configured = true;
       return ck;
     }
   }

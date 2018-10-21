@@ -1,4 +1,5 @@
 {
+  "credit": "Thanks Jannis for the Blockbench.",
   "parent": "block/cube",
   "textures": {
     "0": "rsgauges:blocks/common/darkroughmetal",
@@ -1324,5 +1325,5 @@
 				"down": {"uv": [7.5, 10, 11.875, 15.875], "texture": "#0"}
 			}
 		}
-	]	
+	]
 }

@@ -44,7 +44,7 @@ import org.apache.logging.log4j.Level;
 import java.util.List;
 import java.util.Random;
 
-public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Colored {
+public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.ColorTintSupport {
   public static final PropertyBool POWERED = PropertyBool.create("powered");
 
   public static final int CONFIG_LIGHT_MASK_POWERED              = 0x0000000f;
@@ -150,5 +150,8 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
   }
 
   @Override
-  public int getColorMultiplierRGBA(@Nullable IBlockState state) { return this.colorMultiplierValue; }
+  public boolean hasColorMultiplierRGBA() { return true; }
+
+  @Override
+  public int getColorMultiplierRGBA(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) { return this.colorMultiplierValue; }
 }

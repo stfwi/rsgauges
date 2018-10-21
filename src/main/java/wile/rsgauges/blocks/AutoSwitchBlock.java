@@ -57,7 +57,7 @@ public class AutoSwitchBlock extends SwitchBlock {
     te.click_config(null);
     if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
     RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-    if((wac.accepted) && (wac.wrenched) && (state.getBlock() instanceof AutoSwitchBlock)) {
+    if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof AutoSwitchBlock)) {
       if(te.activation_config((AutoSwitchBlock)state.getBlock(), player, wac.x, wac.y)) return true;
       if((config & (SWITCH_CONFIG_TIMER_INTERVAL))!=0) {
         te.updateSwitchState(state, this, !state.getValue(POWERED), 0);

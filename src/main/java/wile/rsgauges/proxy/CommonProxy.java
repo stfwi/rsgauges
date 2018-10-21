@@ -30,12 +30,8 @@ public class CommonProxy {
   public void postInit(FMLPostInitializationEvent e) {}
 
   @SubscribeEvent
-  public static void registerBlocks(RegistryEvent.Register<Block> event) {
-    ModBlocks.registerBlocks(event);
-  }
+  public static void registerBlocks(RegistryEvent.Register<Block> event) { ModBlocks.registerBlocks(event); }
 
   @SubscribeEvent
-  public static void registerItems(RegistryEvent.Register<Item> event) {
-    ModBlocks.registerItemBlocks(event);
-  }
+  public static void registerItems(RegistryEvent.Register<Item> event) { ModBlocks.registerItemBlocks(event); }
 }
