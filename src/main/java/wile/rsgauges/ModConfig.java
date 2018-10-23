@@ -104,6 +104,16 @@ public class ModConfig {
   @Config.RequiresMcRestart
   public static boolean without_switch_colortinting = true;
 
+  @Config.Comment("Defines a constant light level for sensitive glass on the server, " +
+                  "no matter if the block is powered or not. Prevents performance issues " +
+                  "if many sensitive glass blocks are frequently switched on and off. " +
+                  "Set to zero to switch the light level depending on the redstone power " +
+                  "like on the client side. WARNING: this is experimental and may change."
+                  )
+  @Config.Name("Sensitive glass light level on server")
+  @Config.RangeInt(min=0, max=15)
+  public static int sensitive_glass_server_light_level = 0;
+
   @Config.Comment("Comma sepatated list of items names that can be used alter configurable blocks of this mod." +
                   "This applies when the display side of the block is right click (activated) with the item in the " +
                   "main hand. Empty hand is 'air'.")

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NEN",
+    "NGN"
+  ],
+  "key": {
+    "N": { "item": "minecraft:iron_nugget", "data": 0 },
+    "G": { "item": "minecraft:glass", "data": 0 },
+    "E": { "item": "minecraft:ender_eye", "data": 0 }
+  },
+  "result": { "item": "rsgauges:detectorswitch_glass1", "data": 0 }
+}

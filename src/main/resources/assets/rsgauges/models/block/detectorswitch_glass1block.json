@@ -1,0 +1,88 @@
+{
+	"credit": "Made with the Blockbench",
+	"textures": {
+		"front": "rsgauges:blocks/automaticswitch/detectorswitch_glass1_front",
+		"side": "rsgauges:blocks/common/cleargrayglass",
+		"particle": "rsgauges:blocks/common/cleargrayglass",
+		"led": "rsgauges:blocks/indicator/indicator_fg_red_off_texture"
+	},
+	"elements": [
+		{
+			"name": "cube",
+			"from": [5.5, 5.5, 15.75],
+			"to": [10.5, 10.5, 16],
+			"faces": {
+				"north": {"texture": "#front"},
+				"east": {"texture": "#side"},
+				"south": {"texture": "#side"},
+				"west": {"texture": "#side"},
+				"up": {"texture": "#side"},
+				"down": {"texture": "#side"}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [7.625, 7.5, 15.875],
+			"to": [8.375, 7.625, 16],
+			"faces": {
+				"north": {"texture": "#led"},
+				"east": {"texture": "#led"},
+				"west": {"texture": "#led"},
+				"up": {"texture": "#led"},
+				"down": {"texture": "#led"}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [7.625, 7.25, 15.875],
+			"to": [8.375, 7.375, 16],
+			"faces": {
+				"north": {"texture": "#led"},
+				"east": {"texture": "#led"},
+				"west": {"texture": "#led"},
+				"up": {"texture": "#led"},
+				"down": {"texture": "#led"}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [8.125, 7.375, 15.875],
+			"to": [8.625, 7.5, 16],
+			"faces": {
+				"north": {"texture": "#led"},
+				"east": {"texture": "#led"},
+				"west": {"texture": "#led"},
+				"up": {"texture": "#led"},
+				"down": {"texture": "#led"}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [7.375, 7.375, 15.875],
+			"to": [7.875, 7.5, 16],
+			"faces": {
+				"north": {"texture": "#led"},
+				"east": {"texture": "#led"},
+				"west": {"texture": "#led"},
+				"up": {"texture": "#led"},
+				"down": {"texture": "#led"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"isOpen": true,
+			"export": true,
+			"visibility": true,
+			"children": [0]
+		},
+		{
+			"name": "group",
+			"isOpen": true,
+			"export": true,
+			"visibility": true,
+			"children": [1, 2, 3, 4]
+		}
+	]
+}

@@ -10,7 +10,9 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModBlocks;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.client.JitModelBakery;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -107,7 +109,13 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
   }
 
   @Override
-  public int getLightValue(IBlockState state) { return state.getValue(POWERED) ? ((config & CONFIG_LIGHT_MASK_POWERED)>>0) : ((config & CONFIG_LIGHT_MASK_UNPOWERED)>>8); }
+  public int getLightValue(IBlockState state) {
+    if((ModConfig.sensitive_glass_server_light_level <= 0) || (ModAuxiliaries.isClientSide())) {
+      return state.getValue(POWERED) ? ((config & CONFIG_LIGHT_MASK_POWERED)>>0) : ((config & CONFIG_LIGHT_MASK_UNPOWERED)>>8);
+    } else {
+      return ModConfig.sensitive_glass_server_light_level & 0xf; // TEST/EXPERIMENTAL to prevent server light recalculations (to check if any performance impact).
+    }
+  }
 
   @Override
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) { return state; }

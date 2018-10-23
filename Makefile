@@ -4,8 +4,8 @@
 #
 # GNU Make makefile for, well, speeding
 # up the development a bit.
-# You very likely need some tools installed 
-# to use all build targets, so this file is  
+# You very likely need some tools installed
+# to use all build targets, so this file is
 # not "official". If you work on windows and
 # install GIT with complete shell PATH (the
 # red marked option in the GIT installer) you
@@ -18,6 +18,7 @@ MOD_JAR=$(filter-out %-sources.jar,$(wildcard build/libs/*.jar))
 ifeq ($(OS),Windows_NT)
 GRADLE=gradlew.bat
 INSTALL_DIR=$(realpath ${APPDATA}/.minecraft)
+SERVER_INSTALL_DIR=$(realpath ${APPDATA}/minecraft-server-forge-1.12.2-14.23.3.2655)
 DJS=djs
 else
 GRADLE=./gradle
@@ -30,14 +31,14 @@ wildcardr=$(foreach d,$(wildcard $1*),$(call wildcardr,$d/,$2) $(filter $(subst 
 #
 # Targets
 #
-.PHONY: mod init clean clean-all all install texture-infos
+.PHONY: mod init clean clean-all all install texture-infos start-server
 
-all: clean mod
+all: clean mod install
 
 mod:
 	@echo "Building mod using gradle ..."
 	@$(GRADLE) build
-  
+
 clean:
 	@echo "Cleaning ..."
 	@rm -f build/libs/*
@@ -56,6 +57,12 @@ install: $(MOD_JAR)
 	@echo "Installing '$(MOD_JAR)' to '$(INSTALL_DIR)/mods' ..."
 	@[ -d "$(INSTALL_DIR)/mods" ] || mkdir "$(INSTALL_DIR)/mods"
 	@cp -f "$(MOD_JAR)" "$(INSTALL_DIR)/mods/"
+	@echo "Installing '$(MOD_JAR)' to '$(SERVER_INSTALL_DIR)/mods' ..."
+	@[ -d "$(SERVER_INSTALL_DIR)/mods" ] && cp -f "$(MOD_JAR)" "$(SERVER_INSTALL_DIR)/mods/"
+
+start-server: install
+	@echo "Starting local dedicated server ..."
+	@cd "$(SERVER_INSTALL_DIR)" && java -jar forge-1.12.2-14.23.3.2655-universal.jar &
 
 texture-infos:
 	djs scripts/texture-processing.js src/main/resources/assets/rsgauges/textures

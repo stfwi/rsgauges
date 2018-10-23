@@ -9,11 +9,16 @@
 package wile.rsgauges;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import wile.rsgauges.blocks.SensitiveGlassBlock;
 
 public class ModAuxiliaries {
 
@@ -79,5 +84,38 @@ public class ModAuxiliaries {
   public static String ticksToSecondsString(long t) {
     return String.format("%.02f", ((double)t)/20.0);
   }
+
+  /**
+   * Prefer world.isRemote, only use this if world is not available.
+   *
+   * @return boolean
+   */
+  public static boolean isClientSide() { return (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT); }
+
+  /**
+   * Class allowing to have the dye colors also available on
+   * server side. (EnumDyeColor not available on dedicated servers).
+   */
+  public static class DyeColorFilters {
+    public static final int WHITE       = 0xf3f3f3;
+    public static final int ORANGE      = 0xF9801D;
+    public static final int MAGENTA     = 0xC74EBD;
+    public static final int LIGHTBLUE   = 0x3AB3DA;
+    public static final int YELLOW      = 0xFED83D;
+    public static final int LIME        = 0x80C71F;
+    public static final int PINK        = 0xF38BAA;
+    public static final int GRAY        = 0x474F52;
+    public static final int SILVER      = 0x9D9D97;
+    public static final int CYAN        = 0x169C9C;
+    public static final int PURPLE      = 0x8932B8;
+    public static final int BLUE        = 0x3C44AA;
+    public static final int BROWN       = 0x835432;
+    public static final int GREEN       = 0x5E7C16;
+    public static final int RED         = 0xB02E26;
+    public static final int BLACK       = 0x111111;
+
+    public static final int[] byIndex = { WHITE,ORANGE,MAGENTA,LIGHTBLUE,YELLOW,LIME,PINK,GRAY,SILVER,CYAN,PURPLE,BLUE,BROWN,GREEN,RED,BLACK };
+    public static final String[] nameByIndex = { "white","orange","magenta","lightblue","yellow","lime","pink","gray","silver","cyan","purple","blue","brown","green","red","black" }; }
+
 
 }

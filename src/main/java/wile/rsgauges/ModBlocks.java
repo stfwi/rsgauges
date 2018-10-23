@@ -276,13 +276,15 @@ public class ModBlocks {
       new SwitchBlock("bistableswitch_glass1",
           new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+          SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
       ),
       // Bistable glass touch switch
       new SwitchBlock("bistableswitch_glass2",
           new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
           SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+          SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
       )
   };
 
@@ -446,7 +448,8 @@ public class ModBlocks {
           SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
           SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
-          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+          SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
       ),
       // Thin small star shaped glass button
       new SwitchBlock("pulseswitch_glass2",
@@ -455,7 +458,8 @@ public class ModBlocks {
           SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
           SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
-          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+          SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
       ),
       // Glass touch button
       new SwitchBlock("pulseswitch_glass3",
@@ -464,7 +468,8 @@ public class ModBlocks {
           SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
           SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
-          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE
+          SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+          SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
       )
   };
 
@@ -522,13 +527,14 @@ public class ModBlocks {
       )
   };
 
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch1") public static final AutoSwitchBlock automaticSwitch1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch2") public static final AutoSwitchBlock automaticSwitch2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch3") public static final AutoSwitchBlock automaticSwitch3Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch4") public static final AutoSwitchBlock automaticSwitch4Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch5") public static final AutoSwitchBlock automaticSwitch5Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch6") public static final AutoSwitchBlock automaticSwitch6Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch7") public static final AutoSwitchBlock automaticSwitch7Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch1")         public static final AutoSwitchBlock automaticSwitch1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch2")         public static final AutoSwitchBlock automaticSwitch2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch3")         public static final AutoSwitchBlock automaticSwitch3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch4")         public static final AutoSwitchBlock automaticSwitch4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch5")         public static final AutoSwitchBlock automaticSwitch5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch6")         public static final AutoSwitchBlock automaticSwitch6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch7")         public static final AutoSwitchBlock automaticSwitch7Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:detectorswitch_glass1")    public static final AutoSwitchBlock detectorSwitchGlass1Block = null;
   private static final AutoSwitchBlock automaticSwitches[] = {
       // Infrared motion_sensor
       new AutoSwitchBlock("automaticswitch1",
@@ -592,7 +598,17 @@ public class ModBlocks {
           SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-      )
+      ),
+      // Glass infrared motion_sensor
+      new AutoSwitchBlock("detectorswitch_glass1",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
+          SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_VOLUME|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+          SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+      ),
   };
 
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")             public static final SensitiveGlassBlock sensitiveGlassBlock = null;
@@ -614,26 +630,25 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_black")       public static final SensitiveGlassBlock blackSensitiveGlassBlock = null;
   private static final SensitiveGlassBlock sensitiveGlassBlocks[] = {
       new SensitiveGlassBlock("sensitiveglass"          , 0x000f|0x0020, 0xffffff), // light value if on 0xf | off 0x1, color multiplier
-      new SensitiveGlassBlock("sensitiveglass_white"    , 0x0000|0x0000, EnumDyeColor.WHITE.getColorValue()),       // 0xf3f3f3
-      new SensitiveGlassBlock("sensitiveglass_red"      , 0x0000|0x0000, EnumDyeColor.RED.getColorValue()),         // 0xB02E26
-      new SensitiveGlassBlock("sensitiveglass_green"    , 0x0000|0x0000, EnumDyeColor.GREEN.getColorValue()),       // 0x5E7C16
-      new SensitiveGlassBlock("sensitiveglass_blue"     , 0x0000|0x0000, EnumDyeColor.BLUE.getColorValue()),        // 0x3C44AA
-      new SensitiveGlassBlock("sensitiveglass_yellow"   , 0x0000|0x0000, EnumDyeColor.YELLOW.getColorValue()),      // 0xFED83D
-      new SensitiveGlassBlock("sensitiveglass_orange"   , 0x0000|0x0000, EnumDyeColor.ORANGE.getColorValue()),      // 0xF9801D
-      new SensitiveGlassBlock("sensitiveglass_magenta"  , 0x0000|0x0000, EnumDyeColor.MAGENTA.getColorValue()),     // 0xC74EBD
-      new SensitiveGlassBlock("sensitiveglass_lightblue", 0x0000|0x0000, EnumDyeColor.LIGHT_BLUE.getColorValue()),  // 0x3AB3DA
-      new SensitiveGlassBlock("sensitiveglass_lime"     , 0x0000|0x0000, EnumDyeColor.LIME.getColorValue()),        // 0x80C71F
-      new SensitiveGlassBlock("sensitiveglass_pink"     , 0x0000|0x0000, EnumDyeColor.PINK.getColorValue()),        // 0xF38BAA
-      new SensitiveGlassBlock("sensitiveglass_gray"     , 0x0000|0x0000, EnumDyeColor.GRAY.getColorValue()),        // 0x474F52
-      new SensitiveGlassBlock("sensitiveglass_lightgray", 0x0000|0x0000, EnumDyeColor.SILVER.getColorValue()),      // 0x9D9D97
-      new SensitiveGlassBlock("sensitiveglass_cyan"     , 0x0000|0x0000, EnumDyeColor.CYAN.getColorValue()),        // 0x169C9C
-      new SensitiveGlassBlock("sensitiveglass_purple"   , 0x0000|0x0000, EnumDyeColor.PURPLE.getColorValue()),      // 0x8932B8
-      new SensitiveGlassBlock("sensitiveglass_brown"    , 0x0000|0x0000, EnumDyeColor.BROWN.getColorValue()),       // 0x835432
-      new SensitiveGlassBlock("sensitiveglass_black"    , 0x0000|0x0000, EnumDyeColor.BLACK.getColorValue()),       // 0x111111
+      new SensitiveGlassBlock("sensitiveglass_white"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.WHITE),       // 0xf3f3f3
+      new SensitiveGlassBlock("sensitiveglass_red"      , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.RED),         // 0xB02E26
+      new SensitiveGlassBlock("sensitiveglass_green"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.GREEN),       // 0x5E7C16
+      new SensitiveGlassBlock("sensitiveglass_blue"     , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.BLUE),        // 0x3C44AA
+      new SensitiveGlassBlock("sensitiveglass_yellow"   , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.YELLOW),      // 0xFED83D
+      new SensitiveGlassBlock("sensitiveglass_orange"   , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.ORANGE),      // 0xF9801D
+      new SensitiveGlassBlock("sensitiveglass_magenta"  , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.MAGENTA),     // 0xC74EBD
+      new SensitiveGlassBlock("sensitiveglass_lightblue", 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.LIGHTBLUE),   // 0x3AB3DA
+      new SensitiveGlassBlock("sensitiveglass_lime"     , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.LIME),        // 0x80C71F
+      new SensitiveGlassBlock("sensitiveglass_pink"     , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.PINK),        // 0xF38BAA
+      new SensitiveGlassBlock("sensitiveglass_gray"     , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.GRAY),        // 0x474F52
+      new SensitiveGlassBlock("sensitiveglass_lightgray", 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.SILVER),      // 0x9D9D97
+      new SensitiveGlassBlock("sensitiveglass_cyan"     , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.CYAN),        // 0x169C9C
+      new SensitiveGlassBlock("sensitiveglass_purple"   , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.PURPLE),      // 0x8932B8
+      new SensitiveGlassBlock("sensitiveglass_brown"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.BROWN),       // 0x835432
+      new SensitiveGlassBlock("sensitiveglass_black"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.BLACK),       // 0x111111
   };
 
   public static ArrayList<Block> registeredBlocks = new ArrayList<Block>();
-
 
   // Invoked from CommonProxy.registerBlocks()
   public static final void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -700,6 +715,7 @@ public class ModBlocks {
     }
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void registerBlockColourHandlers(final ColorHandlerEvent.Block event) {
       final IBlockColor blockSpecifiedColorHandler = (state, blockAccess, pos, tintIndex) -> {
         return (state==null) ? ((int)0xffffffff) : (((ColorTintSupport)state.getBlock()).getColorMultiplierRGBA(state, blockAccess, pos));
@@ -711,6 +727,7 @@ public class ModBlocks {
     }
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void registerItemColourHandlers(final ColorHandlerEvent.Item event) {
       final ItemColors ic = event.getItemColors();
       final IItemColor constantBlockColorHandler = (stack, tintIndex) -> {

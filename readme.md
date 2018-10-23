@@ -90,6 +90,13 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.3b5  - Fixed server startup crash issue due to color handler event subscription, 
+                which is unfortunately client side only. Thanks to Dave for posting this
+                on github (issue #6).
+              - Chinese language file added (thanks to sfchipan for the pull request
+                on github)
+              - German language file added, too.
+
   - v1.0.3b4  - Glass bi-stable, pulse, and contact switches added.
               - Sensitive glass textures edited.
               - backend: Configuration based block/item block initialisation improved.
@@ -103,7 +110,7 @@ redstone power to the game:
   - v1.0.3b2  - Mod specific creative tab added.
               - Industrial bi-stable switch 1 model improved.
               - Rustic floor contact switch UI texture added.
-              - Multi-left-click config (weak/inverted) now double-click 
+              - Multi-left-click config (weak/inverted) now double-click
                 for each step.
               - Added switch left-click option 'no output' (default disabled
                 in mod options, feature for future use).

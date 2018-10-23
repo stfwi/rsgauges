@@ -119,7 +119,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public BlockRenderLayer getBlockLayer() { return ((config & SWITCH_CONFIG_TRANSLUCENT) != 0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
 
   @Override
-  public int getLightValue(IBlockState state) { return ((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) ? 1 : 0; }
+  public int getLightValue(IBlockState state) { return (((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) && (ModAuxiliaries.isClientSide())) ? 1 : 0; }
 
   @Override
   public boolean hasColorMultiplierRGBA() { return (!ModConfig.without_switch_colortinting) && ((config & SWITCH_CONFIG_COLOR_TINT_SUPPORT) != 0); }
@@ -128,7 +128,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public int getColorMultiplierRGBA(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) {
     if((pos==null) || (world==null)) return 0xffffffff;
     TileEntity te = world.getTileEntity(pos);
-    return (te instanceof SwitchBlock.SwitchTileEntity)  ? (EnumDyeColor.byMetadata((((SwitchBlock.SwitchTileEntity)te).color_tint() & 0xf)).getColorValue()) : (0xffffffff);
+    return (te instanceof SwitchBlock.SwitchTileEntity)  ? (ModAuxiliaries.DyeColorFilters.byIndex[((SwitchBlock.SwitchTileEntity)te).color_tint() & 0xf]) : (0xffffffff);
   }
 
   @Override
@@ -253,8 +253,9 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     } else if((ck.dye >= 0) && (((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_COLOR_TINT_SUPPORT) != 0) {
       if((!ModConfig.without_switch_colortinting) && (ck.dye <= 15)) {
         te.color_tint(ck.dye);
+        world.markAndNotifyBlock(pos, null, state, state, 1|2|4|16);
         ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("Tinted ") + ": "
-            + ModAuxiliaries.localize(EnumDyeColor.byMetadata(ck.dye).toString())
+            + ModAuxiliaries.localize(ModAuxiliaries.DyeColorFilters.nameByIndex[ck.dye & 0xf])
         );
         return;
       }
