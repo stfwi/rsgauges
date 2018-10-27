@@ -1,0 +1,12 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rsgauges:sensitiveglassblock",
+    "textures": { "side": "rsgauges:blocks/sensitiveglass/sensitiveglass_bw_s15"}
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "powered": { "false":{}, "true": {"textures":{ "side": "rsgauges:blocks/sensitiveglass/sensitiveglass_bw_s00" } } }
+  }
+}

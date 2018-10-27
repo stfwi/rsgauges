@@ -25,7 +25,40 @@
 			}
 		},
 		{
-			"from": [7, 7.25, 15.625],
+			"from": [7, 7.125, 15.625],
+			"to": [7.625, 7.75, 15.75],
+			"faces": {
+				"north": {"texture": "#led"},
+				"east": {"texture": "#led"},
+				"west": {"texture": "#led"},
+				"up": {"texture": "#led"},
+				"down": {"texture": "#led"}
+			}
+		},
+		{
+			"from": [8.375, 7.625, 15.625],
+			"to": [8.75, 7.875, 15.75],
+			"faces": {
+				"north": {"texture": "#led"},
+				"east": {"texture": "#led"},
+				"west": {"texture": "#led"},
+				"up": {"texture": "#led"},
+				"down": {"texture": "#led"}
+			}
+		},
+		{
+			"from": [8.375, 7, 15.625],
+			"to": [8.75, 7.25, 15.75],
+			"faces": {
+				"north": {"texture": "#led"},
+				"east": {"texture": "#led"},
+				"west": {"texture": "#led"},
+				"up": {"texture": "#led"},
+				"down": {"texture": "#led"}
+			}
+		},
+		{
+			"from": [8.75, 7.25, 15.625],
 			"to": [9, 7.625, 15.75],
 			"faces": {
 				"north": {"texture": "#led"},
@@ -36,8 +69,8 @@
 			}
 		},
 		{
-			"from": [6.75, 7.375, 15.625],
-			"to": [7, 7.5, 15.75],
+			"from": [8.125, 7.25, 15.625],
+			"to": [8.375, 7.625, 15.75],
 			"faces": {
 				"north": {"texture": "#led"},
 				"east": {"texture": "#led"},
@@ -47,8 +80,8 @@
 			}
 		},
 		{
-			"from": [9, 7.375, 15.625],
-			"to": [9.25, 7.5, 15.75],
+			"from": [8.5, 7.375, 15.625],
+			"to": [8.625, 7.5, 15.75],
 			"faces": {
 				"north": {"texture": "#led"},
 				"east": {"texture": "#led"},
@@ -58,8 +91,8 @@
 			}
 		},
 		{
-			"from": [10.5, 5.5, 15.875],
-			"to": [10.625, 10.5, 16],
+			"from": [5.375, 5.5, 15.875],
+			"to": [5.5, 10.5, 16],
 			"faces": {
 				"north": {"texture": "#led"},
 				"east": {"texture": "#led"},
@@ -70,8 +103,8 @@
 			}
 		},
 		{
-			"from": [5.5, 5.375, 15.875],
-			"to": [10.5, 5.5, 16],
+			"from": [10.5, 5.5, 15.875],
+			"to": [10.625, 10.5, 16],
 			"faces": {
 				"north": {"texture": "#led"},
 				"east": {"texture": "#led"},
@@ -94,8 +127,8 @@
 			}
 		},
 		{
-			"from": [5.375, 5.5, 15.875],
-			"to": [5.5, 10.5, 16],
+			"from": [5.5, 5.375, 15.875],
+			"to": [10.5, 5.5, 16],
 			"faces": {
 				"north": {"texture": "#led"},
 				"east": {"texture": "#led"},

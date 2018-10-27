@@ -1,11 +1,11 @@
 /**
- * @file AutoSwitchBlock.java
+ * @file SensitiveGlassBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
  *
- * Basic class for blocks representing redstone signal sources, like
- * the vanilla lever or button.
+ * Class representing full, transparent blocks with different
+ * look depending on the redstone power they receive.
 **/
 package wile.rsgauges.blocks;
 
@@ -110,10 +110,10 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
 
   @Override
   public int getLightValue(IBlockState state) {
-    if((ModConfig.sensitive_glass_server_light_level <= 0) || (ModAuxiliaries.isClientSide())) {
-      return state.getValue(POWERED) ? ((config & CONFIG_LIGHT_MASK_POWERED)>>0) : ((config & CONFIG_LIGHT_MASK_UNPOWERED)>>8);
-    } else {
+    if((ModConfig.sensitive_glass_server_light_level > 0) && (!ModAuxiliaries.isClientSide())) {
       return ModConfig.sensitive_glass_server_light_level & 0xf; // TEST/EXPERIMENTAL to prevent server light recalculations (to check if any performance impact).
+    } else {
+      return state.getValue(POWERED) ? ((config & CONFIG_LIGHT_MASK_POWERED)>>0) : ((config & CONFIG_LIGHT_MASK_UNPOWERED)>>4);
     }
   }
 
@@ -130,7 +130,7 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
   protected BlockStateContainer createBlockState() { return new BlockStateContainer(this, POWERED); }
 
   @Override
-  public int tickRate(World world) { return 5; }
+  public int tickRate(World world) { return 100; }
 
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {

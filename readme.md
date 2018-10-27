@@ -90,7 +90,16 @@ redstone power to the game:
 
 ## Revision history
 
-  - v1.0.3b5  - Fixed server startup crash issue due to color handler event subscription, 
+  - v1.0.3b6  - Inverted redstone sensitive glass added (light emitting).
+              - Touch configurable glass contact plate added.
+              - Glass infrared motion detector added.
+              - Glass linear laser detector added.
+              - Glass daytime switch added.
+              - Glass interval timer switch added.
+              - Enabled glass switch color teaching (dye-left-click-tinting).
+              - Language files updated (Chinese prepared, still contains English words).
+
+  - v1.0.3b5  - Fixed server startup crash issue due to color handler event subscription,
                 which is unfortunately client side only. Thanks to Dave for posting this
                 on github (issue #6).
               - Chinese language file added (thanks to sfchipan for the pull request

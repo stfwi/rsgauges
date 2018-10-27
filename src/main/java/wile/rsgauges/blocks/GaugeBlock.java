@@ -142,7 +142,8 @@ public class GaugeBlock extends RsBlock {
 
   @Override
   public int getLightValue(IBlockState state) {
-    if(!ModAuxiliaries.isClientSide()) return (this.lightValueScaling>0) ? 3 : 0;
+    if(this.lightValueScaling < 1) return 0;
+    if(!ModAuxiliaries.isClientSide()) return this.lightValueScaling;
     int v = (int)((this.lightValueScaling * state.getValue(POWER)) / 15);
     return (v < 0) ? (0) : ((v > 15) ? 15 : v);
   }
@@ -212,7 +213,7 @@ public class GaugeBlock extends RsBlock {
       te.power(p);
       IBlockState newState = state.withProperty(POWER, p);
       if(sync) {
-        te.markDirty();
+        world.markChunkDirty(pos, te);
         world.setBlockState(pos, newState, 1|2|16);
         world.markAndNotifyBlock(pos, null, state, newState, 1|2|16);
       } else {

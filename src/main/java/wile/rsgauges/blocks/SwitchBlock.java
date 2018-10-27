@@ -323,9 +323,18 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
     @Override
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
+      int previous_svd = svd_;
       scd_ = nbt.getInteger("scd");
       svd_ = nbt.getInteger("svd");
-      if((!updatePacket) && (scd_==0)) reset();
+      if(!updatePacket) {
+        if(scd_==0) reset();
+      } else {
+        if((svd_ & SWITCH_DATA_SVD_COLOR_MASK) != (previous_svd & SWITCH_DATA_SVD_COLOR_MASK)) {
+          if((getWorld() != null) && (getWorld().isRemote)) {
+            world.markBlockRangeForRenderUpdate(getPos(), getPos());
+          }
+        }
+      }
     }
 
     @Override
@@ -377,6 +386,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
         if((scd_ & 0xff)==0) scd_ |= 15; // implicitly set on-power if not set yet
         if(current_scd != scd_) this.markDirty();
       } catch(Exception e) {
+        // set the on-power to default 15, but no other settings.
         scd_ = 15;
       }
     }
@@ -410,7 +420,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
         if(!multiclicked) return false;
       }
 
-      // Not openable: Settings are changed by cycling through available states.
+      // Settings are changed by cycling through available states.
       if((block.config & (SWITCH_CONFIG_INVERTABLE|SWITCH_CONFIG_WEAKABLE))==(SWITCH_CONFIG_INVERTABLE|SWITCH_CONFIG_WEAKABLE)) {
         switch(((weak() ? 1:0) | (inverted() ? 2:0)) | (nooutput() ? 4:0)) {
           case  0: weak(true);  inverted(false); nooutput(false); break;

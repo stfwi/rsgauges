@@ -67,7 +67,7 @@ public class AutoSwitchBlock extends SwitchBlock {
   }
 
   @Override
-  public int tickRate(World world) { return 20; } // no block based scheduling needed
+  public int tickRate(World world) { return 200; } // no block based scheduling needed
 
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {} // in tile entity update (which is anyway needed)
@@ -200,6 +200,7 @@ public class AutoSwitchBlock extends SwitchBlock {
 
     @Override
     public void update() {
+      if(ModConfig.z_without_detector_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       update_timer_ = update_interval_;
       IBlockState state = getWorld().getBlockState(getPos());
@@ -373,6 +374,7 @@ public class AutoSwitchBlock extends SwitchBlock {
 
     @Override
     public void update() {
+      if(ModConfig.z_without_environmental_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       if(update_interval_ < 10) update_interval_ = 10;
       update_timer_ = update_interval_;
@@ -549,6 +551,7 @@ public class AutoSwitchBlock extends SwitchBlock {
 
     @Override
     public void update() {
+      if(ModConfig.z_without_timer_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       int p = p_;
       if((t_on()<=0) || (t_off()<=0) || (p_set() <= 0)) {

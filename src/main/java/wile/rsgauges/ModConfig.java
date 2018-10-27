@@ -95,14 +95,26 @@ public class ModConfig {
   @Config.Name("Without pulse time configuration")
   public static boolean without_pulsetime_config = false;
 
+  @Config.Comment("Disable color tinting for switches.")
+  @Config.Name("Without switch color tinting")
+  @Config.RequiresMcRestart
+  public static boolean without_switch_colortinting = false;
+
   @Config.Comment("Disable the 'no output' config option for switches.")
   @Config.Name("Without switch 'no output' option")
   public static boolean without_switch_nooutput = true;
 
-  @Config.Comment("Disable color tinting for switches.")
-  @Config.Name("Without switch color tinting")
-  @Config.RequiresMcRestart
-  public static boolean without_switch_colortinting = true;
+  @Config.Comment("Disable tile entity update() for detector switches (for performance testing only, don't do this at home).")
+  @Config.Name("Testing: Without detector switch update")
+  public static boolean z_without_detector_switch_update = false;
+
+  @Config.Comment("Disable tile entity update() for environmental sensor switches (for performance testing only, don't do this at home).")
+  @Config.Name("Testing: Without environmental switch update")
+  public static boolean z_without_environmental_switch_update = false;
+
+  @Config.Comment("Disable tile entity update() for time based switches (for performance testing only, don't do this at home).")
+  @Config.Name("Testing: Without timer switch update")
+  public static boolean z_without_timer_switch_update = false;
 
   @Config.Comment("Defines a constant light level for sensitive glass on the server, " +
                   "no matter if the block is powered or not. Prevents performance issues " +

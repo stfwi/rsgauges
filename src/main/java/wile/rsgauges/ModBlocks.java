@@ -527,14 +527,19 @@ public class ModBlocks {
       )
   };
 
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch1")         public static final AutoSwitchBlock automaticSwitch1Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch2")         public static final AutoSwitchBlock automaticSwitch2Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch3")         public static final AutoSwitchBlock automaticSwitch3Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch4")         public static final AutoSwitchBlock automaticSwitch4Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch5")         public static final AutoSwitchBlock automaticSwitch5Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch6")         public static final AutoSwitchBlock automaticSwitch6Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:automaticswitch7")         public static final AutoSwitchBlock automaticSwitch7Block = null;
-  @GameRegistry.ObjectHolder("rsgauges:detectorswitch_glass1")    public static final AutoSwitchBlock detectorSwitchGlass1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch1")       public static final AutoSwitchBlock automaticSwitch1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch2")       public static final AutoSwitchBlock automaticSwitch2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch3")       public static final AutoSwitchBlock automaticSwitch3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch4")       public static final AutoSwitchBlock automaticSwitch4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch5")       public static final AutoSwitchBlock automaticSwitch5Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch6")       public static final AutoSwitchBlock automaticSwitch6Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:automaticswitch7")       public static final AutoSwitchBlock automaticSwitch7Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:detectorswitch_glass1")  public static final AutoSwitchBlock detectorSwitchGlass1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:detectorswitch_glass2")  public static final AutoSwitchBlock detectorSwitchGlass2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:daytimeswitch_glass1")   public static final AutoSwitchBlock daytimeSwitchGlass1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:timerswitch_glass1")     public static final AutoSwitchBlock timerSwitchGlass1Block = null;
+
+
   private static final AutoSwitchBlock automaticSwitches[] = {
       // Infrared motion_sensor
       new AutoSwitchBlock("automaticswitch1",
@@ -599,16 +604,43 @@ public class ModBlocks {
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
       ),
-      // Glass infrared motion_sensor
+      // Glass infrared motion sensor
       new AutoSwitchBlock("detectorswitch_glass1",
           new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
           SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_VOLUME|
           SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
-          SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT,
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
           new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
       ),
+      // Glass laser motion sensor
+      new AutoSwitchBlock("detectorswitch_glass2",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
+          SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_LINEAR|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+      ),
+      // Glass Day time switch
+      new AutoSwitchBlock("daytimeswitch_glass1",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
+          SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_TIMER_DAYTIME|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+      ),
+      // Glass interval signal timer
+      new AutoSwitchBlock("timerswitch_glass1",
+          new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
+          SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_TIMER_INTERVAL|
+          SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+          SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT,
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+          new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+      ),
+
   };
 
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")             public static final SensitiveGlassBlock sensitiveGlassBlock = null;
@@ -628,6 +660,7 @@ public class ModBlocks {
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_purple")      public static final SensitiveGlassBlock purpleSensitiveGlassBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_brown")       public static final SensitiveGlassBlock brownSensitiveGlassBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_black")       public static final SensitiveGlassBlock blackSensitiveGlassBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_inverted")    public static final SensitiveGlassBlock invertedSensitiveGlassBlock = null;
   private static final SensitiveGlassBlock sensitiveGlassBlocks[] = {
       new SensitiveGlassBlock("sensitiveglass"          , 0x000f|0x0020, 0xffffff), // light value if on 0xf | off 0x1, color multiplier
       new SensitiveGlassBlock("sensitiveglass_white"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.WHITE),       // 0xf3f3f3
@@ -646,6 +679,7 @@ public class ModBlocks {
       new SensitiveGlassBlock("sensitiveglass_purple"   , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.PURPLE),      // 0x8932B8
       new SensitiveGlassBlock("sensitiveglass_brown"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.BROWN),       // 0x835432
       new SensitiveGlassBlock("sensitiveglass_black"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.BLACK),       // 0x111111
+      new SensitiveGlassBlock("sensitiveglass_inverted" , 0x0002|0x00f0, 0xffffff)
   };
 
   public static ArrayList<Block> registeredBlocks = new ArrayList<Block>();

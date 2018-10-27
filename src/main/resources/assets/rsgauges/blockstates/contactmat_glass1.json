@@ -2,7 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "model": "rsgauges:contactmat_glassxblock_thin",
-    "textures": { "side": "rsgauges:blocks/common/cleargrayglass" }
+    "textures": {
+      "front": "rsgauges:blocks/contactswitch/contactmat_glass1_s00",
+      "side": "rsgauges:blocks/common/cleargrayglass"
+    }
   },
   "variants": {
     "normal": [{}],
@@ -10,7 +13,10 @@
     "facing": {"north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{}, "down":{} },
     "powered": {
       "false": {},
-      "true":  { "textures": { "side": "rsgauges:blocks/sensitiveglass/clearwhiteglass40" } }
+      "true": { "textures": {
+        "front": "rsgauges:blocks/contactswitch/contactmat_glass1_s15",
+        "side": "rsgauges:blocks/sensitiveglass/clearwhiteglass40"
+      }}
     }
   }
 }

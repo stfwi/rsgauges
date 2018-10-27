@@ -40,8 +40,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -179,6 +177,7 @@ public abstract class RsBlock extends Block {
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
     AxisAlignedBB bb = getUnrotatedBB(state);
     if(isWallMount()) {
+      // @todo check if I can replace this with a static const array of AxisAlignedBB.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(1-bb.maxX, 1-bb.maxZ, 1-bb.maxY, 1-bb.minX, 1-bb.minZ, 1-bb.minY); // D
         case 1: return new AxisAlignedBB(1-bb.maxX,   bb.minZ,   bb.minY, 1-bb.minX,   bb.maxZ,   bb.maxY); // U
@@ -188,6 +187,7 @@ public abstract class RsBlock extends Block {
         case 5: return new AxisAlignedBB(  bb.minZ,   bb.minY, 1-bb.maxX,   bb.maxZ,   bb.maxY, 1-bb.minX); // E
       }
     } else if(isFloorMount()) {
+      // @todo check if I can replace this with an array of AxisAlignedBB.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); // D --> bb
         case 1: return new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); // U --> bb
@@ -287,14 +287,9 @@ public abstract class RsBlock extends Block {
     }
 
     @Override
-    public NBTTagCompound getUpdateTag() {
-      NBTTagCompound nbt = new NBTTagCompound();
-      super.writeToNBT(nbt);
-      this.writeNbt(nbt, true);
-      return nbt;
-    }
+    public NBTTagCompound getUpdateTag() { NBTTagCompound nbt = new NBTTagCompound(); super.writeToNBT(nbt); this.writeNbt(nbt, true); return nbt; }
 
-    @Override // Only on server.
+    @Override // on server.
     public SPacketUpdateTileEntity getUpdatePacket() { return new SPacketUpdateTileEntity(pos, NBT_ENTITY_TYPE, getUpdateTag()); }
 
     @Override
@@ -327,7 +322,8 @@ public abstract class RsBlock extends Block {
 
     @Override
     public String toString() {
-      return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",accepted:" + Boolean.toString(touch_configured) + ",wrenched:" + Boolean.toString(wrenched) + "}";
+      return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",touch_configured:" + Boolean.toString(touch_configured)
+          + ",wrenched:" + Boolean.toString(wrenched) + ",redstone:" + Integer.toString(redstone) + ",dye:" + Integer.toString(dye) + "}";
     }
 
     public static boolean wrenched(EntityPlayer player) {
@@ -360,6 +356,7 @@ public abstract class RsBlock extends Block {
       if(block.isWallMount() && (facing != state.getValue(FACING))) return ck;
       double xo=0, yo=0;
       if(block.isWallMount()) {
+        // @todo check if I can replace this with an array of lambda expressions.
         switch(facing.getIndex()) {
           case 0: xo = 1-x; yo = 1-z; break; // DOWN
           case 1: xo = 1-x; yo = z  ; break; // UP
@@ -373,6 +370,7 @@ public abstract class RsBlock extends Block {
         yo = Math.round(((yo-aa.minY) * (1.0/(aa.maxY-aa.minY)) * 15.5) - 0.25);
       } else if(block.isFloorMount()) {
         facing = state.getValue(FACING);
+        // @todo check if I can replace this with an array of lambda expressions.
         switch(facing.getIndex()) {
           case 0: xo =   x; yo =   z; break; // DOWN
           case 1: xo =   x; yo =   z; break; // UP

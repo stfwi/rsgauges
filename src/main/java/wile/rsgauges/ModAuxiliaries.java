@@ -90,7 +90,7 @@ public class ModAuxiliaries {
    *
    * @return boolean
    */
-  public static boolean isClientSide() { return (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT); }
+  public static boolean isClientSide() { return (FMLCommonHandler.instance().getSide() == Side.CLIENT); }
 
   /**
    * Class allowing to have the dye colors also available on
@@ -113,9 +113,7 @@ public class ModAuxiliaries {
     public static final int GREEN       = 0x5E7C16;
     public static final int RED         = 0xB02E26;
     public static final int BLACK       = 0x111111;
-
     public static final int[] byIndex = { WHITE,ORANGE,MAGENTA,LIGHTBLUE,YELLOW,LIME,PINK,GRAY,SILVER,CYAN,PURPLE,BLUE,BROWN,GREEN,RED,BLACK };
-    public static final String[] nameByIndex = { "white","orange","magenta","lightblue","yellow","lime","pink","gray","silver","cyan","purple","blue","brown","green","red","black" }; }
-
-
+    public static final String[] nameByIndex = { "white","orange","magenta","lightblue","yellow","lime","pink","gray","silver","cyan","purple","blue","brown","green","red","black" };
+  }
 }
