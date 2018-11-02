@@ -90,6 +90,8 @@ redstone power to the game:
 
 ## Revision history
 
+  - v1.0.3    - Release based on v1.0.3b6. 
+  
   - v1.0.3b6  - Inverted redstone sensitive glass added (light emitting).
               - Touch configurable glass contact plate added.
               - Glass infrared motion detector added.
