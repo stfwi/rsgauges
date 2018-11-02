@@ -57,7 +57,7 @@ public class AutoSwitchBlock extends SwitchBlock {
     te.click_config(null);
     if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
     RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-    if((wac.accepted) && (wac.wrenched) && (state.getBlock() instanceof AutoSwitchBlock)) {
+    if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof AutoSwitchBlock)) {
       if(te.activation_config((AutoSwitchBlock)state.getBlock(), player, wac.x, wac.y)) return true;
       if((config & (SWITCH_CONFIG_TIMER_INTERVAL))!=0) {
         te.updateSwitchState(state, this, !state.getValue(POWERED), 0);
@@ -67,7 +67,7 @@ public class AutoSwitchBlock extends SwitchBlock {
   }
 
   @Override
-  public int tickRate(World world) { return 100; } // no block based scheduling needed
+  public int tickRate(World world) { return 200; } // no block based scheduling needed
 
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {} // in tile entity update (which is anyway needed)
@@ -200,6 +200,7 @@ public class AutoSwitchBlock extends SwitchBlock {
 
     @Override
     public void update() {
+      if(ModConfig.z_without_detector_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       update_timer_ = update_interval_;
       IBlockState state = getWorld().getBlockState(getPos());
@@ -373,6 +374,7 @@ public class AutoSwitchBlock extends SwitchBlock {
 
     @Override
     public void update() {
+      if(ModConfig.z_without_environmental_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       if(update_interval_ < 10) update_interval_ = 10;
       update_timer_ = update_interval_;
@@ -549,6 +551,7 @@ public class AutoSwitchBlock extends SwitchBlock {
 
     @Override
     public void update() {
+      if(ModConfig.z_without_timer_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       int p = p_;
       if((t_on()<=0) || (t_off()<=0) || (p_set() <= 0)) {

@@ -91,11 +91,46 @@ public class ModConfig {
   @Config.RequiresMcRestart
   public static boolean without_decorative = false;
 
-  @Config.Comment("Comma sepatated list of items names that can be used alter (NBT) configurable blocks of this mod." +
+  @Config.Comment("Disable pulse time configuration of switches using redstone dust stack clicking.")
+  @Config.Name("Without pulse time configuration")
+  public static boolean without_pulsetime_config = false;
+
+  @Config.Comment("Disable color tinting for switches.")
+  @Config.Name("Without switch color tinting")
+  @Config.RequiresMcRestart
+  public static boolean without_switch_colortinting = false;
+
+  @Config.Comment("Disable the 'no output' config option for switches.")
+  @Config.Name("Without switch 'no output' option")
+  public static boolean without_switch_nooutput = true;
+
+  @Config.Comment("Disable tile entity update() for detector switches (for performance testing only, don't do this at home).")
+  @Config.Name("Testing: Without detector switch update")
+  public static boolean z_without_detector_switch_update = false;
+
+  @Config.Comment("Disable tile entity update() for environmental sensor switches (for performance testing only, don't do this at home).")
+  @Config.Name("Testing: Without environmental switch update")
+  public static boolean z_without_environmental_switch_update = false;
+
+  @Config.Comment("Disable tile entity update() for time based switches (for performance testing only, don't do this at home).")
+  @Config.Name("Testing: Without timer switch update")
+  public static boolean z_without_timer_switch_update = false;
+
+  @Config.Comment("Defines a constant light level for sensitive glass on the server, " +
+                  "no matter if the block is powered or not. Prevents performance issues " +
+                  "if many sensitive glass blocks are frequently switched on and off. " +
+                  "Set to zero to switch the light level depending on the redstone power " +
+                  "like on the client side. WARNING: this is experimental and may change."
+                  )
+  @Config.Name("Sensitive glass light level on server")
+  @Config.RangeInt(min=0, max=15)
+  public static int sensitive_glass_server_light_level = 0;
+
+  @Config.Comment("Comma sepatated list of items names that can be used alter configurable blocks of this mod." +
                   "This applies when the display side of the block is right click (activated) with the item in the " +
                   "main hand. Empty hand is 'air'.")
   @Config.Name("Accepted wrenches")
-  public static String accepted_wrenches = "air,redstone_torch";
+  public static String accepted_wrenches = "air";
 
   @Config.Comment("Timeout in milliseconds defining the timeout for left clicking switches or devices in order to " +
                   "configure them. If the device can be opened, it will be opened on 'double-left-click' and closed " +

@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [ { "item": "rsgauges:pulseswitch_glass2" } ],
+  "result": { "item": "rsgauges:pulseswitch_glass3", "data": 0 }
+}

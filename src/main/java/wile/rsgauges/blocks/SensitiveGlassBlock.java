@@ -1,15 +1,18 @@
 /**
- * @file AutoSwitchBlock.java
+ * @file SensitiveGlassBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
  *
- * Basic class for blocks representing redstone signal sources, like
- * the vanilla lever or button.
+ * Class representing full, transparent blocks with different
+ * look depending on the redstone power they receive.
 **/
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.ModAuxiliaries;
+import wile.rsgauges.ModBlocks;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.client.JitModelBakery;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -19,6 +22,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -27,6 +31,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -41,7 +46,7 @@ import org.apache.logging.log4j.Level;
 import java.util.List;
 import java.util.Random;
 
-public class SensitiveGlassBlock extends Block {
+public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.ColorTintSupport {
   public static final PropertyBool POWERED = PropertyBool.create("powered");
 
   public static final int CONFIG_LIGHT_MASK_POWERED              = 0x0000000f;
@@ -49,10 +54,11 @@ public class SensitiveGlassBlock extends Block {
   public static final int CONFIG_SIDES_ALWAYS_RENDERED_POWERED   = 0x00000100;
   public static final int CONFIG_SIDES_ALWAYS_RENDERED_UNPOWERED = 0x00000200;
   protected final int config;
+  protected final int colorMultiplierValue;
 
-  public SensitiveGlassBlock(String registryName, int config) {
+  public SensitiveGlassBlock(String registryName, int config, int colorMultiplierValue) {
     super(Material.REDSTONE_LIGHT);
-    setCreativeTab(CreativeTabs.REDSTONE);
+    setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(registryName);
     setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);
@@ -61,7 +67,10 @@ public class SensitiveGlassBlock extends Block {
     setResistance(2.0f);
     setTickRandomly(false);
     this.config = config;
+    this.colorMultiplierValue = colorMultiplierValue;
   }
+
+  public SensitiveGlassBlock(String registryName, int config) { this(registryName, config, (int)0xffffffff); }
 
   @SideOnly(Side.CLIENT)
   public void initModel() { ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory")); }
@@ -71,6 +80,14 @@ public class SensitiveGlassBlock extends Block {
 
   @Override
   public boolean isFullCube(IBlockState state) { return true; }
+
+  @Override
+  @SideOnly(Side.CLIENT)
+  public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, net.minecraft.client.particle.ParticleManager manager) { return true; } // no hit particles
+
+  @Override
+  @SideOnly(Side.CLIENT)
+  public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.ParticleManager manager) { return true; } // no destroy
 
   @SideOnly(Side.CLIENT)
   @Override
@@ -87,13 +104,18 @@ public class SensitiveGlassBlock extends Block {
       final boolean powered = state.getValue(POWERED);
       if(((config & CONFIG_SIDES_ALWAYS_RENDERED_POWERED)!=0) && powered) return true;
       if(((config & CONFIG_SIDES_ALWAYS_RENDERED_UNPOWERED)!=0) && (!powered)) return true;
-      if(neighbourState.getValue(POWERED) != powered) return true;
-      return false;
+      return (neighbourState.getValue(POWERED) != powered);
     }
   }
 
   @Override
-  public int getLightValue(IBlockState state) { return state.getValue(POWERED) ? ((config & CONFIG_LIGHT_MASK_POWERED)>>0) : ((config & CONFIG_LIGHT_MASK_UNPOWERED)>>8); }
+  public int getLightValue(IBlockState state) {
+    if((ModConfig.sensitive_glass_server_light_level > 0) && (!ModAuxiliaries.isClientSide())) {
+      return ModConfig.sensitive_glass_server_light_level & 0xf; // TEST/EXPERIMENTAL to prevent server light recalculations (to check if any performance impact).
+    } else {
+      return state.getValue(POWERED) ? ((config & CONFIG_LIGHT_MASK_POWERED)>>0) : ((config & CONFIG_LIGHT_MASK_UNPOWERED)>>4);
+    }
+  }
 
   @Override
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) { return state; }
@@ -108,7 +130,7 @@ public class SensitiveGlassBlock extends Block {
   protected BlockStateContainer createBlockState() { return new BlockStateContainer(this, POWERED); }
 
   @Override
-  public int tickRate(World world) { return 5; }
+  public int tickRate(World world) { return 100; }
 
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
@@ -120,6 +142,12 @@ public class SensitiveGlassBlock extends Block {
   public boolean canSpawnInBlock() { return false; }
 
   @Override
+  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    if(world.isRemote) return;
+    if(world.isBlockPowered(pos)) world.setBlockState(pos, state.withProperty(POWERED, true), 2);
+  }
+
+  @Override
   public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos neighbourPos) {
     if(world.isRemote) return;
     if(state.getValue(POWERED)) {
@@ -128,4 +156,10 @@ public class SensitiveGlassBlock extends Block {
       if(world.isBlockPowered(pos)) world.setBlockState(pos, state.withProperty(POWERED, true), 2);
     }
   }
+
+  @Override
+  public boolean hasColorMultiplierRGBA() { return true; }
+
+  @Override
+  public int getColorMultiplierRGBA(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) { return this.colorMultiplierValue; }
 }

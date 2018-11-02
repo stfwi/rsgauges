@@ -14,6 +14,7 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModConfig;
+import wile.rsgauges.ModResources;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.client.JitModelBakery;
 import net.minecraft.block.Block;
@@ -26,6 +27,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,13 +40,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.DyeUtils;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraft.world.chunk.*;
 import net.minecraft.world.ChunkCache;
 import com.google.common.base.Predicate;
@@ -59,7 +61,7 @@ public abstract class RsBlock extends Block {
 
   public RsBlock(String registryName, AxisAlignedBB unrotatedBoundingBox) {
     super(Material.CIRCUITS);
-    setCreativeTab(CreativeTabs.REDSTONE);
+    setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(registryName);
     setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);
@@ -175,6 +177,7 @@ public abstract class RsBlock extends Block {
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
     AxisAlignedBB bb = getUnrotatedBB(state);
     if(isWallMount()) {
+      // @todo check if I can replace this with a static const array of AxisAlignedBB.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(1-bb.maxX, 1-bb.maxZ, 1-bb.maxY, 1-bb.minX, 1-bb.minZ, 1-bb.minY); // D
         case 1: return new AxisAlignedBB(1-bb.maxX,   bb.minZ,   bb.minY, 1-bb.minX,   bb.maxZ,   bb.maxY); // U
@@ -184,6 +187,7 @@ public abstract class RsBlock extends Block {
         case 5: return new AxisAlignedBB(  bb.minZ,   bb.minY, 1-bb.maxX,   bb.maxZ,   bb.maxY, 1-bb.minX); // E
       }
     } else if(isFloorMount()) {
+      // @todo check if I can replace this with an array of AxisAlignedBB.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); // D --> bb
         case 1: return new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); // U --> bb
@@ -283,14 +287,9 @@ public abstract class RsBlock extends Block {
     }
 
     @Override
-    public NBTTagCompound getUpdateTag() {
-      NBTTagCompound nbt = new NBTTagCompound();
-      super.writeToNBT(nbt);
-      this.writeNbt(nbt, true);
-      return nbt;
-    }
+    public NBTTagCompound getUpdateTag() { NBTTagCompound nbt = new NBTTagCompound(); super.writeToNBT(nbt); this.writeNbt(nbt, true); return nbt; }
 
-    @Override // Only on server.
+    @Override // on server.
     public SPacketUpdateTileEntity getUpdatePacket() { return new SPacketUpdateTileEntity(pos, NBT_ENTITY_TYPE, getUpdateTag()); }
 
     @Override
@@ -314,14 +313,17 @@ public abstract class RsBlock extends Block {
    */
   protected static final class WrenchActivationCheck
   {
-    public boolean accepted = false;
+    public boolean touch_configured = false;
     public boolean wrenched = false;
+    public int redstone = 0;
+    public int dye = -1;
     public double x = 0;
     public double y = 0;
 
     @Override
     public String toString() {
-      return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",accepted:" + Boolean.toString(accepted) + ",wrenched:" + Boolean.toString(wrenched) + "}";
+      return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",touch_configured:" + Boolean.toString(touch_configured)
+          + ",wrenched:" + Boolean.toString(wrenched) + ",redstone:" + Integer.toString(redstone) + ",dye:" + Integer.toString(dye) + "}";
     }
 
     public static boolean wrenched(EntityPlayer player) {
@@ -329,15 +331,32 @@ public abstract class RsBlock extends Block {
       return (item != null) && ((","+ModConfig.accepted_wrenches+",").indexOf(","+item.getItem().getRegistryName().getResourcePath() + ",") >= 0);
     }
 
-    public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float x, float y, float z) {
+    public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z) {
       WrenchActivationCheck ck = new WrenchActivationCheck();
-      if(!(state.getBlock() instanceof RsBlock)) return ck;
+      if((world==null) || (pos==null)) return ck;
+      if(state==null) state = world.getBlockState(pos);
+      if((state==null) || (!(state.getBlock() instanceof RsBlock))) return ck;
       RsBlock block = (RsBlock)(state.getBlock());
+      ck.wrenched = wrenched(player);
+      if(!ck.wrenched) {
+        ItemStack item = player.getHeldItemMainhand();
+        if(item != null) {
+          if(item.getItem().getRegistryName().getResourcePath().toString().equals("redstone")) {
+            ck.redstone = item.getCount();
+          } else {
+            ck.dye = DyeUtils.rawMetaFromStack(item);
+            if(ck.dye > 15) ck.dye = 15;
+          }
+        }
+      }
+
+      // Touch config check
+      if(facing==null) return ck;
       if(block.isFloorMount() && (facing != EnumFacing.UP)) return ck;
       if(block.isWallMount() && (facing != state.getValue(FACING))) return ck;
-      ck.wrenched = wrenched(player);
       double xo=0, yo=0;
       if(block.isWallMount()) {
+        // @todo check if I can replace this with an array of lambda expressions.
         switch(facing.getIndex()) {
           case 0: xo = 1-x; yo = 1-z; break; // DOWN
           case 1: xo = 1-x; yo = z  ; break; // UP
@@ -351,6 +370,7 @@ public abstract class RsBlock extends Block {
         yo = Math.round(((yo-aa.minY) * (1.0/(aa.maxY-aa.minY)) * 15.5) - 0.25);
       } else if(block.isFloorMount()) {
         facing = state.getValue(FACING);
+        // @todo check if I can replace this with an array of lambda expressions.
         switch(facing.getIndex()) {
           case 0: xo =   x; yo =   z; break; // DOWN
           case 1: xo =   x; yo =   z; break; // UP
@@ -367,7 +387,7 @@ public abstract class RsBlock extends Block {
       }
       ck.x = ((xo > 15.0) ? (15.0) : ((xo < 0.0) ? 0.0 : xo));
       ck.y = ((yo > 15.0) ? (15.0) : ((yo < 0.0) ? 0.0 : yo));
-      ck.accepted = true;
+      ck.touch_configured = true;
       return ck;
     }
   }

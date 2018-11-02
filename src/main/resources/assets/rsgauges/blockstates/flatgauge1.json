@@ -4,7 +4,10 @@
     "model": "rsgauges:flatgauge1block",
     "textures": {
       "front": "rsgauges:blocks/gauge/flatgauge1texture_s00",
-      "side":  "rsgauges:blocks/common/darkgraymetal"
+      "scale":  "rsgauges:blocks/gauge/flatgauge1bg",
+      "side":  "rsgauges:blocks/common/darkmachinemetal",
+      "bulk":  "rsgauges:blocks/common/lightmachinemetal",
+      "glass":  "rsgauges:blocks/common/cleargrayglass" 
     }
   },
   "variants": {

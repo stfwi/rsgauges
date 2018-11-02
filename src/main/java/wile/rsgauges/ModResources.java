@@ -9,8 +9,6 @@
 **/
 package wile.rsgauges;
 
-import java.util.LinkedList;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
@@ -23,6 +21,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
+import java.util.LinkedList;
+
 public class ModResources {
 
   @ObjectHolder("rsgauges:alarm_siren_sound")
@@ -31,7 +31,7 @@ public class ModResources {
   /**
    * Registry event handling for the sounds listed above.
    */
-  @Mod.EventBusSubscriber
+  @Mod.EventBusSubscriber(modid=ModRsGauges.MODID)
   public static final class SoundRegistry {
 
     private static LinkedList<SoundEvent> created_sounds_ = new LinkedList<SoundEvent>();
@@ -65,4 +65,5 @@ public class ModResources {
     public float pitch() { return pitch_; }
     public void play(World world, BlockPos pos) { world.playSound((EntityPlayer)null, pos, se_, SoundCategory.BLOCKS, volume_, pitch_); }
   }
+
 }

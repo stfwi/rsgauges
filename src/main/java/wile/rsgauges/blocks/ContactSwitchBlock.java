@@ -63,7 +63,7 @@ public class ContactSwitchBlock extends SwitchBlock {
     te.click_config(null);
     if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
     RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-    if((wac.accepted) && (wac.wrenched) && (state.getBlock() instanceof ContactSwitchBlock)) {
+    if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof ContactSwitchBlock)) {
       te.activation_config((ContactSwitchBlock)state.getBlock(), player, wac.x, wac.y);
     }
     return true;
@@ -94,7 +94,8 @@ public class ContactSwitchBlock extends SwitchBlock {
     ContactSwitchBlock.ContactSwitchTileEntity te = getTe(world, pos); if(te == null) return;
     boolean active = false;
     boolean powered = state.getValue(POWERED);
-    if(powered && (te.off_timer() > this.tickRate(world))) {
+
+    if(powered && (te.off_timer() > 2)) {
       active = true; // anyway on at the next update.
     } else {
       List<Entity> hits = world.getEntitiesWithinAABB(te.filter_class(), new AxisAlignedBB(pos, pos.add(1,1,1)));
@@ -109,7 +110,7 @@ public class ContactSwitchBlock extends SwitchBlock {
             }
           }
         }
-        if(active) te.off_timer_reset(te.hold_time);
+        if(active) te.off_timer_reset( (te.active_time()<=0) ? (20) : ((te.active_time()*base_tick_rate)+1) );
       }
     }
     if(active && (!powered)) {
@@ -117,7 +118,7 @@ public class ContactSwitchBlock extends SwitchBlock {
       this.power_on_sound.play(world, pos);
       this.notifyNeighbours(world, pos, state);
     }
-    world.scheduleUpdate(pos, this, this.tickRate(world));
+    if(!world.isUpdateScheduled(pos, this)) { world.scheduleUpdate(pos, this, 1); }
   }
 
   @Override
@@ -137,7 +138,6 @@ public class ContactSwitchBlock extends SwitchBlock {
     public static final Class filter_classes[] = { Entity.class, EntityLivingBase.class, EntityPlayer.class, EntityMob.class, EntityAnimal.class, EntityVillager.class, EntityItem.class };
     public static final String filter_class_names[] = { "everything", "creatures", "players", "mobs", "animals", "villagers", "objects" };
     private static final int max_entity_count = 64;
-    private static final int hold_time = 4;
     private boolean high_sensitivity_ = false;
     private int count_threshold_ = 1;
     private int filter_ = 0;

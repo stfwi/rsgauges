@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NLN",
+    "NGN"
+  ],
+  "key": {
+    "N": { "item": "minecraft:iron_nugget", "data": 0 },
+    "G": { "item": "minecraft:glass", "data": 0 },
+    "L": { "item": "minecraft:lever", "data": 0 }
+  },
+  "result": { "item": "rsgauges:bistableswitch_glass1", "data": 0 }
+}

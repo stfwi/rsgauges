@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [ { "item": "rsgauges:timerswitch_glass1" } ],
+  "result": { "item": "rsgauges:daytimeswitch_glass1", "data": 0 }
+}

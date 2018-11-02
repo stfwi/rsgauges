@@ -18,6 +18,8 @@ package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModResources;
+import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModBlocks;
 import wile.rsgauges.blocks.RsBlock;
 import wile.rsgauges.client.JitModelBakery;
@@ -63,6 +65,7 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
@@ -138,7 +141,12 @@ public class GaugeBlock extends RsBlock {
   }
 
   @Override
-  public int getLightValue(IBlockState state) { int v = (int)((this.lightValueScaling * state.getValue(POWER)) / 15); return (v < 0) ? (0) : ((v > 15) ? 15 : v); }
+  public int getLightValue(IBlockState state) {
+    if(this.lightValueScaling < 1) return 0;
+    if(!ModAuxiliaries.isClientSide()) return this.lightValueScaling;
+    int v = (int)((this.lightValueScaling * state.getValue(POWER)) / 15);
+    return (v < 0) ? (0) : ((v > 15) ? 15 : v);
+  }
 
   @Override
   public boolean getWeakChanges(IBlockAccess world, BlockPos pos) { return true; }
@@ -205,7 +213,7 @@ public class GaugeBlock extends RsBlock {
       te.power(p);
       IBlockState newState = state.withProperty(POWER, p);
       if(sync) {
-        te.markDirty();
+        world.markChunkDirty(pos, te);
         world.setBlockState(pos, newState, 1|2|16);
         world.markAndNotifyBlock(pos, null, state, newState, 1|2|16);
       } else {

@@ -1,11 +1,12 @@
 {
+  "credit": "Thanks Jannis for the Blockbench.",
 	"parent": "block/cube",
 	"textures": { "particle": "#lamp" },
-    "display": {
-        "gui":    { "rotation": [ 90,  0, 0 ], "translation": [  0.00, 8.00,   0.00 ], "scale": [ 1.50, 1.50, 1.50 ] },
-        "fixed":  { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 1.00, 1.00, 1.00 ] },
-        "ground": { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 0.75, 0.75, 0.75 ] }
-    },
+  "display": {
+    "gui":    { "rotation": [ 90,  0, 0 ], "translation": [  0.00, 8.00,   0.00 ], "scale": [ 1.50, 1.50, 1.50 ] },
+    "fixed":  { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 1.00, 1.00, 1.00 ] },
+    "ground": { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 0.75, 0.75, 0.75 ] }
+  },
 	"elements": [
 		{
 			"from": [6, 6, 11.5],
