@@ -7,14 +7,14 @@ if(sys.args.length !== 1) die("specify a base directory where to strip png files
 const basedir = fs.realpath(sys.args[0]);
 if(!fs.isdir(basedir)) die("Base directory does not exist: '" + sys.args[0] + "'");
 const imagick_ok = sys.shell("magick --help").toLowerCase().replace(/[\s]/ig,"").search("usage:") == 0; // brief check
-if(!imagick_ok) die("The 'magick' command seems not to be in the executable PATH, or not to be compatible."); 
+if(!imagick_ok) die("The 'magick' command seems not to be in the executable PATH, or not to be compatible.");
 var files = fs.find(basedir, '*.png');
 print("[note ] " + (files.length) + " files to strip.");
 
 for(var it in files) {
   if(image_infos) {
     var stdo = sys.shell('magick identify "' + files[it] + '"');
-    stdo = "[strip] " + stdo.replace(basedir,"").replace("\\", "/").replace(/^[\s\/]+/,"").replace(/[\s]+$/,"");
+    stdo = "[ident] " + stdo.replace(basedir,"").replace("\\", "/").replace(/^[\s\/]+/,"").replace(/[\s]+$/,"");
     print(stdo);
   }
   if(strip_images) {

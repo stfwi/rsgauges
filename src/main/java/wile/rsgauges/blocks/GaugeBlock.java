@@ -20,80 +20,41 @@ import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModResources;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.ModAuxiliaries;
-import wile.rsgauges.ModBlocks;
 import wile.rsgauges.blocks.RsBlock;
-import wile.rsgauges.client.JitModelBakery;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityComparator;
-import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.annotation.Nullable;
-import org.lwjgl.opengl.GL11;
 
 
-public class GaugeBlock extends RsBlock {
-
+public class GaugeBlock extends RsBlock
+{
   public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
-
-  // If the block emits light proportional to the power (e.g. lamp) this scaler is
-  // nonzero. The light is only rendering light, not anti-spawn light.
-  private final int lightValueScaling;
-  // Specifies if the gauge shall look at the maximum redstone power, including
-  // weak power, of the target block it is attached to.
-  private final boolean measureTargetWeakPower = true;
+  private final int lightValue;     // nonzero if the block emits light when powered (e.g. lamp). The light is only rendering light, not anti-spawn light.
   private final int blinkInterval;
-  @Nullable private final ModResources.BlockSoundEvent power_on_sound;
-  @Nullable private final ModResources.BlockSoundEvent power_off_sound;
+
+  @Nullable protected final ModResources.BlockSoundEvent power_on_sound;
+  @Nullable protected final ModResources.BlockSoundEvent power_off_sound;
 
   public GaugeBlock(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
     super(registryName, unrotatedBB);
-    this.lightValueScaling = (powerToLightValueScaling0To15 < 0) ? (0) : ((powerToLightValueScaling0To15 > 15) ? 15 : powerToLightValueScaling0To15);
+    this.lightValue = (powerToLightValueScaling0To15 < 0) ? (0) : ((powerToLightValueScaling0To15 > 15) ? 15 : powerToLightValueScaling0To15);
     this.blinkInterval = (blinkInterval <= 0) ? (0) : ((blinkInterval < 500) ? (500) : ((blinkInterval > 3000) ? 3000 : blinkInterval));
     this.power_on_sound = powerOnSound;
     this.power_off_sound = powerOffSound;
@@ -111,42 +72,31 @@ public class GaugeBlock extends RsBlock {
   @SideOnly(Side.CLIENT)
   public void initModel() { super.initModel(); }
 
-  @SideOnly(Side.CLIENT)
   @Override
-  public BlockRenderLayer getBlockLayer() { return (lightValueScaling>0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
+  @SideOnly(Side.CLIENT)
+  public BlockRenderLayer getBlockLayer() { return (lightValue>0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
 
   @Override
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-    GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
+    final GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
     return super.getActualState(state, world, pos).withProperty(POWER, (te==null) ? 0 : te.power());
   }
 
   @Override
   public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
     if(!this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos)) return;
-    GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
+    final GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
     if(te != null) te.reset_timer();
   }
 
   @Override
-  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-    if(this.onBlockPlacedByCheck(world, pos, state, placer, stack)) world.scheduleBlockUpdate(pos, state.getBlock(), 0, 1);
-  }
+  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) { if(this.onBlockPlacedByCheck(world, pos, state, placer, stack)) world.scheduleBlockUpdate(pos, state.getBlock(), 0, 1); }
 
   @Override
-  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-    RsBlock.WrenchActivationCheck ck = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-    update(state, world, pos);
-    return true;
-  }
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) { return false; }
 
   @Override
-  public int getLightValue(IBlockState state) {
-    if(this.lightValueScaling < 1) return 0;
-    if(!ModAuxiliaries.isClientSide()) return this.lightValueScaling;
-    int v = (int)((this.lightValueScaling * state.getValue(POWER)) / 15);
-    return (v < 0) ? (0) : ((v > 15) ? 15 : v);
-  }
+  public int getLightValue(IBlockState state) { return (this.lightValue<1) ? 0 : ((!ModAuxiliaries.isClientSide()) || (state.getValue(POWER)>0)) ? (this.lightValue) : (0); }
 
   @Override
   public boolean getWeakChanges(IBlockAccess world, BlockPos pos) { return true; }
@@ -161,94 +111,18 @@ public class GaugeBlock extends RsBlock {
   public TileEntity createTileEntity(World world, IBlockState state) { return new GaugeBlock.GaugeTileEntity(); }
 
   /**
-   * Block update.
-   *
-   * Server: Measures direct/indirect, stores the new measured power value
-   *         in the tile entity and synchronises state/nbt on change.
-   *
-   * Client: Block state/render update if the tile entity power does not
-   *         match the current block state power.
-   */
-  public void update(IBlockState state, World world, BlockPos pos) {
-    GaugeBlock.GaugeTileEntity te = getTe(state, world, pos, true);
-    if(te == null) return;
-    if(state == null) state = world.getBlockState(pos);
-    if(world.isRemote) {
-      if(state.getValue(POWER) != te.power()) {
-        world.setBlockState(pos, state.withProperty(POWER, te.power()), 1|2|16);
-        world.markBlockRangeForRenderUpdate(pos, pos);
-      }
-    } else {
-      BlockPos neighbourPos = pos.offset((EnumFacing)state.getValue(GaugeBlock.FACING), -1);
-      if(!world.isBlockLoaded(neighbourPos)) return; // Gauge is placed on a chunk boundary, don't forge loading of neighbour chunk.
-      IBlockState neighborState = world.getBlockState(neighbourPos);
-      int p = 0;
-      if(neighborState != null) {
-        if(neighborState.canProvidePower()) {
-          p = Math.max(
-              neighborState.getWeakPower(world, neighbourPos, state.getValue(FACING).getOpposite()),
-              neighborState.getStrongPower(world, neighbourPos, state.getValue(FACING).getOpposite())
-          );
-        } else if(!measureTargetWeakPower) {
-          p = world.getStrongPower(neighbourPos);
-        } else {
-          for(EnumFacing nbf:EnumFacing.values()) {
-            if(p >= 15) break;
-            // Check if the block next to the neighbour is actually a redstone source block or just a strong powered normal block.
-            BlockPos nbp = neighbourPos.offset(nbf);
-            IBlockState nbs = world.getBlockState(nbp);
-            if((nbs == null) || (!nbs.canProvidePower()) || (nbs.getBlock() instanceof GaugeBlock)) continue;
-            int pa = Math.max(nbs.getStrongPower(world, nbp, nbf), nbs.getWeakPower(world, nbp, nbf));
-            if(p < pa) p = pa;
-          }
-        }
-      }
-      if((this.blinkInterval > 0) && te.force_off()) p = 0;
-      boolean sync = (te.power() != p);
-      if((this.power_on_sound != null) && (te.power() == 0) && (p > 0)) {
-        this.power_on_sound.play(world, pos);
-      } else if((this.power_off_sound != null) && (te.power() > 0) && (p == 0)) {
-        this.power_off_sound.play(world, pos);
-      }
-      te.power(p);
-      IBlockState newState = state.withProperty(POWER, p);
-      if(sync) {
-        world.markChunkDirty(pos, te);
-        world.setBlockState(pos, newState, 1|2|16);
-        world.markAndNotifyBlock(pos, null, state, newState, 1|2|16);
-      } else {
-        world.setBlockState(pos, newState, 1|16);
-      }
-    }
-  }
-
-  /**
    * Readwrite TE getter.
    */
   public GaugeBlock.GaugeTileEntity getTe(IBlockState state, IBlockAccess world, BlockPos pos) {
-    TileEntity te = world.getTileEntity(pos);
-    return (!(te instanceof GaugeBlock.GaugeTileEntity)) ? (null) : ((GaugeBlock.GaugeTileEntity)te);
-  }
-
-  /**
-   * Readwrite/readonly (chunk cache) tile entity getter.
-   */
-  public GaugeBlock.GaugeTileEntity getTe(IBlockState state, IBlockAccess world, BlockPos pos, boolean nocache) {
-    TileEntity te;
-    if(nocache) {
-      te = ((World)world).getTileEntity(pos);
-    } else if((world instanceof ChunkCache)) {
-      return null;
-    } else {
-      te = (world instanceof ChunkCache) ? ((ChunkCache)world).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : ((World)world).getTileEntity(pos);
-    }
+    final TileEntity te = world.getTileEntity(pos);
     return (!(te instanceof GaugeBlock.GaugeTileEntity)) ? (null) : ((GaugeBlock.GaugeTileEntity)te);
   }
 
   /**
    * Tile entity to update the gauge block frequently.
    */
-  public static final class GaugeTileEntity extends RsBlock.RsTileEntity<GaugeBlock> implements ITickable {
+  public static final class GaugeTileEntity extends RsBlock.RsTileEntity<GaugeBlock> implements ITickable
+  {
     private long trigger_timer_ = 0;
     private int power_ = 0;
     private boolean force_off_ = false;
@@ -263,46 +137,84 @@ public class GaugeBlock extends RsBlock {
     public void writeNbt(NBTTagCompound nbt, boolean updatePacket) { nbt.setInteger("power", power()); }
 
     @Override
-    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  { power(nbt.getInteger("power")); }
-
-    @Override
-    public void update() {
-      if(world.isRemote) {
-        IBlockState state = world.getBlockState(pos).withProperty(POWER, power());
+    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
+      power(nbt.getInteger("power"));
+      // Client re-render on NBT power change
+      if(updatePacket && (world!=null) && (world.isRemote)) {
+        final IBlockState state = world.getBlockState(pos).withProperty(POWER, power());
         if(lastState != state) {
           lastState = state;
           if(state != null) {
-            world.setBlockState(pos, state, 1|16);
+            world.setBlockState(pos, state, 16);
             world.markBlockRangeForRenderUpdate(pos, pos);
           }
-          trigger_timer_ = 10;
-        } if(--trigger_timer_ > 0) {
-          return;
-        } else if(trigger_timer_ == 0) {
-          world.setBlockState(pos, state, 1|16);
-          world.markBlockRangeForRenderUpdate(pos, pos);
-        } else {
-          trigger_timer_ = 0;
-        }
-      } else {
-        if(--trigger_timer_ > 0) return;
-        trigger_timer_ = ModConfig.gauge_update_interval;
-        try {
-          IBlockState state = world.getBlockState(pos);
-          GaugeBlock block = (GaugeBlock) state.getBlock();
-          if(block.blinkInterval > 0) {
-            // server based indicator state change. Can be removed if client based gauge rendering update approved.
-            trigger_timer_ = 5;
-            force_off_ = (System.currentTimeMillis() % block.blinkInterval) > (block.blinkInterval/2);
-          } else {
-            force_off_ = false;
-          }
-          block.update(state, world, pos);
-        } catch(Exception e) {
-          trigger_timer_ = 50;
         }
       }
     }
 
+    @Override
+    public void update() {
+      if(world.isRemote || (--trigger_timer_ > 0)) return;
+      trigger_timer_ = ModConfig.gauge_update_interval;
+      try {
+        IBlockState state = world.getBlockState(pos);
+        final GaugeBlock block = (GaugeBlock) state.getBlock();
+        final BlockPos pos = getPos();
+        ////// >>> I have to get this somehow client-side only, its a waste of bandwidth and server CPU
+        force_off_ = (block.blinkInterval > 0) && ((System.currentTimeMillis() % block.blinkInterval) > (block.blinkInterval/2));
+        if(block.blinkInterval > 0) trigger_timer_ = 5;
+        ////// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        {
+          final BlockPos neighbourPos = pos.offset((EnumFacing)state.getValue(GaugeBlock.FACING), -1);
+          if(!world.isBlockLoaded(neighbourPos)) return; // Gauge is placed on a chunk boundary, don't forge loading of neighbour chunk.
+          final IBlockState neighborState = world.getBlockState(neighbourPos);
+          int p = 0;
+          if(neighborState != null) {
+            if(neighborState.canProvidePower()) {
+              p = Math.max(
+                  neighborState.getWeakPower(world, neighbourPos, state.getValue(FACING).getOpposite()),
+                  neighborState.getStrongPower(world, neighbourPos, state.getValue(FACING).getOpposite())
+              );
+            } else if(ModConfig.without_gauge_weak_power_measurement) {
+              p = world.getStrongPower(neighbourPos);
+            } else {
+              for(EnumFacing nbf:EnumFacing.values()) {
+                if(p >= 15) break;
+                // Check if the block next to the neighbour is actually a redstone source block or just a strong powered normal block.
+                final BlockPos nbp = neighbourPos.offset(nbf);
+                final IBlockState nbs = world.getBlockState(nbp);
+                if((nbs == null) || (!nbs.canProvidePower()) || (nbs.getBlock() instanceof GaugeBlock)) continue;
+                int pa = Math.max(nbs.getStrongPower(world, nbp, nbf), nbs.getWeakPower(world, nbp, nbf));
+                if(p < pa) p = pa;
+              }
+            }
+          }
+          if((block.blinkInterval > 0) && this.force_off()) p = 0;
+          final boolean sync = (this.power() != p);
+          if((block.power_on_sound != null) && (this.power() == 0) && (p > 0)) {
+            block.power_on_sound.play(world, pos);
+          } else if((block.power_off_sound != null) && (this.power() > 0) && (p == 0)) {
+            block.power_off_sound.play(world, pos);
+          }
+          this.power(p);
+          if(sync) {
+            /// original verified v1.0.0 --> 1.0.3
+            //world.markChunkDirty(pos, this);
+            //world.setBlockState(pos, newState, 16); // 1|2|
+            //world.markAndNotifyBlock(pos, null, state, newState, 2|16); // 1|
+            // testing for overhead reduction v1.0.4b1:
+            world.markChunkDirty(pos, this);
+            world.notifyBlockUpdate(pos, state, state.withProperty(POWER, p), 2|16); // without observer and comparator stuff
+            // System.out.println("sync:" + Integer.toString(oldpower) + "->" + Integer.toString(p));
+          } else if(state.getValue(POWER) != p) {
+            // System.out.println("world.setBlockState:"  + Integer.toString(state.getValue(POWER)) + "->" + Integer.toString(newState.getValue(POWER))  );
+            world.setBlockState(pos, state.withProperty(POWER, p), 16);
+          }
+        }
+      } catch(Throwable e) {
+        trigger_timer_ = 100;
+        ModRsGauges.logger.error("TE update() failed: " + e);
+      }
+    }
   }
 }

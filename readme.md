@@ -90,8 +90,34 @@ redstone power to the game:
 
 ## Revision history
 
-  - v1.0.3    - Release based on v1.0.3b6. 
-  
+  - v1.0.4b1  - Switch status message overlay implemented (replaces chat messages).
+              - Added industrial shock sensor contact mat (fall-on detector).
+              - Added rustic full size contact plate.
+              - Double click switch config shows the current config at the first
+                double click, after that the config is cycled. Added this because
+                the standard use case is to first inspect the config and then
+                optionally change it.
+              - Block-pop-off-check for gauges and switches check for AIR and any
+                liquid now, not just for air, water, lava.
+              - Light values of indicators reduced (LEDs to 2), only dynamic on client,
+                constant on server. Reduces server recalculations, but has the drawback
+                that light-level-overlay shows not the same values on the client as used
+                on the server.
+              - Local light sensor autoswitch: Initial threshold values 7(on) and 6(off),
+                fitting to spawn risk values. If on- and off-threshold are the same, the
+                switch now activates on exactly that light level.
+              - Redstone dust tracks don't show connections to wall-mount switches.
+              - Switches are attachable to pistons, and pop off when pushed.
+              - Localisation support implemented (some open tasks left, like localized day
+                time representation of the timer clock; and seconds of the interval timers
+                are arabic numbers because localisation files do not support %.02f format
+                etc.). German language file updated.
+              - Sensitive glass dynamic light level mod config changed to constant light
+                level config for the server, means it is opt-in now, not opt-out. Reason
+                is to priorise correct light-level-overlay over performance tuning.
+
+  - v1.0.3    - Release based on v1.0.3b6.
+
   - v1.0.3b6  - Inverted redstone sensitive glass added (light emitting).
               - Touch configurable glass contact plate added.
               - Glass infrared motion detector added.

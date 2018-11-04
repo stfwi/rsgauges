@@ -13,21 +13,19 @@
 **/
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.ModResources;
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.client.JitModelBakery;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,16 +44,12 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.DyeUtils;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraft.world.chunk.*;
-import net.minecraft.world.ChunkCache;
 import com.google.common.base.Predicate;
-import java.util.List;
 import javax.annotation.Nullable;
 
 
-public abstract class RsBlock extends Block {
-
+public abstract class RsBlock extends Block
+{
   public static final PropertyDirection FACING = PropertyDirection.create("facing");
   protected final AxisAlignedBB unrotatedBB;
 
@@ -94,8 +88,8 @@ public abstract class RsBlock extends Block {
   @Nullable
   public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) { return NULL_AABB; }
 
-  @SideOnly(Side.CLIENT)
   @Override
+  @SideOnly(Side.CLIENT)
   public BlockRenderLayer getBlockLayer() { return BlockRenderLayer.CUTOUT; }
 
   @Override
@@ -108,6 +102,9 @@ public abstract class RsBlock extends Block {
 
   @Override
   public boolean canSpawnInBlock() { return false; }
+
+  @Override
+  public EnumPushReaction getMobilityFlag(IBlockState state) { return EnumPushReaction.DESTROY; }
 
   @Override
   public boolean isPassable(IBlockAccess worldIn, BlockPos pos) { return true; }
@@ -143,25 +140,25 @@ public abstract class RsBlock extends Block {
   public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {}
 
   @Override
-  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) { return canPlaceBlockOnSide(world, pos, side, null, null); }
+  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) { return canPlaceBlockOnSide(world, pos, side, (Block block)->{return (!isExceptBlockForAttachWithPiston(block));}, null); }
 
   public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, @Nullable Predicate<Block> blockWhiteListFilter, @Nullable Predicate<Block> blockBlackListFilter) {
     if(isFloorMount()) {
       if(side != EnumFacing.UP) return false;
       return (world.getBlockState(pos.down()).getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
     } else {
-      BlockPos blockpos = pos.offset(side.getOpposite());
-      IBlockState state = world.getBlockState(blockpos);
+      final BlockPos blockpos = pos.offset(side.getOpposite());
+      final IBlockState state = world.getBlockState(blockpos);
       if((blockBlackListFilter!=null) && (blockBlackListFilter.apply(state.getBlock()))) return false;
       if(side == EnumFacing.UP) return (state.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
       if((blockWhiteListFilter!=null) && (blockWhiteListFilter.apply(state.getBlock()))) return true;
-      return (!isExceptBlockForAttachWithPiston(state.getBlock())) && (state.getBlockFaceShape(world, blockpos, side) == BlockFaceShape.SOLID);
+      return (!isExceptionBlockForAttaching(state.getBlock())) && (state.getBlockFaceShape(world, blockpos, side) == BlockFaceShape.SOLID);
     }
   }
 
   @Override
   public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-    IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
+    final IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
     if(isWallMount()) {
       return state.withProperty(FACING, facing);
     } else {
@@ -175,7 +172,7 @@ public abstract class RsBlock extends Block {
    */
   @Override
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-    AxisAlignedBB bb = getUnrotatedBB(state);
+    final AxisAlignedBB bb = getUnrotatedBB(state);
     if(isWallMount()) {
       // @todo check if I can replace this with a static const array of AxisAlignedBB.
       switch(state.getValue(FACING).getIndex()) {
@@ -238,9 +235,9 @@ public abstract class RsBlock extends Block {
     } else {
       if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos)) return false;  // wall mount
     }
-    IBlockState neighborState = world.getBlockState(neighborPos);
+    final IBlockState neighborState = world.getBlockState(neighborPos);
     if(neighborState == null) return false;
-    if(((neighborState.getMaterial() == Material.AIR) || (neighborState.getMaterial() == Material.WATER) || (neighborState.getMaterial() == Material.LAVA))) {
+    if(((neighborState.getMaterial() == Material.AIR) || neighborState.getMaterial().isLiquid())) {
       if(!world.isRemote) {
         this.dropBlockAsItem(world, pos, state, 0);
         world.setBlockToAir(pos);
@@ -250,6 +247,10 @@ public abstract class RsBlock extends Block {
     return true;
   }
 
+  /**
+   * Checks if these blocks can be placed at a given position with a given facing. The client does not send a
+   * placing request if not, the server will drop the item if it was placed somehow.
+   */
   protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
     if(canPlaceBlockOnSide(world, pos, this.isFloorMount() ? EnumFacing.UP : state.getValue(FACING))) return true;
     if(world.isRemote) return false;
@@ -263,14 +264,14 @@ public abstract class RsBlock extends Block {
    */
   public static class RsTileEntity<BlockType extends RsBlock> extends TileEntity
   {
-    private static final int NBT_ENTITY_TYPE = 1; // @todo: no idea yet what effect this value actually has -> double check
+    private static final int NBT_ENTITY_TYPE = 1; // forge-doc: use 1, does not matter, only used ba vanilla.
 
     public void writeNbt(NBTTagCompound nbt, boolean updatePacket) {} // overridden if NBT is needed
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {} // overridden if NBT is needed
 
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState os, IBlockState ns) {
-      return (os.getBlock() != ns.getBlock()) || (!(os.getBlock() instanceof RsBlock)) || (!(ns.getBlock() instanceof RsBlock));
+      return (os.getBlock() != ns.getBlock()) || (!(os.getBlock() instanceof RsBlock)) || (!(ns.getBlock() instanceof RsBlock)); // Tile entity re-creation condition.
     }
 
     @Override
@@ -279,20 +280,16 @@ public abstract class RsBlock extends Block {
     @Override
     public void readFromNBT(NBTTagCompound nbt) { super.readFromNBT(nbt); this.readNbt(nbt, false); }
 
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-      super.readFromNBT(pkt.getNbtCompound());
-      this.readNbt(pkt.getNbtCompound(), true);
-      super.onDataPacket(net, pkt);
-    }
+    @Override // on client
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) { super.readFromNBT(pkt.getNbtCompound()); this.readNbt(pkt.getNbtCompound(), true); super.onDataPacket(net, pkt); }
 
-    @Override
+    @Override // on server
     public NBTTagCompound getUpdateTag() { NBTTagCompound nbt = new NBTTagCompound(); super.writeToNBT(nbt); this.writeNbt(nbt, true); return nbt; }
 
-    @Override // on server.
+    @Override // on server
     public SPacketUpdateTileEntity getUpdatePacket() { return new SPacketUpdateTileEntity(pos, NBT_ENTITY_TYPE, getUpdateTag()); }
 
-    @Override
+    @Override // on client
     public void handleUpdateTag(NBTTagCompound tag) { this.readFromNBT(tag); }
 
     @SideOnly(Side.CLIENT)
@@ -308,8 +305,9 @@ public abstract class RsBlock extends Block {
    * Data class with static factory function to enable unified block activation
    * click coordinates with respect to the device (UI) interface facing, normalised
    * to 0..15. On `wrenched==true` the face was clicked with an valid wrench. If
-   * `accepted==false`, the block was not clicked on the main display facing side,
-   * and remaining instance data are not valid.
+   * `touch_configured==false`, the block was not clicked on the main display
+   * facing side, and remaining instance data are not valid. If clicked with a
+   * redstone stack or dye, the corresponding data values will be non-default.
    */
   protected static final class WrenchActivationCheck
   {
@@ -327,19 +325,19 @@ public abstract class RsBlock extends Block {
     }
 
     public static boolean wrenched(EntityPlayer player) {
-      ItemStack item = player.getHeldItemMainhand();
+      final ItemStack item = player.getHeldItemMainhand();
       return (item != null) && ((","+ModConfig.accepted_wrenches+",").indexOf(","+item.getItem().getRegistryName().getResourcePath() + ",") >= 0);
     }
 
     public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z) {
-      WrenchActivationCheck ck = new WrenchActivationCheck();
+      final WrenchActivationCheck ck = new WrenchActivationCheck();
       if((world==null) || (pos==null)) return ck;
       if(state==null) state = world.getBlockState(pos);
       if((state==null) || (!(state.getBlock() instanceof RsBlock))) return ck;
-      RsBlock block = (RsBlock)(state.getBlock());
+      final RsBlock block = (RsBlock)(state.getBlock());
       ck.wrenched = wrenched(player);
       if(!ck.wrenched) {
-        ItemStack item = player.getHeldItemMainhand();
+        final ItemStack item = player.getHeldItemMainhand();
         if(item != null) {
           if(item.getItem().getRegistryName().getResourcePath().toString().equals("redstone")) {
             ck.redstone = item.getCount();
@@ -365,7 +363,7 @@ public abstract class RsBlock extends Block {
           case 4: xo = z  ; yo = y  ; break; // WEST
           case 5: xo = 1-z; yo = y  ; break; // EAST
         }
-        AxisAlignedBB aa = block.getUnrotatedBB();
+        final AxisAlignedBB aa = block.getUnrotatedBB();
         xo = Math.round(((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25);
         yo = Math.round(((yo-aa.minY) * (1.0/(aa.maxY-aa.minY)) * 15.5) - 0.25);
       } else if(block.isFloorMount()) {
@@ -379,7 +377,7 @@ public abstract class RsBlock extends Block {
           case 4: xo = 1-z; yo = 1-x; break; // WEST
           case 5: xo =   z; yo =   x; break; // EAST
         }
-        AxisAlignedBB aa = block.getUnrotatedBB();
+        final AxisAlignedBB aa = block.getUnrotatedBB();
         xo = 0.1 * Math.round(10.0 * (((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25));
         yo = 0.1 * Math.round(10.0 * (((yo-(1.0-aa.maxZ)) * (1.0/(aa.maxZ-aa.minZ)) * 15.5) - 0.25));
       } else {

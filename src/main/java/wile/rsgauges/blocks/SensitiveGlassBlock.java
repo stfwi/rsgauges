@@ -13,23 +13,17 @@ import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModBlocks;
 import wile.rsgauges.ModConfig;
-import wile.rsgauges.client.JitModelBakery;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -37,16 +31,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.apache.logging.log4j.Level;
-
-import java.util.List;
 import java.util.Random;
 
-public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.ColorTintSupport {
+public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.ColorTintSupport
+{
   public static final PropertyBool POWERED = PropertyBool.create("powered");
 
   public static final int CONFIG_LIGHT_MASK_POWERED              = 0x0000000f;
@@ -110,10 +99,10 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
 
   @Override
   public int getLightValue(IBlockState state) {
-    if((ModConfig.sensitive_glass_server_light_level > 0) && (!ModAuxiliaries.isClientSide())) {
-      return ModConfig.sensitive_glass_server_light_level & 0xf; // TEST/EXPERIMENTAL to prevent server light recalculations (to check if any performance impact).
-    } else {
+    if((!ModConfig.sensitive_glass_constant_server_light_level) || (ModAuxiliaries.isClientSide())) {
       return state.getValue(POWERED) ? ((config & CONFIG_LIGHT_MASK_POWERED)>>0) : ((config & CONFIG_LIGHT_MASK_UNPOWERED)>>4);
+    } else {
+      return (config & CONFIG_LIGHT_MASK_POWERED); // server constant light level
     }
   }
 
@@ -151,7 +140,8 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
   public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos neighbourPos) {
     if(world.isRemote) return;
     if(state.getValue(POWERED)) {
-      if(!world.isBlockPowered(pos)) world.scheduleUpdate(pos, this, 2);
+      // Delay to prevent recalculations on short peaks, especially for light emitting variants.
+      if(!world.isBlockPowered(pos)) world.scheduleUpdate(pos, this, (((config & CONFIG_LIGHT_MASK_POWERED)>>0)==((config & CONFIG_LIGHT_MASK_UNPOWERED)>>4)) ? 1 : 4);
     } else {
       if(world.isBlockPowered(pos)) world.setBlockState(pos, state.withProperty(POWERED, true), 2);
     }

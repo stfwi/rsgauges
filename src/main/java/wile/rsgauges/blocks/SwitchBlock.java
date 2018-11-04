@@ -13,7 +13,6 @@ import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModBlocks;
 import wile.rsgauges.ModResources;
-import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.blocks.RsBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHopper;
@@ -27,23 +26,25 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import java.util.ArrayList;
 import java.util.Random;
 import javax.annotation.Nullable;
 
-public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSupport {
-
+public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSupport
+{
   public static final long SWITCH_DATA_POWERED_POWER_MASK       = 0x000000000000000fl;
   public static final long SWITCH_DATA_UNPOWERED_POWER_MASK     = 0x00000000000000f0l;
   public static final long SWITCH_DATA_INVERTED                 = 0x0000000000000100l;
@@ -75,6 +76,8 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public static final long SWITCH_CONFIG_PULSETIME_CONFIGURABLE = 0x0000000200000000l;
   public static final long SWITCH_CONFIG_FAINT_LIGHTSOURCE      = 0x0000000400000000l;
   public static final long SWITCH_CONFIG_COLOR_TINT_SUPPORT     = 0x0000000800000000l;
+  public static final long SWITCH_CONFIG_NOT_PISTON_MOUNTBALE   = 0x0000001000000000l;
+  public static final long SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE = 0x0000002000000000l;
 
   public static final int SWITCH_DATA_SVD_ACTIVE_TIME_MASK      = 0x000000ff;
   public static final int SWITCH_DATA_SVD_COLOR_MASK            = 0x00000f00;
@@ -127,7 +130,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   @Override
   public int getColorMultiplierRGBA(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos) {
     if((pos==null) || (world==null)) return 0xffffffff;
-    TileEntity te = world.getTileEntity(pos);
+    final TileEntity te = world.getTileEntity(pos);
     return (te instanceof SwitchBlock.SwitchTileEntity)  ? (ModAuxiliaries.DyeColorFilters.byIndex[((SwitchBlock.SwitchTileEntity)te).color_tint() & 0xf]) : (0xffffffff);
   }
 
@@ -147,21 +150,19 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public boolean canProvidePower(IBlockState state) { return true; }
 
   @Override
-  public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-    return (side==null) || ((side)==(EnumFacing.UP)) || ((side)==(state.getValue(FACING)));
-  }
+  public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) { return (!isWallMount()) && ((side==null) || ((side)==(EnumFacing.UP)) || ((side)==(state.getValue(FACING)))); }
 
   @Override
   public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
     if((!(world instanceof World)) || (side != ((this.isFloorMount()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING))))) return 0;
-    SwitchBlock.SwitchTileEntity te = getTe((World)world, pos);
+    final SwitchBlock.SwitchTileEntity te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, false);
   }
 
   @Override
   public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
     if((!(world instanceof World)) || (side != ((this.isFloorMount()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING))))) return 0;
-    SwitchBlock.SwitchTileEntity te = getTe((World)world, pos);
+    final SwitchBlock.SwitchTileEntity te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, true);
   }
 
@@ -181,14 +182,16 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
       return super.canPlaceBlockOnSide(world, pos, side);
     } else {
       return super.canPlaceBlockOnSide(world, pos, side, (Block block)->{
-        return (block instanceof BlockHopper);
+        if(((config & SWITCH_CONFIG_HOPPER_MOUNTBALE)!=0) && (block instanceof BlockHopper)) return true;
+        if(((config & SWITCH_CONFIG_NOT_PISTON_MOUNTBALE)!=0) && isExceptBlockForAttachWithPiston(block)) return false;
+        return true;
       }, null);
     }
   }
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-    SwitchBlock.SwitchTileEntity te = getTe(world, pos);
+    final SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if(te != null) te.reset();
     if(!super.onBlockPlacedByCheck(world, pos, state, placer, stack)) return;
     world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, false), 1|2);
@@ -196,9 +199,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   }
 
   @Override
-  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-    return onBlockActivated(world, pos, state, player);
-  }
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) { return onBlockActivated(world, pos, state, player); }
 
   @Override
   public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
@@ -213,7 +214,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
   protected boolean onBlockActivated(World world, BlockPos pos, IBlockState state, @Nullable EntityPlayer player) {
     if(world.isRemote) return true;
-    SwitchBlock.SwitchTileEntity te = getTe(world, pos);
+    final SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if(te == null) return true;
     if((player != null) && te.click_config(null)) return true;
     if((config & SWITCH_CONFIG_BISTABLE)!=0) {
@@ -226,7 +227,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     }
     notifyNeighbours(world, pos, state);
     if((config & SWITCH_CONFIG_PULSE)!=0) {
-      world.scheduleUpdate(pos, this, this.base_tick_rate);
+      world.scheduleUpdate(pos, this, base_tick_rate);
       if((config & SWITCH_CONFIG_PULSE_EXTENDABLE)==0) te.off_timer_reset();
       te.off_timer_extend();
     }
@@ -236,32 +237,27 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   @Override
   public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
     if((world.isRemote) || (player == null)) return;
-    IBlockState state = world.getBlockState(pos);
+    final IBlockState state = world.getBlockState(pos);
     if(!(state.getBlock() instanceof SwitchBlock)) return;
-    SwitchBlock.SwitchTileEntity te = getTe(world, pos);
+    final SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if(te == null) return;
     RsBlock.WrenchActivationCheck ck = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, null, player, null, null, 0, 0, 0);
     if((ck.redstone > 0) && (((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0) {
       if(!ModConfig.without_pulsetime_config) {
         te.active_time(ck.redstone);
-        ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("Pulse time") + ": "
-            + Double.toString( (((double)(base_tick_rate)*te.active_time()))/20 )
-            + "s (" + Integer.toString(base_tick_rate*te.active_time()) + " ticks)"
-        );
+        ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((SwitchBlock)state.getBlock()));
         return;
       }
     } else if((ck.dye >= 0) && (((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_COLOR_TINT_SUPPORT) != 0) {
       if((!ModConfig.without_switch_colortinting) && (ck.dye <= 15)) {
         te.color_tint(ck.dye);
         world.markAndNotifyBlock(pos, null, state, state, 1|2|4|16);
-        ModAuxiliaries.playerMessage(player, ModAuxiliaries.localize("Tinted ") + ": "
-            + ModAuxiliaries.localize(ModAuxiliaries.DyeColorFilters.nameByIndex[ck.dye & 0xf])
-        );
+        ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.tinting", null, new Object[]{ModAuxiliaries.localizable("switchconfig.tinting." + ModAuxiliaries.DyeColorFilters.nameByIndex[ck.dye & 0xf], null)}));
         return;
       }
     }
     if(ck.wrenched && te.click_config(this)) {
-      ModAuxiliaries.playerMessage(player, te.toString()); // click-config accepted, nothing to do here.
+      ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((SwitchBlock)state.getBlock())); // click-config accepted, nothing to do here.
     } else if((config & (SWITCH_CONFIG_LCLICK_RESETTABLE))!=0) {
       te.off_timer_reset();
       if(!state.getValue(POWERED)) return;
@@ -273,7 +269,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
   @Override
   public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-    SwitchBlock.SwitchTileEntity te = getTe(world, pos);
+    final SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if(te != null) te.reset();
     world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, false), 1|2);
     notifyNeighbours(world, pos, state);
@@ -286,7 +282,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
     if(((config & SWITCH_CONFIG_BISTABLE)!=0) || (world.isRemote) || (!state.getValue(POWERED))) return;
-    SwitchBlock.SwitchTileEntity te = getTe(world, pos);
+    final SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if((te!=null) && (te.off_timer_tick() > 0) && (!world.isUpdateScheduled(pos, this)) ) { world.scheduleUpdate(pos, this, 1); return; }
     world.setBlockState(pos, state.withProperty(POWERED, false));
     power_off_sound.play(world, pos);
@@ -301,7 +297,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public TileEntity createTileEntity(World world, IBlockState state) { return new SwitchBlock.SwitchTileEntity(); }
 
   public SwitchBlock.SwitchTileEntity getTe(World world, BlockPos pos) {
-    TileEntity te = world.getTileEntity(pos);
+    final TileEntity te = world.getTileEntity(pos);
     if((!(te instanceof SwitchBlock.SwitchTileEntity))) return null;
     return (SwitchBlock.SwitchTileEntity)te;
   }
@@ -309,17 +305,16 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   /**
    * Tile entity
    */
-  public static class SwitchTileEntity extends RsTileEntity<SwitchBlock> {
+  public static class SwitchTileEntity extends RsTileEntity<SwitchBlock>
+  {
     protected int off_timer_ = 0;
     protected int scd_ = 0; // encoded state data
     protected int svd_ = 0; // encoded value data
     protected long click_config_time_lastclicked_ = 0;
+    protected long click_config_last_cycled_ = 0;
 
     @Override
-    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) {
-      nbt.setInteger("scd", scd_);
-      nbt.setInteger("svd", svd_);
-    }
+    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) { nbt.setInteger("scd", scd_); nbt.setInteger("svd", svd_); }
 
     @Override
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
@@ -414,10 +409,13 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
       // Check double click
       {
-        long t = System.currentTimeMillis();
+        final long t = System.currentTimeMillis();
         boolean multiclicked = ((t-click_config_time_lastclicked_) > 0) && ((t-click_config_time_lastclicked_) < ModConfig.config_left_click_timeout);
         click_config_time_lastclicked_ = multiclicked ? 0 : t;
-        if(!multiclicked) return false;
+        if(!multiclicked) return false; // not double clicked
+        multiclicked = ((t-click_config_last_cycled_) > 0) && ((t-click_config_last_cycled_) < 3000);
+        click_config_last_cycled_ = t;
+        if(!multiclicked) return true; // first double click shall only show the unchanged status.
       }
 
       // Settings are changed by cycling through available states.
@@ -448,20 +446,70 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     }
 
     @Override
-    public String toString() {
-      return ModAuxiliaries.localize("switch power") + ":" + Integer.toString(on_power())
-      + ((off_power()>0) ? ("/"+ ModAuxiliaries.localize("off") + ":" + Integer.toString(off_power())) : (""))
-      + (nooutput() ? (" " + ModAuxiliaries.localize("no output")) : ((weak() ? (" " + ModAuxiliaries.localize("weak")) : (" " + ModAuxiliaries.localize("strong")))) )
-      + (inverted() ? (" " + ModAuxiliaries.localize("inverted")) : "");
+    public String toString() { return configStatusText(null); }
+
+    public String configStatusText(SwitchBlock block) {
+      ArrayList<String> a = new ArrayList<String>();
+      if((on_power() < 15) || (off_power()>0)) {
+        if((block == null) || ((block.config & SWITCH_CONFIG_AUTOMATIC)==0)) {
+          // power only for non-auto-switches
+          a.add(
+              TextFormatting.RED
+            + "power: " + Integer.toString(on_power()) + ((off_power()>0) ? ("/"+ "off:" + Integer.toString(off_power())) : (""))
+            + TextFormatting.RESET
+          );
+        }
+      }
+      if(nooutput()) {
+        a.add(TextFormatting.DARK_AQUA + "no output" + TextFormatting.RESET);
+      } else {
+        String s = weak() ? "weak" : "strong";
+        if(inverted()) s += (s.isEmpty() ? "":", ") + "inverted";
+        if(!s.isEmpty()) s = TextFormatting.DARK_AQUA + s + TextFormatting.RESET;
+        a.add(s);
+      }
+      if(active_time() > 0) {
+        a.add(""
+          + TextFormatting.GOLD
+          + "pulse: "
+          + Double.toString( (((double)(base_tick_rate) * active_time()))/20 )
+          + "s (" + Integer.toString(base_tick_rate * active_time()) + " ticks)"
+          + TextFormatting.RESET
+        );
+      }
+      return String.join(TextFormatting.DARK_GRAY+" | "+TextFormatting.RESET, a);
     }
 
-    public String toString(SwitchBlock block) {
-      return this.toString()
-          + (((block.config & SWITCH_CONFIG_BISTABLE) != 0) ? " bistable":"")
-          + (((block.config & SWITCH_CONFIG_WEAKABLE) != 0) ? " weakable":"")
-          + (((block.config & SWITCH_CONFIG_INVERTABLE) != 0) ? " invertable":"")
-          + (((block.config & SWITCH_CONFIG_POWER_SETTABLE) != 0) ? " powersettable":"")
-          ;
+    public TextComponentTranslation configStatusTextComponentTranslation(SwitchBlock block) {
+      TextComponentString separator = (new TextComponentString(" | ")); separator.getStyle().setColor(TextFormatting.GRAY);
+      TextComponentTranslation status = ModAuxiliaries.localizable("switchconfig.options", TextFormatting.RESET);
+      boolean statusset = false;
+      if((on_power() < 15) || (off_power()>0)) {
+        if((block == null) || ((block.config & SWITCH_CONFIG_AUTOMATIC)==0)) {
+          // power only for non-auto-switches
+          statusset = true;
+          status.appendSibling(ModAuxiliaries.localizable("switchconfig.options.output_power", TextFormatting.RED, new Object[]{on_power()}));
+        }
+      }
+      if(nooutput()) {
+        if(statusset) status.appendSibling(separator.createCopy()); statusset=true;
+        status.appendSibling(ModAuxiliaries.localizable("switchconfig.options.no_output", TextFormatting.DARK_AQUA));
+      } else if(!inverted()) {
+        if(statusset) status.appendSibling(separator.createCopy()); statusset=true;
+        status.appendSibling(ModAuxiliaries.localizable("switchconfig.options." + (weak() ? "weak" : "strong"), TextFormatting.DARK_AQUA));
+      } else {
+        if(statusset) status.appendSibling(separator.createCopy()); statusset=true;
+        status.appendSibling(ModAuxiliaries.localizable("switchconfig.options." + (weak() ? "weakinverted" : "stronginverted"), TextFormatting.DARK_AQUA));
+      }
+      if(active_time() > 0) {
+        if(statusset) status.appendSibling(separator.createCopy()); statusset=true;
+        status.appendSibling(ModAuxiliaries.localizable("switchconfig.options.pulsetime", TextFormatting.GOLD, new Object[]{
+          Double.toString( (((double)(base_tick_rate) * active_time()))/20 ),
+          Integer.toString(base_tick_rate * active_time())
+        }));
+      }
+      return status;
     }
+
   }
 }

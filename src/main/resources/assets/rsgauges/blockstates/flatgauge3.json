@@ -28,6 +28,6 @@
       "13": { "textures": { "front": "rsgauges:blocks/gauge/flatgauge3texture_s13" } },
       "14": { "textures": { "front": "rsgauges:blocks/gauge/flatgauge3texture_s14" } },
       "15": { "textures": { "front": "rsgauges:blocks/gauge/flatgauge3texture_s15" } }
-    }       
+    }
   }
 }

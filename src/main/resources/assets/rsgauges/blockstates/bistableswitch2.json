@@ -4,7 +4,7 @@
     "model": "rsgauges:bistableswitch2block_s00",
     "textures": {
       "base":  "rsgauges:blocks/bistableswitch/bistableswitch2texture_base",
-      "mount":  "rsgauges:blocks/bistableswitch/bistableswitch2texture_mount",    
+      "mount":  "rsgauges:blocks/bistableswitch/bistableswitch2texture_mount",
       "lever": "rsgauges:blocks/bistableswitch/bistableswitch2texture_lever_s00",
       "handle": "rsgauges:blocks/bistableswitch/bistableswitch2texture_handle"
     }
@@ -12,7 +12,7 @@
   "variants": {
     "normal": [{}],
     "inventory": [{}],
-    "facing": { "north": {"y":0}, "south": {"y":180}, "west": {"y":-90}, "east": {"y":90}, "up": {"x":-90}, "down": {"x":90} },    
+    "facing": { "north": {"y":0}, "south": {"y":180}, "west": {"y":-90}, "east": {"y":90}, "up": {"x":-90}, "down": {"x":90} },
     "powered": {
       "false":  {},
       "true":   { "model": "rsgauges:bistableswitch2block_s15", "textures": { "lever": "rsgauges:blocks/bistableswitch/bistableswitch2texture_lever_s15" } }

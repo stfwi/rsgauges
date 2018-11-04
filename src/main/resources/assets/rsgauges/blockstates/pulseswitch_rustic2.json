@@ -11,8 +11,8 @@
     "powered": {
       "false":  {},
       "true":   {
-        "model": "rsgauges:pulseswitch_rustic2block_s15", 
-        "textures": {} 
+        "model": "rsgauges:pulseswitch_rustic2block_s15",
+        "textures": {}
       }
     }
   }

@@ -8,25 +8,50 @@
 **/
 package wile.rsgauges;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import wile.rsgauges.blocks.SensitiveGlassBlock;
+import wile.rsgauges.network.Networking;
 
-public class ModAuxiliaries {
+public class ModAuxiliaries
+{
+  /**
+   * Text localisation wrapper, implicitly prepends `ModRsGauges.MODID` to the
+   * translation keys.
+   */
+  public static TextComponentTranslation localizable(String modtrkey, @Nullable TextFormatting color, Object... args) {
+    TextComponentTranslation tr = new TextComponentTranslation(ModRsGauges.MODID+"."+modtrkey, args);
+    if(color!=null) tr.getStyle().setColor(color);
+    return tr;
+  }
 
-  public static String localize(String txt) { return I18n.translateToLocal(txt); }
-
-  public static void playerMessage(EntityPlayer player, final String message) {
-    String s = localize(message.trim()).trim();
+  /**
+   * Send a chat message to the player.
+   * Server side usage only.
+   */
+  public static void playerChatMessage(EntityPlayer player, final String message) {
+    String s = message.trim();
     if(!s.isEmpty()) player.sendMessage(new TextComponentTranslation(s));
+  }
+
+  /**
+   * Send RsBlock status message to the player.
+   * Server side usage only.
+   */
+  public static void playerStatusMessage(EntityPlayer player, final TextComponentTranslation message) {
+    if(ModConfig.z_without_switch_status_overlay) {
+      player.sendMessage(message);
+    } else {
+      Networking.OverlayTextMessage.sendToClient((EntityPlayerMP)player, message);
+    }
   }
 
   /**
@@ -61,11 +86,6 @@ public class ModAuxiliaries {
   }
 
   /**
-   * Returns the localised message for a given fixed English message.
-   */
-  public static String localized(String message) { return message; } // later.
-
-  /**
    * Returns a time string in 24:00 hour format.
    */
   public static String daytimeToString(long t) {
@@ -81,22 +101,20 @@ public class ModAuxiliaries {
   /**
    * Returns a string, where ticks are converted to seconds.
    */
-  public static String ticksToSecondsString(long t) {
-    return String.format("%.02f", ((double)t)/20.0);
-  }
+  public static String ticksToSecondsString(long t) { return String.format("%.02f", ((double)t)/20.0); }
 
   /**
    * Prefer world.isRemote, only use this if world is not available.
-   *
-   * @return boolean
    */
   public static boolean isClientSide() { return (FMLCommonHandler.instance().getSide() == Side.CLIENT); }
 
   /**
    * Class allowing to have the dye colors also available on
    * server side. (EnumDyeColor not available on dedicated servers).
+   * Server and client side usage.
    */
-  public static class DyeColorFilters {
+  public static class DyeColorFilters
+  {
     public static final int WHITE       = 0xf3f3f3;
     public static final int ORANGE      = 0xF9801D;
     public static final int MAGENTA     = 0xC74EBD;

@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [ { "item": "rsgauges:contactmat_rustic2" } ],
+  "result": { "item": "rsgauges:contactmat_rustic3", "data": 0 }
+}

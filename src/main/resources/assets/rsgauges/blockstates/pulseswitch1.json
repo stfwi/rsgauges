@@ -15,11 +15,11 @@
     "powered": {
       "false":  {},
       "true":   {
-        "model": "rsgauges:pulseswitch1block_s15", 
-        "textures": { 
+        "model": "rsgauges:pulseswitch1block_s15",
+        "textures": {
             "front": "rsgauges:blocks/pulseswitch/pulseswitch1texture_s15",
-            "handle": "rsgauges:blocks/pulseswitch/pulseswitch1texture_handle_s15"             
-        } 
+            "handle": "rsgauges:blocks/pulseswitch/pulseswitch1texture_handle_s15"
+        }
       }
     }
   }

@@ -5,6 +5,7 @@ bin
 .metadata
 .classpath
 .project
+.vscode
 
 # idea
 out
@@ -18,9 +19,11 @@ build
 .gradle
 
 # other
-.vscode
+*.tmp
+*.log
 eclipse
 run
 tests
+dist
 src/main/java/archive
 src/main/resources/assets/minecraft

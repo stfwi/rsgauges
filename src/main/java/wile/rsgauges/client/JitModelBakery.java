@@ -3,11 +3,9 @@
 //
 package wile.rsgauges.client;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.blocks.RsBlock;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -25,52 +23,33 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import wile.rsgauges.ModBlocks;
-import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.blocks.GaugeBlock;
-import wile.rsgauges.blocks.RsBlock;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.UnmodifiableIterator;
 
 @SideOnly(Side.CLIENT)
-public class JitModelBakery {
-
+public class JitModelBakery
+{
   /**
    * Called from `RsBlock.initModel()`. A baked model to be used can be specified, which
    * has to be extended from JitBakedModel. The `JitBakedModel.getQuads(IBlockstate, ...)` can be overloaded
@@ -89,7 +68,8 @@ public class JitModelBakery {
    * standard blockstate json file (registry name based blockstate json file) with "_jit"
    * appended. The model loader below is adapted to this accordingly.
    */
-  public static class JitStateMapper extends StateMapperBase {
+  public static class JitStateMapper extends StateMapperBase
+  {
     final RsBlock block;
     JitStateMapper(final RsBlock block) { this.block = block; }
 
@@ -103,7 +83,8 @@ public class JitModelBakery {
    * JitModels corresponding to the original (JSON) models without "_jit"
    * suffix.
    */
-  public static class JitModelLoader implements ICustomModelLoader {
+  public static class JitModelLoader implements ICustomModelLoader
+  {
     private IResourceManager manager = null;
     private JitBakedModel jitbakedmodel;
     final private RsBlock block;
@@ -113,6 +94,7 @@ public class JitModelBakery {
       this.block = block;
       this.jitbakedmodel = jitbakedmodel;
       match = ModRsGauges.MODID + ":" + block.getRegistryName().getResourcePath() + "_jit";
+      if(manager==null){;} // unused warning supression, I don't like to remove the RM completely now.
     }
 
     @Override public boolean accepts(ResourceLocation rl) {
@@ -133,7 +115,8 @@ public class JitModelBakery {
    * will allow to override getQuads(), where it is ensured that all state combinations of the
    * original models are loaded.
    */
-  public static class JitModel implements IModel {
+  public static class JitModel implements IModel
+  {
     protected final ModelResourceLocation modelrl;
     protected JitBakedModel jitbakedmodel;
 
@@ -172,7 +155,8 @@ public class JitModelBakery {
    * -> means this is the one where getQuads() can be overridden to customise the
    *    model rendering.
    */
-  public static class JitBakedModel implements IBakedModel {
+  public static class JitBakedModel implements IBakedModel
+  {
     protected HashMap<Integer,IBakedModel> baked;
     protected IBakedModel firstbaked = null;
     public JitBakedModel() { baked = new HashMap<Integer,IBakedModel>(); }
@@ -183,13 +167,12 @@ public class JitModelBakery {
     @Override public boolean isGui3d() { return firstbaked.isGui3d(); }
     @Override public TextureAtlasSprite getParticleTexture() { return firstbaked.getParticleTexture(); }
     @Override public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) { return Pair.of(this, firstbaked.handlePerspective(cameraTransformType).getRight()); }
-    @Override public ItemCameraTransforms getItemCameraTransforms() { return firstbaked.getItemCameraTransforms(); }
     @Override public ItemOverrideList getOverrides() { return null; }
+    @SuppressWarnings("deprecation") @Override public ItemCameraTransforms getItemCameraTransforms() { return firstbaked.getItemCameraTransforms(); }
 
     public static int getStateVariantHash(IBlockState blockstate) { // I don't trust that blockstate.getPropertes().hashCode() will be the same
       if((blockstate==null) || (blockstate.getPropertyKeys().size()==0)) return 0;
       if(blockstate instanceof IExtendedBlockState) blockstate = ((IExtendedBlockState)blockstate).getClean();
-      int statehash = 0;
       String a[] = new String[blockstate.getPropertyKeys().size()];
       int i = 0;
       for(IProperty<?> p:blockstate.getPropertyKeys()) a[i++] = p.getName()+"="+blockstate.getValue(p).toString();
@@ -201,14 +184,15 @@ public class JitModelBakery {
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState blockstate, @Nullable EnumFacing side, long rand) {
       if(blockstate instanceof IExtendedBlockState) blockstate = ((IExtendedBlockState)blockstate).getClean();
-      return baked.getOrDefault(this.getStateVariantHash(blockstate), firstbaked).getQuads(blockstate, side, rand);
+      return baked.getOrDefault(getStateVariantHash(blockstate), firstbaked).getQuads(blockstate, side, rand);
     }
   }
 
   /**
    * TESR applying the model corresponding to the actual block state.
    */
-  public static class JitModelTesr<TeType extends RsBlock.RsTileEntity> extends TileEntitySpecialRenderer<TeType> {
+  public static class JitModelTesr<TeType extends RsBlock.RsTileEntity<?>> extends TileEntitySpecialRenderer<TeType>
+  {
     @Override
     public void render(TeType te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
       BlockRendererDispatcher mcbrd = Minecraft.getMinecraft().getBlockRendererDispatcher();

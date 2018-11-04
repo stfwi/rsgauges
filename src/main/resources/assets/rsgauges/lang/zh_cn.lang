@@ -1,7 +1,15 @@
+#
+# Redstone Gauges and Switches language file
+#
+#PARSE_ESCAPES
+#
 itemGroup.tabrsgauges=红石测量与开关 (?)
 rsgauges.config.title=红石测量与开关 设置
 rsgauges.subtitle.soundindicator1=警报器
 
+#
+# Gauge names
+#
 tile.rsgauges.flatgauge1.name=红石测量仪 (大型模拟电压表)
 tile.rsgauges.flatgauge2.name=红石测量仪 (大型模拟条)
 tile.rsgauges.flatgauge3.name=红石测量仪 (小型数字显示)
@@ -10,6 +18,9 @@ tile.rsgauges.flatgauge5.name=红石测量仪 (玻璃管)
 tile.rsgauges.flatgauge6.name=红石测量仪 (小型模拟电压表)
 tile.rsgauges.gauge_rustic2.name=红石测量仪 (乡村式圆形墙挂表)
 
+#
+# Binary state indicator names
+#
 tile.rsgauges.indicator1.name=红石指示器 (小型方形绿灯)
 tile.rsgauges.indicator2.name=红石指示器 (小型方形黄灯)
 tile.rsgauges.indicator3.name=红石指示器 (小型方形红灯)
@@ -19,6 +30,9 @@ tile.rsgauges.indicator2blink1.name=红石指示器 (闪烁小型方形黄灯)
 tile.rsgauges.indicator3blink1.name=红石指示器 (闪烁小型方形红灯)
 tile.rsgauges.soundindicator1.name=红石声音指示器 (警报器)
 
+#
+# Manual bistable switch names
+#
 tile.rsgauges.bistableswitch1.name=双稳态红石开关 (旋转机械开关)
 tile.rsgauges.bistableswitch2.name=双稳态红石开关 (触点拉杆)
 tile.rsgauges.bistableswitch3.name=双稳态红石开关 (机械开关)
@@ -44,6 +58,9 @@ tile.rsgauges.bistableswitch_rustic7.name=双稳态红石开关 (乡村式钉子
 tile.rsgauges.bistableswitch_glass1.name=双稳态红石开关 (star shaped glass switch)
 tile.rsgauges.bistableswitch_glass2.name=双稳态红石开关 (glass touch switch)
 
+#
+# Manual pulse switch names
+#
 tile.rsgauges.arrowtarget.name=脉冲红石开关 (箭靶)
 tile.rsgauges.pulseswitch1.name=脉冲红石开关 (方形机械按钮)
 tile.rsgauges.pulseswitch2.name=脉冲红石开关 (封闭圆形机械按钮)
@@ -65,12 +82,21 @@ tile.rsgauges.pulseswitch_glass1.name=脉冲红石开关 (star shaped glass butt
 tile.rsgauges.pulseswitch_glass2.name=脉冲红石开关 (small star shaped glass button)
 tile.rsgauges.pulseswitch_glass3.name=脉冲红石开关 (glass touch button)
 
+#
+# Floor contact switch names
+#
 tile.rsgauges.contactmat1.name=接触红石开关 (门接触垫)
 tile.rsgauges.contactmat2.name=接触红石开关 (灵敏方形接触垫)
+tile.rsgauges.contactmat3.name=接触红石开关 (shock sensor contact mat)
 tile.rsgauges.contactmat_rustic1.name=接触红石开关 (乡村式门底板)
+tile.rsgauges.contactmat_rustic2.name=接触红石开关 (rustic pressure plate)
+tile.rsgauges.contactmat_rustic3.name=接触红石开关 (rustic shock sensor plate)
 tile.rsgauges.contactmat_glass1.name=接触红石开关 (touch configurable glass plate)
 tile.rsgauges.contactmat_glass2.name=接触红石开关 (glass plate)
 
+#
+# Auto switch names
+#
 tile.rsgauges.automaticswitch1.name=自动红石开关 (红外运动探测器)
 tile.rsgauges.automaticswitch2.name=自动红石开关 (线性激光探测器)
 tile.rsgauges.automaticswitch3.name=自动红石开关 (局部光感器)
@@ -83,6 +109,9 @@ tile.rsgauges.detectorswitch_glass2.name=自动红石开关 (glass 线性激光�
 tile.rsgauges.daytimeswitch_glass1.name=自动红石开关 (glass 日间计时器)
 tile.rsgauges.timerswitch_glass1.name=自动红石开关 (glass 间隔信号计时器)
 
+#
+# Sensitive glass block names, const
+#
 tile.rsgauges.sensitiveglass.name=红石感应玻璃 (light emitting)
 tile.rsgauges.sensitiveglass_white.name=红石感应玻璃 (white stained)
 tile.rsgauges.sensitiveglass_red.name=红石感应玻璃 (red stained)
@@ -101,3 +130,111 @@ tile.rsgauges.sensitiveglass_purple.name=红石感应玻璃 (purple stained)
 tile.rsgauges.sensitiveglass_brown.name=红石感应玻璃 (brown stained)
 tile.rsgauges.sensitiveglass_black.name=红石感应玻璃 (black stained)
 tile.rsgauges.sensitiveglass_inverted.name=红石感应玻璃 (inverted, light emitting)
+
+#
+# Switch power config (left-click config) stati
+#
+rsgauges.switchconfig.options=%1$s
+rsgauges.switchconfig.options.output_power=power: %1$s
+rsgauges.switchconfig.options.no_output=no output
+rsgauges.switchconfig.options.weak=weak
+rsgauges.switchconfig.options.strong=strong
+rsgauges.switchconfig.options.weakinverted=weak inverted
+rsgauges.switchconfig.options.stronginverted=strong inverted
+rsgauges.switchconfig.options.pulsetime=pulse: %1$ss (%2$s ticks)
+
+#
+# Switch color tinting confirmations
+# (note to self: Tinting colors are explicitly listed, as the coloring
+#  lemmata for tinting may change in different languages)
+#
+rsgauges.switchconfig.tinting=tinted %1$s
+rsgauges.switchconfig.tinting.white=white
+rsgauges.switchconfig.tinting.orange=orange
+rsgauges.switchconfig.tinting.magenta=magenta
+rsgauges.switchconfig.tinting.lightblue=light blue
+rsgauges.switchconfig.tinting.yellow=yellow
+rsgauges.switchconfig.tinting.lime=lime
+rsgauges.switchconfig.tinting.pink=pink
+rsgauges.switchconfig.tinting.gray=gray
+rsgauges.switchconfig.tinting.silver=light gray
+rsgauges.switchconfig.tinting.cyan=cyan
+rsgauges.switchconfig.tinting.purple=purple
+rsgauges.switchconfig.tinting.blue=blue
+rsgauges.switchconfig.tinting.brown=brown
+rsgauges.switchconfig.tinting.green=green
+rsgauges.switchconfig.tinting.red=red
+rsgauges.switchconfig.tinting.black=black
+
+#
+# sensor range: <int>
+# entity type: <int>
+# entity threshold: <int>
+# power: <int>
+#
+rsgauges.switchconfig.detector.sensor_range=sensor range: %1$s
+rsgauges.switchconfig.detector.entity_filter=entity type: %1$s
+rsgauges.switchconfig.detector.entity_filter.creatures=creatures
+rsgauges.switchconfig.detector.entity_filter.players=players
+rsgauges.switchconfig.detector.entity_filter.mobs=mobs
+rsgauges.switchconfig.detector.entity_filter.animals=animals
+rsgauges.switchconfig.detector.entity_filter.villagers=villagers
+rsgauges.switchconfig.detector.entity_filter.everything=everything
+rsgauges.switchconfig.detector.entity_threshold=entity threshold: %1$s
+rsgauges.switchconfig.detector.output_power=power: %1$s
+
+#
+# on: <int>lux  off: <int>lux  power: <int>  debounce:<int>
+#
+rsgauges.switchconfig.lightsensor=%1$s %2$s %3$s %4$s
+rsgauges.switchconfig.lightsensor.lightunit=lux
+rsgauges.switchconfig.lightsensor.threshold_on=on: %1$s %2$s
+rsgauges.switchconfig.lightsensor.threshold_off=off: %1$s %2$s
+rsgauges.switchconfig.lightsensor.output_power=power: %1$s
+rsgauges.switchconfig.lightsensor.debounce=debounce: %1$s %2$s
+
+#
+# on: <int>  off: <int>  power: <int>  random:<int>
+#
+rsgauges.switchconfig.daytimerclock=%1$s  %2$s  %3$s  %4$s
+rsgauges.switchconfig.daytimerclock.daytime_on=on: %1$s
+rsgauges.switchconfig.daytimerclock.daytime_off=off: %1$s
+rsgauges.switchconfig.daytimerclock.output_power=power: %1$s
+rsgauges.switchconfig.daytimerclock.random=random: %1$s
+
+#
+# power: <int>
+#
+rsgauges.switchconfig.rainsensor.output_power=power: %1$s
+rsgauges.switchconfig.thundersensor.output_power=power: %1$s
+
+#
+# on: <float:%.02f>s  off: <float:%.02f>s  power: <int>  ramp:<int>
+#
+rsgauges.switchconfig.intervaltimer=%1$s%2$s%3$s%4$s%5$s
+rsgauges.switchconfig.intervaltimer.t_on=on: %1$ss
+rsgauges.switchconfig.intervaltimer.t_off=off: %1$ss
+rsgauges.switchconfig.intervaltimer.output_power=power: %1$s
+rsgauges.switchconfig.intervaltimer.ramp=ramp: %1$s
+rsgauges.switchconfig.intervaltimer.standby=STANDBY
+
+#
+# Touch configurable floor contact switches
+#
+# weight: <normal|high>
+rsgauges.switchconfig.touchcontactmat.sensitivity=sensitivity: %1$s
+rsgauges.switchconfig.touchcontactmat.sensitivity.normal=normal
+rsgauges.switchconfig.touchcontactmat.sensitivity.high=high
+rsgauges.switchconfig.touchcontactmat.entity_threshold=entity threshold: %1$s
+rsgauges.switchconfig.touchcontactmat.entity_filter=entity type: %1$s
+rsgauges.switchconfig.touchcontactmat.entity_filter.everything=everything
+rsgauges.switchconfig.touchcontactmat.entity_filter.creatures=creatures
+rsgauges.switchconfig.touchcontactmat.entity_filter.players=players
+rsgauges.switchconfig.touchcontactmat.entity_filter.mobs=mobs
+rsgauges.switchconfig.touchcontactmat.entity_filter.animals=animals
+rsgauges.switchconfig.touchcontactmat.entity_filter.villagers=villagers
+rsgauges.switchconfig.touchcontactmat.entity_filter.objects=objects
+rsgauges.switchconfig.touchcontactmat.output_power=power: %1$s
+
+#
+# EOF
