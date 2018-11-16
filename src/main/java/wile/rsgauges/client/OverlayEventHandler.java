@@ -35,16 +35,30 @@ public class OverlayEventHandler extends Gui
   private static long deadline_;
   private static String text_;
 
-  public static synchronized String text() { return text_; }
-  public static synchronized long deadline() { return deadline_; }
-  public static synchronized void hide() { deadline_ = 0; text_ = new String(); }
-  public static synchronized void show(TextComponentTranslation s, int displayTimeoutMs) { text_ = (s==null)?(""):(s.getFormattedText()); deadline_ = System.currentTimeMillis() + displayTimeoutMs; }
-  public static synchronized void show(String s, int displayTimeoutMs) { text_ = new String((s==null)?(""):(s)); deadline_ = System.currentTimeMillis() + displayTimeoutMs; }
-  public static void register() { if(ModAuxiliaries.isClientSide()) MinecraftForge.EVENT_BUS.register(new OverlayEventHandler()); }
-  OverlayEventHandler() { super(); mc=Minecraft.getMinecraft(); }
+  public static synchronized String text()
+  { return text_; }
+
+  public static synchronized long deadline()
+  { return deadline_; }
+
+  public static synchronized void hide()
+  { deadline_ = 0; text_ = new String(); }
+
+  public static synchronized void show(TextComponentTranslation s, int displayTimeoutMs)
+  { text_ = (s==null)?(""):(s.getFormattedText()); deadline_ = System.currentTimeMillis() + displayTimeoutMs; }
+
+  public static synchronized void show(String s, int displayTimeoutMs)
+  { text_ = new String((s==null)?(""):(s)); deadline_ = System.currentTimeMillis() + displayTimeoutMs; }
+
+  public static void register()
+  { if(ModAuxiliaries.isClientSide()) MinecraftForge.EVENT_BUS.register(new OverlayEventHandler()); }
+
+  OverlayEventHandler()
+  { super(); mc=Minecraft.getMinecraft(); }
 
   @SubscribeEvent
-  public void onRenderGui(RenderGameOverlayEvent.Post event) {
+  public void onRenderGui(RenderGameOverlayEvent.Post event)
+  {
     if(event.getType() != RenderGameOverlayEvent.ElementType.CHAT) return;
     if(deadline() < System.currentTimeMillis()) return;
     String txt = text();

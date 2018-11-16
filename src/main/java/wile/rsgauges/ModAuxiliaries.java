@@ -10,6 +10,8 @@ package wile.rsgauges;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
@@ -27,7 +29,8 @@ public class ModAuxiliaries
    * Text localisation wrapper, implicitly prepends `ModRsGauges.MODID` to the
    * translation keys.
    */
-  public static TextComponentTranslation localizable(String modtrkey, @Nullable TextFormatting color, Object... args) {
+  public static TextComponentTranslation localizable(String modtrkey, @Nullable TextFormatting color, Object... args)
+  {
     TextComponentTranslation tr = new TextComponentTranslation(ModRsGauges.MODID+"."+modtrkey, args);
     if(color!=null) tr.getStyle().setColor(color);
     return tr;
@@ -37,7 +40,8 @@ public class ModAuxiliaries
    * Send a chat message to the player.
    * Server side usage only.
    */
-  public static void playerChatMessage(EntityPlayer player, final String message) {
+  public static void playerChatMessage(EntityPlayer player, final String message)
+  {
     String s = message.trim();
     if(!s.isEmpty()) player.sendMessage(new TextComponentTranslation(s));
   }
@@ -46,7 +50,8 @@ public class ModAuxiliaries
    * Send RsBlock status message to the player.
    * Server side usage only.
    */
-  public static void playerStatusMessage(EntityPlayer player, final TextComponentTranslation message) {
+  public static void playerStatusMessage(EntityPlayer player, final TextComponentTranslation message)
+  {
     if(ModConfig.z_without_switch_status_overlay) {
       player.sendMessage(message);
     } else {
@@ -57,7 +62,8 @@ public class ModAuxiliaries
   /**
    * Rotates an aabb from default facing EASE (direction x+) to another facing.
    */
-  public static AxisAlignedBB transform_forward(final AxisAlignedBB bb, final EnumFacing facing) {
+  public static AxisAlignedBB transform_forward(final AxisAlignedBB bb, final EnumFacing facing)
+  {
     switch(facing.getIndex()) {
       case 0: return new AxisAlignedBB(  bb.minY, -bb.minX,  bb.minZ,  bb.maxY, -bb.maxX,  bb.maxZ); // D
       case 1: return new AxisAlignedBB( -bb.minY,  bb.minX,  bb.minZ, -bb.maxY,  bb.maxX,  bb.maxZ); // U
@@ -73,7 +79,8 @@ public class ModAuxiliaries
    * Transforms a block position, rotated around the world origin from EAST
    * to facing.
    */
-  public static BlockPos transform_forward(final BlockPos pos, final EnumFacing facing) {
+  public static BlockPos transform_forward(final BlockPos pos, final EnumFacing facing)
+  {
     switch(facing.getIndex()) {
       case 0: return new BlockPos(  pos.getY(), -pos.getX(),  pos.getZ()); // D
       case 1: return new BlockPos( -pos.getY(),  pos.getX(),  pos.getZ()); // U
@@ -88,7 +95,8 @@ public class ModAuxiliaries
   /**
    * Returns a time string in 24:00 hour format.
    */
-  public static String daytimeToString(long t) {
+  public static String daytimeToString(long t)
+  {
     t = (t + 6000) % 24000; // day starts at 06:00 with t==0.
     // @check: java must have string formatting somehow.
     String sh = Long.toString((t/1000));
@@ -101,12 +109,14 @@ public class ModAuxiliaries
   /**
    * Returns a string, where ticks are converted to seconds.
    */
-  public static String ticksToSecondsString(long t) { return String.format("%.02f", ((double)t)/20.0); }
+  public static String ticksToSecondsString(long t)
+  { return String.format("%.02f", ((double)t)/20.0); }
 
   /**
    * Prefer world.isRemote, only use this if world is not available.
    */
-  public static boolean isClientSide() { return (FMLCommonHandler.instance().getSide() == Side.CLIENT); }
+  public static boolean isClientSide()
+  { return (FMLCommonHandler.instance().getSide() == Side.CLIENT); }
 
   /**
    * Class allowing to have the dye colors also available on
@@ -134,4 +144,25 @@ public class ModAuxiliaries
     public static final int[] byIndex = { WHITE,ORANGE,MAGENTA,LIGHTBLUE,YELLOW,LIME,PINK,GRAY,SILVER,CYAN,PURPLE,BLUE,BROWN,GREEN,RED,BLACK };
     public static final String[] nameByIndex = { "white","orange","magenta","lightblue","yellow","lime","pink","gray","silver","cyan","purple","blue","brown","green","red","black" };
   }
+
+  public static class RsMaterial extends Material
+  {
+    public static final RsMaterial TRAPDOORSWITCH_MATERIAL = new RsMaterial();
+
+    public RsMaterial()
+    { super(MapColor.IRON); }
+
+    @Override
+    public boolean isLiquid()
+    { return false; }
+
+    @Override
+    public boolean blocksLight()
+    { return false; }
+
+    @Override
+    public boolean blocksMovement()
+    { return true; }
+  }
+
 }

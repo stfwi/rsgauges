@@ -53,8 +53,9 @@ public abstract class RsBlock extends Block
   public static final PropertyDirection FACING = PropertyDirection.create("facing");
   protected final AxisAlignedBB unrotatedBB;
 
-  public RsBlock(String registryName, AxisAlignedBB unrotatedBoundingBox) {
-    super(Material.CIRCUITS);
+  public RsBlock(String registryName, AxisAlignedBB unrotatedBoundingBox, @Nullable Material material)
+  {
+    super((material!=null) ? (material) : (Material.CIRCUITS));
     setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(registryName);
     setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
@@ -66,87 +67,116 @@ public abstract class RsBlock extends Block
     this.unrotatedBB = unrotatedBoundingBox;
   }
 
-  public RsBlock(String registryName) { this(registryName, new AxisAlignedBB((0d/16),(1d/16),(0d/16), (8d/16),(12d/16),(2d/16))); }
+  public RsBlock(String registryName)
+  { this(registryName, new AxisAlignedBB((0d/16),(1d/16),(0d/16), (8d/16),(12d/16),(2d/16)), null); }
 
   @SideOnly(Side.CLIENT)
-  public void initModel() {
+  public void initModel()
+  {
     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     JitModelBakery.JitBakedModel jitbakedmodel = this.getJitBakedModel();
     if(jitbakedmodel != null) JitModelBakery.initModelRegistrations(this, jitbakedmodel);
   }
 
   @Override
-  public boolean isOpaqueCube(IBlockState state) { return false; }
+  public boolean isOpaqueCube(IBlockState state)
+  { return false; }
 
   @Override
-  public boolean isFullCube(IBlockState state) { return false; }
+  public boolean isFullCube(IBlockState state)
+  { return false; }
 
   @Override
-  public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) { return BlockFaceShape.UNDEFINED; }
+  public boolean isFullBlock(IBlockState state)
+  { return false; }
+
+  @Override
+  public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face)
+  { return BlockFaceShape.UNDEFINED; }
 
   @Override
   @Nullable
-  public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) { return NULL_AABB; }
+  public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
+  { return NULL_AABB; }
 
   @Override
   @SideOnly(Side.CLIENT)
-  public BlockRenderLayer getBlockLayer() { return BlockRenderLayer.CUTOUT; }
+  public BlockRenderLayer getBlockLayer()
+  { return BlockRenderLayer.CUTOUT; }
 
   @Override
   @SideOnly(Side.CLIENT)
-  public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, net.minecraft.client.particle.ParticleManager manager) { return true; } // no hit particles
+  public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, net.minecraft.client.particle.ParticleManager manager)
+  { return true; } // no hit particles
 
   @Override
   @SideOnly(Side.CLIENT)
-  public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.ParticleManager manager) { return true; } // no destroy
+  public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.ParticleManager manager)
+  { return true; } // no destroy effects
 
   @Override
-  public boolean canSpawnInBlock() { return false; }
+  public boolean canSpawnInBlock()
+  { return false; }
 
   @Override
-  public EnumPushReaction getMobilityFlag(IBlockState state) { return EnumPushReaction.DESTROY; }
+  public EnumPushReaction getMobilityFlag(IBlockState state)
+  { return EnumPushReaction.DESTROY; }
 
   @Override
-  public boolean isPassable(IBlockAccess worldIn, BlockPos pos) { return true; }
+  public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
+  { return true; }
 
   @Override
-  public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) { return false; }
+  public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos)
+  { return false; }
 
   @Override
-  public IBlockState getStateFromMeta(int meta) { return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 0x7)); }
+  public IBlockState getStateFromMeta(int meta)
+  { return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 0x7)); }
 
   @Override
-  public int getMetaFromState(IBlockState state) { return (state.getValue(FACING).getIndex() & 0x07); }
+  public int getMetaFromState(IBlockState state)
+  { return (state.getValue(FACING).getIndex() & 0x07); }
 
   @Override
-  protected BlockStateContainer createBlockState() { return new BlockStateContainer(this, FACING); }
+  protected BlockStateContainer createBlockState()
+  { return new BlockStateContainer(this, FACING); }
 
   @Override
-  public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) { return state; }
+  public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
+  { return state; }
 
   @Override
-  public boolean hasTileEntity(IBlockState state) { return false; }
+  public boolean hasTileEntity(IBlockState state)
+  { return false; }
 
   @Override
-  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) { this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos); }
+  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
+  { this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos); }
 
   @Override
-  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) { this.onBlockPlacedByCheck(world, pos, state, placer, stack); }
+  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+  { this.onBlockPlacedByCheck(world, pos, state, placer, stack); }
 
   @Override
-  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) { return true; }
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+  { return true; }
 
   @Override
-  public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {}
+  public void onBlockClicked(World world, BlockPos pos, EntityPlayer player)
+  {}
 
   @Override
-  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) { return canPlaceBlockOnSide(world, pos, side, (Block block)->{return (!isExceptBlockForAttachWithPiston(block));}, null); }
+  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side)
+  { return canPlaceBlockOnSide(world, pos, side, (Block block)->{return (!isExceptBlockForAttachWithPiston(block));}, null); }
 
-  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, @Nullable Predicate<Block> blockWhiteListFilter, @Nullable Predicate<Block> blockBlackListFilter) {
-    if(isFloorMount()) {
-      if(side != EnumFacing.UP) return false;
+  public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, @Nullable Predicate<Block> blockWhiteListFilter, @Nullable Predicate<Block> blockBlackListFilter)
+  {
+    if(isLateral() && (!isWallMount())) {
+      if(side != EnumFacing.UP) return false; // must be supported from the bottom.
       return (world.getBlockState(pos.down()).getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
     } else {
+      if(isLateral() && ((side==EnumFacing.UP)||(side==EnumFacing.DOWN))) return false; // lateral blocks only on walls.
       final BlockPos blockpos = pos.offset(side.getOpposite());
       final IBlockState state = world.getBlockState(blockpos);
       if((blockBlackListFilter!=null) && (blockBlackListFilter.apply(state.getBlock()))) return false;
@@ -157,12 +187,15 @@ public abstract class RsBlock extends Block
   }
 
   @Override
-  public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+  public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
+  {
     final IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
-    if(isWallMount()) {
-      return state.withProperty(FACING, facing);
+    if(isWallMount() && (!isLateral())) {
+      return state.withProperty(FACING, facing); // e.g. pulse/bistable switches. Placed on the wall with the ui facing to the player.
+    } else if(isWallMount() && isLateral()) {
+      return state.withProperty(FACING, facing.getOpposite()); // e.g. trap door switch. Placed on the wall the player clicked, reverse orientation.
     } else {
-      return state.withProperty(FACING, placer.getHorizontalFacing()); // floor mount and blocky blocks
+      return state.withProperty(FACING, placer.getHorizontalFacing()); // e.g. contact mats, placed in the direction the player is looking.
     }
   }
 
@@ -171,10 +204,11 @@ public abstract class RsBlock extends Block
    * the facing defined in the block state.
    */
   @Override
-  public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+  public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+  {
     final AxisAlignedBB bb = getUnrotatedBB(state);
-    if(isWallMount()) {
-      // @todo check if I can replace this with a static const array of AxisAlignedBB.
+    if(isWallMount() && (!isLateral())) {
+      // Wall attached blocks where the UI is facing to the player.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(1-bb.maxX, 1-bb.maxZ, 1-bb.maxY, 1-bb.minX, 1-bb.minZ, 1-bb.minY); // D
         case 1: return new AxisAlignedBB(1-bb.maxX,   bb.minZ,   bb.minY, 1-bb.minX,   bb.maxZ,   bb.maxY); // U
@@ -183,8 +217,8 @@ public abstract class RsBlock extends Block
         case 4: return new AxisAlignedBB(1-bb.maxZ,   bb.minY,   bb.minX, 1-bb.minZ,   bb.maxY,   bb.maxX); // W
         case 5: return new AxisAlignedBB(  bb.minZ,   bb.minY, 1-bb.maxX,   bb.maxZ,   bb.maxY, 1-bb.minX); // E
       }
-    } else if(isFloorMount()) {
-      // @todo check if I can replace this with an array of AxisAlignedBB.
+    } else if(isLateral()) {
+      // Wall or floor attached blocks where the UI and actuated facing is on the top.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); // D --> bb
         case 1: return new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); // U --> bb
@@ -201,27 +235,33 @@ public abstract class RsBlock extends Block
    * Overridden to indicate that the block is attached to a wall. getBoundingBox() and
    * getStateForPlacement() will return differently accordingly.
    */
-  public boolean isWallMount() { return false; }
+  public boolean isWallMount()
+  { return false; }
 
   /**
    * Overridden to indicate that the block is attached to the floor. getBoundingBox() and
    * getStateForPlacement() will return differently accordingly.
    */
-  public boolean isFloorMount() { return false; }
+  public boolean isLateral()
+  { return false; }
 
   /**
    * Returns the bounding box facing north. For other facing direction
    * block states, the corresponding facing will be calculated from this
    * data.
    */
-  public AxisAlignedBB getUnrotatedBB() { return unrotatedBB; }
-  public AxisAlignedBB getUnrotatedBB(IBlockState state) { return getUnrotatedBB(); }
+  public AxisAlignedBB getUnrotatedBB()
+  { return unrotatedBB; }
+
+  public AxisAlignedBB getUnrotatedBB(IBlockState state)
+  { return getUnrotatedBB(); }
 
   /**
    * Returns the JIT model bakery instance for custom rendering, or null
    * if no custom rendering applies.
    */
-  public JitModelBakery.JitBakedModel getJitBakedModel() { return null; }
+  public JitModelBakery.JitBakedModel getJitBakedModel()
+  { return null; }
 
   /**
    * Checks if the changed neighbour is the block where the gauge/switch/device
@@ -229,11 +269,14 @@ public abstract class RsBlock extends Block
    * the device pop off and dropped as item.
    * Returns true if the neighbour block change may affect the state of the device.
    */
-  protected boolean neighborChangedCheck(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
-    if(isFloorMount()) {
+  protected boolean neighborChangedCheck(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
+  {
+    if(!isWallMount()) {
       if(!(pos.down().equals(neighborPos))) return false;
+    } else if(!isLateral()) {
+      if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos)) return false;
     } else {
-      if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos)) return false;  // wall mount
+      if(!pos.offset(state.getValue(FACING)).equals(neighborPos)) return false;
     }
     final IBlockState neighborState = world.getBlockState(neighborPos);
     if(neighborState == null) return false;
@@ -251,8 +294,9 @@ public abstract class RsBlock extends Block
    * Checks if these blocks can be placed at a given position with a given facing. The client does not send a
    * placing request if not, the server will drop the item if it was placed somehow.
    */
-  protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-    if(canPlaceBlockOnSide(world, pos, this.isFloorMount() ? EnumFacing.UP : state.getValue(FACING))) return true;
+  protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+  {
+    if(canPlaceBlockOnSide(world, pos, this.isWallMount() ? state.getValue(FACING) : EnumFacing.UP)) return true;
     if(world.isRemote) return false;
     this.dropBlockAsItem(world, pos, state, 0);
     world.setBlockToAir(pos);
@@ -319,17 +363,20 @@ public abstract class RsBlock extends Block
     public double y = 0;
 
     @Override
-    public String toString() {
+    public String toString()
+    {
       return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",touch_configured:" + Boolean.toString(touch_configured)
           + ",wrenched:" + Boolean.toString(wrenched) + ",redstone:" + Integer.toString(redstone) + ",dye:" + Integer.toString(dye) + "}";
     }
 
-    public static boolean wrenched(EntityPlayer player) {
+    public static boolean wrenched(EntityPlayer player)
+    {
       final ItemStack item = player.getHeldItemMainhand();
       return (item != null) && ((","+ModConfig.accepted_wrenches+",").indexOf(","+item.getItem().getRegistryName().getResourcePath() + ",") >= 0);
     }
 
-    public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z) {
+    public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
+    {
       final WrenchActivationCheck ck = new WrenchActivationCheck();
       if((world==null) || (pos==null)) return ck;
       if(state==null) state = world.getBlockState(pos);
@@ -350,11 +397,10 @@ public abstract class RsBlock extends Block
 
       // Touch config check
       if(facing==null) return ck;
-      if(block.isFloorMount() && (facing != EnumFacing.UP)) return ck;
-      if(block.isWallMount() && (facing != state.getValue(FACING))) return ck;
+      if(block.isLateral() && (facing != EnumFacing.UP)) return ck;
+      if(block.isWallMount() && (facing != state.getValue(FACING))) return ck; // wall & floor covered above.
       double xo=0, yo=0;
-      if(block.isWallMount()) {
-        // @todo check if I can replace this with an array of lambda expressions.
+      if((block.isWallMount()) && (!block.isLateral())) {
         switch(facing.getIndex()) {
           case 0: xo = 1-x; yo = 1-z; break; // DOWN
           case 1: xo = 1-x; yo = z  ; break; // UP
@@ -366,9 +412,8 @@ public abstract class RsBlock extends Block
         final AxisAlignedBB aa = block.getUnrotatedBB();
         xo = Math.round(((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25);
         yo = Math.round(((yo-aa.minY) * (1.0/(aa.maxY-aa.minY)) * 15.5) - 0.25);
-      } else if(block.isFloorMount()) {
+      } else if(block.isLateral()) {
         facing = state.getValue(FACING);
-        // @todo check if I can replace this with an array of lambda expressions.
         switch(facing.getIndex()) {
           case 0: xo =   x; yo =   z; break; // DOWN
           case 1: xo =   x; yo =   z; break; // UP

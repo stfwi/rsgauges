@@ -25,25 +25,29 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ClientProxy extends CommonProxy
 {
   @Override
-  public void preInit(FMLPreInitializationEvent e) {
+  public void preInit(FMLPreInitializationEvent e)
+  {
     super.preInit(e);
     OBJLoader.INSTANCE.addDomain(ModRsGauges.MODID);
     Networking.preInitClient();
   }
 
   @Override
-  public void init(FMLInitializationEvent e) {
+  public void init(FMLInitializationEvent e)
+  {
     super.init(e);
   }
 
   @Override
-  public void postInit(FMLPostInitializationEvent e) {
+  public void postInit(FMLPostInitializationEvent e)
+  {
     super.postInit(e);
     OverlayEventHandler.register();
   }
 
   @SubscribeEvent
-  public static void registerModels(ModelRegistryEvent event) {
+  public static void registerModels(ModelRegistryEvent event)
+  {
     ModBlocks.initModels();
   }
 }

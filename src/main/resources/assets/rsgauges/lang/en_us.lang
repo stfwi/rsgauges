@@ -95,6 +95,17 @@ tile.rsgauges.contactmat_glass1.name=Contact redstone switch (touch configurable
 tile.rsgauges.contactmat_glass2.name=Contact redstone switch (glass plate)
 
 #
+# Trapdoor switches
+#
+tile.rsgauges.trapdoorswitch1.name=Trapdoor switch (industrial shock activated trapdoor)
+tile.rsgauges.trapdoorswitch2.name=Trapdoor switch (industrial high sensitive shock activated trapdoor)
+tile.rsgauges.trapdoorswitch3.name=Trapdoor switch (industrial item trapdoor)
+#
+tile.rsgauges.trapdoorswitch_rustic1.name=Trapdoor switch (rustic shock activated trapdoor)
+tile.rsgauges.trapdoorswitch_rustic2.name=Trapdoor switch (rustic high sensitive shock activated trapdoor)
+tile.rsgauges.trapdoorswitch_rustic3.name=Trapdoor switch (rustic item trapdoor)
+
+#
 # Auto switch names
 #
 tile.rsgauges.automaticswitch1.name=Automatic redstone switch (infrared motion detector)

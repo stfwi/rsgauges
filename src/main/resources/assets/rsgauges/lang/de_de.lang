@@ -95,6 +95,17 @@ tile.rsgauges.contactmat_glass1.name=Redstone-Kontaktschalter (Glasplatte, touch
 tile.rsgauges.contactmat_glass2.name=Redstone-Kontaktschalter (Glasplatte)
 
 #
+# Trapdoor switches
+#
+tile.rsgauges.trapdoorswitch1.name=Falltürschalter (industrielle erschütterungsaktivierte Falltür)
+tile.rsgauges.trapdoorswitch2.name=Falltürschalter (industrielle empfindliche, erschütterungsaktivierte Falltür)
+tile.rsgauges.trapdoorswitch3.name=Falltürschalter (industrieller Klappschalter)
+#
+tile.rsgauges.trapdoorswitch_rustic1.name=Falltürschalter (rustikale erschütterungsaktivierte Falltür)
+tile.rsgauges.trapdoorswitch_rustic2.name=Falltürschalter (rustikale empfindliche, erschütterungsaktivierte Falltür)
+tile.rsgauges.trapdoorswitch_rustic3.name=Falltürschalter (rustikaler Klappschalter)
+
+#
 # Auto switch names
 #
 tile.rsgauges.automaticswitch1.name=Redstone-Automatikschalter (Infrarot-Bewegungsmelder)

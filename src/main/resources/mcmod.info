@@ -3,7 +3,7 @@
       "modid": "rsgauges",
       "name": "Redstone Gauges and Switches",
       "description": "Adds redstone (metering) gauges, bistable switches (lever like), and pulse switches (button like) to the game.",
-      "version": "1.0.4b1",
+      "version": "1.0.4b2",
       "mcversion": "1.12.2",
       "url": "https://github.com/stfwi/rsgauges/",
       "authorList": ["wile"],

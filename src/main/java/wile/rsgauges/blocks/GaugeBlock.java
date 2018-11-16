@@ -52,8 +52,9 @@ public class GaugeBlock extends RsBlock
   @Nullable protected final ModResources.BlockSoundEvent power_on_sound;
   @Nullable protected final ModResources.BlockSoundEvent power_off_sound;
 
-  public GaugeBlock(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
-    super(registryName, unrotatedBB);
+  public GaugeBlock(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  {
+    super(registryName, unrotatedBB, null);
     this.lightValue = (powerToLightValueScaling0To15 < 0) ? (0) : ((powerToLightValueScaling0To15 > 15) ? 15 : powerToLightValueScaling0To15);
     this.blinkInterval = (blinkInterval <= 0) ? (0) : ((blinkInterval < 500) ? (500) : ((blinkInterval > 3000) ? 3000 : blinkInterval));
     this.power_on_sound = powerOnSound;
@@ -61,59 +62,74 @@ public class GaugeBlock extends RsBlock
     setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWER, 0));
   }
 
-  public GaugeBlock(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval) { this(registryName, unrotatedBB, powerToLightValueScaling0To15, blinkInterval, null, null); }
+  public GaugeBlock(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval)
+  { this(registryName, unrotatedBB, powerToLightValueScaling0To15, blinkInterval, null, null); }
 
-  public GaugeBlock(String registryName, AxisAlignedBB boundingBox) { this(registryName, boundingBox, 0, 0); }
+  public GaugeBlock(String registryName, AxisAlignedBB boundingBox)
+  { this(registryName, boundingBox, 0, 0); }
 
   @Override
-  public boolean isWallMount() { return true; }
+  public boolean isWallMount()
+  { return true; }
 
   @Override
   @SideOnly(Side.CLIENT)
-  public void initModel() { super.initModel(); }
+  public void initModel()
+  { super.initModel(); }
 
   @Override
   @SideOnly(Side.CLIENT)
-  public BlockRenderLayer getBlockLayer() { return (lightValue>0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
+  public BlockRenderLayer getBlockLayer()
+  { return (lightValue>0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
 
   @Override
-  public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+  public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
+  {
     final GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
     return super.getActualState(state, world, pos).withProperty(POWER, (te==null) ? 0 : te.power());
   }
 
   @Override
-  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
+  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
+  {
     if(!this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos)) return;
     final GaugeBlock.GaugeTileEntity te = getTe(state, world, pos);
     if(te != null) te.reset_timer();
   }
 
   @Override
-  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) { if(this.onBlockPlacedByCheck(world, pos, state, placer, stack)) world.scheduleBlockUpdate(pos, state.getBlock(), 0, 1); }
+  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+  { if(this.onBlockPlacedByCheck(world, pos, state, placer, stack)) world.scheduleBlockUpdate(pos, state.getBlock(), 0, 1); }
 
   @Override
-  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) { return false; }
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+  { return false; }
 
   @Override
-  public int getLightValue(IBlockState state) { return (this.lightValue<1) ? 0 : ((!ModAuxiliaries.isClientSide()) || (state.getValue(POWER)>0)) ? (this.lightValue) : (0); }
+  public int getLightValue(IBlockState state)
+  { return (this.lightValue<1) ? 0 : ((!ModAuxiliaries.isClientSide()) || (state.getValue(POWER)>0)) ? (this.lightValue) : (0); }
 
   @Override
-  public boolean getWeakChanges(IBlockAccess world, BlockPos pos) { return true; }
+  public boolean getWeakChanges(IBlockAccess world, BlockPos pos)
+  { return true; }
 
   @Override
-  protected BlockStateContainer createBlockState() { return new BlockStateContainer(this, FACING,POWER); }
+  protected BlockStateContainer createBlockState()
+  { return new BlockStateContainer(this, FACING,POWER); }
 
   @Override
-  public boolean hasTileEntity(IBlockState state) { return true; }
+  public boolean hasTileEntity(IBlockState state)
+  { return true; }
 
   @Override
-  public TileEntity createTileEntity(World world, IBlockState state) { return new GaugeBlock.GaugeTileEntity(); }
+  public TileEntity createTileEntity(World world, IBlockState state)
+  { return new GaugeBlock.GaugeTileEntity(); }
 
   /**
    * Readwrite TE getter.
    */
-  public GaugeBlock.GaugeTileEntity getTe(IBlockState state, IBlockAccess world, BlockPos pos) {
+  public GaugeBlock.GaugeTileEntity getTe(IBlockState state, IBlockAccess world, BlockPos pos)
+  {
     final TileEntity te = world.getTileEntity(pos);
     return (!(te instanceof GaugeBlock.GaugeTileEntity)) ? (null) : ((GaugeBlock.GaugeTileEntity)te);
   }
@@ -128,16 +144,25 @@ public class GaugeBlock extends RsBlock
     private boolean force_off_ = false;
     private IBlockState lastState = null;
 
-    public int power() { return this.power_; }
-    public void power(int p) { this.power_ = (p<=0) ? (0) : ((p>15) ? 15 : p); }
-    public boolean force_off() { return this.force_off_; }
-    public void reset_timer() { trigger_timer_= 0; }
+    public int power()
+    { return this.power_; }
+
+    public void power(int p)
+    { this.power_ = (p<=0) ? (0) : ((p>15) ? 15 : p); }
+
+    public boolean force_off()
+    { return this.force_off_; }
+
+    public void reset_timer()
+    { trigger_timer_= 0; }
 
     @Override
-    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) { nbt.setInteger("power", power()); }
+    public void writeNbt(NBTTagCompound nbt, boolean updatePacket)
+    { nbt.setInteger("power", power()); }
 
     @Override
-    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
+    public void readNbt(NBTTagCompound nbt, boolean updatePacket)
+    {
       power(nbt.getInteger("power"));
       // Client re-render on NBT power change
       if(updatePacket && (world!=null) && (world.isRemote)) {
@@ -153,7 +178,8 @@ public class GaugeBlock extends RsBlock
     }
 
     @Override
-    public void update() {
+    public void update()
+    {
       if(world.isRemote || (--trigger_timer_ > 0)) return;
       trigger_timer_ = ModConfig.gauge_update_interval;
       try {
@@ -198,16 +224,9 @@ public class GaugeBlock extends RsBlock
           }
           this.power(p);
           if(sync) {
-            /// original verified v1.0.0 --> 1.0.3
-            //world.markChunkDirty(pos, this);
-            //world.setBlockState(pos, newState, 16); // 1|2|
-            //world.markAndNotifyBlock(pos, null, state, newState, 2|16); // 1|
-            // testing for overhead reduction v1.0.4b1:
             world.markChunkDirty(pos, this);
             world.notifyBlockUpdate(pos, state, state.withProperty(POWER, p), 2|16); // without observer and comparator stuff
-            // System.out.println("sync:" + Integer.toString(oldpower) + "->" + Integer.toString(p));
           } else if(state.getValue(POWER) != p) {
-            // System.out.println("world.setBlockState:"  + Integer.toString(state.getValue(POWER)) + "->" + Integer.toString(newState.getValue(POWER))  );
             world.setBlockState(pos, state.withProperty(POWER, p), 16);
           }
         }

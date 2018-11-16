@@ -160,7 +160,10 @@ public class ModConfig
     }
   }
 
-  public static final void onPostInit(FMLPostInitializationEvent event) { update(); }
+  public static final void onPostInit(FMLPostInitializationEvent event)
+  { update(); }
 
-  private static final void update() {}
+  private static final void update()
+  {}
+
 }

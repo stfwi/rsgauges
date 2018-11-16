@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [ { "item": "rsgauges:trapdoorswitch2" } ],
+  "result": { "item": "rsgauges:trapdoorswitch3", "data": 0 }
+}

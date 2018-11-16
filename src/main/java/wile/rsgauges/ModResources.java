@@ -35,7 +35,8 @@ public class ModResources
   {
     private static LinkedList<SoundEvent> created_sounds_ = new LinkedList<SoundEvent>();
 
-    public static SoundEvent createSoundEvent(String name) {
+    public static SoundEvent createSoundEvent(String name)
+    {
       final ResourceLocation rl = new ResourceLocation(ModRsGauges.MODID, name);
       SoundEvent se = new SoundEvent(rl).setRegistryName(rl);
       created_sounds_.push(se);
@@ -43,7 +44,8 @@ public class ModResources
     }
 
     @SubscribeEvent
-    public static void onRegistryEvent(RegistryEvent.Register<SoundEvent> event) {
+    public static void onRegistryEvent(RegistryEvent.Register<SoundEvent> event)
+    {
       for(SoundEvent se:created_sounds_) {event.getRegistry().register(se);}
       created_sounds_.clear();
     }
@@ -65,5 +67,4 @@ public class ModResources
     public float pitch() { return pitch_; }
     public void play(World world, BlockPos pos) { world.playSound((EntityPlayer)null, pos, se_, SoundCategory.BLOCKS, volume_, pitch_); }
   }
-
 }

@@ -22,13 +22,21 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber
 public class CommonProxy
 {
-  public void preInit(FMLPreInitializationEvent e) {}
-  public void init(FMLInitializationEvent e) {}
-  public void postInit(FMLPostInitializationEvent e) {}
+  public void preInit(FMLPreInitializationEvent e)
+  {}
+
+  public void init(FMLInitializationEvent e)
+  {}
+
+  public void postInit(FMLPostInitializationEvent e)
+  {}
 
   @SubscribeEvent
-  public static void registerBlocks(RegistryEvent.Register<Block> event) { ModBlocks.registerBlocks(event); }
+  public static void registerBlocks(RegistryEvent.Register<Block> event)
+  { ModBlocks.registerBlocks(event); }
 
   @SubscribeEvent
-  public static void registerItems(RegistryEvent.Register<Item> event) { ModBlocks.registerItemBlocks(event); }
+  public static void registerItems(RegistryEvent.Register<Item> event)
+  { ModBlocks.registerItemBlocks(event); }
+
 }

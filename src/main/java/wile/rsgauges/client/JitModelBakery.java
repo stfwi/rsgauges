@@ -125,9 +125,17 @@ public class JitModelBakery
       this.modelrl = new ModelResourceLocation(rl.toString().replace("_jit", ""));
     }
 
-    @Override public Collection<ResourceLocation> getDependencies() { return ImmutableList.copyOf(new ModelResourceLocation[]{modelrl}); }
-    @Override public Collection<ResourceLocation> getTextures() { return ImmutableList.copyOf(new ResourceLocation[0]); } // should be covered in the model referred to
-    @Override public IModelState getDefaultState() { return null; }
+    @Override
+    public Collection<ResourceLocation> getDependencies()
+    { return ImmutableList.copyOf(new ModelResourceLocation[]{modelrl}); }
+
+    @Override
+    public Collection<ResourceLocation> getTextures()
+    { return ImmutableList.copyOf(new ResourceLocation[0]); } // should be covered in the model referred to
+
+    @Override
+    public IModelState getDefaultState()
+    { return null; }
 
     @Override
     public IBakedModel bake(IModelState modelstate, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)  {
@@ -159,18 +167,44 @@ public class JitModelBakery
   {
     protected HashMap<Integer,IBakedModel> baked;
     protected IBakedModel firstbaked = null;
-    public JitBakedModel() { baked = new HashMap<Integer,IBakedModel>(); }
-    public JitBakedModel push(final int statehash, final IBakedModel model) { baked.put(statehash, model); firstbaked=(firstbaked==null) ? model : firstbaked; return this; }
 
-    @Override public boolean isBuiltInRenderer() { return false; }
-    @Override public boolean isAmbientOcclusion() { return firstbaked.isAmbientOcclusion(); }
-    @Override public boolean isGui3d() { return firstbaked.isGui3d(); }
-    @Override public TextureAtlasSprite getParticleTexture() { return firstbaked.getParticleTexture(); }
-    @Override public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) { return Pair.of(this, firstbaked.handlePerspective(cameraTransformType).getRight()); }
-    @Override public ItemOverrideList getOverrides() { return null; }
-    @SuppressWarnings("deprecation") @Override public ItemCameraTransforms getItemCameraTransforms() { return firstbaked.getItemCameraTransforms(); }
+    public JitBakedModel()
+    { baked = new HashMap<Integer,IBakedModel>(); }
 
-    public static int getStateVariantHash(IBlockState blockstate) { // I don't trust that blockstate.getPropertes().hashCode() will be the same
+    public JitBakedModel push(final int statehash, final IBakedModel model)
+    { baked.put(statehash, model); firstbaked=(firstbaked==null) ? model : firstbaked; return this; }
+
+    @Override
+    public boolean isBuiltInRenderer()
+    { return false; }
+
+    @Override
+    public boolean isAmbientOcclusion()
+    { return firstbaked.isAmbientOcclusion(); }
+
+    @Override
+    public boolean isGui3d()
+    { return firstbaked.isGui3d(); }
+
+    @Override
+    public TextureAtlasSprite getParticleTexture()
+    { return firstbaked.getParticleTexture(); }
+
+    @Override
+    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType)
+    { return Pair.of(this, firstbaked.handlePerspective(cameraTransformType).getRight()); }
+
+    @Override
+    public ItemOverrideList getOverrides()
+    { return null; }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public ItemCameraTransforms getItemCameraTransforms()
+    { return firstbaked.getItemCameraTransforms(); }
+
+    public static int getStateVariantHash(IBlockState blockstate)
+    { // I don't trust that blockstate.getPropertes().hashCode() will be the same
       if((blockstate==null) || (blockstate.getPropertyKeys().size()==0)) return 0;
       if(blockstate instanceof IExtendedBlockState) blockstate = ((IExtendedBlockState)blockstate).getClean();
       String a[] = new String[blockstate.getPropertyKeys().size()];
@@ -182,7 +216,8 @@ public class JitModelBakery
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable IBlockState blockstate, @Nullable EnumFacing side, long rand) {
+    public List<BakedQuad> getQuads(@Nullable IBlockState blockstate, @Nullable EnumFacing side, long rand)
+    {
       if(blockstate instanceof IExtendedBlockState) blockstate = ((IExtendedBlockState)blockstate).getClean();
       return baked.getOrDefault(getStateVariantHash(blockstate), firstbaked).getQuads(blockstate, side, rand);
     }
@@ -194,7 +229,8 @@ public class JitModelBakery
   public static class JitModelTesr<TeType extends RsBlock.RsTileEntity<?>> extends TileEntitySpecialRenderer<TeType>
   {
     @Override
-    public void render(TeType te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TeType te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
+    {
       BlockRendererDispatcher mcbrd = Minecraft.getMinecraft().getBlockRendererDispatcher();
       BlockPos pos = te.getPos();
       IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);

@@ -39,12 +39,12 @@ import java.util.Random;
 public class AutoSwitchBlock extends SwitchBlock
 {
 
-  public AutoSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
-    super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound);
-  }
+  public AutoSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  { super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound); }
 
   @Override
-  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+  {
     if(world.isRemote) return true;
     AutoSwitchBlock.AutoSwitchTileEntity te = getTe(world, pos);
     if(te == null) return true;
@@ -61,13 +61,16 @@ public class AutoSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public int tickRate(World world) { return 200; } // no block based scheduling needed
+  public int tickRate(World world)
+  { return 200; } // no block based scheduling needed
 
   @Override
-  public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {}
+  public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
+  {}
 
   @Override
-  public TileEntity createTileEntity(World world, IBlockState state) {
+  public TileEntity createTileEntity(World world, IBlockState state)
+  {
     if((config & (SWITCH_CONFIG_SENSOR_VOLUME|SWITCH_CONFIG_SENSOR_LINEAR))!=0) {
       return new AutoSwitchBlock.DetectorSwitchTileEntity();
     } else if((config & (SWITCH_CONFIG_SENSOR_ENVIRONMENTAL))!=0) {
@@ -80,7 +83,8 @@ public class AutoSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public AutoSwitchBlock.AutoSwitchTileEntity getTe(World world, BlockPos pos) {
+  public AutoSwitchBlock.AutoSwitchTileEntity getTe(World world, BlockPos pos)
+  {
     TileEntity te = world.getTileEntity(pos);
     if((!(te instanceof AutoSwitchBlock.AutoSwitchTileEntity))) return null;
     return (AutoSwitchBlock.AutoSwitchTileEntity)te;
@@ -91,7 +95,8 @@ public class AutoSwitchBlock extends SwitchBlock
    */
   public static class AutoSwitchTileEntity extends SwitchBlock.SwitchTileEntity
   {
-    protected final void updateSwitchState(IBlockState state, AutoSwitchBlock block, boolean active, int hold_time) {
+    protected final void updateSwitchState(IBlockState state, AutoSwitchBlock block, boolean active, int hold_time)
+    {
       if(active) {
         this.off_timer_reset(hold_time);
         if(!state.getValue(POWERED)) {
@@ -126,16 +131,30 @@ public class AutoSwitchBlock extends SwitchBlock
     private int update_interval_ = 10;
     private int update_timer_ = 0;
 
-    public int filter() { return filter_; }
-    public void filter(int sel) { filter_ = (sel<0) ? 0 : (sel >= filter_classes.length) ? (filter_classes.length-1) : sel; }
-    public Class<?> filter_class() { return (filter_<=0) ? (filter_classes[0]) : ((filter_ >= filter_classes.length) ? (filter_classes[filter_classes.length-1]) : filter_classes[filter_]); }
-    public void sensor_entity_threshold(int count) { sensor_entity_count_threshold_ = (count < 1) ? 1 : count; }
-    public int sensor_entity_threshold() { return sensor_entity_count_threshold_; }
-    public void sensor_range(int r) { sensor_range_ = (r<1) ? (1) : ((r>max_sensor_range_) ? max_sensor_range_ : r); }
-    public int sensor_range() { return sensor_range_; }
+    public int filter()
+    { return filter_; }
+
+    public void filter(int sel)
+    { filter_ = (sel<0) ? 0 : (sel >= filter_classes.length) ? (filter_classes.length-1) : sel; }
+
+    public Class<?> filter_class()
+    { return (filter_<=0) ? (filter_classes[0]) : ((filter_ >= filter_classes.length) ? (filter_classes[filter_classes.length-1]) : filter_classes[filter_]); }
+
+    public void sensor_entity_threshold(int count)
+    { sensor_entity_count_threshold_ = (count < 1) ? 1 : count; }
+
+    public int sensor_entity_threshold()
+    { return sensor_entity_count_threshold_; }
+
+    public void sensor_range(int r)
+    { sensor_range_ = (r<1) ? (1) : ((r>max_sensor_range_) ? max_sensor_range_ : r); }
+
+    public int sensor_range()
+    { return sensor_range_; }
 
     @Override
-    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) {
+    public void writeNbt(NBTTagCompound nbt, boolean updatePacket)
+    {
       super.writeNbt(nbt, updatePacket);
       nbt.setInteger("range", sensor_range_);
       nbt.setInteger("entitythreshold", sensor_entity_count_threshold_);
@@ -143,7 +162,8 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
+    public void readNbt(NBTTagCompound nbt, boolean updatePacket)
+    {
       super.readNbt(nbt, updatePacket);
       this.sensor_range(nbt.getInteger("range"));
       this.sensor_entity_threshold(nbt.getInteger("entitythreshold"));
@@ -151,13 +171,14 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void reset() { super.reset(); update_timer_=0; area_=null; sensor_range_=5; filter_=0; }
+    public void reset()
+    { super.reset(); update_timer_=0; area_=null; sensor_range_=5; filter_=0; }
 
     @Override
-    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y) {
+    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y)
+    {
       if(block == null) return false;
       int direction=0, field=0;
-      //System.out.println("xy:" + Double.toString(x) + "," + Double.toString(y));
       direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
       field = ((x>=2) && (x<=4)) ? (1) : (
               ((x>=5) && (x<=7)) ? (2) : (
@@ -194,7 +215,8 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void update() {
+    public void update()
+    {
       if(ModConfig.z_without_detector_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       update_timer_ = update_interval_;
@@ -265,15 +287,27 @@ public class AutoSwitchBlock extends SwitchBlock
     private int update_timer_ = 0;
     private int debounce_counter_ = 0;
 
-    public double threshold0_on() { return threshold0_on_; }
-    public double threshold0_off() { return threshold0_off_; }
-    public int debounce() { return debounce_; }
-    public void threshold0_on(double v) { threshold0_on_ = (v<0) ? (0) : ((v>15.0) ? (15.0) : (v)); }
-    public void threshold0_off(double v) { threshold0_off_ = (v<0) ? (0) : ((v>15.0) ? (15.0) : (v)); }
-    public void debounce(int v) { debounce_ = (v<0) ? (0) : ((v>debounce_max) ? (debounce_max) : (v)); }
+    public double threshold0_on()
+    { return threshold0_on_; }
+
+    public double threshold0_off()
+    { return threshold0_off_; }
+
+    public int debounce()
+    { return debounce_; }
+
+    public void threshold0_on(double v)
+    { threshold0_on_ = (v<0) ? (0) : ((v>15.0) ? (15.0) : (v)); }
+
+    public void threshold0_off(double v)
+    { threshold0_off_ = (v<0) ? (0) : ((v>15.0) ? (15.0) : (v)); }
+
+    public void debounce(int v)
+    { debounce_ = (v<0) ? (0) : ((v>debounce_max) ? (debounce_max) : (v)); }
 
     @Override
-    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) {
+    public void writeNbt(NBTTagCompound nbt, boolean updatePacket)
+    {
       super.writeNbt(nbt, updatePacket);
       nbt.setDouble("threshold0_on", threshold0_on());
       nbt.setDouble("threshold0_off", threshold0_off());
@@ -281,7 +315,8 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
+    public void readNbt(NBTTagCompound nbt, boolean updatePacket)
+    {
       super.readNbt(nbt, updatePacket);
       this.threshold0_on(nbt.getDouble("threshold0_on"));
       this.threshold0_off(nbt.getDouble("threshold0_off"));
@@ -289,10 +324,10 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y) {
+    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y)
+    {
       if(block == null) return false;
       int direction=0, field=0;
-      //System.out.println("xy:" + Double.toString(x) + "," + Double.toString(y));
       // @TODO: Construction time list or lambla for field assignment.
       direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
       field = ((x>=2) && (x<=4)) ? (1) : (
@@ -385,7 +420,8 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void update() {
+    public void update()
+    {
       if(ModConfig.z_without_environmental_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       if(update_interval_ < 10) update_interval_ = 10;
@@ -485,20 +521,37 @@ public class AutoSwitchBlock extends SwitchBlock
     private int p_ = 0;
     private boolean s_ = false;
 
-    public int p_set() { return p_set_; }
-    public int t_on() { return t_on_; }
-    public int t_off() { return t_off_; }
-    public int ramp() { return ramp_; }
-    public void p_set(int v) { p_set_ = (v<1) ? (1) : ((v>15) ? (15) : (v)); }
-    public void t_on(int v) { t_on_ = (v<0) ? (0) : ((v>t_max) ? (t_max) : (v)); }
-    public void t_off(int v) { t_off_ = (v<0) ? (0) : ((v>t_max) ? (t_max) : (v)); }
-    public void ramp(int v) { ramp_ = (v<0) ? (0) : ((v>ramp_max) ? (ramp_max) : (v)); }
+    public int p_set()
+    { return p_set_; }
+
+    public int t_on()
+    { return t_on_; }
+
+    public int t_off()
+    { return t_off_; }
+
+    public int ramp()
+    { return ramp_; }
+
+    public void p_set(int v)
+    { p_set_ = (v<1) ? (1) : ((v>15) ? (15) : (v)); }
+
+    public void t_on(int v)
+    { t_on_ = (v<0) ? (0) : ((v>t_max) ? (t_max) : (v)); }
+
+    public void t_off(int v)
+    { t_off_ = (v<0) ? (0) : ((v>t_max) ? (t_max) : (v)); }
+
+    public void ramp(int v)
+    { ramp_ = (v<0) ? (0) : ((v>ramp_max) ? (ramp_max) : (v)); }
 
     @Override
-    protected void setWorldCreate(World world) { super.setWorldCreate(world); p_set(15); t_on(20); t_off(20); ramp(0); }
+    protected void setWorldCreate(World world)
+    { super.setWorldCreate(world); p_set(15); t_on(20); t_off(20); ramp(0); }
 
     @Override
-    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) {
+    public void writeNbt(NBTTagCompound nbt, boolean updatePacket)
+    {
       super.writeNbt(nbt, updatePacket);
       nbt.setInteger("pset", p_set());
       nbt.setInteger("toff", t_off());
@@ -507,7 +560,8 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
+    public void readNbt(NBTTagCompound nbt, boolean updatePacket)
+    {
       super.readNbt(nbt, updatePacket);
       this.p_set(nbt.getInteger("pset"));
       this.t_off(nbt.getInteger("toff"));
@@ -515,7 +569,8 @@ public class AutoSwitchBlock extends SwitchBlock
       this.ramp(nbt.getInteger("ramp"));
     }
 
-    private int next_higher_interval_setting(int ticks) {
+    private int next_higher_interval_setting(int ticks)
+    {
       if(ticks <  100) return ticks +   5; //  5s   ->  0.25s steps
       if(ticks <  200) return ticks +  10; // 10s   ->  0.5s steps
       if(ticks <  400) return ticks +  20; // 20s   ->  1.0s steps
@@ -525,7 +580,8 @@ public class AutoSwitchBlock extends SwitchBlock
       else             return ticks + 600; //  5min -> 30.0s steps
     }
 
-    private int next_lower_interval_setting(int ticks) {
+    private int next_lower_interval_setting(int ticks)
+    {
       if(ticks <  100) return ticks -   5; //  5s   ->  0.25s steps
       if(ticks <  200) return ticks -  10; // 10s   ->  0.5s steps
       if(ticks <  400) return ticks -  20; // 20s   ->  1.0s steps
@@ -536,10 +592,10 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y) {
+    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y)
+    {
       if(block == null) return false;
       int direction=0, field=0;
-      //System.out.println("xy:" + Double.toString(x) + "," + Double.toString(y));
       direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
       field = ((x>=2) && (x<=4)) ? (1) : (
               ((x>=5) && (x<=7)) ? (2) : (
@@ -576,7 +632,8 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void update() {
+    public void update()
+    {
       if(ModConfig.z_without_timer_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       int p = p_;
@@ -611,5 +668,4 @@ public class AutoSwitchBlock extends SwitchBlock
       }
     }
   }
-
 }

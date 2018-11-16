@@ -473,6 +473,10 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:contactmat3")              public static final ContactSwitchBlock contactSwitch3Block = null;
   @GameRegistry.ObjectHolder("rsgauges:contactmat_rustic2")       public static final ContactSwitchBlock contactSwitchRustic2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:contactmat_rustic3")       public static final ContactSwitchBlock contactSwitchRustic3Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:trapdoorswitch1")          public static final ContactSwitchBlock trapdoorSwitch1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:trapdoorswitch_rustic1")   public static final ContactSwitchBlock trapdoorSwitchRustic1Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:trapdoorswitch_rustic2")   public static final ContactSwitchBlock trapdoorSwitchRustic2Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:trapdoorswitch_rustic3")   public static final ContactSwitchBlock trapdoorSwitchRustic3Block = null;
   private static final ContactSwitchBlock contactSwitches[] = {
     // Door contact mat
     new ContactSwitchBlock("contactmat1",
@@ -498,8 +502,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_DATA_WEAK|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
     ),
     // Glass plate
     new ContactSwitchBlock("contactmat_glass1",
@@ -536,8 +540,8 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.2d/16),(16d/16)),
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
     ),
     // Rustic shock sensor plate
     new ContactSwitchBlock("contactmat_rustic3",
@@ -546,9 +550,72 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
       SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    )
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
+    ),
+
+    // Industrial trap door switch (shock vibration sensitive)
+    new TrapdoorSwitchBlock("trapdoorswitch1",
+      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
+      SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.01f, 3.0f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.01f, 3.0f)
+    ),
+    // Industrial trap door switch (high sensitive shock vibration sensitive)
+    new TrapdoorSwitchBlock("trapdoorswitch2",
+      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
+      SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE|
+      SwitchBlock.SWITCH_CONFIG_CONTACT_WALKSENSE,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f),
+      ModAuxiliaries.RsMaterial.TRAPDOORSWITCH_MATERIAL
+    ),
+    // Industrial trap door switch (item trap door)
+    new TrapdoorSwitchBlock("trapdoorswitch3",
+      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
+      SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
+      SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.05f, 2.5f),
+      null
+    ),
+    // Rustic trap door switch (shock vibration sensitive)
+    new TrapdoorSwitchBlock("trapdoorswitch_rustic1",
+      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
+      SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
+    ),
+    // Rustic trap door switch (high sensitive shock vibration sensitive)
+    new TrapdoorSwitchBlock("trapdoorswitch_rustic2",
+      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
+      SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE|
+      SwitchBlock.SWITCH_CONFIG_CONTACT_WALKSENSE,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f),
+      ModAuxiliaries.RsMaterial.TRAPDOORSWITCH_MATERIAL
+    ),
+    // Rustic trap door switch (item trap door)
+    new TrapdoorSwitchBlock("trapdoorswitch_rustic3",
+      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
+      SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
+      SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      null // new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
+    ),
   };
 
   @GameRegistry.ObjectHolder("rsgauges:automaticswitch1")       public static final AutoSwitchBlock automaticSwitch1Block = null;
@@ -706,7 +773,8 @@ public class ModBlocks
   public static ArrayList<Block> registeredBlocks = new ArrayList<Block>();
 
   // Invoked from CommonProxy.registerBlocks()
-  public static final void registerBlocks(RegistryEvent.Register<Block> event) {
+  public static final void registerBlocks(RegistryEvent.Register<Block> event)
+  {
     // Config based registry selection
     if((!ModConfig.without_gauges) || (!ModConfig.without_indicators) || (!ModConfig.without_blinking_indicators) || (!ModConfig.without_sound_indicators)) {
       GameRegistry.registerTileEntity(GaugeBlock.GaugeTileEntity.class, ModRsGauges.MODID + "_gauge_entity");
@@ -738,7 +806,8 @@ public class ModBlocks
 
   // Invoked from ClientProxy.registerModels()
   @SideOnly(Side.CLIENT)
-  public static final void initModels() {
+  public static final void initModels()
+  {
     for(Block e:registeredBlocks) {
       if(e instanceof RsBlock) ((RsBlock)e).initModel();
       if(e instanceof SensitiveGlassBlock) ((SensitiveGlassBlock)e).initModel();
@@ -746,9 +815,8 @@ public class ModBlocks
   }
 
   // Invoked from CommonProxy.registerItems()
-  public static final void registerItemBlocks(RegistryEvent.Register<Item> event) {
-    for(Block e:registeredBlocks) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName()));
-  }
+  public static final void registerItemBlocks(RegistryEvent.Register<Item> event)
+  { for(Block e:registeredBlocks) event.getRegistry().register(new ItemBlock(e).setRegistryName(e.getRegistryName())); }
 
   /**
    * Encapsulates colour handling for blocks and their item representations.
@@ -771,7 +839,8 @@ public class ModBlocks
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public static void registerBlockColourHandlers(final ColorHandlerEvent.Block event) {
+    public static void registerBlockColourHandlers(final ColorHandlerEvent.Block event)
+    {
       final IBlockColor blockSpecifiedColorHandler = (state, blockAccess, pos, tintIndex) -> {
         return (state==null) ? ((int)0xffffffff) : (((ColorTintSupport)state.getBlock()).getColorMultiplierRGBA(state, blockAccess, pos));
       };
@@ -783,7 +852,8 @@ public class ModBlocks
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public static void registerItemColourHandlers(final ColorHandlerEvent.Item event) {
+    public static void registerItemColourHandlers(final ColorHandlerEvent.Item event)
+    {
       final ItemColors ic = event.getItemColors();
       final IItemColor constantBlockColorHandler = (stack, tintIndex) -> {
         return (((ColorTintSupport)((ItemBlock)stack.getItem()).getBlock()).getColorMultiplierRGBA(null, null, null));

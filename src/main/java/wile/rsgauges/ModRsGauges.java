@@ -33,7 +33,7 @@ public class ModRsGauges
 {
   public static final String MODID = "rsgauges";
   public static final String MODNAME = "Redstone gauges";
-  public static final String MODVERSION = "mc1.12.2-1.0.4b1";
+  public static final String MODVERSION = "mc1.12.2-1.0.4b2";
   public static Logger logger;
 
   @SidedProxy(clientSide = "wile.rsgauges.proxy.ClientProxy", serverSide = "wile.rsgauges.proxy.ServerProxy")
@@ -43,26 +43,22 @@ public class ModRsGauges
   public static ModRsGauges instance;
 
   @Mod.EventHandler
-  public void preInit(FMLPreInitializationEvent event) {
-    logger = event.getModLog();
-    proxy.preInit(event);
-  }
+  public void preInit(FMLPreInitializationEvent event)
+  { logger = event.getModLog(); proxy.preInit(event); }
 
   @Mod.EventHandler
-  public void init(FMLInitializationEvent event) {
-    proxy.init(event);
-  }
+  public void init(FMLInitializationEvent event)
+  { proxy.init(event); }
 
   @Mod.EventHandler
-  public void postInit(FMLPostInitializationEvent event) {
-    ModConfig.onPostInit(event);
-    proxy.postInit(event);
-  }
+  public void postInit(FMLPostInitializationEvent event)
+  { ModConfig.onPostInit(event); proxy.postInit(event); }
 
-  public static final CreativeTabs CREATIVE_TAB_RSGAUGES = (new CreativeTabs("tabrsgauges") {
+  public static final CreativeTabs CREATIVE_TAB_RSGAUGES = (new CreativeTabs("tabrsgauges"){
     @Override
     @SideOnly(Side.CLIENT)
-    public ItemStack getTabIconItem() { return new ItemStack((ModBlocks.flatgauge1Block != null) ? (ModBlocks.flatgauge1Block) : (Blocks.LEVER)); }
+    public ItemStack getTabIconItem()
+    { return new ItemStack((ModBlocks.flatgauge1Block != null) ? (ModBlocks.flatgauge1Block) : (Blocks.LEVER)); }
   });
 
 }

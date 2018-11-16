@@ -14,6 +14,7 @@ import wile.rsgauges.ModResources;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import wile.rsgauges.blocks.RsBlock;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,21 +35,21 @@ import java.util.List;
 
 public class ContactSwitchBlock extends SwitchBlock
 {
+  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
+  { super(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, material); }
 
-  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
-    super(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound);
-  }
+  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, null); }
 
-  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound) {
-    super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound);
-  }
+  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  { this(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound, null); }
 
-  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config) {
-    super(registryName, unrotatedBB, config);
-  }
+  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config)
+  { this(registryName, unrotatedBB, null, config, null, null, null); }
 
   @Override
-  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+  {
     if(world.isRemote) return true;
     ContactSwitchBlock.ContactSwitchTileEntity te = getTe(world, pos); if(te == null) return true;
     te.click_config(null);
@@ -61,28 +62,52 @@ public class ContactSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+  public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
+  {
     if((side != (state.getValue(FACING).getOpposite())) && (side != EnumFacing.UP)) return 0;
     ContactSwitchBlock.ContactSwitchTileEntity te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, false);
   }
 
   @Override
-  public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+  public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
+  {
     if((side != (state.getValue(FACING).getOpposite())) && (side != EnumFacing.UP)) return 0;
     SwitchBlock.SwitchTileEntity te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, true);
   }
 
   @Override
-  public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-    return (side==null) || ((side)==(EnumFacing.UP)) || ((side)==(state.getValue(FACING).getOpposite()));
+  public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side)
+  { return (side==null) || ((side)==(EnumFacing.UP)) || ((side)==(state.getValue(FACING).getOpposite())); }
+
+  @Override
+  public void onFallenUpon(World world, BlockPos pos, Entity entity, float distance)
+  {
+    if(((config & SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE)!=0)) onEntityCollided(world, pos, world.getBlockState(pos), entity, new AxisAlignedBB(pos, pos.add(1,2,1)));
+    super.onFallenUpon(world, pos, entity, distance);
   }
 
   @Override
-  public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+  public void onEntityWalk(World world, BlockPos pos, Entity entity)
+  {
     if(world.isRemote) return;
-    if(((config & SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE)!=0) && (entity.fallDistance < 0.5)) return;
+    if(((config & SWITCH_CONFIG_CONTACT_WALKSENSE)!=0) && (!entity.isSneaking())) {
+      onEntityCollided(world, pos, world.getBlockState(pos), entity, new AxisAlignedBB(pos, pos.add(1,2,1)));
+    }
+  }
+
+  @Override
+  public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
+  {
+    if((world.isRemote) || (state==null)) return;
+    if(((config & SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE)!=0) && (entity.fallDistance < 0.2)) return;
+    onEntityCollided(world, pos, state, entity, new AxisAlignedBB(pos, pos.add(1,1,1)));
+  }
+
+  protected void onEntityCollided(World world, BlockPos pos, IBlockState state, Entity entity, AxisAlignedBB detectionVolume)
+  {
+    if((world.isRemote) || (state==null)) return;
     ContactSwitchBlock.ContactSwitchTileEntity te = getTe(world, pos); if(te == null) return;
     boolean active = false;
     boolean powered = state.getValue(POWERED);
@@ -90,7 +115,7 @@ public class ContactSwitchBlock extends SwitchBlock
       active = true; // anyway on at the next update.
     } else {
       @SuppressWarnings("unchecked")
-      List<Entity> hits = world.getEntitiesWithinAABB((Class<Entity>)te.filter_class(), new AxisAlignedBB(pos, pos.add(1,1,1)));
+      List<Entity> hits = world.getEntitiesWithinAABB((Class<Entity>)te.filter_class(), detectionVolume);
       if(hits.size() >= te.entity_count_threshold()) {
         if(te.high_sensitivity()) {
           active = true;
@@ -114,10 +139,12 @@ public class ContactSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public TileEntity createTileEntity(World world, IBlockState state) { return new ContactSwitchBlock.ContactSwitchTileEntity(); }
+  public TileEntity createTileEntity(World world, IBlockState state)
+  { return new ContactSwitchBlock.ContactSwitchTileEntity(); }
 
   @Override
-  public ContactSwitchBlock.ContactSwitchTileEntity getTe(World world, BlockPos pos) {
+  public ContactSwitchBlock.ContactSwitchTileEntity getTe(World world, BlockPos pos)
+  {
     TileEntity te = world.getTileEntity(pos);
     if((!(te instanceof ContactSwitchBlock.ContactSwitchTileEntity))) return null;
     return (ContactSwitchBlock.ContactSwitchTileEntity)te;
@@ -135,16 +162,30 @@ public class ContactSwitchBlock extends SwitchBlock
     private int count_threshold_ = 1;
     private int filter_ = 0;
 
-    public int filter() { return filter_; }
-    public void filter(int sel) { filter_ = (sel<0) ? 0 : (sel >= filter_classes.length) ? (filter_classes.length-1) : sel; }
-    public Class<?> filter_class() { return (filter_<=0) ? (filter_classes[0]) : ((filter_ >= filter_classes.length) ? (filter_classes[filter_classes.length-1]) : filter_classes[filter_]); }
-    public boolean high_sensitivity() { return high_sensitivity_; }
-    public void high_sensitivity(boolean sel) { high_sensitivity_ = sel; }
-    public int entity_count_threshold() { return count_threshold_; }
-    public void entity_count_threshold(int sel) { count_threshold_ = ((sel<1) ? 1 : ((sel>=max_entity_count)) ? max_entity_count : sel); }
+    public int filter()
+    { return filter_; }
+
+    public void filter(int sel)
+    { filter_ = (sel<0) ? 0 : (sel >= filter_classes.length) ? (filter_classes.length-1) : sel; }
+
+    public Class<?> filter_class()
+    { return (filter_<=0) ? (filter_classes[0]) : ((filter_ >= filter_classes.length) ? (filter_classes[filter_classes.length-1]) : filter_classes[filter_]); }
+
+    public boolean high_sensitivity()
+    { return high_sensitivity_; }
+
+    public void high_sensitivity(boolean sel)
+    { high_sensitivity_ = sel; }
+
+    public int entity_count_threshold()
+    { return count_threshold_; }
+
+    public void entity_count_threshold(int sel)
+    { count_threshold_ = ((sel<1) ? 1 : ((sel>=max_entity_count)) ? max_entity_count : sel); }
 
     @Override
-    public void writeNbt(NBTTagCompound nbt, boolean updatePacket) {
+    public void writeNbt(NBTTagCompound nbt, boolean updatePacket)
+    {
       super.writeNbt(nbt, updatePacket);
       nbt.setInteger("filter", filter());
       nbt.setBoolean("highsensitive", high_sensitivity());
@@ -152,7 +193,8 @@ public class ContactSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {
+    public void readNbt(NBTTagCompound nbt, boolean updatePacket)
+    {
       super.readNbt(nbt, updatePacket);
       this.filter(nbt.getInteger("filter"));
       this.high_sensitivity(nbt.getBoolean("highsensitive"));
@@ -160,13 +202,14 @@ public class ContactSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void reset() { super.reset(); filter_=0; count_threshold_=1; high_sensitivity_=false; }
+    public void reset()
+    { super.reset(); filter_=0; count_threshold_=1; high_sensitivity_=false; }
 
     @Override
-    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y) {
+    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y)
+    {
       if(block == null) return false;
       int direction=0, field=0;
-      // System.out.println("xy:" + Double.toString(x) + "," + Double.toString(y));
       if((block.config & (SWITCH_CONFIG_FLOOR_MOUNT)) != 0) {
         direction = ((y>=13) && (y<=15)) ? (1) : (((y>=10) && (y<=12)) ? (-1) : (0));
         field = ((x>=9.5) && (x<=10.1)) ? (1) : (
