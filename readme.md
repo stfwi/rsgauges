@@ -132,6 +132,8 @@ reasons:
 ----
 ## Revision history
 
+    - v1.0.4    [R] Release based on v1.0.4b2.
+
     - v1.0.4b2  [A] Added industrial shock sensitive contact mat (pulses when
                     something falls upon).
                 [A] Added rustic shock sensitive contact plate (pulses when
