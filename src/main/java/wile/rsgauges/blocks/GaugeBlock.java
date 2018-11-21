@@ -142,7 +142,7 @@ public class GaugeBlock extends RsBlock
     private long trigger_timer_ = 0;
     private int power_ = 0;
     private boolean force_off_ = false;
-    private IBlockState lastState = null;
+    private IBlockState last_state_ = null;
 
     public int power()
     { return this.power_; }
@@ -167,8 +167,8 @@ public class GaugeBlock extends RsBlock
       // Client re-render on NBT power change
       if(updatePacket && (world!=null) && (world.isRemote)) {
         final IBlockState state = world.getBlockState(pos).withProperty(POWER, power());
-        if(lastState != state) {
-          lastState = state;
+        if(last_state_ != state) {
+          last_state_ = state;
           if(state != null) {
             world.setBlockState(pos, state, 16);
             world.markBlockRangeForRenderUpdate(pos, pos);
@@ -186,10 +186,8 @@ public class GaugeBlock extends RsBlock
         IBlockState state = world.getBlockState(pos);
         final GaugeBlock block = (GaugeBlock) state.getBlock();
         final BlockPos pos = getPos();
-        ////// >>> I have to get this somehow client-side only, its a waste of bandwidth and server CPU
         force_off_ = (block.blinkInterval > 0) && ((System.currentTimeMillis() % block.blinkInterval) > (block.blinkInterval/2));
         if(block.blinkInterval > 0) trigger_timer_ = 5;
-        ////// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         {
           final BlockPos neighbourPos = pos.offset((EnumFacing)state.getValue(GaugeBlock.FACING), -1);
           if(!world.isBlockLoaded(neighbourPos)) return; // Gauge is placed on a chunk boundary, don't forge loading of neighbour chunk.

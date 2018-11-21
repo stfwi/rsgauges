@@ -137,29 +137,34 @@ public class ModBlocks
     // Rotary machine switch
     new SwitchBlock("bistableswitch1",
       new AxisAlignedBB((4.25d/16),(4.25d/16),(0d/16),(11.75d/16),(11.75d/16),(0.80d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Contact lever switch
     new SwitchBlock("bistableswitch2",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(14d/16),(1.5d/16)),
       new AxisAlignedBB((6d/16),(2d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // two-button machine switch
     new SwitchBlock("bistableswitch3",
       new AxisAlignedBB((4d/16),(4d/16),(0d/16),(12d/16),(12d/16),(1d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Light flip switch
     new SwitchBlock("bistableswitch4",
       new AxisAlignedBB((7d/16),(6d/16),(0d/16),(9d/16),(10d/16),(1.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // ESTOP button
     new SwitchBlock("bistableswitch5",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)),
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)),
       SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
       SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE_OFF
     ),
     // Hopper blocking switch
@@ -167,6 +172,7 @@ public class ModBlocks
       new AxisAlignedBB((4.8d/16),(10d/16),(0d/16), (11.2d/16),(11d/16),(6d/16)),
       new AxisAlignedBB((4.8d/16),(10d/16),(0d/16), (11.2d/16),(11d/16),(3d/16)),
       SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
       SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE|SwitchBlock.SWITCH_DATA_WEAK
     ),
     // mechanical rotary lever
@@ -174,100 +180,117 @@ public class ModBlocks
       new AxisAlignedBB((2.5d/16),(9.5d/16),(0d/16), (12.3d/16),(13d/16),(2.7d/16)),
       new AxisAlignedBB((8.7d/16),( 3d/16),(0d/16), (12.3d/16),(13d/16),(2.7d/16)),
       SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
       SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
     ),
     // mechanical lever
     new SwitchBlock("bistableswitch8",
       new AxisAlignedBB((6.5d/16),(6.5d/16),(0d/16), (9.7d/16),(14.0d/16),(3d/16)),
       new AxisAlignedBB((6.5d/16),(5.0d/16),(0d/16), (9.7d/16),(12.5d/16),(3d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy gold decorated lever
     new SwitchBlock("bistableswitch_oldfancy1",
       new AxisAlignedBB((6d/16),(6.5d/16),(0d/16), (10.3d/16),(13.5d/16),(4.5d/16)),
       new AxisAlignedBB((6d/16),(3.5d/16),(0d/16), (10.3d/16),(10.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy angular lever
     new SwitchBlock("bistableswitch_oldfancy2",
       new AxisAlignedBB((2.5d/16),(6.0d/16),(0d/16), (9.7d/16),(10.0d/16),(4.5d/16)),
       new AxisAlignedBB((4.5d/16),(3.5d/16),(0d/16), (9.2d/16),(10.0d/16),(4.5d/16)),
       SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
       SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
     ),
     // Old fancy bent lever
     new SwitchBlock("bistableswitch_oldfancy3",
       new AxisAlignedBB((4.5d/16),(5.0d/16),(0d/16), (12.0d/16),(11.0d/16),(4.5d/16)),
       new AxisAlignedBB((4.5d/16),(5.0d/16),(0d/16), (12.0d/16),(11.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy gold decorated manual slide sphere connector
     new SwitchBlock("bistableswitch_oldfancy4",
       new AxisAlignedBB((5.0d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy gold decorated rotary sphere connector
     new SwitchBlock("bistableswitch_oldfancy5",
       new AxisAlignedBB((5.0d/16),(5.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
       new AxisAlignedBB((5.0d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy gold decorated rotary sphere connector 2
     new SwitchBlock("bistableswitch_oldfancy6",
       new AxisAlignedBB((5.0d/16),(5.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy gold decorated manual contactor
     new SwitchBlock("bistableswitch_oldfancy7",
       new AxisAlignedBB((2.0d/16),(6.0d/16),(0d/16), (11.7d/16),(14.0d/16),(4.5d/16)),
       new AxisAlignedBB((3.5d/16),(3.5d/16),(0d/16), (11.2d/16),(14.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic lever 1
     new SwitchBlock("bistableswitch_rustic1",
       new AxisAlignedBB((6d/16),(5.0d/16),(0d/16), (10.3d/16),(15.0d/16),(4.5d/16)),
       new AxisAlignedBB((6d/16),(2.0d/16),(0d/16), (10.3d/16),(11.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic lever 2 (bolted)
     new SwitchBlock("bistableswitch_rustic2",
       new AxisAlignedBB((4d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
       new AxisAlignedBB((4d/16),(4.0d/16),(0d/16), (13.0d/16),(10.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic lever 3 (big angular)
     new SwitchBlock("bistableswitch_rustic3",
       new AxisAlignedBB((0.2d/16),(10.0d/16),(0d/16), (13.5d/16),(15.0d/16),(4.5d/16)),
       new AxisAlignedBB((5.5d/16),( 2.0d/16),(0d/16), (13.5d/16),(15.0d/16),(4.5d/16)),
       SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
       SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
     ),
     // Rustic lever 4 (counter weighted rotary lever)
     new SwitchBlock("bistableswitch_rustic4",
       new AxisAlignedBB((0.5d/16),(11.0d/16),(0d/16), (14.0d/16),(15.0d/16),(4.5d/16)),
       SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
       SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
     ),
     // Rustic lever 5
     new SwitchBlock("bistableswitch_rustic5",
       new AxisAlignedBB((3.5d/16),(6.0d/16),(0d/16), (12.5d/16),(11.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic lever 6 (latch slide)
     new SwitchBlock("bistableswitch_rustic6",
       new AxisAlignedBB((3d/16),(6.0d/16),(0d/16), (13.0d/16),(12.0d/16),(4.5d/16)),
-      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic lever 7 (The Nail)
     new SwitchBlock("bistableswitch_rustic7",
       new AxisAlignedBB((6.0d/16),(7.0d/16),(0d/16), (9.0d/16),(10.0d/16),(3.0d/16)),
       SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
       SwitchBlock.SWITCH_CONFIG_HOPPER_MOUNTBALE
     ),
     // Thin star shaped glass switch
     new SwitchBlock("bistableswitch_glass1",
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
       SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
       SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
       SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
     ),
@@ -275,6 +298,7 @@ public class ModBlocks
     new SwitchBlock("bistableswitch_glass2",
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
       SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
       SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
       SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
     )
@@ -307,42 +331,48 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Fenced round machine pulse switch
     new SwitchBlock("pulseswitch2",
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)),
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Mechanical spring reset pull handle
     new SwitchBlock("pulseswitch3",
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(2d/16)),
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Arrow target
     new SwitchBlock("arrowtarget",
       new AxisAlignedBB((5d/16),(5d/16),(0d/16),(11d/16),(11d/16),(1d/16)),
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
       SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Mechanical spring reset push button
     new SwitchBlock("pulseswitch5",
       new AxisAlignedBB((5.5d/16),(0.5d/16),(0d/16),(10.5d/16),(5.0d/16),(4d/16)),
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Retro double pole switch
     new SwitchBlock("pulseswitch6",
       new AxisAlignedBB((7d/16),(6d/16),(0d/16),(12d/16),(10d/16),(4d/16)),
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy (golden decorated) button
     new SwitchBlock("pulseswitch_oldfancy1",
@@ -350,7 +380,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy (golden decorated) chain pulse switch
     new SwitchBlock("pulseswitch_oldfancy2",
@@ -358,7 +389,8 @@ public class ModBlocks
       new AxisAlignedBB((6.5d/16),(3.8d/16),(0d/16),(9.5d/16),(12d/16),(4d/16)),
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy (golden decorated) crank
     new SwitchBlock("pulseswitch_oldfancy3",
@@ -367,7 +399,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Old fancy (golden decorated) tiny button
     new SwitchBlock("pulseswitch_oldfancy4",
@@ -375,7 +408,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic button 1
     new SwitchBlock("pulseswitch_rustic1",
@@ -383,7 +417,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic button 2 (bolted)
     new SwitchBlock("pulseswitch_rustic2",
@@ -391,7 +426,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE
+      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic button 3 (pull chain)
     new SwitchBlock("pulseswitch_rustic3",
@@ -399,7 +435,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic button 4 (weight reset pull chain)
     new SwitchBlock("pulseswitch_rustic4",
@@ -407,7 +444,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic button 5 (pull handle)
     new SwitchBlock("pulseswitch_rustic5",
@@ -415,7 +453,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic button 6 (handle)
     new SwitchBlock("pulseswitch_rustic6",
@@ -423,7 +462,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Rustic button 7 (pull nail)
     new SwitchBlock("pulseswitch_rustic7",
@@ -431,7 +471,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE
+      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Thin star shaped glass button
     new SwitchBlock("pulseswitch_glass1",
@@ -441,7 +482,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
       SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
+      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Thin small star shaped glass button
     new SwitchBlock("pulseswitch_glass2",
@@ -451,7 +493,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
       SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
+      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     ),
     // Glass touch button
     new SwitchBlock("pulseswitch_glass3",
@@ -461,7 +504,8 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
       SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
       SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT
+      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
     )
   };
 
@@ -483,7 +527,8 @@ public class ModBlocks
       new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.5d/16),(12.5d/16)),
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_DATA_WEAK|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -491,7 +536,8 @@ public class ModBlocks
     new ContactSwitchBlock("contactmat2",
       new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)),
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE,
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -501,7 +547,8 @@ public class ModBlocks
       new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.2d/16),(12.5d/16)),
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_DATA_WEAK|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
     ),
@@ -511,7 +558,7 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
-      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
     ),
@@ -521,7 +568,7 @@ public class ModBlocks
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
-      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+      SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
     ),
@@ -530,7 +577,7 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)),
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE,
+      SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -539,7 +586,8 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)),
       new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.2d/16),(16d/16)),
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE,
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
     ),
@@ -549,7 +597,7 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.2d/16),(16d/16)),
       SwitchBlock.SWITCH_CONFIG_FLOOR_MOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
       SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE,
+      SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
     ),
@@ -560,9 +608,10 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
       SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.01f, 3.0f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.01f, 3.0f)
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 3.0f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f)
     ),
     // Industrial trap door switch (high sensitive shock vibration sensitive)
     new TrapdoorSwitchBlock("trapdoorswitch2",
@@ -570,8 +619,9 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
       SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE|
-      SwitchBlock.SWITCH_CONFIG_CONTACT_WALKSENSE,
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      SwitchBlock.SWITCH_CONFIG_HIGH_SENSITIVE,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f),
       ModAuxiliaries.RsMaterial.TRAPDOORSWITCH_MATERIAL
@@ -581,7 +631,8 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
       new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
       SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
-      SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.05f, 2.5f),
       null
     ),
@@ -591,7 +642,8 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
       SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE,
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
     ),
@@ -601,8 +653,9 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
       SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE|
-      SwitchBlock.SWITCH_CONFIG_CONTACT_WALKSENSE,
+      SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_HIGH_SENSITIVE|
+      SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f),
       ModAuxiliaries.RsMaterial.TRAPDOORSWITCH_MATERIAL
@@ -612,7 +665,8 @@ public class ModBlocks
       new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
       new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
       SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
-      SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
       null // new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
     ),
@@ -635,7 +689,7 @@ public class ModBlocks
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_VOLUME|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -644,7 +698,7 @@ public class ModBlocks
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_LINEAR|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -653,7 +707,7 @@ public class ModBlocks
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_LIGHT|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -662,7 +716,7 @@ public class ModBlocks
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_TIMER_DAYTIME|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -671,7 +725,7 @@ public class ModBlocks
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_RAIN|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -680,7 +734,7 @@ public class ModBlocks
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_LIGHTNING|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -689,7 +743,7 @@ public class ModBlocks
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_TIMER_INTERVAL|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
     ),
@@ -698,7 +752,8 @@ public class ModBlocks
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_VOLUME|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
     ),
@@ -707,7 +762,8 @@ public class ModBlocks
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_SENSOR_LINEAR|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
     ),
@@ -716,7 +772,8 @@ public class ModBlocks
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_TIMER_DAYTIME|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
     ),
@@ -725,7 +782,8 @@ public class ModBlocks
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
       SwitchBlock.SWITCH_CONFIG_AUTOMATIC|SwitchBlock.SWITCH_CONFIG_TIMER_INTERVAL|
       SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT,
+      SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
     ),

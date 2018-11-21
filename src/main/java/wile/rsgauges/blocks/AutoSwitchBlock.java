@@ -13,6 +13,7 @@ import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModResources;
 import wile.rsgauges.blocks.RsBlock;
+import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.World;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -41,6 +42,19 @@ public class AutoSwitchBlock extends SwitchBlock
 
   public AutoSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound); }
+
+  @Override
+  public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final EntityPlayer player)
+  {
+    if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote)) return false;
+    if((config & (SWITCH_CONFIG_TIMER_INTERVAL))==0) return false;
+    IBlockState state = world.getBlockState(pos);
+    if((state == null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return false;
+    AutoSwitchBlock.AutoSwitchTileEntity te = getTe(world, pos);
+    if((te==null) || (!te.check_link_request(link))) return false;
+    te.updateSwitchState(state, this, !state.getValue(POWERED), 0);
+    return true;
+  }
 
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
@@ -100,17 +114,28 @@ public class AutoSwitchBlock extends SwitchBlock
       if(active) {
         this.off_timer_reset(hold_time);
         if(!state.getValue(POWERED)) {
-          world.setBlockState(pos, state.withProperty(POWERED, true), 1|2);
+          if(this instanceof IntervalTimerSwitchTileEntity) ((IntervalTimerSwitchTileEntity)this).restart();
+          world.setBlockState(pos, (state=state.withProperty(POWERED, true)), 1|2);
           block.power_on_sound.play(world, pos);
           world.notifyNeighborsOfStateChange(pos, block, false);
           world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), block, false);
+          if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
+            if(!activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+              ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+            }
+          }
         }
       } else if(state.getValue(POWERED)) {
         if(this.off_timer_tick() <= 0) {
-          world.setBlockState(pos, state.withProperty(POWERED, false));
+          world.setBlockState(pos, (state=state.withProperty(POWERED, false)));
           block.power_off_sound.play(world, pos);
           world.notifyNeighborsOfStateChange(pos, block, false);
           world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), block, false);
+          if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
+            if(!activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+              ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+            }
+          }
         }
       }
     }
@@ -512,6 +537,7 @@ public class AutoSwitchBlock extends SwitchBlock
   {
     private static final int ramp_max = 5;
     private static final int t_max = 20 * 60 * 10; // 10min @20clk/s
+    private static final int t_min =  5;           // 0.25s @20clk/s
 
     private int p_set_  = 15;
     private int t_on_  = 20;
@@ -520,6 +546,9 @@ public class AutoSwitchBlock extends SwitchBlock
     private int update_timer_ = 0;
     private int p_ = 0;
     private boolean s_ = false;
+
+    public void restart()
+    { update_timer_=0; p_=0; s_=false; }
 
     public int p_set()
     { return p_set_; }
@@ -571,24 +600,26 @@ public class AutoSwitchBlock extends SwitchBlock
 
     private int next_higher_interval_setting(int ticks)
     {
-      if(ticks <  100) return ticks +   5; //  5s   ->  0.25s steps
-      if(ticks <  200) return ticks +  10; // 10s   ->  0.5s steps
-      if(ticks <  400) return ticks +  20; // 20s   ->  1.0s steps
-      if(ticks <  600) return ticks +  40; // 30s   ->  2.0s steps
-      if(ticks <  800) return ticks + 100; // 40s   ->  5.0s steps
-      if(ticks < 2400) return ticks + 200; //  2min -> 10.0s steps
-      else             return ticks + 600; //  5min -> 30.0s steps
+      if     (ticks <  100) ticks +=   5; //  5s   ->  0.25s steps
+      else if(ticks <  200) ticks +=  10; // 10s   ->  0.5s steps
+      else if(ticks <  400) ticks +=  20; // 20s   ->  1.0s steps
+      else if(ticks <  600) ticks +=  40; // 30s   ->  2.0s steps
+      else if(ticks <  800) ticks += 100; // 40s   ->  5.0s steps
+      else if(ticks < 2400) ticks += 200; //  2min -> 10.0s steps
+      else                  ticks += 600; //  5min -> 30.0s steps
+      return (ticks > t_max) ? (t_max) : (ticks);
     }
 
     private int next_lower_interval_setting(int ticks)
     {
-      if(ticks <  100) return ticks -   5; //  5s   ->  0.25s steps
-      if(ticks <  200) return ticks -  10; // 10s   ->  0.5s steps
-      if(ticks <  400) return ticks -  20; // 20s   ->  1.0s steps
-      if(ticks <  600) return ticks -  40; // 30s   ->  2.0s steps
-      if(ticks <  800) return ticks - 100; // 40s   ->  5.0s steps
-      if(ticks < 2400) return ticks - 200; //  2min -> 10.0s steps
-      else             return ticks - 600; //  5min -> 30.0s steps
+      if     (ticks <  100) ticks -=   5; //  5s   ->  0.25s steps
+      else if(ticks <  200) ticks -=  10; // 10s   ->  0.5s steps
+      else if(ticks <  400) ticks -=  20; // 20s   ->  1.0s steps
+      else if(ticks <  600) ticks -=  40; // 30s   ->  2.0s steps
+      else if(ticks <  800) ticks -= 100; // 40s   ->  5.0s steps
+      else if(ticks < 2400) ticks -= 200; //  2min -> 10.0s steps
+      else                  ticks -= 600; //  5min -> 30.0s steps
+      return (ticks < t_min) ? (t_min) : (ticks);
     }
 
     @Override
@@ -632,13 +663,17 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
+    public int power(IBlockState state, boolean strong)
+    { return (nooutput() || (!state.getValue(POWERED)) || ((strong && weak())) ? (0) : on_power()); }
+
+    @Override
     public void update()
     {
       if(ModConfig.z_without_timer_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       int p = p_;
       if((t_on()<=0) || (t_off()<=0) || (p_set() <= 0)) {
-        p_ = (t_on()>0) ? p_set() : 0;
+        p_ = 0;
         update_timer_ = 20;
       } else if(!s_) {
         // switching on
@@ -647,7 +682,7 @@ public class AutoSwitchBlock extends SwitchBlock
           p_ = p_set();
           s_ = true;
         } else {
-          update_timer_ = 4; // ramping
+          update_timer_ = 5; // ramping @ 0.25s
         }
       } else {
         // switching off
@@ -656,13 +691,16 @@ public class AutoSwitchBlock extends SwitchBlock
           p_ = 0;
           s_ = false;
         } else {
-          update_timer_ = 4;
+          update_timer_ = 5; // ramping @ 0.25s
         }
       }
       if(p != p_) {
-        this.on_power((this.inverted() ? (15-p_) : (p_)));
+        on_power((inverted() ? (15-p_) : (p_)));
         IBlockState state = getWorld().getBlockState(getPos());
-        if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock)) || (!state.getValue(POWERED))) return;
+        if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock)) || (!state.getValue(POWERED))) {
+          update_timer_ = 200 + ((int)Math.random() * 10);
+          on_power(inverted() ? (15) : (0));
+        }
         world.notifyNeighborsOfStateChange(pos, state.getBlock(), false);
         world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), state.getBlock(), false);
       }

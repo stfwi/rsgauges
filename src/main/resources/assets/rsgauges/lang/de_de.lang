@@ -248,4 +248,28 @@ rsgauges.switchconfig.touchcontactmat.entity_filter.objects=Gegenstände
 rsgauges.switchconfig.touchcontactmat.output_power=Power: %1$s
 
 #
+# Items
+#
+item.rsgauges.switchlink_pearl.name=Link-Perle
+
+#
+# Switch linking
+#
+rsgauges.switchlinking.switchlink_pearl.tooltip.linkedblock=Verlinkt mit: %1$s.
+rsgauges.switchlinking.switchlink_pearl.tooltip.linkeddistance=Zielschalter ist %1$s Blöcke entfernt.
+rsgauges.switchlinking.switchlink_pearl.tooltip.toofaraway=(ist zu weit weg)
+rsgauges.switchlinking.switchlink_pearl.use.toofaraway=Der Zielschalter ist zu weit weg von dir
+rsgauges.switchlinking.switchlink_pearl.use.targetgone=Der Zielschalter wurde versetzt oder entfernt
+rsgauges.switchlinking.target_assign.ok=Zielschalter gemerkt
+rsgauges.switchlinking.target_assign.error_notarget=Dieser Schalter kann nicht durch Links aktiviert werden
+rsgauges.switchlinking.source_assign.ok=Link-Perle eingestöpselt
+rsgauges.switchlinking.source_assign.error_nosource=Dieser Schalter kann keinen Link aktivieren
+rsgauges.switchlinking.source_assign.error_alreadylinked=Der Schalter kennt dieses Link-Ziel schon
+rsgauges.switchlinking.source_assign.error_toofaraway=Zielschalter ist zu weit weg, das würde nicht klappen
+rsgauges.switchlinking.source_assign.error_failed=Irgendwie mag die Link-Perle diesen Schalter nicht
+rsgauges.switchlinking.relayconfig.confval0=Aktiviert wie der Ausgang des Quellschalters
+rsgauges.switchlinking.relayconfig.confval1=Aktiviert beim Einschalten des Quellschalters
+rsgauges.switchlinking.relayconfig.confval2=Aktiviert beim Ausschalten des Quellschalters
+rsgauges.switchlinking.relayconfig.confval3=Aktiviert beim Änderung des Quellschalterausgangs
+#
 # EOF

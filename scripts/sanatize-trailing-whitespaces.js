@@ -7,6 +7,7 @@ var file_list = (function() {
   for(var i in ext) ls = ls.concat(fs.find("./src", '*.'+ext[i]));
   for(var i in ls) ls[i] = ls[i].replace(/\\/g,"/");
   ls.sort();
+  ls.push("readme.md");
   return ls;
 })();
 

@@ -102,7 +102,7 @@ public class ModConfig
 
   @Config.Comment("Disable the 'no output' config option for switches.")
   @Config.Name("Without switch 'no output' option")
-  public static boolean without_switch_nooutput = true;
+  public static boolean without_switch_nooutput = false;
 
   @Config.Comment("Disable the status overlay for switches and use chat messages instead.")
   @Config.Name("Testing: Without switch status overlay")
@@ -125,6 +125,15 @@ public class ModConfig
   @Config.Comment("Disable tile entity update() for time based switches (for performance testing only, don't do this at home).")
   @Config.Name("Testing: Without timer switch update")
   public static boolean z_without_timer_switch_update = false;
+
+  @Config.Comment("Disables switch remote linking.")
+  @Config.Name("Testing: Without switch linking")
+  public static boolean z_without_switch_linking = false;
+
+  @Config.Comment("Defines how far you or a link source switch can be away from the target to activate it. " +
+                  "The value 0 means 'no limitation'. Affects server and client side.")
+  @Config.Name("Testing: Max switch linking distance")
+  public static int z_max_switch_linking_distance = 48;
 
   @Config.Comment("Defines a constant light level for sensitive glass on the server, " +
                   "no matter if the block is powered or not. Prevents performance issues " +

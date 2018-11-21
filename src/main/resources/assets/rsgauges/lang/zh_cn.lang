@@ -248,4 +248,28 @@ rsgauges.switchconfig.touchcontactmat.entity_filter.objects=objects
 rsgauges.switchconfig.touchcontactmat.output_power=power: %1$s
 
 #
+# Items
+#
+item.rsgauges.switchlink_pearl.name=Switch link pearl
+
+#
+# Switch linking
+#
+rsgauges.switchlinking.switchlink_pearl.tooltip.linkedblock=Linked to %1$s.
+rsgauges.switchlinking.switchlink_pearl.tooltip.linkeddistance=Target is %1$s blocks away.
+rsgauges.switchlinking.switchlink_pearl.tooltip.toofaraway=(too far away)
+rsgauges.switchlinking.switchlink_pearl.use.toofaraway=Target switch is too far away from you
+rsgauges.switchlinking.switchlink_pearl.use.targetgone=Target switch is broken or relocated
+rsgauges.switchlinking.target_assign.ok=Target switch memorized
+rsgauges.switchlinking.target_assign.error_notarget=This switch cannot be a link target
+rsgauges.switchlinking.source_assign.ok=Link pearl plugged
+rsgauges.switchlinking.source_assign.error_nosource=This switch cannot link to target switches
+rsgauges.switchlinking.source_assign.error_alreadylinked=Already linked to the target of that pearl
+rsgauges.switchlinking.source_assign.error_toofaraway=Target is too far away for this switch
+rsgauges.switchlinking.source_assign.error_failed=Link pearl don't like that switch
+rsgauges.switchlinking.relayconfig.confval0=Trigger activation like source switch.
+rsgauges.switchlinking.relayconfig.confval1=Trigger on source activation.
+rsgauges.switchlinking.relayconfig.confval2=Trigger on source deactivation.
+rsgauges.switchlinking.relayconfig.confval3=Trigger on source change.
+#
 # EOF

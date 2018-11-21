@@ -15,6 +15,7 @@ package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.ModConfig;
+import wile.rsgauges.ModItems;
 import wile.rsgauges.client.JitModelBakery;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
@@ -26,6 +27,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -199,6 +201,13 @@ public abstract class RsBlock extends Block
     }
   }
 
+  @Override
+  public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
+  {
+    onRsBlockDestroyed(state, world, pos);
+    return super.removedByPlayer(state, world, pos, player, willHarvest);
+  }
+
   /**
    * Calculates the actual bounding box form the north-normalised block bounding box and
    * the facing defined in the block state.
@@ -264,6 +273,14 @@ public abstract class RsBlock extends Block
   { return null; }
 
   /**
+   * RsBlock handler before a block gets dropped as item in the world.
+   * Allows actions in the tile entity to happen before the forge/MC
+   * block dropping actions are invoked.
+   */
+  protected void onRsBlockDestroyed(IBlockState state, World world, BlockPos pos)
+  {}
+
+  /**
    * Checks if the changed neighbour is the block where the gauge/switch/device
    * is attached to. If this block cannot hold the device (air, water...), then
    * the device pop off and dropped as item.
@@ -282,8 +299,9 @@ public abstract class RsBlock extends Block
     if(neighborState == null) return false;
     if(((neighborState.getMaterial() == Material.AIR) || neighborState.getMaterial().isLiquid())) {
       if(!world.isRemote) {
-        this.dropBlockAsItem(world, pos, state, 0);
+        onRsBlockDestroyed(state, world, pos);
         world.setBlockToAir(pos);
+        this.dropBlockAsItem(world, pos, state, 0);
       }
       return false;
     }
@@ -298,6 +316,7 @@ public abstract class RsBlock extends Block
   {
     if(canPlaceBlockOnSide(world, pos, this.isWallMount() ? state.getValue(FACING) : EnumFacing.UP)) return true;
     if(world.isRemote) return false;
+    onRsBlockDestroyed(state, world, pos);
     this.dropBlockAsItem(world, pos, state, 0);
     world.setBlockToAir(pos);
     return false;
@@ -357,16 +376,18 @@ public abstract class RsBlock extends Block
   {
     public boolean touch_configured = false;
     public boolean wrenched = false;
-    public int redstone = 0;
+    public Item item = Items.AIR;
+    public int item_count = 0;
     public int dye = -1;
     public double x = 0;
     public double y = 0;
+
 
     @Override
     public String toString()
     {
       return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",touch_configured:" + Boolean.toString(touch_configured)
-          + ",wrenched:" + Boolean.toString(wrenched) + ",redstone:" + Integer.toString(redstone) + ",dye:" + Integer.toString(dye) + "}";
+          + ",wrenched:" + Boolean.toString(wrenched) + ",item_count:" + Integer.toString(item_count) + ",dye:" + Integer.toString(dye) + "}";
     }
 
     public static boolean wrenched(EntityPlayer player)
@@ -386,9 +407,17 @@ public abstract class RsBlock extends Block
       if(!ck.wrenched) {
         final ItemStack item = player.getHeldItemMainhand();
         if(item != null) {
-          if(item.getItem().getRegistryName().getResourcePath().toString().equals("redstone")) {
-            ck.redstone = item.getCount();
+          if(item.getItem() == Items.REDSTONE) {
+            ck.item = Items.REDSTONE;
+            ck.item_count = item.getCount();
+          } else if(item.getItem() == Items.ENDER_PEARL) {
+            ck.item = Items.ENDER_PEARL;
+            ck.item_count = item.getCount();
+          } else if(item.getItem() == ModItems.SWITCH_LINK_PEARL) {
+            ck.item = ModItems.SWITCH_LINK_PEARL;
+            ck.item_count = item.getCount();
           } else {
+            ck.item = Items.DYE;
             ck.dye = DyeUtils.rawMetaFromStack(item);
             if(ck.dye > 15) ck.dye = 15;
           }
