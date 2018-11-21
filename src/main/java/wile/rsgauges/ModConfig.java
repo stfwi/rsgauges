@@ -9,22 +9,17 @@
 **/
 package wile.rsgauges;
 
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import org.apache.logging.log4j.Level;
-import java.io.File;
-
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 
 @Config(modid = ModRsGauges.MODID)
 @Config.LangKey("rsgauges.config.title")
-public class ModConfig {
-
+public class ModConfig
+{
   @Config.Comment("Sample interval of the gauges in ticks. Lower values decrease the display "
                 + "latency for indirect weak power measurements. The value is mainly related "
                 + "to the server side logic. Minor performance impact for values >= 5.")
@@ -50,6 +45,11 @@ public class ModConfig {
   @Config.Name("Without gauges")
   @Config.RequiresMcRestart
   public static boolean without_gauges = false;
+
+  @Config.Comment("Testing: Gauges shall not frequently lookup weak power provided to the block they"
+                + "are attached to.")
+  @Config.Name("Without gauge weak power measurements")
+  public static boolean without_gauge_weak_power_measurement = false;
 
   @Config.Comment("Completely disable all (blinking and steady) indicator lamps/LEDs. Requires restart.")
   @Config.Name("Without indicators")
@@ -104,6 +104,16 @@ public class ModConfig {
   @Config.Name("Without switch 'no output' option")
   public static boolean without_switch_nooutput = true;
 
+  @Config.Comment("Disable the status overlay for switches and use chat messages instead.")
+  @Config.Name("Testing: Without switch status overlay")
+  @Config.RequiresMcRestart
+  public static boolean z_without_switch_status_overlay = false;
+
+  @Config.Comment("Vertial position of the switch status overlay message.")
+  @Config.Name("Testing: Switch status overlay y-position")
+  @Config.RangeDouble(min=0.1, max=0.8)
+  public static double z_switch_status_overlay_y = 0.75f;
+
   @Config.Comment("Disable tile entity update() for detector switches (for performance testing only, don't do this at home).")
   @Config.Name("Testing: Without detector switch update")
   public static boolean z_without_detector_switch_update = false;
@@ -118,13 +128,10 @@ public class ModConfig {
 
   @Config.Comment("Defines a constant light level for sensitive glass on the server, " +
                   "no matter if the block is powered or not. Prevents performance issues " +
-                  "if many sensitive glass blocks are frequently switched on and off. " +
-                  "Set to zero to switch the light level depending on the redstone power " +
-                  "like on the client side. WARNING: this is experimental and may change."
+                  "if many sensitive glass blocks are frequently switched on and off. "
                   )
-  @Config.Name("Sensitive glass light level on server")
-  @Config.RangeInt(min=0, max=15)
-  public static int sensitive_glass_server_light_level = 0;
+  @Config.Name("Constant sensitive glass light level on server")
+  public static boolean sensitive_glass_constant_server_light_level = false;
 
   @Config.Comment("Comma sepatated list of items names that can be used alter configurable blocks of this mod." +
                   "This applies when the display side of the block is right click (activated) with the item in the " +
@@ -143,7 +150,8 @@ public class ModConfig {
 
 
   @Mod.EventBusSubscriber(modid=ModRsGauges.MODID)
-  private static final class EventHandler {
+  private static final class EventHandler
+  {
     @SubscribeEvent
     public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
       if(!event.getModID().equals(ModRsGauges.MODID)) return;
@@ -152,7 +160,10 @@ public class ModConfig {
     }
   }
 
-  public static final void onPostInit(FMLPostInitializationEvent event) { update(); }
+  public static final void onPostInit(FMLPostInitializationEvent event)
+  { update(); }
 
-  private static final void update() {}
+  private static final void update()
+  {}
+
 }

@@ -11,8 +11,8 @@
     "powered": {
       "false":  {},
       "true":   {
-        "model": "rsgauges:bistableswitch_oldfancy6block_s15", 
-        "textures": {} 
+        "model": "rsgauges:bistableswitch_oldfancy6block_s15",
+        "textures": {}
       }
     }
   }

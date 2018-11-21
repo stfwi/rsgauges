@@ -10,7 +10,6 @@
 package wile.rsgauges;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -23,8 +22,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
 import java.util.LinkedList;
 
-public class ModResources {
-
+public class ModResources
+{
   @ObjectHolder("rsgauges:alarm_siren_sound")
   public static final SoundEvent alarm_siren_sound = SoundRegistry.createSoundEvent("alarm_siren_sound");
 
@@ -32,11 +31,12 @@ public class ModResources {
    * Registry event handling for the sounds listed above.
    */
   @Mod.EventBusSubscriber(modid=ModRsGauges.MODID)
-  public static final class SoundRegistry {
-
+  public static final class SoundRegistry
+  {
     private static LinkedList<SoundEvent> created_sounds_ = new LinkedList<SoundEvent>();
 
-    public static SoundEvent createSoundEvent(String name) {
+    public static SoundEvent createSoundEvent(String name)
+    {
       final ResourceLocation rl = new ResourceLocation(ModRsGauges.MODID, name);
       SoundEvent se = new SoundEvent(rl).setRegistryName(rl);
       created_sounds_.push(se);
@@ -44,7 +44,8 @@ public class ModResources {
     }
 
     @SubscribeEvent
-    public static void onRegistryEvent(RegistryEvent.Register<SoundEvent> event) {
+    public static void onRegistryEvent(RegistryEvent.Register<SoundEvent> event)
+    {
       for(SoundEvent se:created_sounds_) {event.getRegistry().register(se);}
       created_sounds_.clear();
     }
@@ -54,7 +55,8 @@ public class ModResources {
    * Block sound player class used in the code, additionally specifying
    * playback parameters for the sound.
    */
-  public static final class BlockSoundEvent {
+  public static final class BlockSoundEvent
+  {
     final SoundEvent se_;
     final float volume_, pitch_;
     public BlockSoundEvent(SoundEvent se, float volume, float pitch) { se_=se; volume_=volume; pitch_=pitch; }
@@ -65,5 +67,4 @@ public class ModResources {
     public float pitch() { return pitch_; }
     public void play(World world, BlockPos pos) { world.playSound((EntityPlayer)null, pos, se_, SoundCategory.BLOCKS, volume_, pitch_); }
   }
-
 }

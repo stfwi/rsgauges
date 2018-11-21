@@ -15,8 +15,8 @@
     "powered": {
       "false":  {},
       "true":   {
-        "model": "rsgauges:pulseswitch2block_s15", 
-        "textures": { "handle": "rsgauges:blocks/indicator/indicator_fg_green_on_texture" } 
+        "model": "rsgauges:pulseswitch2block_s15",
+        "textures": { "handle": "rsgauges:blocks/indicator/indicator_fg_green_on_texture" }
       }
     }
   }

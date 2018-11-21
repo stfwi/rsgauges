@@ -4,7 +4,7 @@
     "model": "rsgauges:bistableswitch8block_s00",
     "textures": {
       "side": "rsgauges:blocks/common/darkmachinemetal",
-      "parts": "rsgauges:blocks/common/darkroughmetal",   
+      "parts": "rsgauges:blocks/common/darkroughmetal",
       "handle": "rsgauges:blocks/common/iestylewood",
       "base": "rsgauges:blocks/common/graymetal"
     }

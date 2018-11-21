@@ -1,7 +1,7 @@
 {
     "type": "minecraft:crafting_shapeless",
-    "result": { "item": "rsgauges:indicator1blink1", "data":0 },    
-    "ingredients": [ 
+    "result": { "item": "rsgauges:indicator1blink1", "data":0 },
+    "ingredients": [
         { "item": "rsgauges:indicator1" },
         { "item": "minecraft:egg" }
     ]

@@ -7,7 +7,7 @@
       "scale":  "rsgauges:blocks/gauge/flatgauge1bg",
       "side":  "rsgauges:blocks/common/darkmachinemetal",
       "bulk":  "rsgauges:blocks/common/lightmachinemetal",
-      "glass":  "rsgauges:blocks/common/cleargrayglass" 
+      "glass":  "rsgauges:blocks/common/cleargrayglass"
     }
   },
   "variants": {

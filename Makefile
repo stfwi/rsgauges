@@ -31,7 +31,7 @@ wildcardr=$(foreach d,$(wildcard $1*),$(call wildcardr,$d/,$2) $(filter $(subst 
 #
 # Targets
 #
-.PHONY: mod init clean clean-all all install texture-infos start-server
+.PHONY: mod init clean clean-all all install sanatize dist start-server
 
 all: clean mod install
 
@@ -62,7 +62,14 @@ install: $(MOD_JAR)
 
 start-server: install
 	@echo "Starting local dedicated server ..."
-	@cd "$(SERVER_INSTALL_DIR)" && java -jar forge-1.12.2-14.23.3.2655-universal.jar &
+	@cd "$(SERVER_INSTALL_DIR)" && java -jar forge-1.12.2-14.23.3.2655-universal.jar nogui
 
-texture-infos:
-	djs scripts/texture-processing.js src/main/resources/assets/rsgauges/textures
+sanatize:
+	@echo "Running sanatising tasks ..."
+	@djs scripts/sanatize-trailing-whitespaces.js
+	@djs scripts/sanatize-version-check.js
+	@djs scripts/sanatize-sync-languages.js
+	@#djs scripts/texture-processing.js src/main/resources/assets/rsgauges/textures
+
+dist: mod
+	@echo "Distribution files ..."
