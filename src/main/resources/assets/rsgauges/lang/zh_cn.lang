@@ -271,5 +271,6 @@ rsgauges.switchlinking.relayconfig.confval0=Trigger activation like source switc
 rsgauges.switchlinking.relayconfig.confval1=Trigger on source activation.
 rsgauges.switchlinking.relayconfig.confval2=Trigger on source deactivation.
 rsgauges.switchlinking.relayconfig.confval3=Trigger on source change.
+rsgauges.switchlinking.relayconfig.confval4=Trigger as source inverse output.
 #
 # EOF

@@ -138,17 +138,25 @@ public class ItemSwitchLinkPearl extends RsItem
   {
     if((world==null) || (player==null) || (pos==null)) return null;
     if((player.inventory==null) || (player.inventory.getCurrentItem()==null) || (player.inventory.getCurrentItem().getItem())!=Items.ENDER_PEARL) return null;
+    final IBlockState state = world.getBlockState(pos);
+    if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return null;
+    final int rl = ((((SwitchBlock)state.getBlock()).config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) ? SwitchLink.SWITCHLINK_RELAY_ACTIVATE : SwitchLink.SWITCHLINK_RELAY_STATE;
     ItemStack stack = new ItemStack(ModItems.SWITCH_LINK_PEARL, player.inventory.getCurrentItem().getCount());
-    stack.setTagCompound(SwitchLink.fromTargetPosition(world, pos).toNbt());
+    stack.setTagCompound(SwitchLink.fromTargetPosition(world, pos).with_relay(rl).toNbt());
     return stack;
   }
 
   public static final ItemStack getCycledRelay(ItemStack stack, World world, BlockPos target_pos)
   {
-    if((stack==null) || (stack.getItem()!=ModItems.SWITCH_LINK_PEARL)) return stack;
+    if((world==null) || (stack==null) || (stack.getItem()!=ModItems.SWITCH_LINK_PEARL)) return stack;
     final SwitchLink current_link = SwitchLink.fromItemStack(stack);
     if(!target_pos.equals(current_link.target_position)) return stack;
-    SwitchLink lnk = current_link.with_relay(current_link.relay()+1);
+    final IBlockState state = world.getBlockState(current_link.target_position);
+    if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return stack;
+    final SwitchBlock block = (SwitchBlock)state.getBlock();
+    int next = current_link.relay()+1;
+    if(((block.config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) && ((next < SwitchLink.SWITCHLINK_RELAY_ACTIVATE) || (next > SwitchLink.SWITCHLINK_RELAY_TOGGLE))) next = SwitchLink.SWITCHLINK_RELAY_ACTIVATE;
+    SwitchLink lnk = current_link.with_relay((next < SwitchLink.SWITCHLINK_RELAY_EOL) ? next : 0);
     if(!lnk.valid) return stack;
     stack.setTagCompound(lnk.toNbt());
     return stack;
@@ -161,11 +169,13 @@ public class ItemSwitchLinkPearl extends RsItem
   public static class SwitchLink
   {
     public static final long SWITCHLINK_CONFIG_DEFAULT          = 0x0000000000000000;
-    public static final long SWITCHLINK_CONFIG_RELAY_MASK       = 0x0000000000000003;
-    public static final int  SWITCHLINK_RELAY_STATE      = 0x0;
-    public static final int  SWITCHLINK_RELAY_ACTIVATE   = 0x1;
-    public static final int  SWITCHLINK_RELAY_DEACTIVATE = 0x2;
-    public static final int  SWITCHLINK_RELAY_TOGGLE     = 0x3;
+    public static final long SWITCHLINK_CONFIG_RELAY_MASK       = 0x0000000000000007;
+    public static final int  SWITCHLINK_RELAY_STATE             = 0x0;
+    public static final int  SWITCHLINK_RELAY_ACTIVATE          = 0x1;
+    public static final int  SWITCHLINK_RELAY_DEACTIVATE        = 0x2;
+    public static final int  SWITCHLINK_RELAY_TOGGLE            = 0x3;
+    public static final int  SWITCHLINK_RELAY_STATE_INV         = 0x4;
+    public static final int  SWITCHLINK_RELAY_EOL               = 0x5;
 
     public static enum RequestResult { OK, NOT_MATCHED, INVALID_LINKDATA, TOO_FAR, BLOCK_UNLOADED, TARGET_GONE, REJECTED } ;
     public final BlockPos target_position;
@@ -189,7 +199,7 @@ public class ItemSwitchLinkPearl extends RsItem
     { return "SwitchLink{pos=" + target_position.toString() + ", block='" + block_name + "', config=" + Long.toString(config)+ "}"; }
 
     public int relay()
-    { return (int)(config & SWITCHLINK_CONFIG_RELAY_MASK); }
+    { final int r=(int)(config & SWITCHLINK_CONFIG_RELAY_MASK); return (r<SWITCHLINK_RELAY_EOL) ? r : 0; }
 
     public SwitchLink with_relay(int conf)
     { return new SwitchLink(target_position, block_name, (config & ~SWITCHLINK_CONFIG_RELAY_MASK)|(conf & SWITCHLINK_CONFIG_RELAY_MASK)); }
@@ -256,8 +266,10 @@ public class ItemSwitchLinkPearl extends RsItem
       // Match incoming request to the link config for requests coming from source switches
       if(player==null) {
         switch(relay()) {
-          case SWITCHLINK_RELAY_STATE: {
-            final boolean powered = target_state.getValue(SwitchBlock.POWERED);
+          case SWITCHLINK_RELAY_STATE:
+          case SWITCHLINK_RELAY_STATE_INV: {
+            boolean powered = target_state.getValue(SwitchBlock.POWERED);
+            if(relay()==SWITCHLINK_RELAY_STATE_INV) powered = !powered;
             if(req == SWITCHLINK_RELAY_ACTIVATE) {
               if(powered) return RequestResult.NOT_MATCHED;
             } else if(req == SWITCHLINK_RELAY_DEACTIVATE) {

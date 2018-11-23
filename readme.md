@@ -137,6 +137,11 @@ reasons:
 ----
 ## Revision history
 
+    - v1.0.5b2  [F] Debounced link pearl cycling when creating a link pearl
+                    from an Ender pearl.
+
+                [A] Added inverse output state switch linking feature.
+
     - v1.0.5b1  [A] Added switch linking subsystem.
                 [A] Added switch link pearl, used to link and remote activate
                     switches. Created by left-clicking a switch with an Ender

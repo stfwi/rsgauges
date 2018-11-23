@@ -329,7 +329,8 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
       }
     } else if(ck.item==Items.ENDER_PEARL) {
       if(!ModConfig.z_without_switch_linking) {
-        if((((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_LINK_TARGET_SUPPORT) == 0) {
+        final SwitchBlock block = (SwitchBlock)state.getBlock();
+        if((block.config & SWITCH_CONFIG_LINK_TARGET_SUPPORT) == 0) {
           ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.target_assign.error_notarget", null));
           ModResources.BlockSoundEvents.SWITCHLINK_CANNOT_LINK_THAT.play(world, pos);
         } else {
@@ -337,6 +338,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
           if(link_stack==null) {
             ModResources.BlockSoundEvents.SWITCHLINK_CANNOT_LINK_THAT.play(world, pos);
           } else {
+            link_stack.getTagCompound().setLong("cdtime", world.getTotalWorldTime()); // see E_SELF_ASSIGN branch for SWITCH_LINK_PEARL
             player.inventory.setInventorySlotContents(player.inventory.currentItem, link_stack);
             ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.target_assign.ok", null));
             ModResources.BlockSoundEvents.SWITCHLINK_LINK_TARGET_SELECTED.play(world, pos);
@@ -358,11 +360,11 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
             // Because of the item use config, the click event drops in rather fast (100ms approx), too fast
             // for most users - therefore a cooldown timestamp is additionally saved in the item, not affecting
             // the link itself. No elegance here but should work reliably.
-            long cdtime = player.inventory.getCurrentItem().getTagCompound().getLong("cdtime");
-            if((cdtime != 0) && (world.getTotalWorldTime() < cdtime)) return;
+            final long cdtime = player.inventory.getCurrentItem().getTagCompound().getLong("cdtime");
+            if(Math.abs(world.getTotalWorldTime()-cdtime) < 7) return;
             ItemSwitchLinkPearl.getCycledRelay(player.inventory.getCurrentItem(), world, pos);
             ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.relayconfig.confval" + Integer.toString(ItemSwitchLinkPearl.SwitchLink.fromItemStack(player.inventory.getCurrentItem()).relay()), null));
-            player.inventory.getCurrentItem().getTagCompound().setLong("cdtime", world.getTotalWorldTime()+10);
+            player.inventory.getCurrentItem().getTagCompound().setLong("cdtime", world.getTotalWorldTime());
             return;
           }
           case E_NOSOURCE:

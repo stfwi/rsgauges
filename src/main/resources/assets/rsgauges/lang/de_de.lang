@@ -271,5 +271,6 @@ rsgauges.switchlinking.relayconfig.confval0=Aktiviert wie der Ausgang des Quells
 rsgauges.switchlinking.relayconfig.confval1=Aktiviert beim Einschalten des Quellschalters
 rsgauges.switchlinking.relayconfig.confval2=Aktiviert beim Ausschalten des Quellschalters
 rsgauges.switchlinking.relayconfig.confval3=Aktiviert beim Änderung des Quellschalterausgangs
+rsgauges.switchlinking.relayconfig.confval4=Aktiviert wie der Ausgang des Quellschalters (invertiert)
 #
 # EOF
