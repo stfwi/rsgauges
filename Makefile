@@ -13,7 +13,8 @@
 # For image stripping install imagemagick and
 # also put the "magick" executable in the PATH.
 #
-MOD_JAR=$(filter-out %-sources.jar,$(wildcard build/libs/*.jar))
+MOD_JAR_PREFIX=rsgauges-mc1
+MOD_JAR=$(filter-out %-sources.jar,$(wildcard build/libs/${MOD_JAR_PREFIX}*.jar))
 
 ifeq ($(OS),Windows_NT)
 GRADLE=gradlew.bat
@@ -56,8 +57,10 @@ install: $(MOD_JAR)
 	@if [ ! -d "$(INSTALL_DIR)" ]; then echo "Cannot find installation minecraft directory."; false; fi
 	@echo "Installing '$(MOD_JAR)' to '$(INSTALL_DIR)/mods' ..."
 	@[ -d "$(INSTALL_DIR)/mods" ] || mkdir "$(INSTALL_DIR)/mods"
+	@rm -f "$(INSTALL_DIR)/mods/${MOD_JAR_PREFIX}"*.jar
 	@cp -f "$(MOD_JAR)" "$(INSTALL_DIR)/mods/"
 	@echo "Installing '$(MOD_JAR)' to '$(SERVER_INSTALL_DIR)/mods' ..."
+	@rm -f "$(SERVER_INSTALL_DIR)/mods/${MOD_JAR_PREFIX}"*.jar
 	@[ -d "$(SERVER_INSTALL_DIR)/mods" ] && cp -f "$(MOD_JAR)" "$(SERVER_INSTALL_DIR)/mods/"
 
 start-server: install
@@ -69,7 +72,8 @@ sanatize:
 	@djs scripts/sanatize-trailing-whitespaces.js
 	@djs scripts/sanatize-version-check.js
 	@djs scripts/sanatize-sync-languages.js
-	@#djs scripts/texture-processing.js src/main/resources/assets/rsgauges/textures
+	@#djs scripts/sanatize-texture-files.js src/main/resources/assets/rsgauges/textures
 
-dist: mod
+dist: clean sanatize mod
 	@echo "Distribution files ..."
+	@djs scripts/dist.js

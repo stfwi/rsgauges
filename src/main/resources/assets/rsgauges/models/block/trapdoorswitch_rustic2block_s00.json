@@ -1,5 +1,5 @@
 {
-	"credit": "Made with the Blockbench",
+	"credit": "I made this with the Blockbench",
 	"parent": "block/cube",
 	"textures": {
 		"metal": "rsgauges:blocks/common/old_iron",
@@ -235,7 +235,7 @@
 			}
 		},
 		{
-			"from": [6, 15.625, 12.25],
+			"from": [6.125, 15.625, 12.25],
 			"to": [10, 16, 12.875],
 			"faces": {
 				"north": {"uv": [0, 0, 14, 0.25], "texture": "#metal"},
@@ -355,7 +355,7 @@
 			}
 		},
 		{
-			"from": [6, 15.625, 9.25],
+			"from": [6.125, 15.625, 9.25],
 			"to": [10, 16, 9.875],
 			"faces": {
 				"north": {"uv": [0, 0, 14, 0.25], "texture": "#metal"},
@@ -499,7 +499,7 @@
 			}
 		},
 		{
-			"from": [6, 15.625, 6.25],
+			"from": [6.125, 15.625, 6.25],
 			"to": [10, 16, 6.875],
 			"faces": {
 				"north": {"uv": [0, 0, 14, 0.25], "texture": "#metal"},
@@ -535,7 +535,7 @@
 			}
 		},
 		{
-			"from": [6, 15.625, 3.25],
+			"from": [6.125, 15.625, 3.25],
 			"to": [10, 16, 3.875],
 			"faces": {
 				"north": {"uv": [0, 0, 14, 0.25], "texture": "#metal"},
@@ -631,7 +631,7 @@
 			}
 		},
 		{
-			"from": [6, 15.625, 1.25],
+			"from": [6.125, 15.625, 1.25],
 			"to": [10, 16, 1.875],
 			"faces": {
 				"north": {"uv": [0, 0, 14, 0.25], "texture": "#metal"},

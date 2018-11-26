@@ -8,8 +8,9 @@
 **/
 package wile.rsgauges.proxy;
 
-import wile.rsgauges.ModBlocks;
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.ModBlocks;
+import wile.rsgauges.ModItems;
 import wile.rsgauges.network.*;
 import wile.rsgauges.client.OverlayEventHandler;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -49,5 +50,6 @@ public class ClientProxy extends CommonProxy
   public static void registerModels(ModelRegistryEvent event)
   {
     ModBlocks.initModels();
+    ModItems.initModels();
   }
 }

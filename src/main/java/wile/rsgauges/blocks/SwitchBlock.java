@@ -10,10 +10,12 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModConfig;
+import wile.rsgauges.ModItems;
 import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModBlocks;
 import wile.rsgauges.ModResources;
 import wile.rsgauges.blocks.RsBlock;
+import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHopper;
 import net.minecraft.block.material.Material;
@@ -21,12 +23,15 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -80,8 +85,10 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public static final long SWITCH_CONFIG_NOT_PISTON_MOUNTBALE   = 0x0000001000000000l;
   public static final long SWITCH_CONFIG_NOT_PASSABLE           = 0x0000002000000000l;
   public static final long SWITCH_CONFIG_LATERAL_WALLMOUNT      = 0x0000004000000000l;
-  public static final long SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE = 0x0000008000000000l;
-  public static final long SWITCH_CONFIG_CONTACT_WALKSENSE      = 0x0000010000000000l;
+  public static final long SWITCH_CONFIG_SHOCK_SENSITIVE        = 0x0000008000000000l;
+  public static final long SWITCH_CONFIG_HIGH_SENSITIVE         = 0x0000010000000000l;
+  public static final long SWITCH_CONFIG_LINK_SOURCE_SUPPORT    = 0x0000020000000000l;
+  public static final long SWITCH_CONFIG_LINK_TARGET_SUPPORT    = 0x0000040000000000l;
 
   public static final int SWITCH_DATA_SVD_ACTIVE_TIME_MASK      = 0x000000ff;
   public static final int SWITCH_DATA_SVD_COLOR_MASK            = 0x00000f00;
@@ -101,11 +108,11 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     super(registryName, unrotatedBBUnpowered, material);
     this.config = config;
     if((powerOnSound==null) && (powerOffSound==null)) {
-      powerOnSound = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.3f, 0.92f);
-      powerOffSound = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.3f, 0.82f);
+      powerOnSound  = ModResources.BlockSoundEvents.DEFAULT_SWITCH_ACTIVATION;
+      powerOffSound = ModResources.BlockSoundEvents.DEFAULT_SWITCH_DEACTIVATION;
     } else {
-      if(powerOnSound==null) powerOnSound = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f);
-      if(powerOffSound==null) powerOffSound = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f);
+      if(powerOnSound==null) powerOnSound =  ModResources.BlockSoundEvents.DEFAULT_SWITCH_MUTE;
+      if(powerOffSound==null) powerOffSound = ModResources.BlockSoundEvents.DEFAULT_SWITCH_MUTE;
     }
     unrotated_bb_powered = unrotatedBBPowered;
     power_on_sound = powerOnSound;
@@ -134,19 +141,6 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public boolean isLateral()
   { return ((config & (SWITCH_CONFIG_FLOOR_MOUNT|SWITCH_CONFIG_LATERAL_WALLMOUNT)) != 0); }
 
-  @SideOnly(Side.CLIENT)
-  @Override
-  public BlockRenderLayer getBlockLayer()
-  { return ((config & SWITCH_CONFIG_TRANSLUCENT) != 0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
-
-  @Override
-  public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
-  { return ((config & SWITCH_CONFIG_NOT_PASSABLE)==0) ? NULL_AABB : getBoundingBox(state, world, pos); }
-
-  @Override
-  public int getLightValue(IBlockState state)
-  { return (((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) && (ModAuxiliaries.isClientSide())) ? 1 : 0; }
-
   @Override
   public boolean hasColorMultiplierRGBA()
   { return (!ModConfig.without_switch_colortinting) && ((config & SWITCH_CONFIG_COLOR_TINT_SUPPORT) != 0); }
@@ -158,6 +152,18 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     final TileEntity te = world.getTileEntity(pos);
     return (te instanceof SwitchBlock.SwitchTileEntity)  ? (ModAuxiliaries.DyeColorFilters.byIndex[((SwitchBlock.SwitchTileEntity)te).color_tint() & 0xf]) : (0xffffffff);
   }
+
+  public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final EntityPlayer player)
+  {
+    if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))==0) return false; // this override only allows manual switches
+    SwitchBlock.SwitchTileEntity te = getTe(world, pos);
+    if((te==null) || (!te.check_link_request(link))) return false;
+    return this.onBlockActivated(world, pos, world.getBlockState(pos), player);
+  }
+
+  ///
+  /// Forge / Minecraft overloads
+  ///
 
   @Override
   public IBlockState getStateFromMeta(int meta)
@@ -174,6 +180,19 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   @Override
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
   { return state; }
+
+  @SideOnly(Side.CLIENT)
+  @Override
+  public BlockRenderLayer getBlockLayer()
+  { return ((config & SWITCH_CONFIG_TRANSLUCENT) != 0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
+
+  @Override
+  public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
+  { return ((config & SWITCH_CONFIG_NOT_PASSABLE)==0) ? NULL_AABB : getBoundingBox(state, world, pos); }
+
+  @Override
+  public int getLightValue(IBlockState state)
+  { return (((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) && (ModAuxiliaries.isClientSide())) ? 1 : 0; }
 
   @Override
   public boolean canProvidePower(IBlockState state)
@@ -256,10 +275,10 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     final SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if(te == null) return true;
     if((player != null) && te.click_config(null)) return true;
+    boolean was_powered = state.getValue(POWERED);
     if((config & SWITCH_CONFIG_BISTABLE)!=0) {
-      state = state.cycleProperty(POWERED);
-      world.setBlockState(pos, state, 1|2);
-      if(!state.getValue(POWERED)) power_off_sound.play(world, pos); else power_on_sound.play(world, pos);
+      world.setBlockState(pos, (state=state.cycleProperty(POWERED)), 1|2);
+      if(was_powered) power_off_sound.play(world, pos); else power_on_sound.play(world, pos);
     } else {
       world.setBlockState(pos, state.withProperty(POWERED, true), 1|2);
       power_on_sound.play(world, pos);
@@ -269,6 +288,19 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
       world.scheduleUpdate(pos, this, base_tick_rate);
       if((config & SWITCH_CONFIG_PULSE_EXTENDABLE)==0) te.off_timer_reset();
       te.off_timer_extend();
+    }
+    if( ((config&(SWITCH_CONFIG_LINK_SOURCE_SUPPORT))!=0) && ((config&(SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))!=0) ) {
+      if(!was_powered) {
+        // Manual switches fire link requests when changing from unpowered to powered,
+        // no matter if they are inverted or not.
+        if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+          ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+        }
+      } else if(was_powered && ((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE)) == SWITCH_CONFIG_BISTABLE)) {
+        if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+          ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+        }
+      }
     }
     return true;
   }
@@ -282,9 +314,9 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     final SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if(te == null) return;
     RsBlock.WrenchActivationCheck ck = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, null, player, null, null, 0, 0, 0);
-    if((ck.redstone > 0) && (((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0) {
+    if((ck.item==Items.REDSTONE) && (((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0) {
       if(!ModConfig.without_pulsetime_config) {
-        te.active_time(ck.redstone);
+        te.active_time(ck.item_count);
         ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((SwitchBlock)state.getBlock()));
         return;
       }
@@ -295,6 +327,66 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
         ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.tinting", null, new Object[]{ModAuxiliaries.localizable("switchconfig.tinting." + ModAuxiliaries.DyeColorFilters.nameByIndex[ck.dye & 0xf], null)}));
         return;
       }
+    } else if(ck.item==Items.ENDER_PEARL) {
+      if(!ModConfig.z_without_switch_linking) {
+        final SwitchBlock block = (SwitchBlock)state.getBlock();
+        if((block.config & SWITCH_CONFIG_LINK_TARGET_SUPPORT) == 0) {
+          ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.target_assign.error_notarget", null));
+          ModResources.BlockSoundEvents.SWITCHLINK_CANNOT_LINK_THAT.play(world, pos);
+        } else {
+          ItemStack link_stack = ItemSwitchLinkPearl.createFromEnderPearl(world, pos, player);
+          if(link_stack==null) {
+            ModResources.BlockSoundEvents.SWITCHLINK_CANNOT_LINK_THAT.play(world, pos);
+          } else {
+            link_stack.getTagCompound().setLong("cdtime", world.getTotalWorldTime()); // see E_SELF_ASSIGN branch for SWITCH_LINK_PEARL
+            player.inventory.setInventorySlotContents(player.inventory.currentItem, link_stack);
+            ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.target_assign.ok", null));
+            ModResources.BlockSoundEvents.SWITCHLINK_LINK_TARGET_SELECTED.play(world, pos);
+          }
+        }
+        return;
+      }
+    } else if((ck.item==ModItems.SWITCH_LINK_PEARL) && (player.inventory!=null) && (player.inventory.getCurrentItem()!=null) && (player.inventory.getCurrentItem().getItem())==ModItems.SWITCH_LINK_PEARL) {
+      if(!ModConfig.z_without_switch_linking) {
+        switch(te.assign_switchlink(world, pos, player.inventory.getCurrentItem())) {
+          case OK:
+            // Link target was assigned to ths switch
+            player.inventory.getCurrentItem().shrink(1);
+            ModResources.BlockSoundEvents.SWITCHLINK_LINK_SOURCE_SELECTED.play(world, pos);
+            ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.source_assign.ok", null));
+            return;
+          case E_SELF_ASSIGN: {
+            // Multi-left-clicking a target switch will reconfigure the pearl for that switch.
+            // Because of the item use config, the click event drops in rather fast (100ms approx), too fast
+            // for most users - therefore a cooldown timestamp is additionally saved in the item, not affecting
+            // the link itself. No elegance here but should work reliably.
+            final long cdtime = player.inventory.getCurrentItem().getTagCompound().getLong("cdtime");
+            if(Math.abs(world.getTotalWorldTime()-cdtime) < 7) return;
+            ItemSwitchLinkPearl.getCycledRelay(player.inventory.getCurrentItem(), world, pos);
+            ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.relayconfig.confval" + Integer.toString(ItemSwitchLinkPearl.SwitchLink.fromItemStack(player.inventory.getCurrentItem()).relay()), null));
+            player.inventory.getCurrentItem().getTagCompound().setLong("cdtime", world.getTotalWorldTime());
+            return;
+          }
+          case E_NOSOURCE:
+            // That switch cannot be a link source (not
+            ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.source_assign.error_nosource", null));
+            break;
+          case E_ALREADY_LINKED:
+            // Switch has already a pearl with that location
+            ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.source_assign.error_alreadylinked", null));
+            break;
+          case E_TOO_FAR:
+            // Too far away from the target switch
+            ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.source_assign.error_toofaraway", null));
+            break;
+          case E_FAILED:
+            // General error, e.g. blockstate could not be determined, not a switch at that location, etc.
+            ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.source_assign.error_failed", null));
+            break;
+        }
+        ModResources.BlockSoundEvents.SWITCHLINK_LINK_SOURCE_FAILED.play(world, pos);
+      }
+      return;
     }
     if(ck.wrenched && te.click_config(this)) {
       ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((SwitchBlock)state.getBlock())); // click-config accepted, nothing to do here.
@@ -308,13 +400,10 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
   }
 
   @Override
-  public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
+  protected void onRsBlockDestroyed(IBlockState state, World world, BlockPos pos)
   {
     final SwitchBlock.SwitchTileEntity te = getTe(world, pos);
-    if(te != null) te.reset();
-    world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, false), 1|2);
-    notifyNeighbours(world, pos, state);
-    return super.removedByPlayer(state, world, pos, player, willHarvest);
+    if(te!=null) te.unlink_all(true);
   }
 
   @Override
@@ -327,9 +416,14 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     if(((config & SWITCH_CONFIG_BISTABLE)!=0) || (world.isRemote) || (!state.getValue(POWERED))) return;
     final SwitchBlock.SwitchTileEntity te = getTe(world, pos);
     if((te!=null) && (te.off_timer_tick() > 0) && (!world.isUpdateScheduled(pos, this)) ) { world.scheduleUpdate(pos, this, 1); return; }
-    world.setBlockState(pos, state.withProperty(POWERED, false));
+    world.setBlockState(pos, (state=state.withProperty(POWERED, false)));
     power_off_sound.play(world, pos);
     notifyNeighbours(world, pos, state);
+    if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
+      if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+        ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+      }
+    }
   }
 
   @Override
@@ -342,6 +436,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
   public SwitchBlock.SwitchTileEntity getTe(World world, BlockPos pos)
   {
+    if(world==null) return null;
     final TileEntity te = world.getTileEntity(pos);
     if((!(te instanceof SwitchBlock.SwitchTileEntity))) return null;
     return (SwitchBlock.SwitchTileEntity)te;
@@ -357,10 +452,23 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     protected int svd_ = 0; // encoded value data
     protected long click_config_time_lastclicked_ = 0;
     protected long click_config_last_cycled_ = 0;
+    protected long last_link_request_ = 0;
+    protected ArrayList<ItemSwitchLinkPearl.SwitchLink> links_ = null;
 
     @Override
     public void writeNbt(NBTTagCompound nbt, boolean updatePacket)
-    { nbt.setInteger("scd", scd_); nbt.setInteger("svd", svd_); }
+    {
+      nbt.setInteger("scd", scd_);
+      nbt.setInteger("svd", svd_);
+      if(updatePacket) return; // server save only
+      if((links_==null) || (links_.isEmpty())) {
+        if(nbt.hasKey("links")) nbt.removeTag("links");
+      } else {
+        NBTTagList tl = new NBTTagList();
+        for(ItemSwitchLinkPearl.SwitchLink e:links_) tl.appendTag(e.toNbt());
+        nbt.setTag("links", tl);
+      }
+    }
 
     @Override
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)
@@ -370,6 +478,17 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
       svd_ = nbt.getInteger("svd");
       if(!updatePacket) {
         if(scd_==0) reset();
+        if(!nbt.hasKey("links")) {
+          if(links_!=null) links_.clear();
+        } else {
+          NBTTagList tl = nbt.getTagList("links", nbt.getId()); // getId(): tag type byte of NBTTagCompound, which are saved.
+          ArrayList<ItemSwitchLinkPearl.SwitchLink> links = new ArrayList<ItemSwitchLinkPearl.SwitchLink>();
+          for(NBTBase e:tl) {
+            ItemSwitchLinkPearl.SwitchLink lnk = ItemSwitchLinkPearl.SwitchLink.fromNbt((NBTTagCompound)e);
+            links.add(lnk);
+          }
+          links_ = links;
+        }
       } else {
         if((svd_ & SWITCH_DATA_SVD_COLOR_MASK) != (previous_svd & SWITCH_DATA_SVD_COLOR_MASK)) {
           if((getWorld() != null) && (getWorld().isRemote)) {
@@ -490,7 +609,7 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
     { return false; }
 
     /**
-     * Left click configuration
+     * Left double click configuration
      */
     public boolean click_config(@Nullable SwitchBlock block)
     {
@@ -534,43 +653,9 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
       return true;
     }
 
-    @Override
-    public String toString()
-    { return configStatusText(null); }
-
-    public String configStatusText(SwitchBlock block)
-    {
-      ArrayList<String> a = new ArrayList<String>();
-      if((on_power() < 15) || (off_power()>0)) {
-        if((block == null) || ((block.config & SWITCH_CONFIG_AUTOMATIC)==0)) {
-          // power only for non-auto-switches
-          a.add(
-              TextFormatting.RED
-            + "power: " + Integer.toString(on_power()) + ((off_power()>0) ? ("/"+ "off:" + Integer.toString(off_power())) : (""))
-            + TextFormatting.RESET
-          );
-        }
-      }
-      if(nooutput()) {
-        a.add(TextFormatting.DARK_AQUA + "no output" + TextFormatting.RESET);
-      } else {
-        String s = weak() ? "weak" : "strong";
-        if(inverted()) s += (s.isEmpty() ? "":", ") + "inverted";
-        if(!s.isEmpty()) s = TextFormatting.DARK_AQUA + s + TextFormatting.RESET;
-        a.add(s);
-      }
-      if(active_time() > 0) {
-        a.add(""
-          + TextFormatting.GOLD
-          + "pulse: "
-          + Double.toString( (((double)(base_tick_rate) * active_time()))/20 )
-          + "s (" + Integer.toString(base_tick_rate * active_time()) + " ticks)"
-          + TextFormatting.RESET
-        );
-      }
-      return String.join(TextFormatting.DARK_GRAY+" | "+TextFormatting.RESET, a);
-    }
-
+    /**
+     * Localisable switch status, normally called on double clicking a switch.
+     */
     public TextComponentTranslation configStatusTextComponentTranslation(SwitchBlock block)
     {
       TextComponentString separator = (new TextComponentString(" | ")); separator.getStyle().setColor(TextFormatting.GRAY);
@@ -603,5 +688,78 @@ public class SwitchBlock extends RsBlock implements ModBlocks.Colors.ColorTintSu
       return status;
     }
 
+    public boolean has_links()
+    { return (links_!=null) && (!links_.isEmpty()); }
+
+    /**
+     * Called when link pearl requests are sent to the addressed switch. This can be via
+     * player pearl usage, from link pearls in switches. The method is used to ensure on
+     * the called-side that no recursion or loop lock or other unwanted effects occur.
+     * Returns boolean success.
+     */
+    public boolean check_link_request(final ItemSwitchLinkPearl.SwitchLink link)
+    {
+      final long t = world.getWorldTime();
+      if((world.isRemote) || (last_link_request_ == t)) return false; // not in the same tick, people could try to link A to B and B to A.
+      last_link_request_ = t;
+      final IBlockState state = world.getBlockState(pos);
+      if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return false;
+      return ((((SwitchBlock)state.getBlock()).config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))!=0);
+    }
+
+    /**
+     * Called when a link pearl shall be placed in a switch to make it a link source.
+     */
+    enum SwitchLinkAssignmentResult {OK, E_SELF_ASSIGN, E_ALREADY_LINKED, E_TOO_FAR, E_NOSOURCE, E_FAILED};
+    SwitchLinkAssignmentResult assign_switchlink(final World world, final BlockPos sourcepos, final ItemStack stack)
+    {
+      if(stack==null) return SwitchLinkAssignmentResult.E_FAILED;
+      final ItemSwitchLinkPearl.SwitchLink link = ItemSwitchLinkPearl.SwitchLink.fromItemStack(stack);
+      if((world==null) || (!link.valid) || (!sourcepos.equals(getPos()))) return SwitchLinkAssignmentResult.E_FAILED;
+      final IBlockState state = world.getBlockState(sourcepos);
+      if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return SwitchLinkAssignmentResult.E_FAILED;
+      if(link.target_position.equals(sourcepos)) return SwitchLinkAssignmentResult.E_SELF_ASSIGN;
+      if((((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_LINK_SOURCE_SUPPORT)==0) return SwitchLinkAssignmentResult.E_NOSOURCE;
+      if(link.isTooFar(sourcepos)) return SwitchLinkAssignmentResult.E_TOO_FAR;
+      if(this.links_==null) this.links_ = new ArrayList<ItemSwitchLinkPearl.SwitchLink>();
+      for(ItemSwitchLinkPearl.SwitchLink lnk: this.links_) {
+        if(lnk.target_position.equals(link.target_position)) return SwitchLinkAssignmentResult.E_ALREADY_LINKED;
+      }
+      links_.add(link);
+      this.markDirty();
+      return SwitchLinkAssignmentResult.OK;
+    }
+
+    /**
+     * Removes all links, returns a stack of link pearls placed in the switch,
+     * optionally drops that stack in the world at the switch position.
+     */
+    public ArrayList<ItemStack> unlink_all(boolean drop)
+    {
+      ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+      if((world.isRemote) || (links_==null)) return stacks;
+      for(ItemSwitchLinkPearl.SwitchLink e:links_) stacks.add(e.toSwitchLinkPearl());
+      links_.clear();
+      if(drop) { for(ItemStack e:stacks) world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), e)); }
+      return stacks;
+    }
+
+    public boolean activate_links(final int req)
+    {
+      if(ModConfig.z_without_switch_linking) return true;
+      last_link_request_ = world.getWorldTime();
+      if(links_==null) return true;
+      int n_fails = 0;
+      for(ItemSwitchLinkPearl.SwitchLink lnk:links_) {
+        switch(lnk.request(req, world, pos, null)) {
+          case OK:
+          case NOT_MATCHED:
+            break;
+          default:
+            ++n_fails;
+        }
+      }
+      return (n_fails==0);
+    }
   }
 }

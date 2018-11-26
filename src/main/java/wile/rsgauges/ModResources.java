@@ -10,6 +10,7 @@
 package wile.rsgauges;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -66,5 +67,20 @@ public class ModResources
     public float volume() { return volume_; }
     public float pitch() { return pitch_; }
     public void play(World world, BlockPos pos) { world.playSound((EntityPlayer)null, pos, se_, SoundCategory.BLOCKS, volume_, pitch_); }
+  }
+
+  public static final class BlockSoundEvents
+  {
+    // Switch default sounds
+    public static final BlockSoundEvent DEFAULT_SWITCH_MUTE          = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0f, 1f);
+    public static final BlockSoundEvent DEFAULT_SWITCH_ACTIVATION    = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.3f, 0.92f);
+    public static final BlockSoundEvent DEFAULT_SWITCH_DEACTIVATION  = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.3f, 0.82f);
+    // Switch link sounds
+    public static final BlockSoundEvent SWITCHLINK_CANNOT_LINK_THAT      = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMEN_SCREAM, 0.2f, 2.5f);
+    public static final BlockSoundEvent SWITCHLINK_LINK_TARGET_SELECTED  = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 0.2f, 2.0f);
+    public static final BlockSoundEvent SWITCHLINK_LINK_SOURCE_SELECTED  = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 0.2f, 2.0f);
+    public static final BlockSoundEvent SWITCHLINK_LINK_SOURCE_FAILED    = SWITCHLINK_CANNOT_LINK_THAT;
+    public static final BlockSoundEvent SWITCHLINK_LINK_PEAL_USE_SUCCESS = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMEN_AMBIENT, 0.1f, 4f);
+    public static final BlockSoundEvent SWITCHLINK_LINK_PEAL_USE_FAILED  = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMEN_HURT, 0.1f, 2.0f);
   }
 }

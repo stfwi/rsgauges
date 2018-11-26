@@ -5,7 +5,7 @@
 		"metal": "rsgauges:blocks/common/darkgraymetal",
 		"particle": "rsgauges:blocks/common/darkgraymetal",
 		"pattern": "rsgauges:blocks/common/darkmachinemetal",
-		"redstone": "rsgauges:blocks/indicator/indicator_fg_red_off_texture",
+		"redstone": "rsgauges:blocks/indicator/indicator_fg_red_on_texture",
 		"glass": "rsgauges:blocks/common/cleargrayglass"
 	},
 	"elements": [
@@ -274,7 +274,7 @@
 			}
 		},
 		{
-			"from": [7.5, 15, 0.25],
+			"from": [7.5, 15, 0],
 			"to": [8.5, 15.5, 0.5],
 			"faces": {
 				"north": {"uv": [0, 1, 14, 4.25], "texture": "#redstone"},

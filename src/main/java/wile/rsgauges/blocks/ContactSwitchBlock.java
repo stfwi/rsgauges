@@ -14,6 +14,7 @@ import wile.rsgauges.ModResources;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import wile.rsgauges.blocks.RsBlock;
+import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -54,9 +55,11 @@ public class ContactSwitchBlock extends SwitchBlock
     ContactSwitchBlock.ContactSwitchTileEntity te = getTe(world, pos); if(te == null) return true;
     te.click_config(null);
     if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
-    RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-    if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof ContactSwitchBlock)) {
-      te.activation_config((ContactSwitchBlock)state.getBlock(), player, wac.x, wac.y);
+    if(player != null) {
+      RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
+      if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof ContactSwitchBlock)) {
+        te.activation_config((ContactSwitchBlock)state.getBlock(), player, wac.x, wac.y);
+      }
     }
     return true;
   }
@@ -64,7 +67,7 @@ public class ContactSwitchBlock extends SwitchBlock
   @Override
   public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
   {
-    if((side != (state.getValue(FACING).getOpposite())) && (side != EnumFacing.UP)) return 0;
+    if(!((side == (state.getValue(FACING).getOpposite())) || ((side == EnumFacing.UP) && (!isWallMount())))) return 0;
     ContactSwitchBlock.ContactSwitchTileEntity te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, false);
   }
@@ -72,19 +75,19 @@ public class ContactSwitchBlock extends SwitchBlock
   @Override
   public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
   {
-    if((side != (state.getValue(FACING).getOpposite())) && (side != EnumFacing.UP)) return 0;
+    if(!((side == (state.getValue(FACING).getOpposite())) || ((side == EnumFacing.UP) && (!isWallMount())))) return 0;
     SwitchBlock.SwitchTileEntity te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, true);
   }
 
   @Override
   public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side)
-  { return (side==null) || ((side)==(EnumFacing.UP)) || ((side)==(state.getValue(FACING).getOpposite())); }
+  { return (side==null) || ((side==(EnumFacing.UP)) && (!isWallMount())) || (side==(state.getValue(FACING).getOpposite())); }
 
   @Override
   public void onFallenUpon(World world, BlockPos pos, Entity entity, float distance)
   {
-    if(((config & SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE)!=0)) onEntityCollided(world, pos, world.getBlockState(pos), entity, new AxisAlignedBB(pos, pos.add(1,2,1)));
+    if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0)) onEntityCollided(world, pos, world.getBlockState(pos), entity, new AxisAlignedBB(pos, pos.add(1,2,1)));
     super.onFallenUpon(world, pos, entity, distance);
   }
 
@@ -92,7 +95,7 @@ public class ContactSwitchBlock extends SwitchBlock
   public void onEntityWalk(World world, BlockPos pos, Entity entity)
   {
     if(world.isRemote) return;
-    if(((config & SWITCH_CONFIG_CONTACT_WALKSENSE)!=0) && (!entity.isSneaking())) {
+    if(((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==(SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE)) && (!entity.isSneaking())) {
       onEntityCollided(world, pos, world.getBlockState(pos), entity, new AxisAlignedBB(pos, pos.add(1,2,1)));
     }
   }
@@ -101,7 +104,7 @@ public class ContactSwitchBlock extends SwitchBlock
   public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
   {
     if((world.isRemote) || (state==null)) return;
-    if(((config & SWITCH_CONFIG_CONTACT_FALLSHOCKSENSE)!=0) && (entity.fallDistance < 0.2)) return;
+    if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) && (entity.fallDistance < 0.2)) return;
     onEntityCollided(world, pos, state, entity, new AxisAlignedBB(pos, pos.add(1,1,1)));
   }
 
@@ -131,9 +134,15 @@ public class ContactSwitchBlock extends SwitchBlock
       }
     }
     if(active && (!powered)) {
-      world.setBlockState(pos, state.withProperty(POWERED, true), 1|2);
+      state = state.withProperty(POWERED, true);
+      world.setBlockState(pos, state, 1|2);
       this.power_on_sound.play(world, pos);
       this.notifyNeighbours(world, pos, state);
+      if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
+        if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+          ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+        }
+      }
     }
     if(!world.isUpdateScheduled(pos, this)) { world.scheduleUpdate(pos, this, 1); }
   }
