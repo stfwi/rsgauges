@@ -137,6 +137,10 @@ reasons:
 ----
 ## Revision history
 
+                -------------------------------------------------------------------
+    - v1.0.5    [R] Release based on v1.0.5b2.
+                -------------------------------------------------------------------
+
     - v1.0.5b2  [F] Debounced link pearl cycling when creating a link pearl
                     from an Ender pearl.
 
@@ -162,7 +166,9 @@ reasons:
                 [F] Interval timer output inversion corrected to be not affected
                     by standby/run state.
 
+                -------------------------------------------------------------------
     - v1.0.4    [R] Release based on v1.0.4b2.
+                -------------------------------------------------------------------
 
     - v1.0.4b2  [A] Added industrial shock sensitive contact mat (pulses when
                     something falls upon).
