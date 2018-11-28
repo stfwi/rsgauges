@@ -1,5 +1,6 @@
 {
-	"credit": "Made with the Blockbench",
+  "credit": "Made with the Blockbench",
+  "parent": "block/cube",
 	"textures": {
 		"front": "rsgauges:blocks/automaticswitch/daytimeswitch_glass1_front",
 		"side": "rsgauges:blocks/common/cleargrayglass",

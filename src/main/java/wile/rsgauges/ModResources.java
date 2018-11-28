@@ -1,4 +1,4 @@
-/**
+/*
  * @file ModResources.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
@@ -6,10 +6,9 @@
  *
  * Common extended functionality dealing with resource
  * files and corresponding settings/usage options.
-**/
+ */
 package wile.rsgauges;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -34,7 +33,7 @@ public class ModResources
   @Mod.EventBusSubscriber(modid=ModRsGauges.MODID)
   public static final class SoundRegistry
   {
-    private static LinkedList<SoundEvent> created_sounds_ = new LinkedList<SoundEvent>();
+    private static LinkedList<SoundEvent> created_sounds_ = new LinkedList<>();
 
     public static SoundEvent createSoundEvent(String name)
     {
@@ -44,6 +43,7 @@ public class ModResources
       return se;
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public static void onRegistryEvent(RegistryEvent.Register<SoundEvent> event)
     {
@@ -56,6 +56,7 @@ public class ModResources
    * Block sound player class used in the code, additionally specifying
    * playback parameters for the sound.
    */
+  @SuppressWarnings("unused")
   public static final class BlockSoundEvent
   {
     final SoundEvent se_;
@@ -66,7 +67,7 @@ public class ModResources
     public SoundEvent sound() { return se_; }
     public float volume() { return volume_; }
     public float pitch() { return pitch_; }
-    public void play(World world, BlockPos pos) { world.playSound((EntityPlayer)null, pos, se_, SoundCategory.BLOCKS, volume_, pitch_); }
+    public void play(World world, BlockPos pos) { world.playSound(null, pos, se_, SoundCategory.BLOCKS, volume_, pitch_); }
   }
 
   public static final class BlockSoundEvents

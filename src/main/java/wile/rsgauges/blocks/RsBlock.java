@@ -1,4 +1,4 @@
-/**
+/*
  * @file RsBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
@@ -10,7 +10,7 @@
  * As rsgauges blocks work directional (placed with a
  * defined facing), the basics for `facing` dependent
  * data are implemented here, too.
-**/
+ */
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
@@ -59,14 +59,14 @@ public abstract class RsBlock extends Block
   {
     super((material!=null) ? (material) : (Material.CIRCUITS));
     setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
-    setRegistryName(registryName);
-    setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
+    setRegistryName(ModRsGauges.MODID, registryName);
+    setTranslationKey(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);
     setLightLevel(0);
     setHardness(0.3f);
     setResistance(2.0f);
     setTickRandomly(false);
-    this.unrotatedBB = unrotatedBoundingBox;
+    unrotatedBB = unrotatedBoundingBox;
   }
 
   public RsBlock(String registryName)
@@ -76,34 +76,39 @@ public abstract class RsBlock extends Block
   public void initModel()
   {
     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-    JitModelBakery.JitBakedModel jitbakedmodel = this.getJitBakedModel();
+    JitModelBakery.JitBakedModel jitbakedmodel = getJitBakedModel();
     if(jitbakedmodel != null) JitModelBakery.initModelRegistrations(this, jitbakedmodel);
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean isOpaqueCube(IBlockState state)
   { return false; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean isFullCube(IBlockState state)
   { return false; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean isFullBlock(IBlockState state)
   { return false; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face)
   { return BlockFaceShape.UNDEFINED; }
 
   @Override
   @Nullable
+  @SuppressWarnings("deprecation")
   public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
   { return NULL_AABB; }
 
   @Override
   @SideOnly(Side.CLIENT)
-  public BlockRenderLayer getBlockLayer()
+  public BlockRenderLayer getRenderLayer()
   { return BlockRenderLayer.CUTOUT; }
 
   @Override
@@ -121,7 +126,8 @@ public abstract class RsBlock extends Block
   { return false; }
 
   @Override
-  public EnumPushReaction getMobilityFlag(IBlockState state)
+  @SuppressWarnings("deprecation")
+  public EnumPushReaction getPushReaction(IBlockState state)
   { return EnumPushReaction.DESTROY; }
 
   @Override
@@ -133,8 +139,9 @@ public abstract class RsBlock extends Block
   { return false; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public IBlockState getStateFromMeta(int meta)
-  { return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 0x7)); }
+  { return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta & 0x7)); }
 
   @Override
   public int getMetaFromState(IBlockState state)
@@ -145,6 +152,7 @@ public abstract class RsBlock extends Block
   { return new BlockStateContainer(this, FACING); }
 
   @Override
+  @SuppressWarnings("deprecation")
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
   { return state; }
 
@@ -153,12 +161,13 @@ public abstract class RsBlock extends Block
   { return false; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
-  { this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos); }
+  { neighborChangedCheck(state, world, pos, neighborBlock, neighborPos); }
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-  { this.onBlockPlacedByCheck(world, pos, state, placer, stack); }
+  { onBlockPlacedByCheck(world, pos, state, placer, stack); }
 
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
@@ -170,7 +179,7 @@ public abstract class RsBlock extends Block
 
   @Override
   public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side)
-  { return canPlaceBlockOnSide(world, pos, side, (Block block)->{return (!isExceptBlockForAttachWithPiston(block));}, null); }
+  { return canPlaceBlockOnSide(world, pos, side, (block)->(!isExceptBlockForAttachWithPiston(block)), null); }
 
   public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, @Nullable Predicate<Block> blockWhiteListFilter, @Nullable Predicate<Block> blockBlackListFilter)
   {
@@ -213,6 +222,7 @@ public abstract class RsBlock extends Block
    * the facing defined in the block state.
    */
   @Override
+  @SuppressWarnings("deprecation")
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
   {
     final AxisAlignedBB bb = getUnrotatedBB(state);
@@ -301,7 +311,7 @@ public abstract class RsBlock extends Block
       if(!world.isRemote) {
         onRsBlockDestroyed(state, world, pos);
         world.setBlockToAir(pos);
-        this.dropBlockAsItem(world, pos, state, 0);
+        dropBlockAsItem(world, pos, state, 0);
       }
       return false;
     }
@@ -314,10 +324,10 @@ public abstract class RsBlock extends Block
    */
   protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
   {
-    if(canPlaceBlockOnSide(world, pos, this.isWallMount() ? state.getValue(FACING) : EnumFacing.UP)) return true;
+    if(canPlaceBlockOnSide(world, pos, isWallMount() ? state.getValue(FACING) : EnumFacing.UP)) return true;
     if(world.isRemote) return false;
     onRsBlockDestroyed(state, world, pos);
-    this.dropBlockAsItem(world, pos, state, 0);
+    dropBlockAsItem(world, pos, state, 0);
     world.setBlockToAir(pos);
     return false;
   }
@@ -325,7 +335,7 @@ public abstract class RsBlock extends Block
   /**
    * Main RsBlock derivate tile entity base
    */
-  public static class RsTileEntity<BlockType extends RsBlock> extends TileEntity
+  public static class RsTileEntity extends TileEntity
   {
     private static final int NBT_ENTITY_TYPE = 1; // forge-doc: use 1, does not matter, only used ba vanilla.
 
@@ -333,35 +343,42 @@ public abstract class RsBlock extends Block
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {} // overridden if NBT is needed
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState os, IBlockState ns) {
-      return (os.getBlock() != ns.getBlock()) || (!(os.getBlock() instanceof RsBlock)) || (!(ns.getBlock() instanceof RsBlock)); // Tile entity re-creation condition.
-    }
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState os, IBlockState ns)
+    { return (os.getBlock() != ns.getBlock()) || (!(os.getBlock() instanceof RsBlock)) || (!(ns.getBlock() instanceof RsBlock)); } // Tile entity re-creation condition.
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) { super.writeToNBT(nbt); this.writeNbt(nbt, false); return nbt; }
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
+    { super.writeToNBT(nbt); writeNbt(nbt, false); return nbt; }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) { super.readFromNBT(nbt); this.readNbt(nbt, false); }
+    public void readFromNBT(NBTTagCompound nbt)
+    { super.readFromNBT(nbt); readNbt(nbt, false); }
 
     @Override // on client
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) { super.readFromNBT(pkt.getNbtCompound()); this.readNbt(pkt.getNbtCompound(), true); super.onDataPacket(net, pkt); }
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+    { super.readFromNBT(pkt.getNbtCompound()); readNbt(pkt.getNbtCompound(), true); super.onDataPacket(net, pkt); }
 
     @Override // on server
-    public NBTTagCompound getUpdateTag() { NBTTagCompound nbt = new NBTTagCompound(); super.writeToNBT(nbt); this.writeNbt(nbt, true); return nbt; }
+    public NBTTagCompound getUpdateTag()
+    { NBTTagCompound nbt = new NBTTagCompound(); super.writeToNBT(nbt); writeNbt(nbt, true); return nbt; }
 
     @Override // on server
-    public SPacketUpdateTileEntity getUpdatePacket() { return new SPacketUpdateTileEntity(pos, NBT_ENTITY_TYPE, getUpdateTag()); }
+    public SPacketUpdateTileEntity getUpdatePacket()
+    { return new SPacketUpdateTileEntity(pos, NBT_ENTITY_TYPE, getUpdateTag()); }
 
     @Override // on client
-    public void handleUpdateTag(NBTTagCompound tag) { this.readFromNBT(tag); }
+    public void handleUpdateTag(NBTTagCompound tag)
+    { readFromNBT(tag); }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public double getMaxRenderDistanceSquared() { return 48 * 48; } // TESR
+    public double getMaxRenderDistanceSquared()
+    { return 48 * 48; } // TESR
 
     @SideOnly(Side.CLIENT)
     @Override
-    public AxisAlignedBB getRenderBoundingBox() { return new AxisAlignedBB(getPos(), getPos().add(1, 1, 1)); } // TESR
+    public AxisAlignedBB getRenderBoundingBox()
+    { return new AxisAlignedBB(getPos(), getPos().add(1, 1, 1)); } // TESR
   }
 
   /**
@@ -393,7 +410,7 @@ public abstract class RsBlock extends Block
     public static boolean wrenched(EntityPlayer player)
     {
       final ItemStack item = player.getHeldItemMainhand();
-      return (item != null) && ((","+ModConfig.accepted_wrenches+",").indexOf(","+item.getItem().getRegistryName().getResourcePath() + ",") >= 0);
+      return (item != null) && ((","+ModConfig.zmisc.accepted_wrenches+",").contains(","+item.getItem().getRegistryName().getPath() + ","));
     }
 
     public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)

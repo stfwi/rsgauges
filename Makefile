@@ -13,17 +13,20 @@
 # For image stripping install imagemagick and
 # also put the "magick" executable in the PATH.
 #
-MOD_JAR_PREFIX=rsgauges-mc1
+MOD_JAR_PREFIX=rsgauges-
 MOD_JAR=$(filter-out %-sources.jar,$(wildcard build/libs/${MOD_JAR_PREFIX}*.jar))
 
 ifeq ($(OS),Windows_NT)
-GRADLE=gradlew.bat
+GRADLE=gradlew.bat --no-daemon
+GRADLE_STOP=gradlew.bat --stop
 INSTALL_DIR=$(realpath ${APPDATA}/.minecraft)
-SERVER_INSTALL_DIR=$(realpath ${APPDATA}/minecraft-server-forge-1.12.2-14.23.3.2655)
+SERVER_INSTALL_DIR=$(realpath ${APPDATA}/minecraft-server-forge-1.12.2-14.23.5.2768)
 DJS=djs
 else
-GRADLE=./gradle
+GRADLE=./gradlew --no-daemon
+GRADLE_STOP=./gradlew --stop
 INSTALL_DIR=~/.minecraft
+SERVER_INSTALL_DIR=~/.minecraft-server-forge-1.12.2-14.23.5.2768
 DJS=djs
 endif
 
@@ -32,28 +35,35 @@ wildcardr=$(foreach d,$(wildcard $1*),$(call wildcardr,$d/,$2) $(filter $(subst 
 #
 # Targets
 #
-.PHONY: mod init clean clean-all all install sanatize dist start-server
+.PHONY: default mod init clean clean-all all run install sanatize dist-check dist start-server sync-main-repo
 
-all: clean mod install
+default: mod
+
+all: clean clean-all mod | install
 
 mod:
 	@echo "Building mod using gradle ..."
-	@$(GRADLE) build
+	@$(GRADLE) build $(GRADLE_OPTS)
 
 clean:
 	@echo "Cleaning ..."
 	@rm -f build/libs/*
+	@$(GRADLE) clean
 
 clean-all: clean
 	@echo "Cleaning using gradle ..."
-	@$(GRADLE) clean
+	@rm -f dist/*
+	@$(GRADLE) clean cleanCache
 
 init:
 	@echo "Initialising eclipse workspace using gradle ..."
 	@$(GRADLE) setupDecompWorkspace
-	@$(GRADLE) eclipse
 
-install: $(MOD_JAR)
+run:
+	@echo "Running client ..."
+	@$(GRADLE) runClient
+
+install: $(MOD_JAR) |
 	@if [ ! -d "$(INSTALL_DIR)" ]; then echo "Cannot find installation minecraft directory."; false; fi
 	@echo "Installing '$(MOD_JAR)' to '$(INSTALL_DIR)/mods' ..."
 	@[ -d "$(INSTALL_DIR)/mods" ] || mkdir "$(INSTALL_DIR)/mods"
@@ -65,15 +75,33 @@ install: $(MOD_JAR)
 
 start-server: install
 	@echo "Starting local dedicated server ..."
-	@cd "$(SERVER_INSTALL_DIR)" && java -jar forge-1.12.2-14.23.3.2655-universal.jar nogui
+	@cd "$(SERVER_INSTALL_DIR)" && java -jar forge-1.12.2-14.23.5.2768-universal.jar nogui
 
 sanatize:
 	@echo "Running sanatising tasks ..."
 	@djs scripts/sanatize-trailing-whitespaces.js
 	@djs scripts/sanatize-version-check.js
-	@djs scripts/sanatize-sync-languages.js
-	@#djs scripts/sanatize-texture-files.js src/main/resources/assets/rsgauges/textures
+	@djs scripts/sanatize-tabs-to-spaces.js
+	@djs scripts/sanatize-json-model-files.js
+	@djs scripts/task-update-json.js
 
-dist: clean sanatize mod
+dist-check:
+	@echo "Running dist checks ..."
+	@djs scripts/sanatize-dist-check.js
+
+dist: sanatize dist-check clean-all mod
 	@echo "Distribution files ..."
-	@djs scripts/dist.js
+	@mkdir -p dist
+	@cp build/libs/$(MOD_JAR_PREFIX)* dist/
+	@djs scripts/task-dist.js
+
+# For reviewers: I am using a local repository for experimental changes,
+# this target copies the local working tree to the location of the
+# repository that you cloned.
+sync-main-repo:
+	@echo "Synchronising to github repository working tree ..."
+	@cd ../rsgauges-github; rm -rf build documentation gradle meta scripts src
+	@cd ../rsgauges-github; rm -f .gitignore build.gradle gradle.properties gradlew gradlew.bat license Makefile readme.md
+	@cp -r documentation gradle meta scripts src ../rsgauges-github/
+	@cp .gitignore build.gradle gradle.properties gradlew gradlew.bat license Makefile readme.md ../rsgauges-github/
+	@cd ../rsgauges-github; git status -s

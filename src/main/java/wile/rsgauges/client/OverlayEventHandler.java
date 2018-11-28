@@ -1,4 +1,4 @@
-/**
+/*
  * @file OverlayEventHandler.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
@@ -7,7 +7,7 @@
  * Renders switch stati in one line if switches are looked
  * at and reconfigured. Replaces chat based switch status
  * messages to prevent chat spams.
-**/
+ */
 package wile.rsgauges.client;
 
 import wile.rsgauges.ModAuxiliaries;
@@ -42,13 +42,13 @@ public class OverlayEventHandler extends Gui
   { return deadline_; }
 
   public static synchronized void hide()
-  { deadline_ = 0; text_ = new String(); }
+  { deadline_ = 0; text_ = ""; }
 
   public static synchronized void show(TextComponentTranslation s, int displayTimeoutMs)
   { text_ = (s==null)?(""):(s.getFormattedText()); deadline_ = System.currentTimeMillis() + displayTimeoutMs; }
 
   public static synchronized void show(String s, int displayTimeoutMs)
-  { text_ = new String((s==null)?(""):(s)); deadline_ = System.currentTimeMillis() + displayTimeoutMs; }
+  { text_ = (s == null) ? ("") : (s); deadline_ = System.currentTimeMillis() + displayTimeoutMs; }
 
   public static void register()
   { if(ModAuxiliaries.isClientSide()) MinecraftForge.EVENT_BUS.register(new OverlayEventHandler()); }
@@ -68,7 +68,7 @@ public class OverlayEventHandler extends Gui
     final boolean was_unicode = fr.getUnicodeFlag();
     try {
       final int cx = scaled.getScaledWidth() / 2;
-      final int cy = (int)(scaled.getScaledHeight() * ModConfig.z_switch_status_overlay_y);
+      final int cy = (int)(scaled.getScaledHeight() * ModConfig.zmisc.switch_status_overlay_y);
       final int w = fr.getStringWidth(txt);
       final int h = fr.FONT_HEIGHT;
       drawGradientRect(cx-(w/2)-3, cy-2, cx+(w/2)+2, cy+h+2, 0xaa333333, 0xaa444444);

@@ -1,19 +1,18 @@
-/**
- * @file ContactSwitchBlock.java
+/*
+ * @file BlockContactSwitch.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
  *
  * Basic class for blocks representing redstone signal sources, like
  * the vanilla lever or button.
-**/
+ */
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModResources;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import wile.rsgauges.blocks.RsBlock;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -34,31 +33,31 @@ import net.minecraft.util.text.TextFormatting;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ContactSwitchBlock extends SwitchBlock
+public class BlockContactSwitch extends BlockSwitch
 {
-  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
+  public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
   { super(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, material); }
 
-  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, null); }
 
-  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { this(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound, null); }
 
-  public ContactSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config)
+  public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBB, long config)
   { this(registryName, unrotatedBB, null, config, null, null, null); }
 
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
   {
     if(world.isRemote) return true;
-    ContactSwitchBlock.ContactSwitchTileEntity te = getTe(world, pos); if(te == null) return true;
+    TileEntityContactSwitch te = getTe(world, pos); if(te == null) return true;
     te.click_config(null);
     if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
     if(player != null) {
       RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-      if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof ContactSwitchBlock)) {
-        te.activation_config((ContactSwitchBlock)state.getBlock(), player, wac.x, wac.y);
+      if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof BlockContactSwitch)) {
+        te.activation_config((BlockContactSwitch)state.getBlock(), player, wac.x, wac.y);
       }
     }
     return true;
@@ -68,7 +67,7 @@ public class ContactSwitchBlock extends SwitchBlock
   public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
   {
     if(!((side == (state.getValue(FACING).getOpposite())) || ((side == EnumFacing.UP) && (!isWallMount())))) return 0;
-    ContactSwitchBlock.ContactSwitchTileEntity te = getTe((World)world, pos);
+    TileEntityContactSwitch te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, false);
   }
 
@@ -76,7 +75,7 @@ public class ContactSwitchBlock extends SwitchBlock
   public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
   {
     if(!((side == (state.getValue(FACING).getOpposite())) || ((side == EnumFacing.UP) && (!isWallMount())))) return 0;
-    SwitchBlock.SwitchTileEntity te = getTe((World)world, pos);
+    TileEntitySwitch te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, true);
   }
 
@@ -101,7 +100,7 @@ public class ContactSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
+  public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity)
   {
     if((world.isRemote) || (state==null)) return;
     if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) && (entity.fallDistance < 0.2)) return;
@@ -110,8 +109,8 @@ public class ContactSwitchBlock extends SwitchBlock
 
   protected void onEntityCollided(World world, BlockPos pos, IBlockState state, Entity entity, AxisAlignedBB detectionVolume)
   {
-    if((world.isRemote) || (state==null)) return;
-    ContactSwitchBlock.ContactSwitchTileEntity te = getTe(world, pos); if(te == null) return;
+    if((world.isRemote) || (state==null) || (entity==null)) return;
+    TileEntityContactSwitch te = getTe(world, pos); if(te == null) return;
     boolean active = false;
     boolean powered = state.getValue(POWERED);
     if(powered && (te.off_timer() > 2)) {
@@ -136,9 +135,9 @@ public class ContactSwitchBlock extends SwitchBlock
     if(active && (!powered)) {
       state = state.withProperty(POWERED, true);
       world.setBlockState(pos, state, 1|2);
-      this.power_on_sound.play(world, pos);
-      this.notifyNeighbours(world, pos, state);
-      if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
+      power_on_sound.play(world, pos);
+      notifyNeighbours(world, pos, state);
+      if((config & BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
         if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
@@ -149,20 +148,20 @@ public class ContactSwitchBlock extends SwitchBlock
 
   @Override
   public TileEntity createTileEntity(World world, IBlockState state)
-  { return new ContactSwitchBlock.ContactSwitchTileEntity(); }
+  { return new TileEntityContactSwitch(); }
 
   @Override
-  public ContactSwitchBlock.ContactSwitchTileEntity getTe(World world, BlockPos pos)
+  public TileEntityContactSwitch getTe(World world, BlockPos pos)
   {
     TileEntity te = world.getTileEntity(pos);
-    if((!(te instanceof ContactSwitchBlock.ContactSwitchTileEntity))) return null;
-    return (ContactSwitchBlock.ContactSwitchTileEntity)te;
+    if((!(te instanceof TileEntityContactSwitch))) return null;
+    return (TileEntityContactSwitch)te;
   }
 
   /**
    * Tile entity
    */
-  public static final class ContactSwitchTileEntity extends SwitchBlock.SwitchTileEntity
+  public static class TileEntityContactSwitch extends TileEntitySwitch
   {
     public static final Class<?> filter_classes[] = { Entity.class, EntityLivingBase.class, EntityPlayer.class, EntityMob.class, EntityAnimal.class, EntityVillager.class, EntityItem.class };
     public static final String filter_class_names[] = { "everything", "creatures", "players", "mobs", "animals", "villagers", "objects" };
@@ -205,9 +204,9 @@ public class ContactSwitchBlock extends SwitchBlock
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)
     {
       super.readNbt(nbt, updatePacket);
-      this.filter(nbt.getInteger("filter"));
-      this.high_sensitivity(nbt.getBoolean("highsensitive"));
-      this.entity_count_threshold(nbt.getInteger("entitythreshold"));
+      filter(nbt.getInteger("filter"));
+      high_sensitivity(nbt.getBoolean("highsensitive"));
+      entity_count_threshold(nbt.getInteger("entitythreshold"));
     }
 
     @Override
@@ -215,7 +214,7 @@ public class ContactSwitchBlock extends SwitchBlock
     { super.reset(); filter_=0; count_threshold_=1; high_sensitivity_=false; }
 
     @Override
-    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y)
+    public boolean activation_config(@Nullable BlockSwitch block, @Nullable EntityPlayer player, double x, double y)
     {
       if(block == null) return false;
       int direction=0, field=0;
@@ -230,8 +229,7 @@ public class ContactSwitchBlock extends SwitchBlock
       if((direction==0) || (field==0)) return false;
       switch(field) {
         case 1: {
-          this.high_sensitivity(direction > 0);
-          //ModAuxiliaries.playerStatusMessage(player, TextFormatting.BLUE + ModAuxiliaries.localizable("weight") + ": " + ModAuxiliaries.localizable(this.high_sensitivity() ? "high sensitivity" : "normal sensitivity") + TextFormatting.RESET);
+          high_sensitivity(direction > 0);
           ModAuxiliaries.playerStatusMessage(player,
             ModAuxiliaries.localizable("switchconfig.touchcontactmat.sensitivity", TextFormatting.BLUE, new Object[]{
               ModAuxiliaries.localizable("switchconfig.touchcontactmat.sensitivity." + (high_sensitivity() ? "high":"normal"), null)
@@ -240,32 +238,29 @@ public class ContactSwitchBlock extends SwitchBlock
           break;
         }
         case 2: {
-          this.entity_count_threshold(this.entity_count_threshold() + direction);
-          //ModAuxiliaries.playerStatusMessage(player, TextFormatting.YELLOW + ModAuxiliaries.localizable("entity threshold") + ": " + Integer.toString(this.entity_count_threshold()) + TextFormatting.RESET);
+          entity_count_threshold(entity_count_threshold() + direction);
           ModAuxiliaries.playerStatusMessage(player,
             ModAuxiliaries.localizable("switchconfig.touchcontactmat.entity_threshold", TextFormatting.YELLOW, new Object[]{entity_count_threshold()})
           );
           break;
         }
         case 3: {
-          this.filter(this.filter() + direction);
-          //ModAuxiliaries.playerStatusMessage(player, TextFormatting.DARK_GREEN + ModAuxiliaries.localizable("entity filter") + ": " + ModAuxiliaries.localizable(filter_class_names[filter_]) + TextFormatting.RESET);
+          filter(filter() + direction);
           ModAuxiliaries.playerStatusMessage(player,
             ModAuxiliaries.localizable("switchconfig.touchcontactmat.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TextComponentTranslation("rsgauges.switchconfig.touchcontactmat.entity_filter."+filter_class_names[filter_])})
           );
           break;
         }
         case 4: {
-          this.on_power(this.on_power() + direction);
-          if(this.on_power() < 1) this.on_power(1);
-          //ModAuxiliaries.playerStatusMessage(player, TextFormatting.RED + ModAuxiliaries.localizable("power") + ": " + Integer.toString(this.on_power()) + TextFormatting.RESET);
+          on_power(on_power() + direction);
+          if(on_power() < 1) on_power(1);
           ModAuxiliaries.playerStatusMessage(player,
             ModAuxiliaries.localizable("switchconfig.touchcontactmat.output_power", TextFormatting.RED, new Object[]{on_power()})
           );
           break;
         }
       }
-      this.markDirty();
+      markDirty();
       return true;
     }
   }

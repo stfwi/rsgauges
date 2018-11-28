@@ -1,14 +1,12 @@
-/**
+/*
  * @file ModAuxiliaries.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
  *
  * General commonly used functionality.
-**/
+ */
 package wile.rsgauges;
-
-import javax.annotation.Nullable;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -22,6 +20,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import wile.rsgauges.network.Networking;
+import javax.annotation.Nullable;
 
 public class ModAuxiliaries
 {
@@ -40,6 +39,7 @@ public class ModAuxiliaries
    * Send a chat message to the player.
    * Server side usage only.
    */
+  @SuppressWarnings("unused")
   public static void playerChatMessage(EntityPlayer player, final String message)
   {
     String s = message.trim();
@@ -52,7 +52,7 @@ public class ModAuxiliaries
    */
   public static void playerStatusMessage(EntityPlayer player, final TextComponentTranslation message)
   {
-    if(ModConfig.z_without_switch_status_overlay) {
+    if(ModConfig.zmisc.without_switch_status_overlay) {
       player.sendMessage(message);
     } else {
       Networking.OverlayTextMessage.sendToClient((EntityPlayerMP)player, message);
@@ -79,6 +79,7 @@ public class ModAuxiliaries
    * Transforms a block position, rotated around the world origin from EAST
    * to facing.
    */
+  @SuppressWarnings("unused")
   public static BlockPos transform_forward(final BlockPos pos, final EnumFacing facing)
   {
     switch(facing.getIndex()) {

@@ -1,18 +1,17 @@
-/**
- * @file AutoSwitchBlock.java
+/*
+ * @file BlockAutoSwitch.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
  *
  * Basic class for blocks representing redstone signal sources, like
  * the vanilla lever or button.
-**/
+ */
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModResources;
-import wile.rsgauges.blocks.RsBlock;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.World;
 import net.minecraft.block.state.IBlockState;
@@ -37,10 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class AutoSwitchBlock extends SwitchBlock
+public class BlockAutoSwitch extends BlockSwitch
 {
 
-  public AutoSwitchBlock(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public BlockAutoSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound); }
 
   @Override
@@ -49,8 +48,8 @@ public class AutoSwitchBlock extends SwitchBlock
     if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote)) return false;
     if((config & (SWITCH_CONFIG_TIMER_INTERVAL))==0) return false;
     IBlockState state = world.getBlockState(pos);
-    if((state == null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return false;
-    AutoSwitchBlock.AutoSwitchTileEntity te = getTe(world, pos);
+    if((state == null) || (!(state.getBlock() instanceof BlockAutoSwitch))) return false;
+    TileEntityAutoSwitch te = getTe(world, pos);
     if((te==null) || (!te.check_link_request(link))) return false;
     te.updateSwitchState(state, this, !state.getValue(POWERED), 0);
     return true;
@@ -60,13 +59,13 @@ public class AutoSwitchBlock extends SwitchBlock
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
   {
     if(world.isRemote) return true;
-    AutoSwitchBlock.AutoSwitchTileEntity te = getTe(world, pos);
+    TileEntityAutoSwitch te = getTe(world, pos);
     if(te == null) return true;
     te.click_config(null);
     if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
     RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-    if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof AutoSwitchBlock)) {
-      if(te.activation_config((AutoSwitchBlock)state.getBlock(), player, wac.x, wac.y)) return true;
+    if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof BlockAutoSwitch)) {
+      if(te.activation_config((BlockAutoSwitch)state.getBlock(), player, wac.x, wac.y)) return true;
       if((config & (SWITCH_CONFIG_TIMER_INTERVAL))!=0) {
         te.updateSwitchState(state, this, !state.getValue(POWERED), 0);
       }
@@ -86,52 +85,52 @@ public class AutoSwitchBlock extends SwitchBlock
   public TileEntity createTileEntity(World world, IBlockState state)
   {
     if((config & (SWITCH_CONFIG_SENSOR_VOLUME|SWITCH_CONFIG_SENSOR_LINEAR))!=0) {
-      return new AutoSwitchBlock.DetectorSwitchTileEntity();
+      return new TileEntityDetectorSwitch();
     } else if((config & (SWITCH_CONFIG_SENSOR_ENVIRONMENTAL))!=0) {
-      return new AutoSwitchBlock.EnvironmentalSensorSwitchTileEntity();
+      return new TileEntityEnvironmentalSensorSwitch();
     } else if((config & (SWITCH_CONFIG_TIMER_INTERVAL))!=0) {
-      return new AutoSwitchBlock.IntervalTimerSwitchTileEntity();
+      return new TileEntityIntervalTimerSwitch();
     } else {
-      return new AutoSwitchBlock.AutoSwitchTileEntity();
+      return new TileEntityAutoSwitch();
     }
   }
 
   @Override
-  public AutoSwitchBlock.AutoSwitchTileEntity getTe(World world, BlockPos pos)
+  public TileEntityAutoSwitch getTe(World world, BlockPos pos)
   {
     TileEntity te = world.getTileEntity(pos);
-    if((!(te instanceof AutoSwitchBlock.AutoSwitchTileEntity))) return null;
-    return (AutoSwitchBlock.AutoSwitchTileEntity)te;
+    if((!(te instanceof TileEntityAutoSwitch))) return null;
+    return (TileEntityAutoSwitch)te;
   }
 
   /**
    * Tile entity base
    */
-  public static class AutoSwitchTileEntity extends SwitchBlock.SwitchTileEntity
+  public static class TileEntityAutoSwitch extends TileEntitySwitch
   {
-    protected final void updateSwitchState(IBlockState state, AutoSwitchBlock block, boolean active, int hold_time)
+    protected final void updateSwitchState(IBlockState state, BlockAutoSwitch block, boolean active, int hold_time)
     {
       if(active) {
-        this.off_timer_reset(hold_time);
+        off_timer_reset(hold_time);
         if(!state.getValue(POWERED)) {
-          if(this instanceof IntervalTimerSwitchTileEntity) ((IntervalTimerSwitchTileEntity)this).restart();
+          if(this instanceof TileEntityIntervalTimerSwitch) ((TileEntityIntervalTimerSwitch)this).restart();
           world.setBlockState(pos, (state=state.withProperty(POWERED, true)), 1|2);
           block.power_on_sound.play(world, pos);
           world.notifyNeighborsOfStateChange(pos, block, false);
           world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), block, false);
-          if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
+          if((block.config & BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
             if(!activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }
         }
       } else if(state.getValue(POWERED)) {
-        if(this.off_timer_tick() <= 0) {
+        if(off_timer_tick() <= 0) {
           world.setBlockState(pos, (state=state.withProperty(POWERED, false)));
           block.power_off_sound.play(world, pos);
           world.notifyNeighborsOfStateChange(pos, block, false);
           world.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), block, false);
-          if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
+          if((block.config & BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
             if(!activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
@@ -144,7 +143,7 @@ public class AutoSwitchBlock extends SwitchBlock
   /**
    * Tile entity for entity detection based auto switches
    */
-  public static final class DetectorSwitchTileEntity extends AutoSwitchBlock.AutoSwitchTileEntity implements ITickable
+  public static class TileEntityDetectorSwitch extends TileEntityAutoSwitch implements ITickable
   {
     public static final Class<?> filter_classes[] = { EntityLivingBase.class, EntityPlayer.class, EntityMob.class, EntityAnimal.class, EntityVillager.class, Entity.class };
     public static final String filter_class_names[] = { "creatures", "players", "mobs", "animals", "villagers", "everything" };
@@ -190,9 +189,9 @@ public class AutoSwitchBlock extends SwitchBlock
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)
     {
       super.readNbt(nbt, updatePacket);
-      this.sensor_range(nbt.getInteger("range"));
-      this.sensor_entity_threshold(nbt.getInteger("entitythreshold"));
-      this.filter(nbt.getInteger("filter"));
+      sensor_range(nbt.getInteger("range"));
+      sensor_entity_threshold(nbt.getInteger("entitythreshold"));
+      filter(nbt.getInteger("filter"));
     }
 
     @Override
@@ -200,12 +199,11 @@ public class AutoSwitchBlock extends SwitchBlock
     { super.reset(); update_timer_=0; area_=null; sensor_range_=5; filter_=0; }
 
     @Override
-    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y)
+    public boolean activation_config(@Nullable BlockSwitch block, @Nullable EntityPlayer player, double x, double y)
     {
       if(block == null) return false;
-      int direction=0, field=0;
-      direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
-      field = ((x>=2) && (x<=4)) ? (1) : (
+      final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
+      final int field = ((x>=2) && (x<=4)) ? (1) : (
               ((x>=5) && (x<=7)) ? (2) : (
               ((x>=8) && (x<=10)) ? (3) : (
               ((x>=11) && (x<=13)) ? (4) : (0)
@@ -213,47 +211,47 @@ public class AutoSwitchBlock extends SwitchBlock
       if((direction==0) || (field==0)) return false;
       switch(field) {
         case 1: {
-          this.sensor_range(this.sensor_range()+direction);
+          sensor_range(sensor_range()+direction);
           area_ = null;
           ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.detector.sensor_range", TextFormatting.BLUE, new Object[]{sensor_range()}));
           break;
         }
         case 2: {
-          this.sensor_entity_threshold(sensor_entity_threshold() + direction);
+          sensor_entity_threshold(sensor_entity_threshold() + direction);
           ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.detector.entity_threshold", TextFormatting.YELLOW, new Object[]{sensor_entity_threshold()}));
           break;
         }
         case 3: {
-          this.filter(this.filter() + direction);
+          filter(filter() + direction);
           ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.detector.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TextComponentTranslation("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}));
           break;
         }
         case 4: {
-          this.on_power(this.on_power() + direction);
-          if(this.on_power() < 1) this.on_power(1);
+          on_power(on_power() + direction);
+          if(on_power() < 1) on_power(1);
           ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.detector.output_power", TextFormatting.RED, new Object[]{on_power()}));
           break;
         }
       }
-      this.markDirty();
+      markDirty();
       return true;
     }
 
     @Override
     public void update()
     {
-      if(ModConfig.z_without_detector_switch_update) return;
+      if(ModConfig.zmisc.without_detector_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       update_timer_ = update_interval_;
       IBlockState state = getWorld().getBlockState(getPos());
-      if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return;
-      AutoSwitchBlock block = (AutoSwitchBlock)(state.getBlock());
+      if((state==null) || (!(state.getBlock() instanceof BlockAutoSwitch))) return;
+      BlockAutoSwitch block = (BlockAutoSwitch)(state.getBlock());
       // initialisations
       if(update_interval_==0) {
         if((block.config & SWITCH_CONFIG_SENSOR_LINEAR) != 0) {
-          update_interval_ = ModConfig.autoswitch_linear_update_interval;
+          update_interval_ = ModConfig.tweaks.autoswitch_linear_update_interval;
         } else {
-          update_interval_ = ModConfig.autoswitch_volumetric_update_interval;
+          update_interval_ = ModConfig.tweaks.autoswitch_volumetric_update_interval;
         }
       }
       if(area_ == null) {
@@ -273,7 +271,7 @@ public class AutoSwitchBlock extends SwitchBlock
 
       // measurement
       boolean active = false;
-      if(this.off_timer() > update_interval_) {
+      if(off_timer() > update_interval_) {
         active = true; // no need to ray trace, it's anyway on at the next update.
       } else {
         @SuppressWarnings("unchecked")
@@ -295,14 +293,14 @@ public class AutoSwitchBlock extends SwitchBlock
         }
       }
       // state setting
-      this.updateSwitchState(state, block, active, 4);
+      updateSwitchState(state, block, active, 4);
     }
   }
 
   /**
    * Tile entity for environmental and time sensor based switches
    */
-  public static final class EnvironmentalSensorSwitchTileEntity extends AutoSwitchBlock.AutoSwitchTileEntity implements ITickable
+  public static class TileEntityEnvironmentalSensorSwitch extends TileEntityAutoSwitch implements ITickable
   {
     private static final int debounce_max = 10;
     private int update_interval_ = 10;
@@ -343,19 +341,18 @@ public class AutoSwitchBlock extends SwitchBlock
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)
     {
       super.readNbt(nbt, updatePacket);
-      this.threshold0_on(nbt.getDouble("threshold0_on"));
-      this.threshold0_off(nbt.getDouble("threshold0_off"));
-      this.debounce(nbt.getInteger("debounce"));
+      threshold0_on(nbt.getDouble("threshold0_on"));
+      threshold0_off(nbt.getDouble("threshold0_off"));
+      debounce(nbt.getInteger("debounce"));
     }
 
     @Override
-    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y)
+    public boolean activation_config(@Nullable BlockSwitch block, @Nullable EntityPlayer player, double x, double y)
     {
       if(block == null) return false;
-      int direction=0, field=0;
       // @TODO: Construction time list or lambla for field assignment.
-      direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
-      field = ((x>=2) && (x<=4)) ? (1) : (
+      final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
+      final int field = ((x>=2) && (x<=4)) ? (1) : (
               ((x>=5) && (x<=7)) ? (2) : (
               ((x>=8) && (x<=10)) ? (3) : (
               ((x>=11) && (x<=13)) ? (4) : (0)
@@ -375,12 +372,12 @@ public class AutoSwitchBlock extends SwitchBlock
             break;
           }
           case 3: { debounce(debounce()+direction); break; }
-          case 4: { this.on_power(this.on_power() + direction); break; }
+          case 4: { on_power(on_power() + direction); break; }
         }
-        if(this.threshold0_on() < 1) this.threshold0_on(1);
-        if(this.on_power() < 1) this.on_power(1);
+        if(threshold0_on() < 1) threshold0_on(1);
+        if(on_power() < 1) on_power(1);
         {
-          ArrayList<Object> tr = new ArrayList<Object>();
+          ArrayList<Object> tr = new ArrayList<>();
           final TextComponentTranslation trunit = ModAuxiliaries.localizable("switchconfig.lightsensor.lightunit", null);
           TextComponentString separator = (new TextComponentString(" | ")); separator.getStyle().setColor(TextFormatting.GRAY);
           tr.add(ModAuxiliaries.localizable("switchconfig.lightsensor.threshold_on", TextFormatting.BLUE, new Object[]{(int)threshold0_on(), trunit}));
@@ -409,13 +406,13 @@ public class AutoSwitchBlock extends SwitchBlock
             break;
           }
           case 3: { debounce(debounce()+direction); break; }
-          case 4: { this.on_power(this.on_power() + direction); break; }
+          case 4: { on_power(on_power() + direction); break; }
         }
-        if(this.on_power() < 1) this.on_power(1);
+        if(on_power() < 1) on_power(1);
         {
           // @TODO: day time localisation: how the hack that, transfer long timestamp with tagging and localise on client or system time class?
           TextComponentString separator = (new TextComponentString(" | ")); separator.getStyle().setColor(TextFormatting.GRAY);
-          ArrayList<Object> tr = new ArrayList<Object>();
+          ArrayList<Object> tr = new ArrayList<>();
           tr.add(ModAuxiliaries.localizable("switchconfig.daytimerclock.daytime_on", TextFormatting.BLUE, new Object[]{ModAuxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
           tr.add(separator.createCopy().appendSibling(ModAuxiliaries.localizable("switchconfig.daytimerclock.daytime_off", TextFormatting.YELLOW, new Object[]{ModAuxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
           tr.add(separator.createCopy().appendSibling(ModAuxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
@@ -429,9 +426,9 @@ public class AutoSwitchBlock extends SwitchBlock
         }
       } else if((block.config & (SWITCH_CONFIG_SENSOR_RAIN|SWITCH_CONFIG_SENSOR_LIGHTNING))!=0) {
         switch(field) {
-          case 4: { this.on_power(this.on_power() + direction); break; }
+          case 4: { on_power(on_power() + direction); break; }
         }
-        if(this.on_power() < 1) this.on_power(1);
+        if(on_power() < 1) on_power(1);
         {
           if((block.config & SWITCH_CONFIG_SENSOR_RAIN)!=0) {
             ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.rainsensor.output_power", TextFormatting.RED, new Object[]{on_power()}));
@@ -440,20 +437,20 @@ public class AutoSwitchBlock extends SwitchBlock
           }
         }
       }
-      this.markDirty();
+      markDirty();
       return true;
     }
 
     @Override
     public void update()
     {
-      if(ModConfig.z_without_environmental_switch_update) return;
+      if(ModConfig.zmisc.without_environmental_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       if(update_interval_ < 10) update_interval_ = 10;
       update_timer_ = update_interval_ + (int)(Math.random()*5); // sensor timing noise using rnd
       IBlockState state = getWorld().getBlockState(getPos());
-      if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return;
-      AutoSwitchBlock block = (AutoSwitchBlock)(state.getBlock());
+      if((state==null) || (!(state.getBlock() instanceof BlockAutoSwitch))) return;
+      BlockAutoSwitch block = (BlockAutoSwitch)(state.getBlock());
       boolean active = state.getValue(POWERED);
       if((block.config & SWITCH_CONFIG_TIMER_DAYTIME) != 0) {
         long wt = world.getWorldTime() % 24000;
@@ -526,14 +523,14 @@ public class AutoSwitchBlock extends SwitchBlock
         }
       }
       // state setting
-      this.updateSwitchState(state, block, active, 1);
+      updateSwitchState(state, block, active, 1);
     }
   }
 
   /**
    * Tile entity for timer interval based switches
    */
-  public static final class IntervalTimerSwitchTileEntity extends AutoSwitchBlock.AutoSwitchTileEntity implements ITickable
+  public static class TileEntityIntervalTimerSwitch extends TileEntityAutoSwitch implements ITickable
   {
     private static final int ramp_max = 5;
     private static final int t_max = 20 * 60 * 10; // 10min @20clk/s
@@ -592,10 +589,10 @@ public class AutoSwitchBlock extends SwitchBlock
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)
     {
       super.readNbt(nbt, updatePacket);
-      this.p_set(nbt.getInteger("pset"));
-      this.t_off(nbt.getInteger("toff"));
-      this.t_on(nbt.getInteger("ton"));
-      this.ramp(nbt.getInteger("ramp"));
+      p_set(nbt.getInteger("pset"));
+      t_off(nbt.getInteger("toff"));
+      t_on(nbt.getInteger("ton"));
+      ramp(nbt.getInteger("ramp"));
     }
 
     private int next_higher_interval_setting(int ticks)
@@ -623,17 +620,16 @@ public class AutoSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public boolean activation_config(@Nullable SwitchBlock block, @Nullable EntityPlayer player, double x, double y)
+    public boolean activation_config(@Nullable BlockSwitch block, @Nullable EntityPlayer player, double x, double y)
     {
       if(block == null) return false;
-      int direction=0, field=0;
-      direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
-      field = ((x>=2) && (x<=4)) ? (1) : (
+      final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
+      final int field = ((x>=2) && (x<=4)) ? (1) : (
               ((x>=5) && (x<=7)) ? (2) : (
               ((x>=8) && (x<=10)) ? (3) : (
               ((x>=11) && (x<=13)) ? (4) : (0)
               )));
-      boolean selected = ((direction!=0) && (field!=0));
+      final boolean selected = ((direction!=0) && (field!=0));
       if(selected) {
         switch(field) {
           case 1: t_on( (direction > 0) ? next_higher_interval_setting(t_on()) : next_lower_interval_setting(t_on()) ); break;
@@ -641,7 +637,7 @@ public class AutoSwitchBlock extends SwitchBlock
           case 3: ramp(ramp()+direction); break;
           case 4: p_set( ((p_set()<=0) ? 15 : p_set()) + direction); break;
         }
-        this.markDirty();
+        markDirty();
       }
       {
         boolean switch_state = false;
@@ -649,7 +645,7 @@ public class AutoSwitchBlock extends SwitchBlock
         if(!selected) switch_state = !switch_state; // will be switched in turn.
         {
           TextComponentString separator = (new TextComponentString(" | ")); separator.getStyle().setColor(TextFormatting.GRAY);
-          ArrayList<Object> tr = new ArrayList<Object>();
+          ArrayList<Object> tr = new ArrayList<>();
           tr.add(ModAuxiliaries.localizable("switchconfig.intervaltimer.t_on", TextFormatting.BLUE, new Object[]{ModAuxiliaries.ticksToSecondsString(t_on())}));
           tr.add(separator.createCopy().appendSibling(ModAuxiliaries.localizable("switchconfig.intervaltimer.t_off", TextFormatting.YELLOW, new Object[]{ModAuxiliaries.ticksToSecondsString(t_off())})));
           tr.add(separator.createCopy().appendSibling(ModAuxiliaries.localizable("switchconfig.intervaltimer.output_power", TextFormatting.RED, new Object[]{p_set()})));
@@ -669,7 +665,7 @@ public class AutoSwitchBlock extends SwitchBlock
     @Override
     public void update()
     {
-      if(ModConfig.z_without_timer_switch_update) return;
+      if(ModConfig.zmisc.without_timer_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       int p = p_;
       if((t_on()<=0) || (t_off()<=0) || (p_set() <= 0)) {
@@ -697,8 +693,8 @@ public class AutoSwitchBlock extends SwitchBlock
       if(p != p_) {
         on_power((inverted() ? (15-p_) : (p_)));
         IBlockState state = getWorld().getBlockState(getPos());
-        if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock)) || (!state.getValue(POWERED))) {
-          update_timer_ = 200 + ((int)Math.random() * 10);
+        if((state==null) || (!(state.getBlock() instanceof BlockAutoSwitch)) || (!state.getValue(POWERED))) {
+          update_timer_ = 200 + ((int)(Math.random() * 10));
           on_power(inverted() ? (15) : (0));
         }
         world.notifyNeighborsOfStateChange(pos, state.getBlock(), false);

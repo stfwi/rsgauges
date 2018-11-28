@@ -29,10 +29,10 @@ public class Networking
   }
 
   public static void preInitServer()
-  { if(!ModConfig.z_without_switch_status_overlay) preInitCommon(); }
+  { if(!ModConfig.zmisc.without_switch_status_overlay) preInitCommon(); }
 
   public static void preInitClient()
-  { if(!ModConfig.z_without_switch_status_overlay) preInitCommon(); }
+  { if(!ModConfig.zmisc.without_switch_status_overlay) preInitCommon(); }
 
   /**
    * Simple string message that may contain localisation patterns for
@@ -109,7 +109,8 @@ public class Networking
       private static void client(TextComponentTranslation message)
       {
         Minecraft minecraft = Minecraft.getMinecraft();
-        minecraft.addScheduledTask(new Runnable() { @Override public void run(){OverlayEventHandler.show(message, DISPLAY_TIME_MS);} });
+        //minecraft.addScheduledTask(new Runnable() { @Override public void run(){OverlayEventHandler.show(message, DISPLAY_TIME_MS);} });
+        minecraft.addScheduledTask(() -> OverlayEventHandler.show(message, DISPLAY_TIME_MS));
       }
     }
   }

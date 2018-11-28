@@ -1,12 +1,12 @@
-/**
- * @file ContactSwitchBlock.java
+/*
+ * @file BlockContactSwitch.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
  *
  * Basic class for blocks representing redstone signal sources, like
  * the vanilla lever or button.
-**/
+ */
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModResources;
@@ -23,13 +23,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import javax.annotation.Nullable;
 
-public class TrapdoorSwitchBlock extends ContactSwitchBlock
+public class BlockTrapdoorSwitch extends BlockContactSwitch
 {
 
-  public TrapdoorSwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
+  public BlockTrapdoorSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
   { super(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, material); }
 
-  public TrapdoorSwitchBlock(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public BlockTrapdoorSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, null); }
 
   @Override
@@ -37,14 +37,14 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
   {
     if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote)) return false;
     IBlockState state = world.getBlockState(pos);
-    if((state == null) || (!(state.getBlock() instanceof TrapdoorSwitchBlock))) return false;
+    if((state == null) || (!(state.getBlock() instanceof BlockTrapdoorSwitch))) return false;
     if(state.getValue(POWERED)) return true; // already active
-    ContactSwitchBlock.ContactSwitchTileEntity te = getTe(world, pos);
+    TileEntityContactSwitch te = getTe(world, pos);
     if((te==null) || (!te.check_link_request(link))) return false;
     te.off_timer_reset( (te.active_time()<=0) ? (20) : ((te.active_time()*base_tick_rate)+1) );
     world.setBlockState(pos, state.withProperty(POWERED, true), 1|2);
-    this.power_on_sound.play(world, pos);
-    this.notifyNeighbours(world, pos, state);
+    power_on_sound.play(world, pos);
+    notifyNeighbours(world, pos, state);
     if(!world.isUpdateScheduled(pos, this)) world.scheduleUpdate(pos, this, 1);
     return true;
   }
@@ -85,7 +85,7 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
   }
 
   @Override
-  public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
+  public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity)
   {
     if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) && (entity.height < 0.9)) return; // close on items
     onEntityCollided(world, pos, state, entity, new AxisAlignedBB(pos, pos.add(1,1,1)));

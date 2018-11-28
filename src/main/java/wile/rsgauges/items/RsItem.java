@@ -15,7 +15,7 @@ public class RsItem extends Item
   {
     super();
     setRegistryName(ModRsGauges.MODID, registryName);
-    setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
+    setTranslationKey(ModRsGauges.MODID + "." + registryName);
     setMaxStackSize(64);
     setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setHasSubtypes(false);
@@ -26,7 +26,7 @@ public class RsItem extends Item
   @SideOnly(Side.CLIENT)
   public void initModel()
   {
-    ModelResourceLocation rc = new ModelResourceLocation(this.getRegistryName(), "inventory");
+    ModelResourceLocation rc = new ModelResourceLocation(getRegistryName(),"inventory");
     ModelBakery.registerItemVariants(this, rc);
     ModelLoader.setCustomMeshDefinition(this, stack->rc);
   }

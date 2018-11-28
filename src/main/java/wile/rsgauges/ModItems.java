@@ -1,4 +1,4 @@
-/**
+/*
  * @file ModItems.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
@@ -7,7 +7,7 @@
  * Definition and initialisation of items of this
  * module.
  *
-**/
+ */
 package wile.rsgauges;
 
 import wile.rsgauges.items.*;
@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ModItems
 {
@@ -26,15 +27,12 @@ public class ModItems
     new ItemSwitchLinkPearl("switchlink_pearl")
   };
 
-  public static ArrayList<Item> registeredItems = new ArrayList<Item>();
+  public static ArrayList<Item> registeredItems = new ArrayList<>();
 
   // Invoked from CommonProxy.registerItems()
   public static final void registerItems(RegistryEvent.Register<Item> event)
   {
-    for(Item e:modItems) {
-      // if((ModConfig.z_without_switch_linking) && (e instanceof ItemSwitchLinkPearl)) continue;
-      registeredItems.add(e);
-    }
+    registeredItems.addAll(Arrays.asList(modItems));
     for(Item e:registeredItems) event.getRegistry().register(e);
   }
 

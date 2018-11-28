@@ -1,12 +1,12 @@
-/**
- * @file SensitiveGlassBlock.java
+/*
+ * @file BlockSensitiveGlass.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
  *
  * Class representing full, transparent blocks with different
  * look depending on the redstone power they receive.
-**/
+ */
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.ColorTintSupport
+public class BlockSensitiveGlass extends Block implements ModBlocks.Colors.ColorTintSupport
 {
   public static final PropertyBool POWERED = PropertyBool.create("powered");
 
@@ -43,24 +43,24 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
   public static final int CONFIG_SIDES_ALWAYS_RENDERED_POWERED   = 0x00000100;
   public static final int CONFIG_SIDES_ALWAYS_RENDERED_UNPOWERED = 0x00000200;
   protected final int config;
-  protected final int colorMultiplierValue;
+  protected final int color_multiplier_value;
 
-  public SensitiveGlassBlock(String registryName, int config, int colorMultiplierValue)
+  public BlockSensitiveGlass(String registryName, int config, int colorMultiplierValue)
   {
     super(Material.REDSTONE_LIGHT);
     setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
-    setRegistryName(registryName);
-    setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
+    setRegistryName(ModRsGauges.MODID, registryName);
+    setTranslationKey(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);
     setLightLevel(0);
     setHardness(0.3f);
     setResistance(2.0f);
     setTickRandomly(false);
     this.config = config;
-    this.colorMultiplierValue = colorMultiplierValue;
+    color_multiplier_value = colorMultiplierValue;
   }
 
-  public SensitiveGlassBlock(String registryName, int config)
+  public BlockSensitiveGlass(String registryName, int config)
   { this(registryName, config, (int)0xffffffff); }
 
   @SideOnly(Side.CLIENT)
@@ -68,10 +68,12 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
   { ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory")); }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean isOpaqueCube(IBlockState state)
   { return false; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean isFullCube(IBlockState state)
   { return true; }
 
@@ -87,18 +89,19 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
 
   @SideOnly(Side.CLIENT)
   @Override
-  public BlockRenderLayer getBlockLayer()
+  public BlockRenderLayer getRenderLayer()
   { return BlockRenderLayer.TRANSLUCENT; }
 
   @SideOnly(Side.CLIENT)
   @Override
+  @SuppressWarnings("deprecation")
   public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
   {
     if((config & (CONFIG_SIDES_ALWAYS_RENDERED_POWERED|CONFIG_SIDES_ALWAYS_RENDERED_UNPOWERED))==(CONFIG_SIDES_ALWAYS_RENDERED_POWERED|CONFIG_SIDES_ALWAYS_RENDERED_UNPOWERED)) {
       return true; // fast return branch
     } else {
       final IBlockState neighbourState = world.getBlockState(pos.offset(side));
-      if((neighbourState==null) || (!(neighbourState.getBlock() instanceof SensitiveGlassBlock))) return true;
+      if((neighbourState==null) || (!(neighbourState.getBlock() instanceof BlockSensitiveGlass))) return true;
       final boolean powered = state.getValue(POWERED);
       if(((config & CONFIG_SIDES_ALWAYS_RENDERED_POWERED)!=0) && powered) return true;
       if(((config & CONFIG_SIDES_ALWAYS_RENDERED_UNPOWERED)!=0) && (!powered)) return true;
@@ -107,9 +110,10 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public int getLightValue(IBlockState state)
   {
-    if((!ModConfig.sensitive_glass_constant_server_light_level) || (ModAuxiliaries.isClientSide())) {
+    if((!ModConfig.zmisc.sensitive_glass_constant_server_light_level) || (ModAuxiliaries.isClientSide())) {
       return state.getValue(POWERED) ? ((config & CONFIG_LIGHT_MASK_POWERED)>>0) : ((config & CONFIG_LIGHT_MASK_UNPOWERED)>>4);
     } else {
       return (config & CONFIG_LIGHT_MASK_POWERED); // server constant light level
@@ -117,10 +121,12 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
   { return state; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public IBlockState getStateFromMeta(int meta)
   { return getDefaultState().withProperty(POWERED, (meta & 0x1)!=0); }
 
@@ -155,6 +161,7 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos neighbourPos)
   {
     if(world.isRemote) return;
@@ -172,6 +179,6 @@ public class SensitiveGlassBlock extends Block implements ModBlocks.Colors.Color
 
   @Override
   public int getColorMultiplierRGBA(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos)
-  { return this.colorMultiplierValue; }
+  { return color_multiplier_value; }
 
 }

@@ -54,9 +54,6 @@ public class JitModelBakery
    * Called from `RsBlock.initModel()`. A baked model to be used can be specified, which
    * has to be extended from JitBakedModel. The `JitBakedModel.getQuads(IBlockstate, ...)` can be overloaded
    * to change the behaviour depending on the `IBlockstate` argument.
-   *
-   * @param block
-   * @param jitbakedmodel
    */
   public static void initModelRegistrations(final RsBlock block, JitBakedModel jitbakedmodel) {
     ModelLoader.setCustomStateMapper(block, new JitModelBakery.JitStateMapper(block));
@@ -74,27 +71,26 @@ public class JitModelBakery
     JitStateMapper(final RsBlock block) { this.block = block; }
 
     @Override protected ModelResourceLocation getModelResourceLocation(IBlockState blockstate) {
-      return new ModelResourceLocation(ModRsGauges.MODID + ":" + block.getRegistryName().getResourcePath() + "_jit", this.getPropertyString(blockstate.getProperties()) );
+      return new ModelResourceLocation(ModRsGauges.MODID + ":" + block.getRegistryName().getPath() + "_jit", this.getPropertyString(blockstate.getProperties()) );
     }
   }
 
   /**
-   * Loads the mapped JIT model locations (blockstate JSONS), returning the
+   * Loads the mapped JIT model locations (blockstate JSONs), returning the
    * JitModels corresponding to the original (JSON) models without "_jit"
    * suffix.
    */
   public static class JitModelLoader implements ICustomModelLoader
   {
-    private IResourceManager manager = null;
-    private JitBakedModel jitbakedmodel;
+    @SuppressWarnings("unused") private IResourceManager manager = null;
+    private final JitBakedModel jitbakedmodel;
     final private RsBlock block;
     final private String match;
 
     public JitModelLoader(final RsBlock block, JitBakedModel jitbakedmodel) {
       this.block = block;
       this.jitbakedmodel = jitbakedmodel;
-      match = ModRsGauges.MODID + ":" + block.getRegistryName().getResourcePath() + "_jit";
-      if(manager==null){;} // unused warning supression, I don't like to remove the RM completely now.
+      match = ModRsGauges.MODID + ":" + block.getRegistryName().getPath() + "_jit";
     }
 
     @Override public boolean accepts(ResourceLocation rl) {
@@ -110,7 +106,7 @@ public class JitModelBakery
   }
 
   /**
-   * Passthrough model, baking a JitBakedModel that corresponds to the JSON model resource path.
+   * Pass-through model, baking a JitBakedModel that corresponds to the JSON model resource path.
    * The original model will be baked and registered at startup as normal. The JitBakedModel
    * will allow to override getQuads(), where it is ensured that all state combinations of the
    * original models are loaded.
@@ -118,7 +114,7 @@ public class JitModelBakery
   public static class JitModel implements IModel
   {
     protected final ModelResourceLocation modelrl;
-    protected JitBakedModel jitbakedmodel;
+    protected final JitBakedModel jitbakedmodel;
 
     public JitModel(final RsBlock block, ResourceLocation rl, JitBakedModel jitbakedmodel) {
       this.jitbakedmodel = jitbakedmodel;
@@ -165,11 +161,11 @@ public class JitModelBakery
    */
   public static class JitBakedModel implements IBakedModel
   {
-    protected HashMap<Integer,IBakedModel> baked;
+    protected final HashMap<Integer,IBakedModel> baked;
     protected IBakedModel firstbaked = null;
 
     public JitBakedModel()
-    { baked = new HashMap<Integer,IBakedModel>(); }
+    { baked = new HashMap<>(); }
 
     public JitBakedModel push(final int statehash, final IBakedModel model)
     { baked.put(statehash, model); firstbaked=(firstbaked==null) ? model : firstbaked; return this; }
@@ -226,7 +222,7 @@ public class JitModelBakery
   /**
    * TESR applying the model corresponding to the actual block state.
    */
-  public static class JitModelTesr<TeType extends RsBlock.RsTileEntity<?>> extends TileEntitySpecialRenderer<TeType>
+  public static class JitModelTesr<TeType extends RsBlock.RsTileEntity> extends TileEntitySpecialRenderer<TeType>
   {
     @Override
     public void render(TeType te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
