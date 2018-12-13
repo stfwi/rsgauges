@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rsgauges:powerplant_redblock",
+    "textures": {}
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": { "north":{}, "south":{}, "west":{}, "east": {}, "up":{}, "down":{} },
+    "powered": { "false":{}, "true":{  "textures": { "cross": "rsgauges:blocks/plants/powerplant_red_s15" } } }
+  }
+}

@@ -63,7 +63,7 @@ public class ModRsGauges
   public void preInit(FMLPreInitializationEvent event)
   {
     logger = event.getModLog();
-    logger.info(MODNAME + ": Version " + MODMCVERSION + "-" + MODVERSION + ( (MODBUILDID=="@"+"MOD_BUILDID"+"@") ? "" : (" #"+MODBUILDID) ) + ".");
+    logger.info(MODNAME + ": Version " + MODMCVERSION + "-" + MODVERSION + ( (MODBUILDID=="@"+"MOD_BUILDID"+"@") ? "" : (" "+MODBUILDID) ) + ".");
     if(MODFINGERPRINT=="@"+"MOD_SIGNSHA1"+"@") {
       logger.warn(MODNAME + ": Mod is NOT signed by the author.");
     } else {

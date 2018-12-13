@@ -83,6 +83,7 @@ sanatize:
 	@djs scripts/sanatize-version-check.js
 	@djs scripts/sanatize-tabs-to-spaces.js
 	@djs scripts/sanatize-json-model-files.js
+	@djs scripts/sanatize-sync-languages.js
 	@djs scripts/task-update-json.js
 
 dist-check:
@@ -98,7 +99,7 @@ dist: sanatize dist-check clean-all mod
 # For reviewers: I am using a local repository for experimental changes,
 # this target copies the local working tree to the location of the
 # repository that you cloned.
-sync-main-repo:
+sync-main-repo: sanatize
 	@echo "Synchronising to github repository working tree ..."
 	@cd ../rsgauges-github; rm -rf build documentation gradle meta scripts src
 	@cd ../rsgauges-github; rm -f .gitignore build.gradle gradle.properties gradlew gradlew.bat license Makefile readme.md

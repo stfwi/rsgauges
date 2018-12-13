@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SPS",
+    "SFS"
+  ],
+  "key": {
+    "S": { "item": "minecraft:stick", "data": 0 },
+    "F": { "item": "minecraft:red_flower", "data": 0 },
+    "P": { "item": "minecraft:wooden_pressure_plate", "data": 0 }
+  },
+  "result": { "item": "rsgauges:powerplant_red", "data": 0 }
+}

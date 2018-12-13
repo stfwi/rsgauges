@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.12.2": {
+    "1.1.0-b2": "[A] Added switch link relay (redstone power based link activation).\n[A] Added switch link pulse relay (reacts on redstone rising edge).\n[A] Added switch link receiver (silent bistable switch device).\n[A] Added switch link pulse receiver (silent pulse switch device).\n[A] Added yellow and red power plants (yes, flowers).",
     "1.1.0-b1": "[U] Forge dependency update from v14.23.3.2655 to v14.23.5.2768, gradle updated to v3.3, mappings update to version stable_39.\n[!] Forge deprecation fixes, THIS MAY AFFECT EXISTING SWITCHES.\n[!] Structured config file implemented. THIS WILL RESET YOUR MOD CONFIG TO THE DEFAULTS.\n[A] Version update check (Forge update json file format).\n[A] Mod jar signing implemented.\n[M] Version naming compliancy (removed 'mc' prefix in version strings).\n[M] Forge naming convention refractoring of classes.",
     "1.0.5": "[R] Release based on v1.0.5b2.",
     "1.0.5-b2": "[F] Debounced link pearl cycling when creating a link pearl from an Ender pearl.\n[A] Added inverse output state switch linking feature.",
@@ -30,6 +31,6 @@
   },
   "promos": {
     "1.12.2-recommended": "1.0.5",
-    "1.12.2-latest": "1.1.0-b1"
+    "1.12.2-latest": "1.1.0-b2"
   }
 }

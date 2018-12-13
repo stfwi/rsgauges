@@ -48,6 +48,11 @@ on [`Forge`](http://www.minecraftforge.net/). The Mod adds devices to measure or
   tracks on it, but because of boundary effects of the crystalline material
   structures you will not see the tracks from below.
 
+- **Power plants** are no energy generating facilities, but artificial flowers.
+  They look very similar to vanilla Minecraft flowers and produce a redstone signal
+  if they are touched or something falls on them. Because artificial, they behave
+  like contact plates and support all switch settings including switch linking.
+
 ----
 ### Recipes
 
@@ -136,6 +141,12 @@ reasons:
 
 ----
 ## Revision history
+
+    - v1.1.0-b2 [A] Added switch link relay (redstone power based link activation).
+                [A] Added switch link pulse relay (reacts on redstone rising edge).
+                [A] Added switch link receiver (silent bistable switch device).
+                [A] Added switch link pulse receiver (silent pulse switch device).
+                [A] Added yellow and red power plants (yes, flowers).
 
     - v1.1.0-b1 [U] Forge dependency update from v14.23.3.2655 to v14.23.5.2768,
                     gradle updated to v3.3, mappings update to version stable_39.

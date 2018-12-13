@@ -146,24 +146,33 @@ public class ModAuxiliaries
     public static final String[] nameByIndex = { "white","orange","magenta","lightblue","yellow","lime","pink","gray","silver","cyan","purple","blue","brown","green","red","black" };
   }
 
-  public static class RsMaterial extends Material
+  public static class RsMaterials
   {
-    public static final RsMaterial TRAPDOORSWITCH_MATERIAL = new RsMaterial();
+    public static final Material MATERIAL_TRAPDOORSWITCH = new MetalMaterial();
+    public static final Material MATERIAL_PLANT = new PlantMaterial();
 
-    public RsMaterial()
-    { super(MapColor.IRON); }
+    public static class MetalMaterial extends Material {
+      public MetalMaterial() { super(MapColor.IRON); }
+      @Override public boolean isLiquid() { return false; }
+      @Override public boolean blocksLight() { return false; }
+      @Override public boolean blocksMovement() { return true; }
+      @Override public boolean isToolNotRequired()
+      {
+        return true;
+      }
+    }
 
-    @Override
-    public boolean isLiquid()
-    { return false; }
+    public static class PlantMaterial extends Material {
+      public PlantMaterial() { super(MapColor.GRASS); }
+      @Override public boolean isLiquid() { return false; }
+      @Override public boolean blocksLight() { return false; }
+      @Override public boolean blocksMovement() { return false; }
+      @Override public boolean isToolNotRequired()
+      {
+        return true;
+      }
+    }
 
-    @Override
-    public boolean blocksLight()
-    { return false; }
-
-    @Override
-    public boolean blocksMovement()
-    { return true; }
   }
 
 }

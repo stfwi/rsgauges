@@ -20,7 +20,11 @@ for(var file_i in file_list) {
   if(model.parent === undefined) add_error("Missing parent");
   if(model.textures === undefined) add_error("Missing textures");
   if(model.display === undefined) {
-    if((model.parent=== undefined) || (model.parent.search("cube_all")<0)) add_error("Missing display");
+    if((model.parent === undefined) ||
+      ((model.parent.search("cube_all")<0) && (model.parent.search("cross")<0))
+    ) {
+      add_error("Missing display");
+    }
   } else {
     if(model.display.gui === undefined) add_error("Missing display.gui");
     if(model.display.fixed === undefined) add_error("Missing display.fixed");

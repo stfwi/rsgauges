@@ -9,6 +9,7 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.block.Block;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModItems;
 import wile.rsgauges.ModAuxiliaries;
@@ -88,6 +89,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public static final long SWITCH_CONFIG_HIGH_SENSITIVE         = 0x0000010000000000l;
   public static final long SWITCH_CONFIG_LINK_SOURCE_SUPPORT    = 0x0000020000000000l;
   public static final long SWITCH_CONFIG_LINK_TARGET_SUPPORT    = 0x0000040000000000l;
+  public static final long SWITCH_CONFIG_LINK_RELAY             = 0x0000080000000000l;
 
   public static final int SWITCH_DATA_SVD_ACTIVE_TIME_MASK      = 0x000000ff;
   public static final int SWITCH_DATA_SVD_COLOR_MASK            = 0x00000f00;
@@ -102,7 +104,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
   public static final PropertyBool POWERED = PropertyBool.create("powered");
 
-  public BlockSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
+  public BlockSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
   {
     super(registryName, unrotatedBBUnpowered, material);
     this.config = config;
@@ -113,7 +115,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       if(powerOnSound==null) powerOnSound =  ModResources.BlockSoundEvents.DEFAULT_SWITCH_MUTE;
       if(powerOffSound==null) powerOffSound = ModResources.BlockSoundEvents.DEFAULT_SWITCH_MUTE;
     }
-    unrotated_bb_powered = unrotatedBBPowered;
+    unrotated_bb_powered = (unrotatedBBPowered!=null) ? unrotatedBBPowered : unrotatedBBUnpowered;
     power_on_sound = powerOnSound;
     power_off_sound = powerOffSound;
     setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));
@@ -121,12 +123,6 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
   public BlockSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, null); }
-
-  public BlockSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config)
-  { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, null, null, null); }
-
-  public BlockSwitch(String registryName, AxisAlignedBB unrotatedBB, long config)
-  { this(registryName, unrotatedBB, null, config, null, null, null); }
 
   @Override
   public AxisAlignedBB getUnrotatedBB(IBlockState state)
@@ -197,7 +193,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   @Override
   @SuppressWarnings("deprecation")
   public boolean canProvidePower(IBlockState state)
-  { return true; }
+  { return ((config & SWITCH_CONFIG_LINK_RELAY)==0); }
 
   @Override
   public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side)
@@ -207,6 +203,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   @SuppressWarnings("deprecation")
   public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
   {
+    if((config & SWITCH_CONFIG_LINK_RELAY)!=0) return 0;
     if((!(world instanceof World)) || (side != ((isLateral()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING))))) return 0;
     final TileEntitySwitch te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, false);
@@ -216,6 +213,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   @SuppressWarnings("deprecation")
   public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
   {
+    if((config & SWITCH_CONFIG_LINK_RELAY)!=0) return 0;
     if((!(world instanceof World)) || (side != ((isLateral()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING))))) return 0;
     final TileEntitySwitch te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, true);
@@ -244,6 +242,22 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
         return true;
       }, null);
     }
+  }
+
+  @Override
+  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighbourPos)
+  {
+    if(!neighborChangedCheck(state, world, pos, neighborBlock, neighbourPos)) return;
+    if((config & SWITCH_CONFIG_LINK_RELAY)==0) return;
+    final TileEntitySwitch te = getTe((World)world, pos);
+    if(te==null) return;
+    boolean powered = world.isSidePowered(neighbourPos, state.getValue(FACING).getOpposite());
+    if(((config & SWITCH_CONFIG_INVERTABLE)!=0) && (te.inverted())) powered = !powered; // inverted==redstone input state inverted
+    if((te.on_power()==0) == (powered)) return; // power state not changed
+    te.on_power(powered ? 0 : 15);
+    if(((config & SWITCH_CONFIG_BISTABLE)!=0) && (state.getValue(POWERED)==powered)) return; // no state change, don't flip state
+    if(((config & SWITCH_CONFIG_PULSE)!=0) && ((!powered) || (state.getValue(POWERED)))) return; // no extension etc.
+    onBlockActivated(world, pos, state, null);
   }
 
   @Override
@@ -286,7 +300,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       world.setBlockState(pos, state.withProperty(POWERED, true), 1|2);
       power_on_sound.play(world, pos);
     }
-    notifyNeighbours(world, pos, state);
+    if((config & SWITCH_CONFIG_LINK_RELAY)==0) notifyNeighbours(world, pos, state);
     if((config & SWITCH_CONFIG_PULSE)!=0) {
       world.scheduleUpdate(pos, this, base_tick_rate);
       if((config & SWITCH_CONFIG_PULSE_EXTENDABLE)==0) te.off_timer_reset();
@@ -399,7 +413,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       world.setBlockState(pos, state.withProperty(POWERED, false), 1|2);
       power_off_sound.play(world, pos);
     }
-    notifyNeighbours(world, pos, state);
+    if((config & SWITCH_CONFIG_LINK_RELAY)==0) notifyNeighbours(world, pos, state);
   }
 
   @Override
@@ -421,7 +435,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     if((te!=null) && (te.off_timer_tick() > 0) && (!world.isUpdateScheduled(pos, this)) ) { world.scheduleUpdate(pos, this, 1); return; }
     world.setBlockState(pos, (state=state.withProperty(POWERED, false)));
     power_off_sound.play(world, pos);
-    notifyNeighbours(world, pos, state);
+    if((config & SWITCH_CONFIG_LINK_RELAY)==0) notifyNeighbours(world, pos, state);
     if((config & BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
       if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
         ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
@@ -650,7 +664,12 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
           default: weak(false); inverted(false); nooutput(false); break;
         }
       }
-      if(ModConfig.optouts.without_switch_nooutput) nooutput(false); // override last option, where not weak and not inverted is already set.
+      if((block.config & (SWITCH_DATA_WEAK|SWITCH_CONFIG_WEAKABLE))==(SWITCH_DATA_WEAK)) {
+        if(!weak()) weak(true); // strong/weak not settable, and always weak forced.
+      }
+      if((ModConfig.optouts.without_switch_nooutput) || ((block.config & SWITCH_CONFIG_LINK_RELAY)!=0)) {
+        nooutput(false); // override last option, where not weak and not inverted is already set.
+      }
       markDirty();
       return true;
     }
@@ -664,7 +683,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       TextComponentTranslation status = ModAuxiliaries.localizable("switchconfig.options", TextFormatting.RESET);
       boolean statusset = false;
       if((on_power() < 15) || (off_power()>0)) {
-        if((block == null) || ((block.config & SWITCH_CONFIG_AUTOMATIC)==0)) {
+        if((block == null) || ((block.config & (SWITCH_CONFIG_AUTOMATIC|SWITCH_CONFIG_LINK_RELAY))==0)) {
           // power only for non-auto-switches
           statusset = true;
           status.appendSibling(ModAuxiliaries.localizable("switchconfig.options.output_power", TextFormatting.RED, new Object[]{on_power()}));

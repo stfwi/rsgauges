@@ -13,6 +13,8 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.block.SoundType;
+import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModItems;
@@ -58,15 +60,20 @@ public abstract class RsBlock extends Block
   public RsBlock(String registryName, AxisAlignedBB unrotatedBoundingBox, @Nullable Material material)
   {
     super((material!=null) ? (material) : (Material.CIRCUITS));
+    unrotatedBB = unrotatedBoundingBox;
     setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(ModRsGauges.MODID, registryName);
     setTranslationKey(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);
     setLightLevel(0);
-    setHardness(0.3f);
     setResistance(2.0f);
     setTickRandomly(false);
-    unrotatedBB = unrotatedBoundingBox;
+    if(material != ModAuxiliaries.RsMaterials.MATERIAL_PLANT) {
+      setHardness(0.3f);
+    } else {
+      setHardness(0.1f);
+      setSoundType(SoundType.PLANT);
+    }
   }
 
   public RsBlock(String registryName)
@@ -162,8 +169,8 @@ public abstract class RsBlock extends Block
 
   @Override
   @SuppressWarnings("deprecation")
-  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
-  { neighborChangedCheck(state, world, pos, neighborBlock, neighborPos); }
+  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighbourPos)
+  { neighborChangedCheck(state, world, pos, neighborBlock, neighbourPos); }
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
@@ -185,7 +192,12 @@ public abstract class RsBlock extends Block
   {
     if(isLateral() && (!isWallMount())) {
       if(side != EnumFacing.UP) return false; // must be supported from the bottom.
-      return (world.getBlockState(pos.down()).getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
+      final IBlockState state = world.getBlockState(pos.down());
+      if((state==null) || (state.getBlockFaceShape(world, pos, EnumFacing.UP) != BlockFaceShape.SOLID)) return false;
+      if(material!=ModAuxiliaries.RsMaterials.MATERIAL_PLANT) return true;
+
+
+      return true;
     } else {
       if(isLateral() && ((side==EnumFacing.UP)||(side==EnumFacing.DOWN))) return false; // lateral blocks only on walls.
       final BlockPos blockpos = pos.offset(side.getOpposite());

@@ -41,11 +41,6 @@ public class BlockContactSwitch extends BlockSwitch
   public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, null); }
 
-  public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { this(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound, null); }
-
-  public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBB, long config)
-  { this(registryName, unrotatedBB, null, config, null, null, null); }
 
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)

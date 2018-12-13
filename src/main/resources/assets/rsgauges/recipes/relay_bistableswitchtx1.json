@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NRN",
+    "NLN",
+    "NRN"
+  ],
+  "key": {
+    "N": { "item": "minecraft:iron_nugget", "data": 0 },
+    "R": { "item": "minecraft:redstone", "data": 0 },
+    "L": { "item": "minecraft:lever", "data": 0 }
+  },
+  "result": { "item": "rsgauges:relay_bistableswitchtx1", "data": 0 }
+}

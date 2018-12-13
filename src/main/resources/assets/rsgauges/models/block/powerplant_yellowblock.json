@@ -1,0 +1,4 @@
+{
+  "parent": "block/cross",
+  "textures": { "cross": "rsgauges:blocks/plants/powerplant_yellow_s00" }
+}

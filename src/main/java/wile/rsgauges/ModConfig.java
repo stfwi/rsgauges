@@ -107,6 +107,15 @@ public class ModConfig
     public boolean without_automatic_switches = false;
 
     @Config.Comment({
+      "Completely disable all link relay switches, the blocks will not " +
+      "be registered.",
+      "Affects server and client side. Requires restart."
+    })
+    @Config.Name("Without link relay switches")
+    @Config.RequiresMcRestart
+    public boolean without_linkrelay_switches = false;
+
+    @Config.Comment({
       "Completely disable all decorative blocks, the blocks will not " +
       "be registered.",
       "Affects server and client side. Requires restart."
