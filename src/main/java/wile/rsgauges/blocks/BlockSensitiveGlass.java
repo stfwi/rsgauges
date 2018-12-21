@@ -19,6 +19,7 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.List;
 
 public class BlockSensitiveGlass extends Block implements ModBlocks.Colors.ColorTintSupport
 {
@@ -86,6 +88,11 @@ public class BlockSensitiveGlass extends Block implements ModBlocks.Colors.Color
   @SideOnly(Side.CLIENT)
   public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.ParticleManager manager)
   { return true; }
+
+  @Override
+  @SideOnly(Side.CLIENT)
+  public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
+  { ModAuxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, true); }
 
   @SideOnly(Side.CLIENT)
   @Override

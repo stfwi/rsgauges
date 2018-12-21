@@ -15,6 +15,7 @@ const version_rsgauges = fs.readfile("gradle.properties", function(line){
 
 const git_remote = sys.shell("git remote -v").trim();
 const git_branch = sys.shell("git rev-parse --abbrev-ref HEAD").trim();
+const git_diff = sys.shell("git diff").trim();
 var fails = [];
 
 if(version_rsgauges=="") fails.push("Could not determine 'version_rsgauges' from gradle properties.");
@@ -28,7 +29,7 @@ if((git_branch != "develop") && (git_branch != "master")) {
 } else if((git_branch == "master") && (version_rsgauges.replace(/[^\w\.-]/g,"")!="")) {
   fails.push("Cannot make beta dist on master branch.");
 }
-
+if(git_diff !== "") fails.push("Not everything committed to the GIT repository.");
 if((!fs.isfile("signing.jks")) || (!fs.isfile("signing.properties"))) fails.push("Jar signing files missing.");
 
 if(fails.length>0) {

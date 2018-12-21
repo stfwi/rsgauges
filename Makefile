@@ -85,6 +85,7 @@ sanatize:
 	@djs scripts/sanatize-json-model-files.js
 	@djs scripts/sanatize-sync-languages.js
 	@djs scripts/task-update-json.js
+	@git status -s
 
 dist-check:
 	@echo "Running dist checks ..."

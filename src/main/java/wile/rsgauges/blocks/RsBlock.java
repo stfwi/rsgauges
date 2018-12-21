@@ -14,6 +14,7 @@
 package wile.rsgauges.blocks;
 
 import net.minecraft.block.SoundType;
+import net.minecraft.client.util.ITooltipFlag;
 import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.ModConfig;
@@ -50,6 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.DyeUtils;
 import com.google.common.base.Predicate;
 import javax.annotation.Nullable;
+import java.util.List;
 
 
 public abstract class RsBlock extends Block
@@ -127,6 +129,11 @@ public abstract class RsBlock extends Block
   @SideOnly(Side.CLIENT)
   public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.ParticleManager manager)
   { return true; } // no destroy effects
+
+  @Override
+  @SideOnly(Side.CLIENT)
+  public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
+  { ModAuxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, true); }
 
   @Override
   public boolean canSpawnInBlock()

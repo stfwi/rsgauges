@@ -142,6 +142,10 @@ reasons:
 ----
 ## Revision history
 
+    - v1.1.0-b3 [A] Added manual/description tooltips for all blocks and items
+                    of the mod (CTRL-SHIFT when mouse hovering in the inventory
+                    or JEI).
+
     - v1.1.0-b2 [A] Added switch link relay (redstone power based link activation).
                 [A] Added switch link pulse relay (reacts on redstone rising edge).
                 [A] Added switch link receiver (silent bistable switch device).

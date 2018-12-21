@@ -74,6 +74,7 @@ public class ItemSwitchLinkPearl extends RsItem
   public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
   {
     final SwitchLink link = SwitchLink.fromItemStack(stack);
+    if(ModAuxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, (!link.valid))) return;
     if(!link.valid) return;
     final Block targetBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(link.block_name));
     if(targetBlock!=null) {
@@ -99,6 +100,7 @@ public class ItemSwitchLinkPearl extends RsItem
       "switchlinking.relayconfig.confval" + Integer.toString(link.relay()),
       TextFormatting.ITALIC
     ).getFormattedText());
+    super.addInformation(stack, world, tooltip, flag);
   }
 
   @Override

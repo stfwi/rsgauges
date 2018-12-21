@@ -6,8 +6,24 @@ function load() {
   fs.find("./src/main/resources/assets/rsgauges/lang", '*.lang', function(f){
     var lang_code = fs.basename(f).replace(/\..*$/,"").trim().toLowerCase();
     var lines = fs.readfile(f).trim().split("\n");
-    for(var i in lines) { lines[i] = lines[i].trim(); }
-    lang_data[lang_code] = lines;
+    var was_eol_escape = false;
+    for(var i in lines) {
+      if(was_eol_escape) {
+        var k=0;
+        for(k=i-1; k>=0; --k) {
+          if(lines[k] != null) {
+            lines[k] += "\n" + lines[i];
+            break;
+          }
+        }
+        was_eol_escape = lines[i].match(/[^\\][\\]$/) != null;
+        lines[i] = null;
+      } else {
+        lines[i] = lines[i].trim();
+        was_eol_escape = lines[i].match(/[^\\][\\]$/) != null;
+      }
+    }
+    lang_data[lang_code] = lines.filter(function(l){return (l!==null);});
     return false;
   });
   return lang_data;
@@ -67,8 +83,9 @@ function complete_lang_lines(lang_lines, lang_names, reflang_code) {
           lang_outputs[name].push(entry.key + "=" + entry.tr[name]);
         } else {
           var added = entry.key + "=" + entry.tr[reflang_code];
+          if((entry.key.search(/\.tip$/)>0) || (entry.key.search(/\.help$/)>0)) added = "#" + added;
           lang_outputs[name].push(added);
-          print("[warn] Lang: Added default language for missing entry in " + name + ": '" + added + "'");
+          if(added.search(/^#/)<0) print("[warn] Lang: Added default language for missing entry in " + name + ": '" + added + "'");
         }
       }
     }
