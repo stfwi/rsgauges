@@ -1,5 +1,7 @@
 package wile.rsgauges.items;
 
+import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.detail.ModAuxiliaries;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -9,8 +11,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import wile.rsgauges.ModAuxiliaries;
-import wile.rsgauges.ModRsGauges;
 import javax.annotation.Nullable;
 import java.util.List;
 

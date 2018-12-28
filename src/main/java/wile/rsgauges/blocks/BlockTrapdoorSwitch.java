@@ -9,7 +9,7 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModResources;
+import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;

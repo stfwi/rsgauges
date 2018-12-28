@@ -6,25 +6,26 @@
  *
  * General commonly used functionality.
  */
-package wile.rsgauges;
+package wile.rsgauges.detail;
 
+import wile.rsgauges.ModRsGauges;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.input.Keyboard;
-import wile.rsgauges.network.Networking;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -49,7 +50,7 @@ public class ModAuxiliaries
     TextComponentTranslation tr = new TextComponentTranslation(translationKey, args);
     tr.getStyle().setColor(TextFormatting.RESET);
     final String ft = tr.getFormattedText();
-    if(ft.indexOf("${")>=0) {
+    if(ft.contains("${")) {
       // Non-recursive, non-argument lang file entry cross referencing.
       Pattern pt = Pattern.compile("\\$\\{([\\w\\.]+)\\}");
       Matcher mt = pt.matcher(ft);
@@ -234,9 +235,13 @@ public class ModAuxiliaries
     public static final String[] nameByIndex = { "white","orange","magenta","lightblue","yellow","lime","pink","gray","silver","cyan","purple","blue","brown","green","red","black" };
   }
 
+  /**
+   * Material definitions specific to blocks of this Mod.
+   */
   public static class RsMaterials
   {
     public static final Material MATERIAL_TRAPDOORSWITCH = new MetalMaterial();
+    public static final Material MATERIAL_METALLIC = new MetalMaterial();
     public static final Material MATERIAL_PLANT = new PlantMaterial();
 
     public static class MetalMaterial extends Material {
@@ -244,23 +249,15 @@ public class ModAuxiliaries
       @Override public boolean isLiquid() { return false; }
       @Override public boolean blocksLight() { return false; }
       @Override public boolean blocksMovement() { return true; }
-      @Override public boolean isToolNotRequired()
-      {
-        return true;
-      }
+      @Override public boolean isToolNotRequired()  { return true; }
     }
-
     public static class PlantMaterial extends Material {
       public PlantMaterial() { super(MapColor.GRASS); }
       @Override public boolean isLiquid() { return false; }
       @Override public boolean blocksLight() { return false; }
       @Override public boolean blocksMovement() { return false; }
-      @Override public boolean isToolNotRequired()
-      {
-        return true;
-      }
+      @Override public boolean isToolNotRequired() { return true; }
     }
-
   }
 
 }

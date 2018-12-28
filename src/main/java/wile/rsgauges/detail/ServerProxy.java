@@ -6,10 +6,10 @@
  *
  * Module initialisation event handling, server side only.
  */
-package wile.rsgauges.proxy;
+package wile.rsgauges.detail;
 
 import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.network.*;
+import wile.rsgauges.detail.Networking;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

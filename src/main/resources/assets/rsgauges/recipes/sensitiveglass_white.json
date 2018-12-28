@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:sensitiveglass_white"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "result": {
     "item": "rsgauges:sensitiveglass_white",
@@ -11,9 +17,21 @@
     "NGN"
   ],
   "key": {
-    "N": { "item": "minecraft:iron_nugget", "data": 0 },
-    "R": { "item": "minecraft:redstone", "data": 0 },
-    "G": { "item": "minecraft:glass", "data": 0 },
-    "D": { "type": "forge:ore_dict", "ore": "dyeWhite"  }
+    "N": {
+      "item": "minecraft:iron_nugget",
+      "data": 0
+    },
+    "R": {
+      "item": "minecraft:redstone",
+      "data": 0
+    },
+    "G": {
+      "item": "minecraft:glass",
+      "data": 0
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "dyeWhite"
+    }
   }
 }

@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:automaticswitch5",
+      "items": [
+        "rsgauges:automaticswitch3"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:automaticswitch3" } ],
-  "result": { "item": "rsgauges:automaticswitch5", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:automaticswitch3"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:automaticswitch5",
+    "data": 0
+  }
 }

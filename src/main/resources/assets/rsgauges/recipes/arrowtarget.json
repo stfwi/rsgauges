@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:arrowtarget"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "NAN",
@@ -6,10 +12,25 @@
     "NRN"
   ],
   "key": {
-    "N": { "item": "minecraft:iron_nugget", "data": 0 },
-    "A": { "item": "minecraft:arrow", "data": 0 },
-    "R": { "item": "minecraft:redstone", "data": 0 },
-    "B": { "item": "minecraft:stone_button", "data": 0 }
+    "N": {
+      "item": "minecraft:iron_nugget",
+      "data": 0
+    },
+    "A": {
+      "item": "minecraft:arrow",
+      "data": 0
+    },
+    "R": {
+      "item": "minecraft:redstone",
+      "data": 0
+    },
+    "B": {
+      "item": "minecraft:stone_button",
+      "data": 0
+    }
   },
-  "result": { "item": "rsgauges:arrowtarget", "data": 0 }
+  "result": {
+    "item": "rsgauges:arrowtarget",
+    "data": 0
+  }
 }

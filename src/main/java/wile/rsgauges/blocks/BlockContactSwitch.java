@@ -9,8 +9,8 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModAuxiliaries;
-import wile.rsgauges.ModResources;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModResources;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
@@ -36,10 +36,10 @@ import java.util.List;
 public class BlockContactSwitch extends BlockSwitch
 {
   public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
-  { super(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, material); }
+  { super(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config|BlockSwitch.SWITCH_CONFIG_CONTACT, powerOnSound, powerOffSound, material); }
 
   public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, null); }
+  { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config|BlockSwitch.SWITCH_CONFIG_CONTACT, powerOnSound, powerOffSound, null); }
 
 
   @Override
@@ -51,7 +51,7 @@ public class BlockContactSwitch extends BlockSwitch
     if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
     if(player != null) {
       RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-      if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof BlockContactSwitch)) {
+      if((wac.touch_configured) && (state.getBlock() instanceof BlockContactSwitch)) {
         te.activation_config((BlockContactSwitch)state.getBlock(), player, wac.x, wac.y);
       }
     }
@@ -213,7 +213,7 @@ public class BlockContactSwitch extends BlockSwitch
     {
       if(block == null) return false;
       int direction=0, field=0;
-      if((block.config & (SWITCH_CONFIG_FLOOR_MOUNT)) != 0) {
+      if((block.config & (SWITCH_CONFIG_LATERAL)) != 0) {
         direction = ((y>=13) && (y<=15)) ? (1) : (((y>=10) && (y<=12)) ? (-1) : (0));
         field = ((x>=9.5) && (x<=10.1)) ? (1) : (
                 ((x>=10.9) && (x<=11.7)) ? (2) : (

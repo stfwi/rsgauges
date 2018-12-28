@@ -9,9 +9,10 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.ModAuxiliaries;
-import wile.rsgauges.ModResources;
+import net.minecraft.block.material.Material;
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.World;
 import net.minecraft.block.state.IBlockState;
@@ -38,9 +39,11 @@ import java.util.Random;
 
 public class BlockAutoSwitch extends BlockSwitch
 {
+  public BlockAutoSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
+  { super(registryName, unrotatedBB, null, config|BlockSwitch.SWITCH_CONFIG_AUTOMATIC, powerOnSound, powerOffSound, material); }
 
   public BlockAutoSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound); }
+  { super(registryName, unrotatedBB, null, config|BlockSwitch.SWITCH_CONFIG_AUTOMATIC, powerOnSound, powerOffSound, null); }
 
   @Override
   public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final EntityPlayer player)
@@ -64,7 +67,7 @@ public class BlockAutoSwitch extends BlockSwitch
     te.click_config(null);
     if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
     RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-    if((wac.touch_configured) && (wac.wrenched) && (state.getBlock() instanceof BlockAutoSwitch)) {
+    if((wac.touch_configured) && (state.getBlock() instanceof BlockAutoSwitch)) {
       if(te.activation_config((BlockAutoSwitch)state.getBlock(), player, wac.x, wac.y)) return true;
       if((config & (SWITCH_CONFIG_TIMER_INTERVAL))!=0) {
         te.updateSwitchState(state, this, !state.getValue(POWERED), 0);

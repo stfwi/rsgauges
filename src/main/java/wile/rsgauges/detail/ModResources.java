@@ -7,8 +7,9 @@
  * Common extended functionality dealing with resource
  * files and corresponding settings/usage options.
  */
-package wile.rsgauges;
+package wile.rsgauges.detail;
 
+import wile.rsgauges.ModRsGauges;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;

@@ -80,10 +80,11 @@ start-server: install
 sanatize:
 	@echo "Running sanatising tasks ..."
 	@djs scripts/sanatize-trailing-whitespaces.js
-	@djs scripts/sanatize-version-check.js
 	@djs scripts/sanatize-tabs-to-spaces.js
 	@djs scripts/sanatize-json-model-files.js
+	@djs scripts/sanatize-json-recipes.js
 	@djs scripts/sanatize-sync-languages.js
+	@djs scripts/sanatize-version-check.js
 	@djs scripts/task-update-json.js
 	@git status -s
 

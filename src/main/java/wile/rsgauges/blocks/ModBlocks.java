@@ -10,9 +10,12 @@
  * Note: Straight forward definition of different blocks/entities
  *       to make recipes, models and texture definitions easier.
  */
-package wile.rsgauges;
+package wile.rsgauges.blocks;
 
-import wile.rsgauges.blocks.*;
+import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModConfig;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,12 +37,15 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.init.SoundEvents;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @SuppressWarnings("unused")
 public class ModBlocks
 {
+  // Gauges
   @GameRegistry.ObjectHolder("rsgauges:flatgauge1")               public static final BlockGauge flatgauge1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:flatgauge2")               public static final BlockGauge flatgauge2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:flatgauge3")               public static final BlockGauge flatgauge3Block = null;
@@ -47,71 +53,18 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:flatgauge5")               public static final BlockGauge flatgauge5Block = null;
   @GameRegistry.ObjectHolder("rsgauges:flatgauge6")               public static final BlockGauge flatgauge6Block = null;
   @GameRegistry.ObjectHolder("rsgauges:gauge_rustic2")            public static final BlockGauge gaugeRustic2Block = null;
-  private static final Block gauges[] = {
-    new BlockGauge("flatgauge1", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) ),
-    new BlockGauge("flatgauge2", new AxisAlignedBB((4d/16),(2d/16),(0d/16), (12d/16),(14d/16),(1d/16)) ),
-    new BlockGauge("flatgauge3", new AxisAlignedBB((4d/16),(5d/16),(0d/16), (12d/16),(11d/16),(1d/16)) ),
-    new BlockGauge("flatgauge4", new AxisAlignedBB((7d/16),(3.7d/16),(0d/16), (10d/16),(12d/16),(0.4d/16)) ),
-    new BlockGauge("flatgauge5", new AxisAlignedBB((7d/16),(4d/16),(0d/16), (9d/16),(12d/16),(3d/16)) ),
-    new BlockGauge("flatgauge6", new AxisAlignedBB((2d/16),(4d/16),(0d/16), (14d/16),(12d/16),(1d/16)) ),
-    new BlockGauge("gauge_rustic2", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) )
-  };
-
+  // Indicators (steady)
   @GameRegistry.ObjectHolder("rsgauges:indicator1")               public static final BlockGauge indicator1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator2")               public static final BlockGauge indicator2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator3")               public static final BlockGauge indicator3Block = null;
-  private static final Block indicators[] = {
-    // square LED
-    new BlockGauge("indicator1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 0  // light level, blink frequency
-    ),
-    new BlockGauge("indicator2",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 0  // light level, blink frequency
-    ),
-    new BlockGauge("indicator3",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 0  // light level, blink frequency
-    )
-  };
-
+  // Blinking indicators
   @GameRegistry.ObjectHolder("rsgauges:indicator1blink1")         public static final BlockGauge indicator1Blink1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator2blink1")         public static final BlockGauge indicator2Blink1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator3blink1")         public static final BlockGauge indicator3Blink1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator4")               public static final BlockGauge indicator4Block = null;
-  private static final Block blinkIndicators[] = {
-    // Blinking square LEDs
-    new BlockGauge("indicator1blink1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 2000  // light level scaling, blink frequency
-    ),
-    new BlockGauge("indicator2blink1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 2000  // light level scaling, blink frequency
-    ),
-    new BlockGauge("indicator3blink1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 2000  // light level scaling, blink frequency
-    ),
-    // alarm lamp
-    new BlockGauge("indicator4",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(4d/16)),
-      8, 1500  // light level scaling, blink frequency
-    )
-  };
-
+  // Sound indicators
   @GameRegistry.ObjectHolder("rsgauges:soundindicator1")          public static final BlockGauge soundIndicator1Block = null;
-  private static final Block soundIndicators[] = {
-    // Alarm siren
-    new BlockGauge("soundindicator1",
-      new AxisAlignedBB((4d/16),(6.5d/16),(0d/16), (11.5d/16),(9.5d/16),(4d/16)),
-      1, 1500, // light level scaling, blink frequency
-      new ModResources.BlockSoundEvent(ModResources.alarm_siren_sound),
-      null
-    )
-  };
-
+  // Bi-stable switches
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch1")          public static final BlockSwitch bistableSwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch2")          public static final BlockSwitch bistableSwitch2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch3")          public static final BlockSwitch bistableSwitch3Block = null;
@@ -136,201 +89,7 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch_rustic7")   public static final BlockSwitch bistableSwitchRustic7Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch_glass1")    public static final BlockSwitch bistableSwitchGlass1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:bistableswitch_glass2")    public static final BlockSwitch bistableSwitchGlass2Block = null;
-  private static final Block bistableSwitches[] = {
-    // Rotary machine switch
-    new BlockSwitch("bistableswitch1",
-      new AxisAlignedBB((4.25d/16),(4.25d/16),(0d/16),(11.75d/16),(11.75d/16),(0.80d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Contact lever switch
-    new BlockSwitch("bistableswitch2",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(14d/16),(1.5d/16)),
-      new AxisAlignedBB((6d/16),(2d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // two-button machine switch
-    new BlockSwitch("bistableswitch3",
-      new AxisAlignedBB((4d/16),(4d/16),(0d/16),(12d/16),(12d/16),(1d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Light flip switch
-    new BlockSwitch("bistableswitch4",
-      new AxisAlignedBB((7d/16),(6d/16),(0d/16),(9d/16),(10d/16),(1.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // ESTOP button
-    new BlockSwitch("bistableswitch5",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)),
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE_OFF,
-      null, null
-    ),
-    // Hopper blocking switch
-    new BlockSwitch("bistableswitch6",
-      new AxisAlignedBB((4.8d/16),(10d/16),(0d/16), (11.2d/16),(11d/16),(6d/16)),
-      new AxisAlignedBB((4.8d/16),(10d/16),(0d/16), (11.2d/16),(11d/16),(3d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE|BlockSwitch.SWITCH_DATA_WEAK,
-      null, null
-    ),
-    // mechanical rotary lever
-    new BlockSwitch("bistableswitch7",
-      new AxisAlignedBB((2.5d/16),(9.5d/16),(0d/16), (12.3d/16),(13d/16),(2.7d/16)),
-      new AxisAlignedBB((8.7d/16),( 3d/16),(0d/16), (12.3d/16),(13d/16),(2.7d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
-      null, null
-    ),
-    // mechanical lever
-    new BlockSwitch("bistableswitch8",
-      new AxisAlignedBB((6.5d/16),(6.5d/16),(0d/16), (9.7d/16),(14.0d/16),(3d/16)),
-      new AxisAlignedBB((6.5d/16),(5.0d/16),(0d/16), (9.7d/16),(12.5d/16),(3d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy gold decorated lever
-    new BlockSwitch("bistableswitch_oldfancy1",
-      new AxisAlignedBB((6d/16),(6.5d/16),(0d/16), (10.3d/16),(13.5d/16),(4.5d/16)),
-      new AxisAlignedBB((6d/16),(3.5d/16),(0d/16), (10.3d/16),(10.0d/16),(4.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy angular lever
-    new BlockSwitch("bistableswitch_oldfancy2",
-      new AxisAlignedBB((2.5d/16),(6.0d/16),(0d/16), (9.7d/16),(10.0d/16),(4.5d/16)),
-      new AxisAlignedBB((4.5d/16),(3.5d/16),(0d/16), (9.2d/16),(10.0d/16),(4.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
-      null, null
-    ),
-    // Old fancy bent lever
-    new BlockSwitch("bistableswitch_oldfancy3",
-      new AxisAlignedBB((4.5d/16),(5.0d/16),(0d/16), (12.0d/16),(11.0d/16),(4.5d/16)),
-      new AxisAlignedBB((4.5d/16),(5.0d/16),(0d/16), (12.0d/16),(11.0d/16),(4.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy gold decorated manual slide sphere connector
-    new BlockSwitch("bistableswitch_oldfancy4",
-      new AxisAlignedBB((5.0d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy gold decorated rotary sphere connector
-    new BlockSwitch("bistableswitch_oldfancy5",
-      new AxisAlignedBB((5.0d/16),(5.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
-      new AxisAlignedBB((5.0d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy gold decorated rotary sphere connector 2
-    new BlockSwitch("bistableswitch_oldfancy6",
-      new AxisAlignedBB((5.0d/16),(5.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy gold decorated manual contactor
-    new BlockSwitch("bistableswitch_oldfancy7",
-      new AxisAlignedBB((2.0d/16),(6.0d/16),(0d/16), (11.7d/16),(14.0d/16),(4.5d/16)),
-      new AxisAlignedBB((3.5d/16),(3.5d/16),(0d/16), (11.2d/16),(14.0d/16),(4.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic lever 1
-    new BlockSwitch("bistableswitch_rustic1",
-      new AxisAlignedBB((6d/16),(5.0d/16),(0d/16), (10.3d/16),(15.0d/16),(4.5d/16)),
-      new AxisAlignedBB((6d/16),(2.0d/16),(0d/16), (10.3d/16),(11.0d/16),(4.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic lever 2 (bolted)
-    new BlockSwitch("bistableswitch_rustic2",
-      new AxisAlignedBB((4d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
-      new AxisAlignedBB((4d/16),(4.0d/16),(0d/16), (13.0d/16),(10.0d/16),(4.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic lever 3 (big angular)
-    new BlockSwitch("bistableswitch_rustic3",
-      new AxisAlignedBB((0.2d/16),(10.0d/16),(0d/16), (13.5d/16),(15.0d/16),(4.5d/16)),
-      new AxisAlignedBB((5.5d/16),( 2.0d/16),(0d/16), (13.5d/16),(15.0d/16),(4.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
-      null, null
-    ),
-    // Rustic lever 4 (counter weighted rotary lever)
-    new BlockSwitch("bistableswitch_rustic4",
-      new AxisAlignedBB((0.5d/16),(11.0d/16),(0d/16), (14.0d/16),(15.0d/16),(4.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
-      null, null
-    ),
-    // Rustic lever 5
-    new BlockSwitch("bistableswitch_rustic5",
-      new AxisAlignedBB((3.5d/16),(6.0d/16),(0d/16), (12.5d/16),(11.0d/16),(4.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic lever 6 (latch slide)
-    new BlockSwitch("bistableswitch_rustic6",
-      new AxisAlignedBB((3d/16),(6.0d/16),(0d/16), (13.0d/16),(12.0d/16),(4.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic lever 7 (The Nail)
-    new BlockSwitch("bistableswitch_rustic7",
-      new AxisAlignedBB((6.0d/16),(7.0d/16),(0d/16), (9.0d/16),(10.0d/16),(3.0d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
-      null, null
-    ),
-    // Thin star shaped glass switch
-    new BlockSwitch("bistableswitch_glass1",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
-      null, null
-    ),
-    // Bistable glass touch switch
-    new BlockSwitch("bistableswitch_glass2",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
-      null, null
-    )
-  };
-
+  // Pulse switches
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch1")             public static final BlockSwitch pulseSwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch2")             public static final BlockSwitch pulseSwitch2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch3")             public static final BlockSwitch pulseSwitch3Block = null;
@@ -351,211 +110,7 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch_glass1")       public static final BlockSwitch pulseSwitchGlass1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch_glass2")       public static final BlockSwitch pulseSwitchGlass2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:pulseswitch_glass3")       public static final BlockSwitch pulseSwitchGlass3Block = null;
-  private static final Block pulseSwitches[] = {
-    // Square machine pulse switch
-    new BlockSwitch("pulseswitch1",
-      new AxisAlignedBB((5d/16),(5d/16),(0d/16),(11d/16),(11d/16),(1d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Fenced round machine pulse switch
-    new BlockSwitch("pulseswitch2",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Mechanical spring reset pull handle
-    new BlockSwitch("pulseswitch3",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(2d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Arrow target
-    new BlockSwitch("arrowtarget",
-      new AxisAlignedBB((5d/16),(5d/16),(0d/16),(11d/16),(11d/16),(1d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-      BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Mechanical spring reset push button
-    new BlockSwitch("pulseswitch5",
-      new AxisAlignedBB((5.5d/16),(0.5d/16),(0d/16),(10.5d/16),(5.0d/16),(4d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Retro double pole switch
-    new BlockSwitch("pulseswitch6",
-      new AxisAlignedBB((7d/16),(6d/16),(0d/16),(12d/16),(10d/16),(4d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy (golden decorated) button
-    new BlockSwitch("pulseswitch_oldfancy1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy (golden decorated) chain pulse switch
-    new BlockSwitch("pulseswitch_oldfancy2",
-      new AxisAlignedBB((6.5d/16),(4.8d/16),(0d/16),(9.5d/16),(13d/16),(4d/16)),
-      new AxisAlignedBB((6.5d/16),(3.8d/16),(0d/16),(9.5d/16),(12d/16),(4d/16)),
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy (golden decorated) crank
-    new BlockSwitch("pulseswitch_oldfancy3",
-      new AxisAlignedBB((6.5d/16),(4.8d/16),(0d/16),(9.5d/16),(13d/16),(4d/16)),
-      new AxisAlignedBB((6.5d/16),(3.8d/16),(0d/16),(9.5d/16),(12d/16),(4d/16)),
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Old fancy (golden decorated) tiny button
-    new BlockSwitch("pulseswitch_oldfancy4",
-      new AxisAlignedBB((7d/16),(7d/16),(0d/16),(9d/16),(9d/16),(1.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic button 1
-    new BlockSwitch("pulseswitch_rustic1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic button 2 (bolted)
-    new BlockSwitch("pulseswitch_rustic2",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic button 3 (pull chain)
-    new BlockSwitch("pulseswitch_rustic3",
-      new AxisAlignedBB((6d/16),(6.5d/16),(0d/16),(10d/16),(14.5d/16),(2.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic button 4 (weight reset pull chain)
-    new BlockSwitch("pulseswitch_rustic4",
-      new AxisAlignedBB((3d/16),(5.5d/16),(0d/16),(14d/16),(15d/16),(2.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic button 5 (pull handle)
-    new BlockSwitch("pulseswitch_rustic5",
-      new AxisAlignedBB((3.5d/16),(6.0d/16),(0d/16), (12.5d/16),(11.0d/16),(4.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic button 6 (handle)
-    new BlockSwitch("pulseswitch_rustic6",
-      new AxisAlignedBB((6.0d/16),(5.0d/16),(0d/16), (10.0d/16),(12.0d/16),(3.0d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Rustic button 7 (pull nail)
-    new BlockSwitch("pulseswitch_rustic7",
-      new AxisAlignedBB((6.0d/16),(7.0d/16),(0d/16), (9.0d/16),(10.0d/16),(3.0d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Thin star shaped glass button
-    new BlockSwitch("pulseswitch_glass1",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Thin small star shaped glass button
-    new BlockSwitch("pulseswitch_glass2",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    ),
-    // Glass touch button
-    new BlockSwitch("pulseswitch_glass3",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null, null
-    )
-  };
-
+  // Contact switches
   @GameRegistry.ObjectHolder("rsgauges:contactmat1")              public static final BlockContactSwitch contactSwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:contactmat2")              public static final BlockContactSwitch contactSwitch2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:contactmat_rustic1")       public static final BlockContactSwitch contactSwitchRustic1Block = null;
@@ -570,177 +125,7 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:trapdoorswitch_rustic3")   public static final BlockContactSwitch trapdoorSwitchRustic3Block = null;
   @GameRegistry.ObjectHolder("rsgauges:powerplant_yellow")        public static final BlockContactSwitch powerPlantYellowBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:powerplant_red")           public static final BlockContactSwitch powerPlantRedBlock = null;
-  private static final Block contactSwitches[] = {
-    // Door contact mat
-    new BlockContactSwitch("contactmat1",
-      new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.5d/16),(12.5d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|BlockSwitch.SWITCH_DATA_WEAK|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Sensitive full size contact mat
-    new BlockContactSwitch("contactmat2",
-      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Rustic door contact mat
-    new BlockContactSwitch("contactmat_rustic1",
-      new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.5d/16),(12.5d/16)),
-      new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.2d/16),(12.5d/16)),
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|BlockSwitch.SWITCH_DATA_WEAK|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    ),
-    // Glass plate
-    new BlockContactSwitch("contactmat_glass1",
-      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.25d/16),(16d/16)),null,
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
-      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
-    ),
-    // Glass plate
-    new BlockContactSwitch("contactmat_glass2",
-      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.25d/16),(16d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
-      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
-    ),
-    // Industrial shock sensor contact mat
-    new BlockContactSwitch("contactmat3",
-      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Rustic full-size contact plate
-    new BlockContactSwitch("contactmat_rustic2",
-      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)),
-      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.2d/16),(16d/16)),
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    ),
-    // Rustic shock sensor plate
-    new BlockContactSwitch("contactmat_rustic3",
-      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)),
-      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.2d/16),(16d/16)),
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    ),
-
-    // Industrial trap door switch (shock vibration sensitive)
-    new BlockTrapdoorSwitch("trapdoorswitch1",
-      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
-      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 3.0f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f)
-    ),
-    // Industrial trap door switch (high sensitive shock vibration sensitive)
-    new BlockTrapdoorSwitch("trapdoorswitch2",
-      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
-      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-      BlockSwitch.SWITCH_CONFIG_HIGH_SENSITIVE,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f),
-      ModAuxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
-    ),
-    // Industrial trap door switch (item trap door)
-    new BlockTrapdoorSwitch("trapdoorswitch3",
-      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
-      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
-      BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
-      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.05f, 2.5f),
-      null
-    ),
-    // Rustic trap door switch (shock vibration sensitive)
-    new BlockTrapdoorSwitch("trapdoorswitch_rustic1",
-      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
-      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    ),
-    // Rustic trap door switch (high sensitive shock vibration sensitive)
-    new BlockTrapdoorSwitch("trapdoorswitch_rustic2",
-      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
-      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_HIGH_SENSITIVE|
-      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f),
-      ModAuxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
-    ),
-    // Rustic trap door switch (item trap door)
-    new BlockTrapdoorSwitch("trapdoorswitch_rustic3",
-      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
-      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
-      BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
-      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
-      null // new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    ),
-    // Yellow power plant
-    new BlockContactSwitch("powerplant_yellow",
-      new AxisAlignedBB((5d/16),(0.0d/16),(5d/16), (11d/16),(9d/16),(11d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
-      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.09f, 3.6f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.04f, 3.0f),
-      ModAuxiliaries.RsMaterials.MATERIAL_PLANT
-    ),
-    // Red power plant
-    new BlockContactSwitch("powerplant_red",
-      new AxisAlignedBB((5d/16),(0.0d/16),(5d/16), (11d/16),(9d/16),(11d/16)), null,
-      BlockSwitch.SWITCH_CONFIG_FLOOR_MOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
-        BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-        BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.09f, 3.6f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.04f, 3.0f),
-      ModAuxiliaries.RsMaterials.MATERIAL_PLANT
-    ),
-  };
-
+  // Auto switches
   @GameRegistry.ObjectHolder("rsgauges:automaticswitch1")       public static final BlockAutoSwitch automaticSwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:automaticswitch2")       public static final BlockAutoSwitch automaticSwitch2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:automaticswitch3")       public static final BlockAutoSwitch automaticSwitch3Block = null;
@@ -752,160 +137,12 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:detectorswitch_glass2")  public static final BlockAutoSwitch detectorSwitchGlass2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:daytimeswitch_glass1")   public static final BlockAutoSwitch daytimeSwitchGlass1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:timerswitch_glass1")     public static final BlockAutoSwitch timerSwitchGlass1Block = null;
-  private static final Block automaticSwitches[] = {
-    // Infrared motion_sensor
-    new BlockAutoSwitch("automaticswitch1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_VOLUME|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Linear laser motion sensor
-    new BlockAutoSwitch("automaticswitch2",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_LINEAR|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Local light sensor
-    new BlockAutoSwitch("automaticswitch3",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_LIGHT|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Day time switch
-    new BlockAutoSwitch("automaticswitch4",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_TIMER_DAYTIME|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Rain sensor switch
-    new BlockAutoSwitch("automaticswitch5",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_RAIN|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Lightning sensor switch
-    new BlockAutoSwitch("automaticswitch6",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_LIGHTNING|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Interval signal timer
-    new BlockAutoSwitch("automaticswitch7",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_TIMER_INTERVAL|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
-    ),
-    // Glass infrared motion sensor
-    new BlockAutoSwitch("detectorswitch_glass1",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_VOLUME|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
-    ),
-    // Glass laser motion sensor
-    new BlockAutoSwitch("detectorswitch_glass2",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_LINEAR|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
-    ),
-    // Glass Day time switch
-    new BlockAutoSwitch("daytimeswitch_glass1",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_TIMER_DAYTIME|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
-    ),
-    // Glass interval signal timer
-    new BlockAutoSwitch("timerswitch_glass1",
-      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_TIMER_INTERVAL|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
-    ),
-  };
-
+  // Link switches
   @GameRegistry.ObjectHolder("rsgauges:relay_pulseswitchrx1")     public static final BlockSwitch relayPulseRxSwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:relay_bistableswitchrx1")  public static final BlockSwitch relayBistableRxSwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:relay_pulseswitchtx1")     public static final BlockSwitch relayPulseRelaySwitch1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:relay_bistableswitchtx1")  public static final BlockSwitch relayBistableRelaySwitch1Block = null;
-  private static final Block linkRelaySwitches[] = {
-    // Industrial pulse link relay receiver switch
-    new BlockSwitch("relay_pulseswitchrx1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_PULSE|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
-      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
-    ),
-    // Industrial bistable link relay receiver switch
-    new BlockSwitch("relay_bistableswitchrx1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
-    ),
-    // Industrial pulse link relay
-    new BlockSwitch("relay_pulseswitchtx1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_LINK_RELAY|
-      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
-      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
-    ),
-    // Industrial bistable link relay
-    new BlockSwitch("relay_bistableswitchtx1",
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_LINK_RELAY|
-      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
-    )
-  };
-
+  // Sensitive glass
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")             public static final BlockSensitiveGlass sensitiveGlassBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_white")       public static final BlockSensitiveGlass whiteSensitiveGlassBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_red")         public static final BlockSensitiveGlass redSensitiveGlassBlock = null;
@@ -924,7 +161,843 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_brown")       public static final BlockSensitiveGlass brownSensitiveGlassBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_black")       public static final BlockSensitiveGlass blackSensitiveGlassBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_inverted")    public static final BlockSensitiveGlass invertedSensitiveGlassBlock = null;
-  private static final Block sensitiveGlassBlocks[] = {
+
+  private static final Block modBlocks[] = {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- gauges
+    // -----------------------------------------------------------------------------------------------------------------
+    new BlockGauge("flatgauge1", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) ),
+    new BlockGauge("flatgauge2", new AxisAlignedBB((4d/16),(2d/16),(0d/16), (12d/16),(14d/16),(1d/16)) ),
+    new BlockGauge("flatgauge3", new AxisAlignedBB((4d/16),(5d/16),(0d/16), (12d/16),(11d/16),(1d/16)) ),
+    new BlockGauge("flatgauge4", new AxisAlignedBB((7d/16),(3.7d/16),(0d/16), (10d/16),(12d/16),(0.4d/16)) ),
+    new BlockGauge("flatgauge5", new AxisAlignedBB((7d/16),(4d/16),(0d/16), (9d/16),(12d/16),(3d/16)) ),
+    new BlockGauge("flatgauge6", new AxisAlignedBB((2d/16),(4d/16),(0d/16), (14d/16),(12d/16),(1d/16)) ),
+    new BlockGauge("gauge_rustic2", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) ),
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- indicators
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // square LED
+    new BlockIndicator("indicator1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      2, 0  // light level, blink frequency
+    ),
+    new BlockIndicator("indicator2",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      2, 0  // light level, blink frequency
+    ),
+    new BlockIndicator("indicator3",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      2, 0  // light level, blink frequency
+    ),
+
+    // Blinking square LEDs
+    new BlockIndicator("indicator1blink1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      2, 2000  // light level scaling, blink frequency
+    ),
+    new BlockIndicator("indicator2blink1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      2, 2000  // light level scaling, blink frequency
+    ),
+    new BlockIndicator("indicator3blink1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      2, 2000  // light level scaling, blink frequency
+    ),
+    // alarm lamp
+    new BlockIndicator("indicator4",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(4d/16)),
+      8, 1500  // light level scaling, blink frequency
+    ),
+
+    // Alarm siren
+    new BlockIndicator("soundindicator1",
+      new AxisAlignedBB((4d/16),(6.5d/16),(0d/16), (11.5d/16),(9.5d/16),(4d/16)),
+      1, 1500, // light level scaling, blink frequency
+      new ModResources.BlockSoundEvent(ModResources.alarm_siren_sound),
+      null
+    ),
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- bi-stable switches
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // Rotary machine switch
+    new BlockSwitch("bistableswitch1",
+      new AxisAlignedBB((4.25d/16),(4.25d/16),(0d/16),(11.75d/16),(11.75d/16),(0.80d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Contact lever switch
+    new BlockSwitch("bistableswitch2",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(14d/16),(1.5d/16)),
+      new AxisAlignedBB((6d/16),(2d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // two-button machine switch
+    new BlockSwitch("bistableswitch3",
+      new AxisAlignedBB((4d/16),(4d/16),(0d/16),(12d/16),(12d/16),(1d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Light flip switch
+    new BlockSwitch("bistableswitch4",
+      new AxisAlignedBB((7d/16),(6d/16),(0d/16),(9d/16),(10d/16),(1.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // ESTOP button
+    new BlockSwitch("bistableswitch5",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)),
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE_OFF,
+      null, null
+    ),
+    // Hopper blocking switch
+    new BlockSwitch("bistableswitch6",
+      new AxisAlignedBB((4.8d/16),(10d/16),(0d/16), (11.2d/16),(11d/16),(6d/16)),
+      new AxisAlignedBB((4.8d/16),(10d/16),(0d/16), (11.2d/16),(11d/16),(3d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE|BlockSwitch.SWITCH_DATA_WEAK,
+      null, null
+    ),
+    // mechanical rotary lever
+    new BlockSwitch("bistableswitch7",
+      new AxisAlignedBB((2.5d/16),(9.5d/16),(0d/16), (12.3d/16),(13d/16),(2.7d/16)),
+      new AxisAlignedBB((8.7d/16),( 3d/16),(0d/16), (12.3d/16),(13d/16),(2.7d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
+      null, null
+    ),
+    // mechanical lever
+    new BlockSwitch("bistableswitch8",
+      new AxisAlignedBB((6.5d/16),(6.5d/16),(0d/16), (9.7d/16),(14.0d/16),(3d/16)),
+      new AxisAlignedBB((6.5d/16),(5.0d/16),(0d/16), (9.7d/16),(12.5d/16),(3d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy gold decorated lever
+    new BlockSwitch("bistableswitch_oldfancy1",
+      new AxisAlignedBB((6d/16),(6.5d/16),(0d/16), (10.3d/16),(13.5d/16),(4.5d/16)),
+      new AxisAlignedBB((6d/16),(3.5d/16),(0d/16), (10.3d/16),(10.0d/16),(4.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy angular lever
+    new BlockSwitch("bistableswitch_oldfancy2",
+      new AxisAlignedBB((2.5d/16),(6.0d/16),(0d/16), (9.7d/16),(10.0d/16),(4.5d/16)),
+      new AxisAlignedBB((4.5d/16),(3.5d/16),(0d/16), (9.2d/16),(10.0d/16),(4.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
+      null, null
+    ),
+    // Old fancy bent lever
+    new BlockSwitch("bistableswitch_oldfancy3",
+      new AxisAlignedBB((4.5d/16),(5.0d/16),(0d/16), (12.0d/16),(11.0d/16),(4.5d/16)),
+      new AxisAlignedBB((4.5d/16),(5.0d/16),(0d/16), (12.0d/16),(11.0d/16),(4.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy gold decorated manual slide sphere connector
+    new BlockSwitch("bistableswitch_oldfancy4",
+      new AxisAlignedBB((5.0d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy gold decorated rotary sphere connector
+    new BlockSwitch("bistableswitch_oldfancy5",
+      new AxisAlignedBB((5.0d/16),(5.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
+      new AxisAlignedBB((5.0d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy gold decorated rotary sphere connector 2
+    new BlockSwitch("bistableswitch_oldfancy6",
+      new AxisAlignedBB((5.0d/16),(5.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy gold decorated manual contactor
+    new BlockSwitch("bistableswitch_oldfancy7",
+      new AxisAlignedBB((2.0d/16),(6.0d/16),(0d/16), (11.7d/16),(14.0d/16),(4.5d/16)),
+      new AxisAlignedBB((3.5d/16),(3.5d/16),(0d/16), (11.2d/16),(14.0d/16),(4.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic lever 1
+    new BlockSwitch("bistableswitch_rustic1",
+      new AxisAlignedBB((6d/16),(5.0d/16),(0d/16), (10.3d/16),(15.0d/16),(4.5d/16)),
+      new AxisAlignedBB((6d/16),(2.0d/16),(0d/16), (10.3d/16),(11.0d/16),(4.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic lever 2 (bolted)
+    new BlockSwitch("bistableswitch_rustic2",
+      new AxisAlignedBB((4d/16),(6.0d/16),(0d/16), (13.0d/16),(13.0d/16),(4.5d/16)),
+      new AxisAlignedBB((4d/16),(4.0d/16),(0d/16), (13.0d/16),(10.0d/16),(4.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic lever 3 (big angular)
+    new BlockSwitch("bistableswitch_rustic3",
+      new AxisAlignedBB((0.2d/16),(10.0d/16),(0d/16), (13.5d/16),(15.0d/16),(4.5d/16)),
+      new AxisAlignedBB((5.5d/16),( 2.0d/16),(0d/16), (13.5d/16),(15.0d/16),(4.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
+      null, null
+    ),
+    // Rustic lever 4 (counter weighted rotary lever)
+    new BlockSwitch("bistableswitch_rustic4",
+      new AxisAlignedBB((0.5d/16),(11.0d/16),(0d/16), (14.0d/16),(15.0d/16),(4.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
+      null, null
+    ),
+    // Rustic lever 5
+    new BlockSwitch("bistableswitch_rustic5",
+      new AxisAlignedBB((3.5d/16),(6.0d/16),(0d/16), (12.5d/16),(11.0d/16),(4.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic lever 6 (latch slide)
+    new BlockSwitch("bistableswitch_rustic6",
+      new AxisAlignedBB((3d/16),(6.0d/16),(0d/16), (13.0d/16),(12.0d/16),(4.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic lever 7 (The Nail)
+    new BlockSwitch("bistableswitch_rustic7",
+      new AxisAlignedBB((6.0d/16),(7.0d/16),(0d/16), (9.0d/16),(10.0d/16),(3.0d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_HOPPER_MOUNTBALE,
+      null, null
+    ),
+    // Thin star shaped glass switch
+    new BlockSwitch("bistableswitch_glass1",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+      null, null
+    ),
+    // Bistable glass touch switch
+    new BlockSwitch("bistableswitch_glass2",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+      null, null
+    ),
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- pulse switches
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // Square machine pulse switch
+    new BlockSwitch("pulseswitch1",
+      new AxisAlignedBB((5d/16),(5d/16),(0d/16),(11d/16),(11d/16),(1d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Fenced round machine pulse switch
+    new BlockSwitch("pulseswitch2",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Mechanical spring reset pull handle
+    new BlockSwitch("pulseswitch3",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(2d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Arrow target
+    new BlockSwitch("arrowtarget",
+      new AxisAlignedBB((5d/16),(5d/16),(0d/16),(11d/16),(11d/16),(1d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Mechanical spring reset push button
+    new BlockSwitch("pulseswitch5",
+      new AxisAlignedBB((5.5d/16),(0.5d/16),(0d/16),(10.5d/16),(5.0d/16),(4d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Retro double pole switch
+    new BlockSwitch("pulseswitch6",
+      new AxisAlignedBB((7d/16),(6d/16),(0d/16),(12d/16),(10d/16),(4d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy (golden decorated) button
+    new BlockSwitch("pulseswitch_oldfancy1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy (golden decorated) chain pulse switch
+    new BlockSwitch("pulseswitch_oldfancy2",
+      new AxisAlignedBB((6.5d/16),(4.8d/16),(0d/16),(9.5d/16),(13d/16),(4d/16)),
+      new AxisAlignedBB((6.5d/16),(3.8d/16),(0d/16),(9.5d/16),(12d/16),(4d/16)),
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy (golden decorated) crank
+    new BlockSwitch("pulseswitch_oldfancy3",
+      new AxisAlignedBB((6.5d/16),(4.8d/16),(0d/16),(9.5d/16),(13d/16),(4d/16)),
+      new AxisAlignedBB((6.5d/16),(3.8d/16),(0d/16),(9.5d/16),(12d/16),(4d/16)),
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Old fancy (golden decorated) tiny button
+    new BlockSwitch("pulseswitch_oldfancy4",
+      new AxisAlignedBB((7d/16),(7d/16),(0d/16),(9d/16),(9d/16),(1.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic button 1
+    new BlockSwitch("pulseswitch_rustic1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic button 2 (bolted)
+    new BlockSwitch("pulseswitch_rustic2",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(2.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic button 3 (pull chain)
+    new BlockSwitch("pulseswitch_rustic3",
+      new AxisAlignedBB((6d/16),(6.5d/16),(0d/16),(10d/16),(14.5d/16),(2.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic button 4 (weight reset pull chain)
+    new BlockSwitch("pulseswitch_rustic4",
+      new AxisAlignedBB((3d/16),(5.5d/16),(0d/16),(14d/16),(15d/16),(2.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic button 5 (pull handle)
+    new BlockSwitch("pulseswitch_rustic5",
+      new AxisAlignedBB((3.5d/16),(6.0d/16),(0d/16), (12.5d/16),(11.0d/16),(4.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic button 6 (handle)
+    new BlockSwitch("pulseswitch_rustic6",
+      new AxisAlignedBB((6.0d/16),(5.0d/16),(0d/16), (10.0d/16),(12.0d/16),(3.0d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Rustic button 7 (pull nail)
+    new BlockSwitch("pulseswitch_rustic7",
+      new AxisAlignedBB((6.0d/16),(7.0d/16),(0d/16), (9.0d/16),(10.0d/16),(3.0d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Thin star shaped glass button
+    new BlockSwitch("pulseswitch_glass1",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Thin small star shaped glass button
+    new BlockSwitch("pulseswitch_glass2",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Glass touch button
+    new BlockSwitch("pulseswitch_glass3",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
+      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- contact switches
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // Door contact mat
+    new BlockContactSwitch("contactmat1",
+      new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.5d/16),(12.5d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_DATA_WEAK|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Sensitive full size contact mat
+    new BlockContactSwitch("contactmat2",
+      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Rustic door contact mat
+    new BlockContactSwitch("contactmat_rustic1",
+      new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.5d/16),(12.5d/16)),
+      new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.2d/16),(12.5d/16)),
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_DATA_WEAK|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
+    ),
+    // Glass plate
+    new BlockContactSwitch("contactmat_glass1",
+      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.25d/16),(16d/16)),null,
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
+      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+    ),
+    // Glass plate
+    new BlockContactSwitch("contactmat_glass2",
+      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.25d/16),(16d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
+      BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+    ),
+    // Industrial shock sensor contact mat
+    new BlockContactSwitch("contactmat3",
+      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Rustic full-size contact plate
+    new BlockContactSwitch("contactmat_rustic2",
+      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)),
+      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.2d/16),(16d/16)),
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
+    ),
+    // Rustic shock sensor plate
+    new BlockContactSwitch("contactmat_rustic3",
+      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.5d/16),(16d/16)),
+      new AxisAlignedBB((0d/16),(0.0d/16),(0d/16), (16d/16),(0.2d/16),(16d/16)),
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
+    ),
+
+    // Industrial trap door switch (shock vibration sensitive)
+    new BlockTrapdoorSwitch("trapdoorswitch1",
+      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 3.0f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f)
+    ),
+    // Industrial trap door switch (high sensitive shock vibration sensitive)
+    new BlockTrapdoorSwitch("trapdoorswitch2",
+      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_HIGH_SENSITIVE,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f),
+      ModAuxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
+    ),
+    // Industrial trap door switch (item trap door)
+    new BlockTrapdoorSwitch("trapdoorswitch3",
+      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.05f, 2.5f),
+      null
+    ),
+    // Rustic trap door switch (shock vibration sensitive)
+    new BlockTrapdoorSwitch("trapdoorswitch_rustic1",
+      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
+    ),
+    // Rustic trap door switch (high sensitive shock vibration sensitive)
+    new BlockTrapdoorSwitch("trapdoorswitch_rustic2",
+      new AxisAlignedBB((0d/16),(15.6d/16),(0d/16), (16d/16),(16d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),( 2.0d/16),(0d/16), (16d/16),(16d/16),( 0.1d/16)),
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_SHOCK_SENSITIVE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_HIGH_SENSITIVE|
+      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f),
+      ModAuxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
+    ),
+    // Rustic trap door switch (item trap door)
+    new BlockTrapdoorSwitch("trapdoorswitch_rustic3",
+      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
+      new AxisAlignedBB((0d/16),(12.6d/16),(0d/16), (16d/16),(13d/16),(16.0d/16)),
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
+      null // new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
+    ),
+    // Yellow power plant
+    new BlockContactSwitch("powerplant_yellow",
+      new AxisAlignedBB((5d/16),(0.0d/16),(5d/16), (11d/16),(9d/16),(11d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.09f, 3.6f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.04f, 3.0f),
+      ModAuxiliaries.RsMaterials.MATERIAL_PLANT
+    ),
+    // Red power plant
+    new BlockContactSwitch("powerplant_red",
+      new AxisAlignedBB((5d/16),(0.0d/16),(5d/16), (11d/16),(9d/16),(11d/16)), null,
+      BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.09f, 3.6f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.04f, 3.0f),
+      ModAuxiliaries.RsMaterials.MATERIAL_PLANT
+    ),
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- auto switches
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // Infrared motion_sensor
+    new BlockAutoSwitch("automaticswitch1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_VOLUME|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Linear laser motion sensor
+    new BlockAutoSwitch("automaticswitch2",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_LINEAR|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Local light sensor
+    new BlockAutoSwitch("automaticswitch3",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_LIGHT|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Day time switch
+    new BlockAutoSwitch("automaticswitch4",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_TIMER_DAYTIME|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Rain sensor switch
+    new BlockAutoSwitch("automaticswitch5",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_RAIN|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Lightning sensor switch
+    new BlockAutoSwitch("automaticswitch6",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_LIGHTNING|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Interval signal timer
+    new BlockAutoSwitch("automaticswitch7",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_TIMER_INTERVAL|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
+    // Glass infrared motion sensor
+    new BlockAutoSwitch("detectorswitch_glass1",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_VOLUME|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+    ),
+    // Glass laser motion sensor
+    new BlockAutoSwitch("detectorswitch_glass2",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_SENSOR_LINEAR|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+    ),
+    // Glass Day time switch
+    new BlockAutoSwitch("daytimeswitch_glass1",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_TIMER_DAYTIME|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+    ),
+    // Glass interval signal timer
+    new BlockAutoSwitch("timerswitch_glass1",
+      new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
+      BlockSwitch.SWITCH_CONFIG_AUTOMATIC|BlockSwitch.SWITCH_CONFIG_TIMER_INTERVAL|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
+    ),
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- link relay switches
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // Industrial pulse link relay receiver switch
+    new BlockSwitch("relay_pulseswitchrx1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_PULSE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    ),
+    // Industrial bistable link relay receiver switch
+    new BlockSwitch("relay_bistableswitchrx1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_BISTABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    ),
+    // Industrial pulse link relay
+    new BlockSwitch("relay_pulseswitchtx1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_LINK_RELAY|
+      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    ),
+    // Industrial bistable link relay
+    new BlockSwitch("relay_bistableswitchtx1",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_LINK_RELAY|
+      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    ),
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- sensitive glass
+    // -----------------------------------------------------------------------------------------------------------------
     new BlockSensitiveGlass("sensitiveglass"          , 0x000f|0x0020, 0xffffff), // light value if on 0xf | off 0x1, color multiplier
     new BlockSensitiveGlass("sensitiveglass_white"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.WHITE),       // 0xf3f3f3
     new BlockSensitiveGlass("sensitiveglass_red"      , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.RED),         // 0xB02E26
@@ -943,6 +1016,18 @@ public class ModBlocks
     new BlockSensitiveGlass("sensitiveglass_brown"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.BROWN),       // 0x835432
     new BlockSensitiveGlass("sensitiveglass_black"    , 0x0000|0x0000, ModAuxiliaries.DyeColorFilters.BLACK),       // 0x111111
     new BlockSensitiveGlass("sensitiveglass_inverted" , 0x0002|0x00f0, 0xffffff)
+  };
+
+
+  private static final Block devBlocks[] = {
+    new BlockSwitch("qube",
+      new AxisAlignedBB(0,0,0,1,1,1), null,
+      BlockSwitch.SWITCH_CONFIG_FULLCUBIC_BLOCK|BlockSwitch.SWITCH_CONFIG_LATERAL|
+      BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null,null, null
+    )
   };
 
   // ------------------------------------------------------------------------------------------------------------------>
@@ -965,66 +1050,127 @@ public class ModBlocks
   }
   // <------------------------------------------------------------------------------------------------------------------
 
+  /**
+   * Returns true if the given (rsgauges RS) block is enabled, false if opt'ed out in the config.
+   */
+  public static boolean enabled(Block block) {
+    if(block instanceof BlockIndicator) {
+      BlockIndicator bl = ((BlockIndicator)block);
+      if(ModConfig.optouts.without_indicators) return false;
+      if((ModConfig.optouts.without_blinking_indicators) && (bl.blink_interval > 0)) return false;
+      if((ModConfig.optouts.without_sound_indicators) && ((bl.power_on_sound != null) || (bl.power_off_sound != null))) return false;
+    } if(block instanceof BlockGauge) {
+      BlockGauge bl = ((BlockGauge)block);
+      if(ModConfig.optouts.without_gauges) return false;
+    } else if(block instanceof BlockSwitch) {
+      BlockSwitch bl = ((BlockSwitch)block);
+      if((ModConfig.optouts.without_bistable_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_BISTABLE)!=0)) return false;
+      if((ModConfig.optouts.without_pulse_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_PULSE)!=0)) return false;
+      if((ModConfig.optouts.without_contact_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_CONTACT)!=0)) return false;
+      if((ModConfig.optouts.without_automatic_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_AUTOMATIC)!=0)) return false;
+      if((ModConfig.optouts.without_linkrelay_switches)  && ((bl.config & BlockSwitch.SWITCH_CONFIG_LINK_RELAY)!=0)) return false;
+    } else if(block instanceof BlockSensitiveGlass) {
+      if(ModConfig.optouts.without_decorative) return false;
+    }
+    return true;
+  }
+
   private static ArrayList<Block> registeredBlocks = new ArrayList<>();
+
+  @Nonnull
+  public static List getRegisteredBlocks()
+  { return Collections.unmodifiableList(registeredBlocks); }
 
   // Invoked from CommonProxy.registerBlocks()
   public static final void registerBlocks(RegistryEvent.Register<Block> event)
   {
+    // Config based registry selection
+    ArrayList<Block> allBlocks = new ArrayList<>();
+    Collections.addAll(allBlocks, modBlocks);
+    if(ModConfig.zmisc.with_experimental) Collections.addAll(allBlocks, devBlocks);
+    if(ModConfig.zmisc.without_optout_registrations) ModRsGauges.logger.info("Registration opt-out configured, disabled block categories will not be registered at all.");
+
+    // note to self: first trying to use the switch config to check which switch entities
+    // are needed, not e.g. a map<classid,bool> from createTileEntity().getClass() or so.
+    boolean gauge_entity_needed = false;
+    long switch_config_bits_union_set = 0;
+    for(Block e:allBlocks) {
+      if(ModConfig.zmisc.without_optout_registrations && (!enabled(e))) continue;
+      if(e instanceof BlockGauge) {
+        gauge_entity_needed = true;
+      } else if(e instanceof BlockSwitch) {
+        switch_config_bits_union_set |= ((BlockSwitch)e).config;
+      }
+      registeredBlocks.add(e);
+    }
+
     // Tile entities
-    if((!ModConfig.optouts.without_gauges) || (!ModConfig.optouts.without_indicators) || (!ModConfig.optouts.without_blinking_indicators) || (!ModConfig.optouts.without_sound_indicators)) {
+    if(gauge_entity_needed) {
       GameRegistry.registerTileEntity(BlockGauge.TileEntityGauge.class, new ResourceLocation(ModRsGauges.MODID, "gauge_entity"));
       VersionTransition.registerTileEntity(VersionTransition.V10xTileEntityGauge.class,"gauge_entity");
+      ModRsGauges.logger.info("Registered gauge tile entity.");
     }
-    if((!ModConfig.optouts.without_pulse_switches) || (!ModConfig.optouts.without_bistable_switches) || (!ModConfig.optouts.without_linkrelay_switches)) {
+    if((switch_config_bits_union_set & (BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_LINK_RELAY)) != 0) {
       GameRegistry.registerTileEntity(BlockSwitch.TileEntitySwitch.class, new ResourceLocation(ModRsGauges.MODID, "switch_entity"));
       VersionTransition.registerTileEntity(VersionTransition.V10xTileEntitySwitch.class, "pulseswitch_entity");
+      ModRsGauges.logger.info("Registered switch tile entity.");
     }
-    if(!ModConfig.optouts.without_contact_switches) {
+    if((switch_config_bits_union_set & (BlockSwitch.SWITCH_CONFIG_CONTACT)) != 0) {
       GameRegistry.registerTileEntity(BlockContactSwitch.TileEntityContactSwitch.class, new ResourceLocation(ModRsGauges.MODID, "contactswitch_entity"));
       VersionTransition.registerTileEntity(VersionTransition.V10xTileEntityContactSwitch.class,"contactswitch_entity");
+      ModRsGauges.logger.info("Registered contact switch tile entity.");
     }
-    if(!ModConfig.optouts.without_automatic_switches) {
+    if((switch_config_bits_union_set & (BlockSwitch.SWITCH_CONFIG_AUTOMATIC)) != 0) {
       GameRegistry.registerTileEntity(BlockAutoSwitch.TileEntityAutoSwitch.class, new ResourceLocation(ModRsGauges.MODID, "autoswitch_entity"));
-      GameRegistry.registerTileEntity(BlockAutoSwitch.TileEntityDetectorSwitch.class, new ResourceLocation(ModRsGauges.MODID, "detectorswitch_entity"));
-      GameRegistry.registerTileEntity(BlockAutoSwitch.TileEntityEnvironmentalSensorSwitch.class, new ResourceLocation(ModRsGauges.MODID, "sensorswitch_entity"));
-      GameRegistry.registerTileEntity(BlockAutoSwitch.TileEntityIntervalTimerSwitch.class, new ResourceLocation(ModRsGauges.MODID, "timerswitch_entity"));
       VersionTransition.registerTileEntity(VersionTransition.V10xTileEntityAutoSwitch.class, "autoswitch_entity");
-      VersionTransition.registerTileEntity(VersionTransition.V10xTileEntityDetectorSwitch.class,"detectorswitch_entity");
-      VersionTransition.registerTileEntity(VersionTransition.V10xTileEntityEnvironmentalSensorSwitch.class,"sensorswitch_entity");
-      VersionTransition.registerTileEntity(VersionTransition.V10xTileEntityIntervalTimerSwitch.class,"timerswitch_entity");
+      ModRsGauges.logger.info("Registered auto switch tile entity.");
+      if((switch_config_bits_union_set & (BlockSwitch.SWITCH_CONFIG_SENSOR_DETECTOR)) != 0) {
+        GameRegistry.registerTileEntity(BlockAutoSwitch.TileEntityDetectorSwitch.class, new ResourceLocation(ModRsGauges.MODID, "detectorswitch_entity"));
+        VersionTransition.registerTileEntity(VersionTransition.V10xTileEntityDetectorSwitch.class, "detectorswitch_entity");
+        ModRsGauges.logger.info("Registered detector auto switch tile entity.");
+      }
+      if((switch_config_bits_union_set & (BlockSwitch.SWITCH_CONFIG_SENSOR_ENVIRONMENTAL)) != 0) {
+        GameRegistry.registerTileEntity(BlockAutoSwitch.TileEntityEnvironmentalSensorSwitch.class, new ResourceLocation(ModRsGauges.MODID, "sensorswitch_entity"));
+        VersionTransition.registerTileEntity(VersionTransition.V10xTileEntityEnvironmentalSensorSwitch.class, "sensorswitch_entity");
+        ModRsGauges.logger.info("Registered environmental auto switch tile entity.");
+      }
+      if((switch_config_bits_union_set & (BlockSwitch.SWITCH_CONFIG_SENSOR_TIME)) != 0) {
+        GameRegistry.registerTileEntity(BlockAutoSwitch.TileEntityIntervalTimerSwitch.class, new ResourceLocation(ModRsGauges.MODID, "timerswitch_entity"));
+        VersionTransition.registerTileEntity(VersionTransition.V10xTileEntityIntervalTimerSwitch.class, "timerswitch_entity");
+        ModRsGauges.logger.info("Registered timer auto switch tile entity.");
+      }
     }
-    // Config based registry selection
-    if(!ModConfig.optouts.without_gauges) Collections.addAll(registeredBlocks, gauges);
-    if(!ModConfig.optouts.without_indicators) Collections.addAll(registeredBlocks, indicators);
-    if(!ModConfig.optouts.without_blinking_indicators) Collections.addAll(registeredBlocks, blinkIndicators);
-    if(!ModConfig.optouts.without_sound_indicators) Collections.addAll(registeredBlocks, soundIndicators);
-    if(!ModConfig.optouts.without_bistable_switches) Collections.addAll(registeredBlocks, bistableSwitches);
-    if(!ModConfig.optouts.without_pulse_switches) Collections.addAll(registeredBlocks, pulseSwitches);
-    if(!ModConfig.optouts.without_contact_switches) Collections.addAll(registeredBlocks, contactSwitches);
-    if(!ModConfig.optouts.without_automatic_switches) Collections.addAll(registeredBlocks, automaticSwitches);
-    if(!ModConfig.optouts.without_linkrelay_switches) Collections.addAll(registeredBlocks, linkRelaySwitches);
-    if(!ModConfig.optouts.without_decorative) Collections.addAll(registeredBlocks, sensitiveGlassBlocks);
 
     // Register blocks
     for(Block e:registeredBlocks) event.getRegistry().register(e);
+    ModRsGauges.logger.info("Registered " + Integer.toString(registeredBlocks.size()) + " blocks.");
   }
 
   // Invoked from ClientProxy.registerModels()
   @SideOnly(Side.CLIENT)
   public static final void initModels()
   {
+    int n = 0;
     for(Block e:registeredBlocks) {
-      if(e instanceof RsBlock) ((RsBlock)e).initModel();
-      if(e instanceof BlockSensitiveGlass) ((BlockSensitiveGlass)e).initModel();
+      if(e instanceof RsBlock) {
+        ((RsBlock)e).initModel();
+        ++n;
+      } else if(e instanceof BlockSensitiveGlass) {
+        ((BlockSensitiveGlass)e).initModel();
+        ++n;
+      }
     }
   }
 
   // Invoked from CommonProxy.registerItems()
   public static final void registerItemBlocks(RegistryEvent.Register<Item> event)
   {
+    int n = 0;
     for(Block e:registeredBlocks) {
       ResourceLocation rl = e.getRegistryName();
-      if(rl != null) event.getRegistry().register(new ItemBlock(e).setRegistryName(rl));
+      if(rl == null) continue;
+      event.getRegistry().register(new ItemBlock(e).setRegistryName(rl));
+      ++n;
     }
   }
 
@@ -1053,9 +1199,14 @@ public class ModBlocks
     {
       final IBlockColor blockSpecifiedColorHandler = (state, blockAccess, pos, tintIndex) -> (((ColorTintSupport)state.getBlock()).getColorMultiplierRGBA(state, blockAccess, pos));
       final BlockColors bc = event.getBlockColors();
+      int n = 0;
       for(Block e:registeredBlocks) {
-        if((e instanceof Colors.ColorTintSupport) && (((Colors.ColorTintSupport)e).hasColorMultiplierRGBA())) bc.registerBlockColorHandler(blockSpecifiedColorHandler, e);
+        if((e instanceof Colors.ColorTintSupport) && (((Colors.ColorTintSupport)e).hasColorMultiplierRGBA())) {
+          bc.registerBlockColorHandler(blockSpecifiedColorHandler, e);
+          ++n;
+        }
       }
+      ModRsGauges.logger.info("Registered " + Integer.toString(n) + " block color handlers.");
     }
 
     @SubscribeEvent
@@ -1065,7 +1216,9 @@ public class ModBlocks
       final ItemColors ic = event.getItemColors();
       final IItemColor constantBlockColorHandler = (stack, tintIndex) -> (((ColorTintSupport)((ItemBlock)stack.getItem()).getBlock()).getColorMultiplierRGBA(null, null, null));
       for(Block e:registeredBlocks) {
-        if((e instanceof Colors.ColorTintSupport) && (((Colors.ColorTintSupport)e).hasColorMultiplierRGBA())) ic.registerItemColorHandler(constantBlockColorHandler, e);
+        if((e instanceof Colors.ColorTintSupport) && (((Colors.ColorTintSupport)e).hasColorMultiplierRGBA())) {
+          ic.registerItemColorHandler(constantBlockColorHandler, e);
+        }
       }
     }
   }

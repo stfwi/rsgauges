@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:flatgauge4",
+      "items": [
+        "rsgauges:flatgauge3"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:flatgauge3" } ],
-  "result": { "item": "rsgauges:flatgauge4", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:flatgauge3"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:flatgauge4",
+    "data": 0
+  }
 }

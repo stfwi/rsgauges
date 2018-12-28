@@ -9,13 +9,14 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.Block;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.ModItems;
-import wile.rsgauges.ModAuxiliaries;
-import wile.rsgauges.ModBlocks;
-import wile.rsgauges.ModResources;
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.blocks.ModBlocks;
+import wile.rsgauges.items.ModItems;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
+import net.minecraft.item.ItemStack;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockHopper;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -31,7 +32,6 @@ import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -56,41 +56,46 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public static final long SWITCH_DATA_INVERTED                 = 0x0000000000000100l;
   public static final long SWITCH_DATA_WEAK                     = 0x0000000000000200l;
   public static final long SWITCH_DATA_NOOUTPUT                 = 0x0000000000000400l;
+  // --
   public static final long SWITCH_CONFIG_INVERTABLE             = 0x0000000000001000l;
   public static final long SWITCH_CONFIG_WEAKABLE               = 0x0000000000002000l;
-  public static final long SWITCH_CONFIG_POWER_SETTABLE         = 0x0000000000004000l;
-  public static final long SWITCH_CONFIG_BISTABLE               = 0x0000000000008000l;
-  public static final long SWITCH_CONFIG_PULSE                  = 0x0000000000010000l;
-  public static final long SWITCH_CONFIG_PULSE_EXTENDABLE       = 0x0000000000020000l;
-  public static final long SWITCH_CONFIG_LCLICK_RESETTABLE      = 0x0000000000040000l;
-  public static final long SWITCH_CONFIG_TOUCH_CONFIGURABLE     = 0x0000000000080000l;
-  public static final long SWITCH_CONFIG_AUTOMATIC              = 0x0000000000100000l;
-  public static final long SWITCH_CONFIG_SENSOR_VOLUME          = 0x0000000000200000l;
-  public static final long SWITCH_CONFIG_SENSOR_LINEAR          = 0x0000000000400000l;
-  public static final long SWITCH_CONFIG_FLOOR_MOUNT            = 0x0000000000800000l;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON    = 0x0000000001000000l;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF   = 0x0000000002000000l;
-  public static final long SWITCH_CONFIG_PROJECTILE_SENSE       = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
-  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE       = 0x0000000004000000l;
-  public static final long SWITCH_CONFIG_SENSOR_LIGHT           = 0x0000000008000000l;
-  public static final long SWITCH_CONFIG_TIMER_DAYTIME          = 0x0000000010000000l;
+  public static final long SWITCH_CONFIG_PULSETIME_CONFIGURABLE = 0x0000000000004000l;
+  public static final long SWITCH_CONFIG_TOUCH_CONFIGURABLE     = 0x0000000000008000l;
+  public static final long SWITCH_CONFIG_PULSE_EXTENDABLE       = 0x0000000000010000l;
+  public static final long SWITCH_CONFIG_LCLICK_RESETTABLE      = 0x0000000000020000l;
+  public static final long SWITCH_CONFIG_BISTABLE               = 0x0000000000100000l;
+  public static final long SWITCH_CONFIG_PULSE                  = 0x0000000000200000l;
+  public static final long SWITCH_CONFIG_CONTACT                = 0x0000000000400000l;
+  public static final long SWITCH_CONFIG_AUTOMATIC              = 0x0000000000800000l;
+  public static final long SWITCH_CONFIG_TIMER_DAYTIME          = 0x0000000001000000l; // note: uses environmental tile entity due to slow update rate
+  public static final long SWITCH_CONFIG_TIMER_INTERVAL         = 0x0000000002000000l;
+  public static final long SWITCH_CONFIG_SENSOR_TIME            = SWITCH_CONFIG_TIMER_INTERVAL;
+  public static final long SWITCH_CONFIG_SENSOR_VOLUME          = 0x0000000004000000l;
+  public static final long SWITCH_CONFIG_SENSOR_LINEAR          = 0x0000000008000000l;
+  public static final long SWITCH_CONFIG_SENSOR_DETECTOR        = SWITCH_CONFIG_SENSOR_VOLUME|SWITCH_CONFIG_SENSOR_LINEAR;
+  public static final long SWITCH_CONFIG_SENSOR_LIGHT           = 0x0000000010000000l;
   public static final long SWITCH_CONFIG_SENSOR_RAIN            = 0x0000000020000000l;
   public static final long SWITCH_CONFIG_SENSOR_LIGHTNING       = 0x0000000040000000l;
   public static final long SWITCH_CONFIG_SENSOR_ENVIRONMENTAL   = SWITCH_CONFIG_SENSOR_LIGHT|SWITCH_CONFIG_TIMER_DAYTIME|SWITCH_CONFIG_SENSOR_RAIN|SWITCH_CONFIG_SENSOR_LIGHTNING;
-  public static final long SWITCH_CONFIG_TIMER_INTERVAL         = 0x0000000080000000l;
-  public static final long SWITCH_CONFIG_TRANSLUCENT            = 0x0000000100000000l;
-  public static final long SWITCH_CONFIG_PULSETIME_CONFIGURABLE = 0x0000000200000000l;
-  public static final long SWITCH_CONFIG_FAINT_LIGHTSOURCE      = 0x0000000400000000l;
-  public static final long SWITCH_CONFIG_COLOR_TINT_SUPPORT     = 0x0000000800000000l;
-  public static final long SWITCH_CONFIG_NOT_PISTON_MOUNTBALE   = 0x0000001000000000l;
-  public static final long SWITCH_CONFIG_NOT_PASSABLE           = 0x0000002000000000l;
-  public static final long SWITCH_CONFIG_LATERAL_WALLMOUNT      = 0x0000004000000000l;
-  public static final long SWITCH_CONFIG_SHOCK_SENSITIVE        = 0x0000008000000000l;
-  public static final long SWITCH_CONFIG_HIGH_SENSITIVE         = 0x0000010000000000l;
-  public static final long SWITCH_CONFIG_LINK_SOURCE_SUPPORT    = 0x0000020000000000l;
-  public static final long SWITCH_CONFIG_LINK_TARGET_SUPPORT    = 0x0000040000000000l;
-  public static final long SWITCH_CONFIG_LINK_RELAY             = 0x0000080000000000l;
-
+  public static final long SWITCH_CONFIG_WALLMOUNT              = 0x0000000100000000l;
+  public static final long SWITCH_CONFIG_LATERAL                = 0x0000000200000000l;
+  public static final long SWITCH_CONFIG_LATERAL_WALLMOUNT      = SWITCH_CONFIG_WALLMOUNT|SWITCH_CONFIG_LATERAL;
+  public static final long SWITCH_CONFIG_FULLCUBIC_BLOCK        = 0x0000000800000000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON    = 0x0000001000000000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF   = 0x0000002000000000l;
+  public static final long SWITCH_CONFIG_PROJECTILE_SENSE       = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
+  public static final long SWITCH_CONFIG_SHOCK_SENSITIVE        = 0x0000004000000000l;
+  public static final long SWITCH_CONFIG_HIGH_SENSITIVE         = 0x0000008000000000l;
+  public static final long SWITCH_CONFIG_TRANSLUCENT            = 0x0000010000000000l;
+  public static final long SWITCH_CONFIG_FAINT_LIGHTSOURCE      = 0x0000020000000000l;
+  public static final long SWITCH_CONFIG_COLOR_TINT_SUPPORT     = 0x0000040000000000l;
+  public static final long SWITCH_CONFIG_NOT_PISTON_MOUNTBALE   = 0x0000080000000000l;
+  public static final long SWITCH_CONFIG_NOT_PASSABLE           = 0x0000100000000000l;
+  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE       = 0x0000200000000000l;
+  public static final long SWITCH_CONFIG_LINK_SOURCE_SUPPORT    = 0x0001000000000000l;
+  public static final long SWITCH_CONFIG_LINK_TARGET_SUPPORT    = 0x0002000000000000l;
+  public static final long SWITCH_CONFIG_LINK_RELAY             = 0x0004000000000000l;
+  // --
   public static final int SWITCH_DATA_SVD_ACTIVE_TIME_MASK      = 0x000000ff;
   public static final int SWITCH_DATA_SVD_COLOR_MASK            = 0x00000f00;
   public static final int SWITCH_DATA_SVD_COLOR_SHIFT           = 8;
@@ -130,11 +135,15 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
   @Override
   public boolean isWallMount()
-  { return ((config & (SWITCH_CONFIG_FLOOR_MOUNT)) == 0); }
+  { return ((config & (SWITCH_CONFIG_WALLMOUNT)) != 0); }
 
   @Override
   public boolean isLateral()
-  { return ((config & (SWITCH_CONFIG_FLOOR_MOUNT|SWITCH_CONFIG_LATERAL_WALLMOUNT)) != 0); }
+  { return ((config & (SWITCH_CONFIG_LATERAL)) != 0); }
+
+  @Override
+  public boolean isCube()
+  { return ((config & (SWITCH_CONFIG_FULLCUBIC_BLOCK)) != 0); }
 
   @Override
   public boolean hasColorMultiplierRGBA()
@@ -214,7 +223,8 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
   {
     if((config & SWITCH_CONFIG_LINK_RELAY)!=0) return 0;
-    if((!(world instanceof World)) || (side != ((isLateral()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING))))) return 0;
+    if(!(world instanceof World)) return 0;
+    if(side != ((isLateral()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING)))) return 0;
     final TileEntitySwitch te = getTe((World)world, pos);
     return (te==null) ? 0 : te.power(state, true);
   }

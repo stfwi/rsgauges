@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:contactmat3",
+      "items": [
+        "rsgauges:contactmat2"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:contactmat2" } ],
-  "result": { "item": "rsgauges:contactmat3", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:contactmat2"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:contactmat3",
+    "data": 0
+  }
 }

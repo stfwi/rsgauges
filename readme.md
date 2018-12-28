@@ -142,6 +142,14 @@ reasons:
 ----
 ## Revision history
 
+    - v1.1.0-b4 [A] Added recipe system based opt-out (intended to facilitate
+                    mod packing); added optionally omitting registration of
+                    opt'ed out features (for trouble shooting and development).
+                [A] Added with-experimental opt-in config.
+                [A] Added mod specific registration and config based recipe condition.
+                [M] Indicator state range reduced (RAM/performance optimisation).
+                [M] Internal changes to prepare future mod features (see repository).
+
     - v1.1.0-b3 [A] Added manual/description tooltips for all blocks and items
                     of the mod (CTRL-SHIFT when mouse hovering in the inventory
                     or JEI).

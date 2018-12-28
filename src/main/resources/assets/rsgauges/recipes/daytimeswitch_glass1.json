@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:daytimeswitch_glass1"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "NNN",
@@ -6,9 +12,21 @@
     "NGN"
   ],
   "key": {
-    "N": { "item": "minecraft:iron_nugget", "data": 0 },
-    "G": { "item": "minecraft:glass", "data": 0 },
-    "D": { "item": "minecraft:clock", "data": 0 }
+    "N": {
+      "item": "minecraft:iron_nugget",
+      "data": 0
+    },
+    "G": {
+      "item": "minecraft:glass",
+      "data": 0
+    },
+    "D": {
+      "item": "minecraft:clock",
+      "data": 0
+    }
   },
-  "result": { "item": "rsgauges:daytimeswitch_glass1", "data": 0 }
+  "result": {
+    "item": "rsgauges:daytimeswitch_glass1",
+    "data": 0
+  }
 }

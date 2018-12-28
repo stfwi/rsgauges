@@ -1,7 +1,7 @@
 //
 // Rendering tests using baked models and TESR
 //
-package wile.rsgauges.client;
+package wile.rsgauges.detail;
 
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.blocks.RsBlock;

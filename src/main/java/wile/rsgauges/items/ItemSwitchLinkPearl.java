@@ -1,5 +1,10 @@
 package wile.rsgauges.items;
 
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.items.ModItems;
+import wile.rsgauges.blocks.BlockSwitch;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -22,11 +27,6 @@ import net.minecraft.init.Items;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import wile.rsgauges.ModAuxiliaries;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.ModItems;
-import wile.rsgauges.ModResources;
-import wile.rsgauges.blocks.BlockSwitch;
 
 import javax.annotation.Nullable;
 import java.util.List;

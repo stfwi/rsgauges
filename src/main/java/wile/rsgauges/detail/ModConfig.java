@@ -7,8 +7,9 @@
  * Main class for module settings. Handles reading and
  * saving the config file.
  */
-package wile.rsgauges;
+package wile.rsgauges.detail;
 
+import wile.rsgauges.ModRsGauges;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +29,7 @@ public class ModConfig
   public static final class SettingsAFeatureOptout
   {
     @Config.Comment({
-      "Completely disable all (power metering) gauges, the blocks will not be registered at all.",
+      "Completely disable all (power metering) gauges.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without gauges")
@@ -44,8 +45,7 @@ public class ModConfig
     public boolean without_gauge_weak_power_measurement = false;
 
     @Config.Comment({
-      "Completely disable all (blinking and steady) indicator lamps/LEDs, the " +
-      "blocks will not be registered at all.",
+      "Completely disable all (blinking and steady) indicator lamps/LEDs.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without indicators")
@@ -53,8 +53,7 @@ public class ModConfig
     public boolean without_indicators = false;
 
     @Config.Comment({
-      "Completely disable all blinking indicator lamps/LEDs, the blocks will not " +
-      "be registered.",
+      "Completely disable all blinking indicator lamps/LEDs.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without blinking indicators")
@@ -62,8 +61,7 @@ public class ModConfig
     public boolean without_blinking_indicators = false;
 
     @Config.Comment({
-      "Completely disable all sound emmitting indicators, the blocks will not " +
-      "be registered.",
+      "Completely disable all sound emmitting indicators.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without blinking indicators")
@@ -71,8 +69,7 @@ public class ModConfig
     public boolean without_sound_indicators = false;
 
     @Config.Comment({
-      "Completely disable all (button like) pulse switches, the blocks will not " +
-      "be registered.",
+      "Completely disable all (button like) pulse switches.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without pulse switches")
@@ -80,8 +77,7 @@ public class ModConfig
     public boolean without_pulse_switches = false;
 
     @Config.Comment({
-      "Completely disable all (lever like) bistable switches, the blocks will not " +
-      "be registered.",
+      "Completely disable all (lever like) bistable switches.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without bistable switches")
@@ -89,8 +85,7 @@ public class ModConfig
     public boolean without_bistable_switches = false;
 
     @Config.Comment({
-      "Completely disable all contact switches, the blocks will not " +
-      "be registered.",
+      "Completely disable all contact switches.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without contact switches")
@@ -98,8 +93,7 @@ public class ModConfig
     public boolean without_contact_switches = false;
 
     @Config.Comment({
-      "Completely disable all automatic switches, the blocks will not " +
-      "be registered.",
+      "Completely disable all automatic switches.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without automatic switches")
@@ -107,8 +101,7 @@ public class ModConfig
     public boolean without_automatic_switches = false;
 
     @Config.Comment({
-      "Completely disable all link relay switches, the blocks will not " +
-      "be registered.",
+      "Completely disable all link relay switches.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without link relay switches")
@@ -116,8 +109,7 @@ public class ModConfig
     public boolean without_linkrelay_switches = false;
 
     @Config.Comment({
-      "Completely disable all decorative blocks, the blocks will not " +
-      "be registered.",
+      "Completely disable all decorative blocks.",
       "Affects server and client side. Requires restart."
     })
     @Config.Name("Without decorative blocks")
@@ -208,7 +200,7 @@ public class ModConfig
   }
 
   @Config.Comment({
-    "Settings for beta testing and trouble shooting. Some of the settings" +
+    "Settings for beta testing and trouble shooting. Some of the settings " +
     "may be moved to other categories after testing."
   })
   @Config.Name("Miscellaneous")
@@ -282,6 +274,21 @@ public class ModConfig
     @Config.Name("Accepted wrenches")
     public String accepted_wrenches = "air";
 
+    @Config.Comment({
+      "Blocks and items opt'ed out in this config will not disabled in the " +
+      "recipe system, but not registered at all. Note this can cause trouble " +
+      "if server and client have different settings here.",
+      "Affects server and client side. Requires restart."
+    })
+    @Config.Name("Omit registrations of opt-out features")
+    public boolean without_optout_registrations = false;
+
+    @Config.Comment({
+      "Enables experimental features, blocks or items.",
+      "Affects server and client side. Use at own risk."
+    })
+    @Config.Name("With experimental")
+    public boolean with_experimental = false;
   }
 
   @SuppressWarnings("unused")

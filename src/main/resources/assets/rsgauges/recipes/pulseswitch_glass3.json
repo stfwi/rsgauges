@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:pulseswitch_glass3",
+      "items": [
+        "rsgauges:pulseswitch_glass2"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:pulseswitch_glass2" } ],
-  "result": { "item": "rsgauges:pulseswitch_glass3", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:pulseswitch_glass2"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:pulseswitch_glass3",
+    "data": 0
+  }
 }

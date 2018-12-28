@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:bistableswitch_rustic1"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "NNN",
@@ -6,9 +12,21 @@
     "NSN"
   ],
   "key": {
-    "N": { "item": "minecraft:iron_nugget", "data": 0 },
-    "S": { "item": "minecraft:stick", "data": 0 },
-    "L": { "item": "minecraft:lever", "data": 0 }
+    "N": {
+      "item": "minecraft:iron_nugget",
+      "data": 0
+    },
+    "S": {
+      "item": "minecraft:stick",
+      "data": 0
+    },
+    "L": {
+      "item": "minecraft:lever",
+      "data": 0
+    }
   },
-  "result": { "item": "rsgauges:bistableswitch_rustic1", "data": 0 }
+  "result": {
+    "item": "rsgauges:bistableswitch_rustic1",
+    "data": 0
+  }
 }

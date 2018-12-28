@@ -13,13 +13,11 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.SoundType;
-import net.minecraft.client.util.ITooltipFlag;
-import wile.rsgauges.ModAuxiliaries;
 import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.ModItems;
-import wile.rsgauges.client.JitModelBakery;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.detail.JitModelBakery;
+import wile.rsgauges.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -27,6 +25,8 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,10 +59,10 @@ public abstract class RsBlock extends Block
   public static final PropertyDirection FACING = PropertyDirection.create("facing");
   protected final AxisAlignedBB unrotatedBB;
 
-  public RsBlock(String registryName, AxisAlignedBB unrotatedBoundingBox, @Nullable Material material)
+  public RsBlock(String registryName, @Nullable AxisAlignedBB unrotatedBoundingBox, @Nullable Material material)
   {
     super((material!=null) ? (material) : (Material.CIRCUITS));
-    unrotatedBB = unrotatedBoundingBox;
+    unrotatedBB = (unrotatedBoundingBox!=null) ? (unrotatedBoundingBox) : (new AxisAlignedBB(0,0,0,1,1,1));
     setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(ModRsGauges.MODID, registryName);
     setTranslationKey(ModRsGauges.MODID + "." + registryName);
@@ -97,7 +97,7 @@ public abstract class RsBlock extends Block
   @Override
   @SuppressWarnings("deprecation")
   public boolean isFullCube(IBlockState state)
-  { return false; }
+  { return isCube(); }
 
   @Override
   @SuppressWarnings("deprecation")
@@ -107,13 +107,13 @@ public abstract class RsBlock extends Block
   @Override
   @SuppressWarnings("deprecation")
   public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face)
-  { return BlockFaceShape.UNDEFINED; }
+  { return isCube() ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED; }
 
   @Override
   @Nullable
   @SuppressWarnings("deprecation")
   public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
-  { return NULL_AABB; }
+  { return (!isCube()) ? (NULL_AABB) : (getBoundingBox(state, world, pos)); }
 
   @Override
   @SideOnly(Side.CLIENT)
@@ -142,11 +142,11 @@ public abstract class RsBlock extends Block
   @Override
   @SuppressWarnings("deprecation")
   public EnumPushReaction getPushReaction(IBlockState state)
-  { return EnumPushReaction.DESTROY; }
+  { return isCube() ? EnumPushReaction.NORMAL : EnumPushReaction.DESTROY; }
 
   @Override
   public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
-  { return true; }
+  { return (!isCube()); }
 
   @Override
   public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos)
@@ -185,7 +185,7 @@ public abstract class RsBlock extends Block
 
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-  { return true; }
+  { return (!isCube()); }
 
   @Override
   public void onBlockClicked(World world, BlockPos pos, EntityPlayer player)
@@ -197,15 +197,15 @@ public abstract class RsBlock extends Block
 
   public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, @Nullable Predicate<Block> blockWhiteListFilter, @Nullable Predicate<Block> blockBlackListFilter)
   {
-    if(isLateral() && (!isWallMount())) {
+    if(isCube()) {
+      return true;
+    } else if(isLateral() && (!isWallMount())) {
       if(side != EnumFacing.UP) return false; // must be supported from the bottom.
       final IBlockState state = world.getBlockState(pos.down());
       if((state==null) || (state.getBlockFaceShape(world, pos, EnumFacing.UP) != BlockFaceShape.SOLID)) return false;
       if(material!=ModAuxiliaries.RsMaterials.MATERIAL_PLANT) return true;
-
-
       return true;
-    } else {
+    } else if(isWallMount()) {
       if(isLateral() && ((side==EnumFacing.UP)||(side==EnumFacing.DOWN))) return false; // lateral blocks only on walls.
       final BlockPos blockpos = pos.offset(side.getOpposite());
       final IBlockState state = world.getBlockState(blockpos);
@@ -213,6 +213,8 @@ public abstract class RsBlock extends Block
       if(side == EnumFacing.UP) return (state.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
       if((blockWhiteListFilter!=null) && (blockWhiteListFilter.apply(state.getBlock()))) return true;
       return (!isExceptionBlockForAttaching(state.getBlock())) && (state.getBlockFaceShape(world, blockpos, side) == BlockFaceShape.SOLID);
+    } else {
+      return (super.canPlaceBlockOnSide(world, pos, side));
     }
   }
 
@@ -224,8 +226,10 @@ public abstract class RsBlock extends Block
       return state.withProperty(FACING, facing); // e.g. pulse/bistable switches. Placed on the wall with the ui facing to the player.
     } else if(isWallMount() && isLateral()) {
       return state.withProperty(FACING, facing.getOpposite()); // e.g. trap door switch. Placed on the wall the player clicked, reverse orientation.
+    } else if((!isWallMount()) && isLateral()) {
+      return state.withProperty(FACING, placer.getHorizontalFacing()); // e.g. contact mats or full blocks, placed in the direction the player is looking.
     } else {
-      return state.withProperty(FACING, placer.getHorizontalFacing()); // e.g. contact mats, placed in the direction the player is looking.
+      return state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()); // other switches, placed so that the UI side is facing the player.
     }
   }
 
@@ -284,6 +288,14 @@ public abstract class RsBlock extends Block
   { return false; }
 
   /**
+   * Overridden to indicate that the block is a standard cube, cannot be washed off, and is
+   * not explicitly attached to another block, so that it would pop off when that block,
+   * is destroyed. Also implies Block class overrides for cubes.
+   */
+  public boolean isCube()
+  { return false; }
+
+  /**
    * Returns the bounding box facing north. For other facing direction
    * block states, the corresponding facing will be calculated from this
    * data.
@@ -317,7 +329,9 @@ public abstract class RsBlock extends Block
    */
   protected boolean neighborChangedCheck(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
   {
-    if(!isWallMount()) {
+    if(isCube()) {
+      return true;
+    } else if(!isWallMount()) {
       if(!(pos.down().equals(neighborPos))) return false;
     } else if(!isLateral()) {
       if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos)) return false;
@@ -343,7 +357,7 @@ public abstract class RsBlock extends Block
    */
   protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
   {
-    if(canPlaceBlockOnSide(world, pos, isWallMount() ? state.getValue(FACING) : EnumFacing.UP)) return true;
+    if(isCube() || canPlaceBlockOnSide(world, pos, isWallMount() ? state.getValue(FACING) : EnumFacing.UP)) return true;
     if(world.isRemote) return false;
     onRsBlockDestroyed(state, world, pos);
     dropBlockAsItem(world, pos, state, 0);
@@ -418,18 +432,11 @@ public abstract class RsBlock extends Block
     public double x = 0;
     public double y = 0;
 
-
     @Override
     public String toString()
     {
       return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",touch_configured:" + Boolean.toString(touch_configured)
           + ",wrenched:" + Boolean.toString(wrenched) + ",item_count:" + Integer.toString(item_count) + ",dye:" + Integer.toString(dye) + "}";
-    }
-
-    public static boolean wrenched(EntityPlayer player)
-    {
-      final ItemStack item = player.getHeldItemMainhand();
-      return (item != null) && ((","+ModConfig.zmisc.accepted_wrenches+",").contains(","+item.getItem().getRegistryName().getPath() + ","));
     }
 
     public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
@@ -438,30 +445,30 @@ public abstract class RsBlock extends Block
       if((world==null) || (pos==null)) return ck;
       if(state==null) state = world.getBlockState(pos);
       if((state==null) || (!(state.getBlock() instanceof RsBlock))) return ck;
-      final RsBlock block = (RsBlock)(state.getBlock());
-      ck.wrenched = wrenched(player);
-      if(!ck.wrenched) {
-        final ItemStack item = player.getHeldItemMainhand();
-        if(item != null) {
-          if(item.getItem() == Items.REDSTONE) {
-            ck.item = Items.REDSTONE;
-            ck.item_count = item.getCount();
-          } else if(item.getItem() == Items.ENDER_PEARL) {
-            ck.item = Items.ENDER_PEARL;
-            ck.item_count = item.getCount();
-          } else if(item.getItem() == ModItems.SWITCH_LINK_PEARL) {
-            ck.item = ModItems.SWITCH_LINK_PEARL;
-            ck.item_count = item.getCount();
-          } else {
-            ck.item = Items.DYE;
-            ck.dye = DyeUtils.rawMetaFromStack(item);
-            if(ck.dye > 15) ck.dye = 15;
-          }
-        }
+      final ItemStack item = player.getHeldItemMainhand();
+      if(item == null) return ck;
+      if(item.getItem()==Items.AIR) {
+        ck.wrenched = true;
+      } else if(item.getItem() == Items.REDSTONE) {
+        ck.item = Items.REDSTONE;
+        ck.item_count = item.getCount();
+      } else if(item.getItem() == Items.ENDER_PEARL) {
+        ck.item = Items.ENDER_PEARL;
+        ck.item_count = item.getCount();
+      } else if(item.getItem() == ModItems.SWITCH_LINK_PEARL) {
+        ck.item = ModItems.SWITCH_LINK_PEARL;
+        ck.item_count = item.getCount();
+      } else if(DyeUtils.isDye(item)) {
+        ck.item = Items.DYE;
+        ck.dye = DyeUtils.rawMetaFromStack(item);
+        if(ck.dye > 15) ck.dye = 15;
+      } else {
+        ck.wrenched = ((","+ModConfig.zmisc.accepted_wrenches+",").contains(","+item.getItem().getRegistryName().getPath() + ","));
       }
 
       // Touch config check
-      if(facing==null) return ck;
+      if((facing==null) || (!ck.wrenched)) return ck;
+      final RsBlock block = (RsBlock)(state.getBlock());
       if(block.isLateral() && (facing != EnumFacing.UP)) return ck;
       if(block.isWallMount() && (facing != state.getValue(FACING))) return ck; // wall & floor covered above.
       double xo=0, yo=0;

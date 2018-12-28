@@ -1,8 +1,24 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:sensitiveglass_inverted",
+      "items": [
+        "rsgauges:sensitiveglass"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    { "item": "rsgauges:sensitiveglass" },
-    { "item": "minecraft:redstone_torch" }
+    {
+      "item": "rsgauges:sensitiveglass"
+    },
+    {
+      "item": "minecraft:redstone_torch"
+    }
   ],
-  "result": { "item": "rsgauges:sensitiveglass_inverted", "data": 0 }
+  "result": {
+    "item": "rsgauges:sensitiveglass_inverted",
+    "data": 0
+  }
 }

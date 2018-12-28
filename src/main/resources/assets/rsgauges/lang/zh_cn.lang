@@ -476,6 +476,12 @@ tile.rsgauges.sensitiveglass_inverted.name=红石感应玻璃 (inverted, light e
 #tile.rsgauges.sensitiveglass_black.help=${rsgauges.sensitiveglass.colored.help}
 
 #-----------------------------------------------------------------------------------------------------------
+# Other blocks
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.qube.name=The qube
+#tile.rsgauges.qube.help=It's a developer block that is not supposed to be craftable or used in the game.
+
+#-----------------------------------------------------------------------------------------------------------
 # Items
 #-----------------------------------------------------------------------------------------------------------
 item.rsgauges.switchlink_pearl.name=Switch link pearl

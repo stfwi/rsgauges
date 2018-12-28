@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:bistableswitch2",
+      "items": [
+        "rsgauges:bistableswitch1"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:bistableswitch1" } ],
-  "result": { "item": "rsgauges:bistableswitch2", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:bistableswitch1"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:bistableswitch2",
+    "data": 0
+  }
 }

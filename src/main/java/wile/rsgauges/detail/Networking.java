@@ -1,8 +1,8 @@
-package wile.rsgauges.network;
+package wile.rsgauges.detail;
 
-import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.client.OverlayEventHandler;
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.detail.OverlayEventHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

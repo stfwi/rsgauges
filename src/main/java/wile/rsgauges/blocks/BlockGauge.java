@@ -16,10 +16,10 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.ModResources;
 import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.ModAuxiliaries;
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.detail.ModAuxiliaries;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -45,10 +45,10 @@ import javax.annotation.Nullable;
 public class BlockGauge extends RsBlock
 {
   public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
-  private final int light_value;     // nonzero if the block emits light when powered (e.g. lamp). The light is only rendering light, not anti-spawn light.
-  private final int blink_interval;
-  @Nullable protected final ModResources.BlockSoundEvent power_on_sound;
-  @Nullable protected final ModResources.BlockSoundEvent power_off_sound;
+  public final int light_value;     // nonzero if the block emits light when powered (e.g. lamp). The light is only rendering light, not anti-spawn light.
+  public final int blink_interval;
+  @Nullable public final ModResources.BlockSoundEvent power_on_sound;
+  @Nullable public final ModResources.BlockSoundEvent power_off_sound;
 
   public BlockGauge(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   {
@@ -57,7 +57,7 @@ public class BlockGauge extends RsBlock
     blink_interval = (blinkInterval <= 0) ? (0) : ((blinkInterval < 500) ? (500) : ((blinkInterval > 3000) ? 3000 : blinkInterval));
     power_on_sound = powerOnSound;
     power_off_sound = powerOffSound;
-    setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWER, 0));
+    setDefaultState(getBlockStateWithPower(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH), 0));
   }
 
   public BlockGauge(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval)
@@ -70,10 +70,36 @@ public class BlockGauge extends RsBlock
   public boolean isWallMount()
   { return true; }
 
+  /**
+   * Enables overriding to allow stripped value ranges for individual POWER block properties.
+   * Returns the blockstate, where the corresponding POWER value property is set to the closest
+   * value to `power`.
+   */
+  public IBlockState getBlockStateWithPower(IBlockState orig, int power)
+  { return orig.withProperty(POWER, power); }
+
+  /**
+   * Enables overriding to allow stripped value ranges for individual POWER block properties.
+   * Returns the int value of the block specific POWER property.
+   */
+  public int getBlockStatePower(IBlockState state)
+  { return state.getValue(POWER); }
+
+  /**
+   * Enables overriding to allow stripped value ranges for individual POWER block properties.
+   * Returns true if state power and passed power are identical.
+   */
+  public boolean cmpBlockStatePower(IBlockState state, int power)
+  { return state.getValue(POWER) == power; }
+
   @Override
   @SideOnly(Side.CLIENT)
   public void initModel()
   { super.initModel(); }
+
+  ///
+  /// Forge / Minecraft overloads
+  ///
 
   @Override
   @SideOnly(Side.CLIENT)
@@ -84,7 +110,7 @@ public class BlockGauge extends RsBlock
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
   {
     final TileEntityGauge te = getTe(state, world, pos);
-    return super.getActualState(state, world, pos).withProperty(POWER, (te==null) ? 0 : te.power());
+    return getBlockStateWithPower(super.getActualState(state, world, pos), (te==null) ? 0 : te.power());
   }
 
   @Override
@@ -106,7 +132,7 @@ public class BlockGauge extends RsBlock
   @Override
   @SuppressWarnings("deprecation")
   public int getLightValue(IBlockState state)
-  { return (light_value <1) ? 0 : ((!ModAuxiliaries.isClientSide()) || (state.getValue(POWER)>0)) ? (light_value) : (0); }
+  { return (light_value <1) ? 0 : ((!ModAuxiliaries.isClientSide()) || (getBlockStatePower(state)>0)) ? (light_value) : (0); }
 
   @Override
   public boolean getWeakChanges(IBlockAccess world, BlockPos pos)
@@ -114,7 +140,7 @@ public class BlockGauge extends RsBlock
 
   @Override
   protected BlockStateContainer createBlockState()
-  { return new BlockStateContainer(this, FACING,POWER); }
+  { return new BlockStateContainer(this, FACING, POWER); }
 
   @Override
   public boolean hasTileEntity(IBlockState state)
@@ -124,9 +150,7 @@ public class BlockGauge extends RsBlock
   public TileEntity createTileEntity(World world, IBlockState state)
   { return new TileEntityGauge(); }
 
-  /**
-   * Readwrite TE getter.
-   */
+
   public TileEntityGauge getTe(IBlockState state, IBlockAccess world, BlockPos pos)
   {
     final TileEntity te = world.getTileEntity(pos);
@@ -165,13 +189,16 @@ public class BlockGauge extends RsBlock
       power(nbt.getInteger("power"));
       // Client re-render on NBT power change
       if(updatePacket && (world!=null) && (world.isRemote)) {
-        final IBlockState state = world.getBlockState(pos).withProperty(POWER, power());
-        if(last_state_ != state) {
-          last_state_ = state;
-          if(state != null) {
+        IBlockState state = world.getBlockState(pos);
+        if((state!=null) && (state.getBlock() instanceof BlockGauge)) {
+          state = ((BlockGauge) state.getBlock()).getBlockStateWithPower(state, power());
+          if(last_state_ != state) {
+            last_state_ = state;
             world.setBlockState(pos, state, 16);
             world.markBlockRangeForRenderUpdate(pos, pos);
           }
+        } else {
+          last_state_ = null;
         }
       }
     }
@@ -222,9 +249,9 @@ public class BlockGauge extends RsBlock
           power(p);
           if(sync) {
             world.markChunkDirty(pos, this);
-            world.notifyBlockUpdate(pos, state, state.withProperty(POWER, p), 2|16); // without observer and comparator stuff
-          } else if(state.getValue(POWER) != p) {
-            world.setBlockState(pos, state.withProperty(POWER, p), 16);
+            world.notifyBlockUpdate(pos, state, block.getBlockStateWithPower(state, p), 2|16); // without observer and comparator stuff
+          } else if(!block.cmpBlockStatePower(state, p)) {
+            world.setBlockState(pos, block.getBlockStateWithPower(state, p), 16);
           }
         }
       } catch(Throwable e) {

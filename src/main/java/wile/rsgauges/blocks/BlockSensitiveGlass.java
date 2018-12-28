@@ -10,9 +10,9 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.ModAuxiliaries;
-import wile.rsgauges.ModBlocks;
-import wile.rsgauges.ModConfig;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.blocks.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;

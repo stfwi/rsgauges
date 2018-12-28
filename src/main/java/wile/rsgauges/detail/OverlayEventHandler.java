@@ -8,10 +8,10 @@
  * at and reconfigured. Replaces chat based switch status
  * messages to prevent chat spams.
  */
-package wile.rsgauges.client;
+package wile.rsgauges.detail;
 
-import wile.rsgauges.ModAuxiliaries;
-import wile.rsgauges.ModConfig;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.Mod;

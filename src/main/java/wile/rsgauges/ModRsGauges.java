@@ -8,6 +8,9 @@
  */
 package wile.rsgauges;
 
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.blocks.ModBlocks;
+import wile.rsgauges.items.ModItems;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -49,7 +52,7 @@ public class ModRsGauges
   @Mod.Instance
   public static ModRsGauges instance;
 
-  @SidedProxy(clientSide = "wile.rsgauges.proxy.ClientProxy", serverSide = "wile.rsgauges.proxy.ServerProxy")
+  @SidedProxy(clientSide = "wile.rsgauges.detail.ClientProxy", serverSide = "wile.rsgauges.detail.ServerProxy")
   public static IProxy proxy;
 
   public interface IProxy

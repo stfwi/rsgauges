@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:detectorswitch_glass2",
+      "items": [
+        "rsgauges:detectorswitch_glass1"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:detectorswitch_glass1" } ],
-  "result": { "item": "rsgauges:detectorswitch_glass2", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:detectorswitch_glass1"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:detectorswitch_glass2",
+    "data": 0
+  }
 }

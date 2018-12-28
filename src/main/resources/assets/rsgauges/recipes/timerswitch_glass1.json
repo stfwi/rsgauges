@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:timerswitch_glass1",
+      "items": [
+        "rsgauges:daytimeswitch_glass1"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:daytimeswitch_glass1" } ],
-  "result": { "item": "rsgauges:timerswitch_glass1", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:daytimeswitch_glass1"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:timerswitch_glass1",
+    "data": 0
+  }
 }
