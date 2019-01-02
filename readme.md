@@ -142,6 +142,10 @@ reasons:
 ----
 ## Revision history
 
+                -------------------------------------------------------------------
+    - v1.1.0    [R] Release based on v1.1.0-b4.
+                -------------------------------------------------------------------
+
     - v1.1.0-b4 [A] Added recipe system based opt-out (intended to facilitate
                     mod packing); added optionally omitting registration of
                     opt'ed out features (for trouble shooting and development).
