@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:trapdoorswitch3",
+      "items": [
+        "rsgauges:trapdoorswitch2"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:trapdoorswitch2" } ],
-  "result": { "item": "rsgauges:trapdoorswitch3", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:trapdoorswitch2"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:trapdoorswitch3",
+    "data": 0
+  }
 }

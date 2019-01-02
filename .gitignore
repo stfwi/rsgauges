@@ -1,29 +1,24 @@
-# eclipse
 bin
 *.launch
 .settings
 .metadata
 .classpath
 .project
-.vscode
-
-# idea
 out
 *.ipr
 *.iws
 *.iml
 .idea
-
-# gradle
 build
 .gradle
-
-# other
 *.tmp
 *.log
+*.jks
 eclipse
 run
 tests
-dist
+/dist
+signing.*
 src/main/java/archive
 src/main/resources/assets/minecraft
+.vscode

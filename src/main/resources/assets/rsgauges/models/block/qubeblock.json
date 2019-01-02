@@ -1,0 +1,29 @@
+{
+  "parent": "block/cube",
+  "display": {
+		"gui":    { "rotation": [ 30, 225, 0 ], "scale": [0.625, 0.625, 0.625] },
+		"fixed":  { "scale": [0.5, 0.5, 0.5] },
+		"ground": {	"scale": [0.2, 0.2, 0.2] }
+	},
+	"textures": {
+		"particle": "rsgauges:blocks/qube/qube_d_texture",
+		"n": "rsgauges:blocks/qube/qube_b_texture",
+		"e": "rsgauges:blocks/qube/qube_r_texture",
+		"s": "rsgauges:blocks/qube/qube_f_texture",
+		"w": "rsgauges:blocks/qube/qube_l_texture",
+		"u": "rsgauges:blocks/qube/qube_u_texture",
+		"d": "rsgauges:blocks/qube/qube_d_texture"
+	},
+	"elements": [{
+    "from": [0, 0, 0],
+    "to": [16, 16, 16],
+    "faces": {
+      "north": {"uv": [0, 0, 16, 16], "texture": "#n"},
+      "east": {"uv": [0, 0, 16, 16], "texture": "#e"},
+      "south": {"uv": [0, 0, 16, 16], "texture": "#s"},
+      "west": {"uv": [0, 0, 16, 16], "texture": "#w"},
+      "up": {"uv": [0, 0, 16, 16], "texture": "#u"},
+      "down": {"uv": [0, 0, 16, 16], "texture": "#d"}
+    }
+  }]
+}

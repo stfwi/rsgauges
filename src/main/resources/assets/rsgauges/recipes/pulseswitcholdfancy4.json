@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:pulseswitch_oldfancy4",
+      "items": [
+        "rsgauges:pulseswitch_oldfancy3"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:pulseswitch_oldfancy3" } ],
-  "result": { "item": "rsgauges:pulseswitch_oldfancy4", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:pulseswitch_oldfancy3"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:pulseswitch_oldfancy4",
+    "data": 0
+  }
 }

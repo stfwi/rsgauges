@@ -1,14 +1,32 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:soundindicator1"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
-  "result": { "item": "rsgauges:soundindicator1", "data": 0 },
+  "result": {
+    "item": "rsgauges:soundindicator1",
+    "data": 0
+  },
   "pattern": [
     "NNN",
     "NBN",
     "NRN"
   ],
   "key": {
-    "N": { "item": "minecraft:iron_nugget", "data": 0 },
-    "R": { "item": "minecraft:redstone", "data": 0 },
-    "B": { "item": "minecraft:noteblock", "data": 0 }
+    "N": {
+      "item": "minecraft:iron_nugget",
+      "data": 0
+    },
+    "R": {
+      "item": "minecraft:redstone",
+      "data": 0
+    },
+    "B": {
+      "item": "minecraft:noteblock",
+      "data": 0
+    }
   }
 }

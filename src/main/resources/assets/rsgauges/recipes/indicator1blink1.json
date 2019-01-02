@@ -1,8 +1,24 @@
 {
-    "type": "minecraft:crafting_shapeless",
-    "result": { "item": "rsgauges:indicator1blink1", "data":0 },
-    "ingredients": [
-        { "item": "rsgauges:indicator1" },
-        { "item": "minecraft:egg" }
-    ]
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:indicator1blink1",
+      "items": [
+        "rsgauges:indicator1"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "result": {
+    "item": "rsgauges:indicator1blink1",
+    "data": 0
+  },
+  "ingredients": [
+    {
+      "item": "rsgauges:indicator1"
+    },
+    {
+      "item": "minecraft:egg"
+    }
+  ]
 }

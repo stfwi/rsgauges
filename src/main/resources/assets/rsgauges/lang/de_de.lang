@@ -1,15 +1,24 @@
 #
 # Redstone Gauges and Switches language file
 #
+# - Inventory hover tooltip help/descriptions (when CTRL-SHIFT are down).
+#   Texts are for items and blocks, and the key identical to the names, only
+#   with ".help" instead of ".name" at the end. These translations allow
+#   cross referencing (non-recursively) other lang key because quite a few
+#   blocks have the same description text. Use "one.key.help=${other.key.help}".
+#
 #PARSE_ESCAPES
 #
+#-----------------------------------------------------------------------------------------------------------
 itemGroup.tabrsgauges=Redstone Gauges and Switches
 rsgauges.config.title=Redstone Gauges and Switches Konfiguration
 rsgauges.subtitle.soundindicator1=Alarmsirene
+rsgauges.tooltip.hint.extended=§8[§oSHIFT§8 Mehr Infos]§r
+rsgauges.tooltip.hint.help=§8[§oCTRL-SHIFT§8 Hilfe]§r
 
-#
+#-----------------------------------------------------------------------------------------------------------
 # Gauge names
-#
+#-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.flatgauge1.name=Redstone-Messgerät (großes analoges Voltmeter)
 tile.rsgauges.flatgauge2.name=Redstone-Messgerät (vertikale Balkenanzeige)
 tile.rsgauges.flatgauge3.name=Redstone-Messgerät (kleine Digitalanzeige)
@@ -17,10 +26,24 @@ tile.rsgauges.flatgauge4.name=Redstone-Messgerät (Glas-Balkenanzeige)
 tile.rsgauges.flatgauge5.name=Redstone-Messgerät (Glasrohr)
 tile.rsgauges.flatgauge6.name=Redstone-Messgerät (kleines Analog-Voltmeter)
 tile.rsgauges.gauge_rustic2.name=Redstone-Messgerät (rustikales Drehzeiger-Messgerät, natürlich aus Eisen)
+# tooltip help
+#tile.rsgauges.flatgauge1.help=§6A display device that can be attached to a solid block to visualise the \
+                              redstone power of that block.§r\n\
+                              If the block can provide power itself, the \
+                              gauge uses the output of it, otherwise the gauge will indirectly measure \
+                              the power that the block receives from adjacent blocks. \
+                              Strong and weak power is supported. Indirect weak measurements may have \
+                              a short latency.
+#tile.rsgauges.flatgauge2.help=${tile.rsgauges.flatgauge1.help}
+#tile.rsgauges.flatgauge3.help=${tile.rsgauges.flatgauge1.help}
+#tile.rsgauges.flatgauge4.help=${tile.rsgauges.flatgauge1.help}
+#tile.rsgauges.flatgauge5.help=${tile.rsgauges.flatgauge1.help}
+#tile.rsgauges.flatgauge6.help=${tile.rsgauges.flatgauge1.help}
+#tile.rsgauges.gauge_rustic2.help=${tile.rsgauges.flatgauge1.help}
 
-#
+#-----------------------------------------------------------------------------------------------------------
 # Binary state indicator names
-#
+#-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.indicator1.name=Redstone-Indikator (grüne rechteckige Signalleuchte)
 tile.rsgauges.indicator2.name=Redstone-Indikator (gelbe rechteckige Signalleuchte)
 tile.rsgauges.indicator3.name=Redstone-Indikator (rote rechteckige Signalleuchte)
@@ -29,10 +52,39 @@ tile.rsgauges.indicator1blink1.name=Redstone-Indikator (blinkende grüne Signall
 tile.rsgauges.indicator2blink1.name=Redstone-Indikator (blinkende gelbe Signalleuchte)
 tile.rsgauges.indicator3blink1.name=Redstone-Indikator (blinkende rote Signalleuchte)
 tile.rsgauges.soundindicator1.name=Akustischer Redstone-Indikator (Alarmsirene)
+# tooltip help
+#tile.rsgauges.indicator1.help=§6A small device that can be attached to a block to indicate \
+                              if that block is powered.§r\n\
+                              If the block can provide power itself, it uses \
+                              the output of the block, otherwise it looks up the power that the \
+                              block receives from adjacent blocks.
+#tile.rsgauges.indicator2.help=${tile.rsgauges.indicator1.help}
+#tile.rsgauges.indicator3.help=${tile.rsgauges.indicator1.help}
+#tile.rsgauges.indicator1blink1.help=${tile.rsgauges.indicator1.help} Blinks with a frequency of about 0.5Hz.
+#tile.rsgauges.indicator2blink1.help=${tile.rsgauges.indicator1.help} Blinks with a frequency of about 0.5Hz.
+#tile.rsgauges.indicator3blink1.help=${tile.rsgauges.indicator1.help} Blinks with a frequency of about 0.5Hz.
+#tile.rsgauges.indicator4.help=§6A red lamp that blinks when detecting a redstone signal from the block \
+                              it is attached to.§r Emits light when active.
+#tile.rsgauges.soundindicator1.help=§6A siren that frequently emits an alarm sound when detecting a redstone \
+                              signal from the block it is attached to.
 
-#
+#-----------------------------------------------------------------------------------------------------------
+# Switch tooltip help aspects
+#-----------------------------------------------------------------------------------------------------------
+#rsgauges.switch.feature.pulseextend.help=Activate while already active to extend the pulse time.
+#rsgauges.switch.feature.hoppermountable.help=Can be placed on hoppers.
+#rsgauges.switch.feature.pulsetime.help=Left-click with a stack of redstone to set a fixed pulse time between 0.1s (1) and 6.4s (64).
+#rsgauges.switch.feature.outputconfig.help=Double left-click empty handed to configure the output (cycles through the options that this switch supports).
+#rsgauges.switch.feature.projectilesense.help=Can be activated with projectiles.
+#rsgauges.switch.feature.colortinting.help=Left-click with any dye to color tint the switch.
+#rsgauges.switch.feature.linktarget.help=Left-click with an Ender pearl to get a Switch Link Pearl linked to this switch.
+#rsgauges.switch.feature.linksource.help=Left-click with a Switch Link Pearl to use this switch as link source.
+#rsgauges.switch.feature.contactmat.offdelay.help=Left-click with a stack of redstone to set the hold-time between 0.1s (1) and 6.4s (64).
+#rsgauges.switch.feature.contactmat.touch.help=Click on the touch config up/down buttons to set output power, entity filter, entity count, and sensitivity.
+
+#-----------------------------------------------------------------------------------------------------------
 # Manual bistable switch names
-#
+#-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.bistableswitch1.name=Redstone-Schalter (Maschinen-Drehschalter)
 tile.rsgauges.bistableswitch2.name=Redstone-Schalter (Frankenstein-Hebel)
 tile.rsgauges.bistableswitch3.name=Redstone-Schalter (Maschinenschalter)
@@ -57,10 +109,38 @@ tile.rsgauges.bistableswitch_rustic6.name=Redstone-Schalter (rustikaler Schiebes
 tile.rsgauges.bistableswitch_rustic7.name=Redstone-Schalter (rustikaler Nagel)
 tile.rsgauges.bistableswitch_glass1.name=Redstone-Schalter (sternförmiger Glasschalter)
 tile.rsgauges.bistableswitch_glass2.name=Redstone-Schalter (Glas-Touch-Schalter)
+#
+# Bistable switch tooltip help
+#
+#rsgauges.switch.feature.typebistable.help=§6A switch that is manually flipped on or off like a lever.\n
+#tile.rsgauges.bistableswitch1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch4.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch5.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} Can be shot off with a projectile.
+#tile.rsgauges.bistableswitch6.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
+#tile.rsgauges.bistableswitch7.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
+#tile.rsgauges.bistableswitch8.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_oldfancy1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_oldfancy2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_oldfancy3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_oldfancy4.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_oldfancy5.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_oldfancy6.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_oldfancy7.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_rustic1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_rustic2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_rustic3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
+#tile.rsgauges.bistableswitch_rustic4.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
+#tile.rsgauges.bistableswitch_rustic5.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_rustic6.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_rustic7.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.bistableswitch_glass1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
+#tile.rsgauges.bistableswitch_glass2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
 
-#
+#-----------------------------------------------------------------------------------------------------------
 # Manual pulse switch names
-#
+#-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.arrowtarget.name=Redstone-Taster (Zielscheibe)
 tile.rsgauges.pulseswitch1.name=Redstone-Taster (Maschinentaster)
 tile.rsgauges.pulseswitch2.name=Redstone-Taster (runder Maschinentaster)
@@ -81,33 +161,123 @@ tile.rsgauges.pulseswitch_rustic7.name=Redstone-Taster (rustikaler Nagel)
 tile.rsgauges.pulseswitch_glass1.name=Redstone-Taster (Sternförmiger Glasknopf)
 tile.rsgauges.pulseswitch_glass2.name=Redstone-Taster (kleiner Sternförmiger Glasknopf)
 tile.rsgauges.pulseswitch_glass3.name=Redstone-Taster (Glas Touch-Knopf)
-
 #
+# Pulse switch tooltip help
+#
+#rsgauges.switch.feature.typepulse.help=§6A switch that outputs a redstone signal for a short time, like a button.\n
+#tile.rsgauges.arrowtarget.help=§6A target that emits a redstone pulse to the block it is attached to when it is hit with an arrow or activated by hand.\n\
+                               ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch1.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.projectilesense.help}
+#tile.rsgauges.pulseswitch2.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch3.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch5.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch6.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch_oldfancy1.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.projectilesense.help}
+#tile.rsgauges.pulseswitch_oldfancy2.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch_oldfancy3.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.projectilesense.help}
+#tile.rsgauges.pulseswitch_oldfancy4.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.projectilesense.help}
+#tile.rsgauges.pulseswitch_rustic1.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.projectilesense.help}
+#tile.rsgauges.pulseswitch_rustic2.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch_rustic3.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch_rustic4.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch_rustic5.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch_rustic6.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch_rustic7.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.pulseswitch_glass1.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
+#tile.rsgauges.pulseswitch_glass2.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
+#tile.rsgauges.pulseswitch_glass3.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
+
+#-----------------------------------------------------------------------------------------------------------
 # Floor contact switch names
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.contactmat1.name=Redstone-Berührungsschalter (Kontakt-Türmatte)
+tile.rsgauges.contactmat2.name=Redstone-Berührungsschalter (empfindliche Kontaktmatte)
+tile.rsgauges.contactmat3.name=Redstone-Berührungsschalter (Shocksensor-Kontaktmatte)
+tile.rsgauges.contactmat_rustic1.name=Redstone-Berührungsschalter (rustikale Eisentürmatte)
+tile.rsgauges.contactmat_rustic2.name=Redstone-Berührungsschalter (rustikale Eisenplate)
+tile.rsgauges.contactmat_rustic3.name=Redstone-Berührungsschalter (rustikale erschütterungssensitive Eisenplate)
+tile.rsgauges.contactmat_glass1.name=Redstone-Berührungsschalter (Glasplatte, touch-konfigurierbar)
+tile.rsgauges.contactmat_glass2.name=Redstone-Berührungsschalter (Glasplatte)
 #
-tile.rsgauges.contactmat1.name=Redstone-Kontaktschalter (Kontakt-Türmatte)
-tile.rsgauges.contactmat2.name=Redstone-Kontaktschalter (sensitive Kontaktmatte)
-tile.rsgauges.contactmat3.name=Redstone-Kontaktschalter (Shocksensor-Kontaktmatte)
-tile.rsgauges.contactmat_rustic1.name=Redstone-Kontaktschalter (rustikale Eisentürmatte)
-tile.rsgauges.contactmat_rustic2.name=Redstone-Kontaktschalter (rustikale Eisenplate)
-tile.rsgauges.contactmat_rustic3.name=Redstone-Kontaktschalter (rustikale erschütterungssensitive Eisenplate)
-tile.rsgauges.contactmat_glass1.name=Redstone-Kontaktschalter (Glasplatte, touch-konfigurierbar)
-tile.rsgauges.contactmat_glass2.name=Redstone-Kontaktschalter (Glasplatte)
+# Floor contact switch tooltip help
+#
+#tile.rsgauges.contactmat1.help=§6An industrial floor contact mat that emits a redstone signal when exposed to mechanical pressure \
+                               on the top (e.g. someone standing on it), and a short time after the pressure was released.§r\n\
+                               Outputs are to the front and bottom. \
+                               ${rsgauges.switch.feature.contactmat.touch.help} ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.contactmat2.help=§6An industrial floor contact mat that emits a redstone signal when exposed to mechanical pressure on \
+                               the top side (e.g. someone standing on it), and a short time after the pressure was released.§r\n\
+                               Outputs are to the front and bottom. \
+                               ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.contactmat3.help=§6An industrial contact mat emitting a redstone pulse when exposed to mechanical shock from above \
+                               (e.g. something falls on it).§r\n\
+                               Outputs are to the front and bottom. Power is always 15. \
+                               ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.contactmat_rustic1.help=§6A metal plate that emits a redstone signal when exposed to mechanical pressure from above \
+                               (e.g. someone standing on it), and a short time after the pressure was released.§r\n\
+                               Outputs are to the front and bottom. \
+                               ${rsgauges.switch.feature.contactmat.touch.help} ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.contactmat_rustic2.help=§6A metal plate that emits a redstone signal when exposed to mechanical pressure from above \
+                               (e.g. someone standing on it), and a short time after the pressure was released.§r\n\
+                               Outputs are to the front and bottom. \
+                               ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.contactmat_rustic3.help=§6A metal plate emitting a redstone pulse when exposed to mechanical shock from above \
+                               (e.g. something falls on it).§r\n\
+                               Outputs are to the front and bottom. Power is always 15. \
+                               ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.contactmat_glass1.help=§6A glass floor plate that changes color and emits a redstone signal when exposed to mechanical pressure on the top \
+                               (e.g. someone standing on it), and a short time after the pressure was released.§r\n\
+                               Outputs are to the front and bottom. Does not emit any sounds. \
+                               ${rsgauges.switch.feature.contactmat.touch.help} ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
+#tile.rsgauges.contactmat_glass2.help=§6A glass floor plate that changes color and emits a redstone signal when exposed to mechanical pressure on the top \
+                               (e.g. someone standing on it), and a short time after the pressure was released.§r\n\
+                               Outputs are to the front and bottom. Does not emit any sounds. Sensors are high sensitive. \
+                               ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
 
-#
+#-----------------------------------------------------------------------------------------------------------
 # Trapdoor switches
-#
+#-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.trapdoorswitch1.name=Falltürschalter (industrielle erschütterungsaktivierte Falltür)
 tile.rsgauges.trapdoorswitch2.name=Falltürschalter (industrielle empfindliche, erschütterungsaktivierte Falltür)
 tile.rsgauges.trapdoorswitch3.name=Falltürschalter (industrieller Klappschalter)
-#
 tile.rsgauges.trapdoorswitch_rustic1.name=Falltürschalter (rustikale erschütterungsaktivierte Falltür)
 tile.rsgauges.trapdoorswitch_rustic2.name=Falltürschalter (rustikale empfindliche, erschütterungsaktivierte Falltür)
 tile.rsgauges.trapdoorswitch_rustic3.name=Falltürschalter (rustikaler Klappschalter)
+#
+# Trapdoor switch tooltip help
+#
+#tile.rsgauges.trapdoorswitch1.help=§6An industrial floor trap door that swings open and emits a redstone signal when \
+                                   someone or something falls on it.§r\n\
+                                   Output is to the block it is mounted on. \
+                                   ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
+                                   ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.trapdoorswitch2.help=§6An industrial floor trap door that swings open and emits a redstone signal when \
+                                   someone or something falls on it, or when someone walks on it without sneaking.§r\n\
+                                   Output is to the block it is mounted on. \
+                                   ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
+                                   ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.trapdoorswitch3.help=§6An industrial sensor frame that emits a redstone signal when something falls through it.§r\n\
+                                   Output is to the block it is mounted on. \
+                                   ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
+                                   ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.trapdoorswitch_rustic1.help=§6A metal floor trap door that swings open and emits a redstone signal when \
+                                   someone or something falls on it.§r\n\
+                                   Output is to the block it is mounted on. \
+                                   ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
+                                   ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.trapdoorswitch_rustic2.help=§6Metal floor trap door that swings open and emits a redstone signal when \
+                                   someone or something falls on it, or when someone walks on it without sneaking.§r\n\
+                                   Output is to the block it is mounted on. \
+                                   ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
+                                   ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.trapdoorswitch_rustic3.help=§6A metal trap door that swings open emits a redstone signal when something touches it.§r\n\
+                                   Output is to the block it is mounted on. \
+                                   ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
+                                   ${rsgauges.switch.feature.linksource.help}
 
-#
+#-----------------------------------------------------------------------------------------------------------
 # Auto switch names
-#
+#-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.automaticswitch1.name=Redstone-Automatikschalter (Infrarot-Bewegungsmelder)
 tile.rsgauges.automaticswitch2.name=Redstone-Automatikschalter (Laser-Lichtschranke)
 tile.rsgauges.automaticswitch3.name=Redstone-Automatikschalter (Lichtsensor)
@@ -119,10 +289,149 @@ tile.rsgauges.detectorswitch_glass1.name=Redstone-Automatikschalter (Glas-Infrar
 tile.rsgauges.detectorswitch_glass2.name=Redstone-Automatikschalter (Glas-Laser-Lichtschranke)
 tile.rsgauges.daytimeswitch_glass1.name=Redstone-Automatikschalter (Glas-Zeitschaltuhr)
 tile.rsgauges.timerswitch_glass1.name=Redstone-Automatikschalter (Glas-Intervalzeitschalter)
+#
+# Auto switch tooltip help
+#
+#tile.rsgauges.automaticswitch1.help=§6A small device that observes a defined volume and emits a redstone signal if it sees an entity.§r\n\
+                                    The volume is two blocks above and below, and 'range' in front, left and right (covers 180 degrees). \
+                                    The range can be configured with small buttons on the front face, together with the output strength, \
+                                    the number of entities seen, and the entity type seen (mobs, players, animals, etc). \
+                                    Output is to the block where the sensor is placed on. \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.automaticswitch2.help=§6A small device that observes in one direction and emits a redstone signal if it senses an entity.§r\n\
+                                    The observed volume is 'range' blocks in front, and half a block to the sides. \
+                                    The range can be configured with small buttons on the front face, together with the output strength, \
+                                    the number of entities seen, and the entity type seen (mobs, players, animals, etc). \
+                                    Output is to the block where the sensor is placed on. \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.automaticswitch3.help=§6A small device that measures the local light level at its location and emits a redstone signal \
+                                    depending on on-threshold and off-threshold set with small buttons on the front face.§r\n\
+                                    These buttons also allow to set output power and debouncing. Debouncing delays switching off or on \
+                                    until the light level is stable, higher values means better noise filtering, but also more switching \
+                                    delay. If on and off settings are identical, then the measured light level must exactly match the set \
+                                    value. Output is to the block where the sensor is placed on. \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.automaticswitch4.help=§6A small device that emits a redstone signal from a configured start (day) time to a configured \
+                                    end time.§r\n\
+                                    The time span is set with buttons on the device front face (24 hour format, where 06:00 is sunrise). \
+                                    These buttons also allow to set output power and a randomising value. Latter means delaying \
+                                    to switch on or off for a random time span, where higher values cause longer delays. \
+                                    Output is to the block where the sensor is placed on. \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.automaticswitch5.help=§6A small wall mounted device that emits a redstone signal when it rains on it.§r\n\
+                                    The buttons on the front facing allow to configure the output signal strength. \
+                                    Output is to the block where the sensor is placed on. \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.automaticswitch6.help=§6A small wall mounted device that emits a redstone signal when it senses a high electric \
+                                    potential in the air, i.e. in thunder storms.§r\n\
+                                    The buttons on the front facing allow to configure the output signal strength. \
+                                    Output is to the block where the sensor is placed on. \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.automaticswitch7.help=§6A small device that emits a rectangular redstone signal with a defined on- and off- time.§r\n\
+                                    Timing is configured using buttons on the front facing, and can be set between 0.1s (2 ticks) \
+                                    and 600s (10min). The step size adapts to the current values (small steps for small values, \
+                                    big steps for big values). The config buttons also enable you to define the output signal \
+                                    strength and a ramp value, which will make the timer ramping up and down the redstone signal \
+                                    when switching. §eThe timer is placed in standby mode for setup. Click on the front face to \
+                                    set it into run mode.§r \
+                                    Output is to the block where the sensor is placed on. \
+                                    ${rsgauges.switch.feature.outputconfig.help} \
+                                    As Switch Link target the timer toggles between run and standby mode.
+#tile.rsgauges.detectorswitch_glass1.help=§6A small glass device that observes a defined volume and emits a redstone signal if it sees an entity.§r\n\
+                                    The volume is two blocks above and below, and 'range' in front, left and right (covers 180 degrees). \
+                                    The range can be configured with small buttons on the front face, together with the output strength, \
+                                    the number of entities seen, and the entity type seen (mobs, players, animals, etc). \
+                                    Output is to the block where the sensor is placed on. Does not emit switching sounds. \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.detectorswitch_glass2.help=§6A small glass device that observes in one direction and emits a redstone signal if it senses an entity.§r\n\
+                                    The observed volume is 'range' blocks in front, and half a block to the sides. \
+                                    The range can be configured with small buttons on the front face, together with the output strength, \
+                                    the number of entities seen, and the entity type seen (mobs, players, animals, etc). \
+                                    Output is to the block where the sensor is placed on. Does not emit switching sounds. \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.daytimeswitch_glass1.help=§6A small glass device that emits a redstone signal from a configured start (day) time to a configured \
+                                    end time.§r\n\
+                                    The time span is set with buttons on the device front face (24 hour format, where 06:00 is sunrise). \
+                                    These buttons also allow to set output power and a randomising value. Latter means delaying \
+                                    to switch on or off for a random time span, where higher values cause longer delays. \
+                                    Output is to the block where the sensor is placed on. Does not emit switching sounds.\
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.timerswitch_glass1.help=§6A small device that emits a rectangular redstone signal with a defined on- and off- time.§r\n\
+                                    Timing is configured using buttons on the front facing, and can be set between 0.1s (2 ticks) \
+                                    and 600s (10min). The step size adapts to the current values (small steps for small values, \
+                                    big steps for big values). The config buttons also enable you to define the output signal \
+                                    strength and a ramp value, which will make the timer ramping up and down the redstone signal \
+                                    when switching. §eThe timer is placed in standby mode for setup. Click on the front face to \
+                                    set it into run mode.§r \
+                                    Output is to the block where the sensor is placed on. Does not emit switching sounds.\
+                                    ${rsgauges.switch.feature.outputconfig.help} \
+                                    As Switch Link target the timer toggles between run and standby mode.
 
+#-----------------------------------------------------------------------------------------------------------
+# Link relay switch names
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.relay_bistableswitchrx1.name=Switch-Link Empfänger (industriell)
+tile.rsgauges.relay_pulseswitchrx1.name=Switch-Link Pulsempfänger (industriell)
+tile.rsgauges.relay_bistableswitchtx1.name=Switch-Link Signalwandler (industriell)
+tile.rsgauges.relay_pulseswitchtx1.name=Switch-Link Signal-Pulswandler (industriell)
 #
-# Sensitive glass block names, const
+# Link relay switch help
 #
+#tile.rsgauges.relay_bistableswitchrx1.help=§6A small industrial bistable switching device that is optimised to be \
+                                           used as a Switch Link target.§r\n\
+                                           The relay inside is muffled and therefore very silent. \
+                                           Can also be manually activated like a lever. \
+                                           ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} \
+                                           ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.relay_pulseswitchrx1.help=§6A small industrial pulse switching device that is optimised to be used as a Switch Link \
+                                           target.§r\n\
+                                           Like a normal pulse switch it activates for a short time when manually clicked or triggered \
+                                           by a switch link. \
+                                           The relay inside is muffled and therefore very silent. \
+                                           ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} \
+                                           ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.pulsetime.help}
+#tile.rsgauges.relay_bistableswitchtx1.help=§6A small industrial switching device that is optimised to be \
+                                           used as a Switch Link relay with redstone input.§r\n\
+                                           The relay cannot emit redstone signals, instead it allows Link Pearls inside to trigger \
+                                           when the redstone power of the block it is mounted on changes. \
+                                           By double-left clicking empty handed you can change the input polarity (inverted means \
+                                           active-low) and strength sensitivity (default weak, strong means that strong power is \
+                                           needed to triggger the links). \
+                                           Muffled, therefore very silent. Can also be manually activated like a lever for testing. \
+                                           ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.relay_pulseswitchtx1.help=§6A small industrial pulse switching device that is optimised to be used as a Switch Link relay \
+                                           with redstone input.§r\n\
+                                           The pulse relay cannot emit redstone signals, instead it allows Link Pearls inside to trigger \
+                                           when the redstone power of the block it is mounted on changes. \
+                                           It activates for a short time when the redstone input changes from 0 to any higher value. \
+                                           By double-left clicking empty handed you can change the input polarity (inverted means \
+                                           active-low) and strength sensitivity (default weak, strong means that strong power is needed \
+                                           to triggger the links). \
+                                           Muffled, therefore very silent. Can also be manually activated like a pulse switch for testing. \
+                                           ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+
+#-----------------------------------------------------------------------------------------------------------
+# Power plants (really flowers, not energy production facilities)
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.powerplant_yellow.name=Gelbe Powerblume
+tile.rsgauges.powerplant_red.name=Rote Powerblume
+#
+# Power plant help
+#
+#tile.rsgauges.powerplant_yellow.help=§6Artificial yellow flower that looks very similar to dandelion, \
+                                     emitting a redstone signal to the front and bottom when something \
+                                     touches it (like a contact plate).§r\n\
+                                     ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
+                                     ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.powerplant_red.help=§6Artificial yellow flower that looks very similar to a poppy, \
+                                     emitting a redstone signal to the front and bottom when something \
+                                     touches it (like a contact plate).§r\n\
+                                     ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
+                                     ${rsgauges.switch.feature.linksource.help}
+
+#-----------------------------------------------------------------------------------------------------------
+# Sensitive glass block names
+#-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.sensitiveglass.name=Redstone-sensitiver Glasblock (leuchtend)
 tile.rsgauges.sensitiveglass_white.name=Redstone-sensitiver Glasblock (weiß)
 tile.rsgauges.sensitiveglass_red.name=Redstone-sensitiver Glasblock (rot)
@@ -141,10 +450,53 @@ tile.rsgauges.sensitiveglass_purple.name=Redstone-sensitiver Glasblock (lila)
 tile.rsgauges.sensitiveglass_brown.name=Redstone-sensitiver Glasblock (braun)
 tile.rsgauges.sensitiveglass_black.name=Redstone-sensitiver Glasblock (schwarz)
 tile.rsgauges.sensitiveglass_inverted.name=Redstone-sensitiver Glasblock (invertiert, leuchtend)
+#
+# Sensitive glass block tooltip help
+#
+#tile.rsgauges.sensitiveglass.help=§6Glass block that emits light when it is powered by a redstone signal, similar to a redstone lamp.
+#tile.rsgauges.sensitiveglass_inverted.help=§6Glass block that normally emits light like a redstone lamp, and switches off \
+                                           when it is powered by a redstone signal.§r
+#rsgauges.sensitiveglass.colored.help=§6Glass block that changes from transparent to colored when it is powered by a redstone \
+                                     signal.§r A faint dashed framing indicates the color in unpowered state.
+#tile.rsgauges.sensitiveglass_white.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_red.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_green.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_blue.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_yellow.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_orange.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_magenta.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_lightblue.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_lime.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_pink.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_gray.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_lightgray.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_cyan.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_purple.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_brown.help=${rsgauges.sensitiveglass.colored.help}
+#tile.rsgauges.sensitiveglass_black.help=${rsgauges.sensitiveglass.colored.help}
 
-#
+#-----------------------------------------------------------------------------------------------------------
+# Other blocks
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.qube.name=The qube
+#tile.rsgauges.qube.help=It's a developer block that is not supposed to be craftable or used in the game.
+
+#-----------------------------------------------------------------------------------------------------------
+# Items
+#-----------------------------------------------------------------------------------------------------------
+item.rsgauges.switchlink_pearl.name=Link-Perle
+#item.rsgauges.switchlink_pearl.help=§6Created by left clicking a switch with an Ender pearl. Remote activates that \
+                                    (target) switch when used or plugged into another (source) switch, also by \
+                                    left clicking.§r\n\
+                                    Change link options by left clicking the target with the switch link pearl (cycles \
+                                    through link options). You can plug more than one pearl into a switch. \
+                                    Pearls will complain when they are overstressed or cannot find their target, you can hear that. \
+                                    If a switch is not suitable to be a source or target for linking, the pearl will also complain. \
+                                    Different switch types may differ in their reaction to link triggers (simply experiment a bit).
+
+#-----------------------------------------------------------------------------------------------------------
 # Switch power config (left-click config) stati
-#
+#-----------------------------------------------------------------------------------------------------------
 rsgauges.switchconfig.options=%1$s
 rsgauges.switchconfig.options.output_power=Power: %1$s
 rsgauges.switchconfig.options.no_output=Blindausgang
@@ -154,8 +506,9 @@ rsgauges.switchconfig.options.weakinverted=schwach-invertiert
 rsgauges.switchconfig.options.stronginverted=stark-invertiert
 rsgauges.switchconfig.options.pulsetime=Pulsdauer:%1$ss (%2$s Ticks)
 
-#
+#-----------------------------------------------------------------------------------------------------------
 # Switch color tinting confirmations
+#-----------------------------------------------------------------------------------------------------------
 # (note to self: Tinting colors are explicitly listed, as the coloring
 #  lemmata for tinting may change in different languages)
 #
@@ -177,7 +530,7 @@ rsgauges.switchconfig.tinting.green=Grün
 rsgauges.switchconfig.tinting.red=Rot
 rsgauges.switchconfig.tinting.black=Schwarz
 
-#
+#--------------------------------------------------
 # sensor range: <int>
 # entity type: <int>
 # entity threshold: <int>
@@ -194,7 +547,7 @@ rsgauges.switchconfig.detector.entity_filter.everything=Alles
 rsgauges.switchconfig.detector.entity_threshold=Anzahl: %1$s
 rsgauges.switchconfig.detector.output_power=Power: %1$s
 
-#
+#--------------------------------------------------
 # on: <int>lux  off: <int>lux  power: <int>  debounce:<int>
 #
 rsgauges.switchconfig.lightsensor=%1$s%2$s%3$s%4$s
@@ -204,7 +557,7 @@ rsgauges.switchconfig.lightsensor.threshold_off=Ausschaltschwelle: %1$s%2$s
 rsgauges.switchconfig.lightsensor.output_power=Power: %1$s
 rsgauges.switchconfig.lightsensor.debounce=Entprellen: %1$s %2$s
 
-#
+#--------------------------------------------------
 # on: <int>  off: <int>  power: <int>  random:<int>
 #
 rsgauges.switchconfig.daytimerclock=%1$s%2$s%3$s%4$s
@@ -213,7 +566,7 @@ rsgauges.switchconfig.daytimerclock.daytime_off=Ausschaltzeit: %1$s
 rsgauges.switchconfig.daytimerclock.output_power=Power: %1$s
 rsgauges.switchconfig.daytimerclock.random=Schaltzufall: %1$s
 
-#
+#--------------------------------------------------
 # power: <int>
 #
 rsgauges.switchconfig.rainsensor.output_power=Power: %1$s
@@ -229,7 +582,7 @@ rsgauges.switchconfig.intervaltimer.output_power=Power: %1$s
 rsgauges.switchconfig.intervaltimer.ramp=Rampe: %1$s
 rsgauges.switchconfig.intervaltimer.standby=STANDBY
 
-#
+#--------------------------------------------------
 # Touch configurable floor contact switches
 #
 # weight: <normal|high>
@@ -247,14 +600,9 @@ rsgauges.switchconfig.touchcontactmat.entity_filter.villagers=Dorfleute
 rsgauges.switchconfig.touchcontactmat.entity_filter.objects=Gegenstände
 rsgauges.switchconfig.touchcontactmat.output_power=Power: %1$s
 
-#
-# Items
-#
-item.rsgauges.switchlink_pearl.name=Link-Perle
-
-#
+#-----------------------------------------------------------------------------------------------------------
 # Switch linking
-#
+#-----------------------------------------------------------------------------------------------------------
 rsgauges.switchlinking.switchlink_pearl.tooltip.linkedblock=Verlinkt mit: %1$s.
 rsgauges.switchlinking.switchlink_pearl.tooltip.linkeddistance=Zielschalter ist %1$s Blöcke entfernt.
 rsgauges.switchlinking.switchlink_pearl.tooltip.toofaraway=(ist zu weit weg)
@@ -274,3 +622,4 @@ rsgauges.switchlinking.relayconfig.confval3=Aktiviert beim Änderung des Quellsc
 rsgauges.switchlinking.relayconfig.confval4=Aktiviert wie der Ausgang des Quellschalters (invertiert)
 #
 # EOF
+#-----------------------------------------------------------------------------------------------------------

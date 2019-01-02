@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:gauge_rustic2",
+      "items": [
+        "rsgauges:gauge_rustic2"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:gauge_rustic2" } ],
-  "result": { "item": "rsgauges:gauge_rustic2", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:gauge_rustic2"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:gauge_rustic2",
+    "data": 0
+  }
 }

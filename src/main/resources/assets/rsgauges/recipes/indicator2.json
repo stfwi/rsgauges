@@ -1,5 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:indicator2",
+      "items": [
+        "rsgauges:indicator1"
+      ]
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
-  "ingredients": [ { "item": "rsgauges:indicator1" } ],
-  "result": { "item": "rsgauges:indicator2", "data": 0 }
+  "ingredients": [
+    {
+      "item": "rsgauges:indicator1"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:indicator2",
+    "data": 0
+  }
 }

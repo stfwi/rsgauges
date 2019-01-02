@@ -1,12 +1,18 @@
 package wile.rsgauges.items;
 
+import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.detail.ModAuxiliaries;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import wile.rsgauges.ModRsGauges;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class RsItem extends Item
 {
@@ -15,7 +21,7 @@ public class RsItem extends Item
   {
     super();
     setRegistryName(ModRsGauges.MODID, registryName);
-    setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
+    setTranslationKey(ModRsGauges.MODID + "." + registryName);
     setMaxStackSize(64);
     setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setHasSubtypes(false);
@@ -26,9 +32,14 @@ public class RsItem extends Item
   @SideOnly(Side.CLIENT)
   public void initModel()
   {
-    ModelResourceLocation rc = new ModelResourceLocation(this.getRegistryName(), "inventory");
+    ModelResourceLocation rc = new ModelResourceLocation(getRegistryName(),"inventory");
     ModelBakery.registerItemVariants(this, rc);
     ModelLoader.setCustomMeshDefinition(this, stack->rc);
   }
+
+  @Override
+  @SideOnly(Side.CLIENT)
+  public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
+  { ModAuxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, true); }
 
 }

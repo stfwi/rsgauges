@@ -48,6 +48,11 @@ on [`Forge`](http://www.minecraftforge.net/). The Mod adds devices to measure or
   tracks on it, but because of boundary effects of the crystalline material
   structures you will not see the tracks from below.
 
+- **Power plants** are no energy generating facilities, but artificial flowers.
+  They look very similar to vanilla Minecraft flowers and produce a redstone signal
+  if they are touched or something falls on them. Because artificial, they behave
+  like contact plates and support all switch settings including switch linking.
+
 ----
 ### Recipes
 
@@ -138,15 +143,47 @@ reasons:
 ## Revision history
 
                 -------------------------------------------------------------------
+    - v1.1.0    [R] Release based on v1.1.0-b4.
+                -------------------------------------------------------------------
+
+    - v1.1.0-b4 [A] Added recipe system based opt-out (intended to facilitate
+                    mod packing); added optionally omitting registration of
+                    opt'ed out features (for trouble shooting and development).
+                [A] Added with-experimental opt-in config.
+                [A] Added mod specific registration and config based recipe condition.
+                [M] Indicator state range reduced (RAM/performance optimisation).
+                [M] Internal changes to prepare future mod features (see repository).
+
+    - v1.1.0-b3 [A] Added manual/description tooltips for all blocks and items
+                    of the mod (CTRL-SHIFT when mouse hovering in the inventory
+                    or JEI).
+
+    - v1.1.0-b2 [A] Added switch link relay (redstone power based link activation).
+                [A] Added switch link pulse relay (reacts on redstone rising edge).
+                [A] Added switch link receiver (silent bistable switch device).
+                [A] Added switch link pulse receiver (silent pulse switch device).
+                [A] Added yellow and red power plants (yes, flowers).
+
+    - v1.1.0-b1 [U] Forge dependency update from v14.23.3.2655 to v14.23.5.2768,
+                    gradle updated to v3.3, mappings update to version stable_39.
+                [!] Forge deprecation fixes, THIS MAY AFFECT EXISTING SWITCHES.
+                [!] Structured config file implemented. THIS WILL RESET YOUR
+                    MOD CONFIG TO THE DEFAULTS.
+                [A] Version update check (Forge update json file format).
+                [A] Mod jar signing implemented.
+                [M] Version naming compliancy (removed 'mc' prefix in version strings).
+                [M] Forge naming convention refractoring of classes.
+
+                -------------------------------------------------------------------
     - v1.0.5    [R] Release based on v1.0.5b2.
                 -------------------------------------------------------------------
 
-    - v1.0.5b2  [F] Debounced link pearl cycling when creating a link pearl
+    - v1.0.5-b2 [F] Debounced link pearl cycling when creating a link pearl
                     from an Ender pearl.
 
                 [A] Added inverse output state switch linking feature.
 
-    - v1.0.5b1  [A] Added switch linking subsystem.
+    - v1.0.5-b1 [A] Added switch linking subsystem.
                 [A] Added switch link pearl, used to link and remote activate
                     switches. Created by left-clicking a switch with an Ender
                     pearl.
@@ -170,7 +207,7 @@ reasons:
     - v1.0.4    [R] Release based on v1.0.4b2.
                 -------------------------------------------------------------------
 
-    - v1.0.4b2  [A] Added industrial shock sensitive contact mat (pulses when
+    - v1.0.4-b2 [A] Added industrial shock sensitive contact mat (pulses when
                     something falls upon).
                 [A] Added rustic shock sensitive contact plate (pulses when
                     fallen upon).
@@ -182,7 +219,7 @@ reasons:
                 [A] Added industrial and rustic counter trapdoor switch (pulses
                     when items or any entities fall through).
 
-    - v1.0.4b1  [A] Added switch status message overlay (replaces chat messages).
+    - v1.0.4-b1 [A] Added switch status message overlay (replaces chat messages).
                 [A] Added industrial shock sensor contact mat (fall-on detector).
                 [A] Added rustic full size contact plate.
                 [M] Double click switch config shows the current config
@@ -217,7 +254,7 @@ reasons:
     - v1.0.3    [R] Release based on v1.0.3b6.
                 -------------------------------------------------------------------
 
-    - v1.0.3b6  [A] Added inverted redstone sensitive glass (light emitting).
+    - v1.0.3-b6 [A] Added inverted redstone sensitive glass (light emitting).
                 [A] Added touch configurable glass contact plate.
                 [A] Added glass infrared motion detector.
                 [A] Added glass linear laser detector.
@@ -227,25 +264,25 @@ reasons:
                 [M] Updated language files (Chinese prepared, still contains
                     English words).
 
-    - v1.0.3b5  [A] Added Chinese language file (thanks to sfchipan for the pull
+    - v1.0.3-b5 [A] Added Chinese language file (thanks to sfchipan for the pull
                     request on github)
                 [A] Added German language file, too.
                 [A] Fixed server startup crash issue due to color handler event
                     subscription, which is unfortunately client side only. Thanks
                     to Dave for posting this on github (issue #6).
 
-    - v1.0.3b4  [A] Added glass bi-stable, pulse, and contact switches.
+    - v1.0.3-b4 [A] Added glass bi-stable, pulse, and contact switches.
                 [M] Changed sensitive glass textures.
                 [M] Improved configuration based block/item block initialisation
                     (backend).
                 [A] Implemented unified switch color tinting support (backend)
                 [A] Implemented unified switch light emission support (backend)
 
-    - v1.0.3b3  [A] Added stained redstone sensitive glass blocks, changing from
+    - v1.0.3-b3 [A] Added stained redstone sensitive glass blocks, changing from
                     clear to stained-colored, but do not emit light as the clear
                     sensitive glass block.
 
-    - v1.0.3b2  [A] Added mod specific creative tab.
+    - v1.0.3-b2 [A] Added mod specific creative tab.
                 [A] Added rustic floor contact switch UI texture.
                 [A] Added switch left-click option 'no output' (default disabled
                     in mod options, feature for future use).
@@ -253,7 +290,7 @@ reasons:
                 [M] Changed multi-left-click config (weak/inverted): Now double-click
                     for each step.
 
-    - v1.0.3b1  [A] Added rustic wall gauge.
+    - v1.0.3-b1 [A] Added rustic wall gauge.
                 [A] Added exact pulse switch off-timing using redstone-dust
                     left-clicking.
                 [M] Improved industrial gauge models.
@@ -262,9 +299,9 @@ reasons:
     - v1.0.2    [R] Release based on v1.0.2b2.
                 -------------------------------------------------------------------
 
-    - v1.0.2b2  [A] Added "rustic" switch series switches.
+    - v1.0.2-b2 [A] Added "rustic" switch series switches.
 
-    - v1.0.2b1  [A] Added "old fancy" switch series.
+    - v1.0.2-b1 [A] Added "old fancy" switch series.
                 [A] Added "rustic" switch series (partial).
                 [F] Fixed automatic switch iterative recipe.
                 [F] Fixed version update bug (switchtileentity.reset() recursion),
@@ -273,7 +310,7 @@ reasons:
 
     - v1.0.1    [R] Release based on v1.0.1b3.
 
-    - v1.0.1b3  [A] Added local light sensor switch.
+    - v1.0.1-b3 [A] Added local light sensor switch.
                 [A] Added rain sensor switch.
                 [A] Added lightning potential sensor switch.
                 [A] Added (day) timer clock.
@@ -282,7 +319,7 @@ reasons:
                     to 700ms.
                 [A] Prepared translation/localisation for text messages.
 
-    - v1.0.1b2  [A] Added bistable mechanical/retro style hopper blocker switch.
+    - v1.0.1-b2 [A] Added bistable mechanical/retro style hopper blocker switch.
                 [A] Added bistable mechanical/retro style rotary lever switch.
                 [A] Added bistable mechanical/retro style lever switch.
                 [A] Added pulse mechanical/retro style pull switch.
@@ -297,7 +334,7 @@ reasons:
                 [F] Fixed texture bleeding, UV scaling, and bounding box of the
                     alarm siren.
 
-    - v1.0.1b1  [A] Added configurable infrared motion sensor (volume range
+    - v1.0.1-b1 [A] Added configurable infrared motion sensor (volume range
                     automatic switch).
                 [A] Added configurable sensor (linear range automatic switch).
                 [A] Added configurable door contact mat.
@@ -326,16 +363,16 @@ reasons:
                 [M] Final recipe tuning (gauge and lamp indicator).
                 -------------------------------------------------------------------
 
-    - v1.0.0rc4 [M] Performance improvements, startup screen config options added.
-                [F] Fix: Network client: Gauge display zero when hit or activated.
+    - v1.0.0-rc4 [M] Performance improvements, startup screen config options added.
+                 [F] Fix: Network client: Gauge display zero when hit or activated.
 
-    - v1.0.0rc3 [F] Fix: Tile entity based gauge handling to prevent display
-                    glitches on network clients.
+    - v1.0.0-rc3 [F] Fix: Tile entity based gauge handling to prevent display
+                     glitches on network clients.
 
-    - v1.0.0rc2 [F] Fix: Server based gauge processing to measure indirect weak
-                    power.
+    - v1.0.0-rc2 [F] Fix: Server based gauge processing to measure indirect weak
+                     power.
 
-    - v1.0.0rc1 [A] Initial feature complete version.
+    - v1.0.0-rc1 [A] Initial feature complete version.
 
 ----
 
@@ -466,7 +503,7 @@ allows to "reset" a switch by simply re-attaching it.
       (right click the buttons empty handed) encompasses:
       - Output power  : 1 to 15
       - Randomiser    : 0 to 10. Randomly delays the switching time point. Higher
-  	                    numbers will (probably) increase the delay. Default 0 = no
+                        numbers will (probably) increase the delay. Default 0 = no
                         random = exact timing.
       - Off-time point: 00:00 to 23:30 in 30min steps
       - On-time point : 00:00 to 23:30 in 30min steps

@@ -1,5 +1,6 @@
 {
-	"credit": "Made with the Blockbench",
+  "credit": "Thanks Jannis for the Blockbench.",
+  "parent": "block/cube",
 	"textures": {
     "front": "rsgauges:blocks/common/cleargrayglass",
 		"side": "rsgauges:blocks/common/cleargrayglass",

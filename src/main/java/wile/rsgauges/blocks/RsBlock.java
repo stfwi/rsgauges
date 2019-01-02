@@ -1,4 +1,4 @@
-/**
+/*
  * @file RsBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
@@ -10,13 +10,14 @@
  * As rsgauges blocks work directional (placed with a
  * defined facing), the basics for `facing` dependent
  * data are implemented here, too.
-**/
+ */
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.ModItems;
-import wile.rsgauges.client.JitModelBakery;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.detail.JitModelBakery;
+import wile.rsgauges.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -24,6 +25,8 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,6 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.DyeUtils;
 import com.google.common.base.Predicate;
 import javax.annotation.Nullable;
+import java.util.List;
 
 
 public abstract class RsBlock extends Block
@@ -55,18 +59,23 @@ public abstract class RsBlock extends Block
   public static final PropertyDirection FACING = PropertyDirection.create("facing");
   protected final AxisAlignedBB unrotatedBB;
 
-  public RsBlock(String registryName, AxisAlignedBB unrotatedBoundingBox, @Nullable Material material)
+  public RsBlock(String registryName, @Nullable AxisAlignedBB unrotatedBoundingBox, @Nullable Material material)
   {
     super((material!=null) ? (material) : (Material.CIRCUITS));
+    unrotatedBB = (unrotatedBoundingBox!=null) ? (unrotatedBoundingBox) : (new AxisAlignedBB(0,0,0,1,1,1));
     setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
-    setRegistryName(registryName);
-    setUnlocalizedName(ModRsGauges.MODID + "." + registryName);
+    setRegistryName(ModRsGauges.MODID, registryName);
+    setTranslationKey(ModRsGauges.MODID + "." + registryName);
     setLightOpacity(0);
     setLightLevel(0);
-    setHardness(0.3f);
     setResistance(2.0f);
     setTickRandomly(false);
-    this.unrotatedBB = unrotatedBoundingBox;
+    if(material != ModAuxiliaries.RsMaterials.MATERIAL_PLANT) {
+      setHardness(0.3f);
+    } else {
+      setHardness(0.1f);
+      setSoundType(SoundType.PLANT);
+    }
   }
 
   public RsBlock(String registryName)
@@ -76,34 +85,39 @@ public abstract class RsBlock extends Block
   public void initModel()
   {
     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-    JitModelBakery.JitBakedModel jitbakedmodel = this.getJitBakedModel();
+    JitModelBakery.JitBakedModel jitbakedmodel = getJitBakedModel();
     if(jitbakedmodel != null) JitModelBakery.initModelRegistrations(this, jitbakedmodel);
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean isOpaqueCube(IBlockState state)
   { return false; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean isFullCube(IBlockState state)
-  { return false; }
+  { return isCube(); }
 
   @Override
+  @SuppressWarnings("deprecation")
   public boolean isFullBlock(IBlockState state)
   { return false; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face)
-  { return BlockFaceShape.UNDEFINED; }
+  { return isCube() ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED; }
 
   @Override
   @Nullable
+  @SuppressWarnings("deprecation")
   public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
-  { return NULL_AABB; }
+  { return (!isCube()) ? (NULL_AABB) : (getBoundingBox(state, world, pos)); }
 
   @Override
   @SideOnly(Side.CLIENT)
-  public BlockRenderLayer getBlockLayer()
+  public BlockRenderLayer getRenderLayer()
   { return BlockRenderLayer.CUTOUT; }
 
   @Override
@@ -117,24 +131,31 @@ public abstract class RsBlock extends Block
   { return true; } // no destroy effects
 
   @Override
+  @SideOnly(Side.CLIENT)
+  public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
+  { ModAuxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, true); }
+
+  @Override
   public boolean canSpawnInBlock()
   { return false; }
 
   @Override
-  public EnumPushReaction getMobilityFlag(IBlockState state)
-  { return EnumPushReaction.DESTROY; }
+  @SuppressWarnings("deprecation")
+  public EnumPushReaction getPushReaction(IBlockState state)
+  { return isCube() ? EnumPushReaction.NORMAL : EnumPushReaction.DESTROY; }
 
   @Override
   public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
-  { return true; }
+  { return (!isCube()); }
 
   @Override
   public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos)
   { return false; }
 
   @Override
+  @SuppressWarnings("deprecation")
   public IBlockState getStateFromMeta(int meta)
-  { return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 0x7)); }
+  { return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta & 0x7)); }
 
   @Override
   public int getMetaFromState(IBlockState state)
@@ -145,6 +166,7 @@ public abstract class RsBlock extends Block
   { return new BlockStateContainer(this, FACING); }
 
   @Override
+  @SuppressWarnings("deprecation")
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
   { return state; }
 
@@ -153,16 +175,17 @@ public abstract class RsBlock extends Block
   { return false; }
 
   @Override
-  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
-  { this.neighborChangedCheck(state, world, pos, neighborBlock, neighborPos); }
+  @SuppressWarnings("deprecation")
+  public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighbourPos)
+  { neighborChangedCheck(state, world, pos, neighborBlock, neighbourPos); }
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-  { this.onBlockPlacedByCheck(world, pos, state, placer, stack); }
+  { onBlockPlacedByCheck(world, pos, state, placer, stack); }
 
   @Override
   public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-  { return true; }
+  { return (!isCube()); }
 
   @Override
   public void onBlockClicked(World world, BlockPos pos, EntityPlayer player)
@@ -170,14 +193,19 @@ public abstract class RsBlock extends Block
 
   @Override
   public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side)
-  { return canPlaceBlockOnSide(world, pos, side, (Block block)->{return (!isExceptBlockForAttachWithPiston(block));}, null); }
+  { return canPlaceBlockOnSide(world, pos, side, (block)->(!isExceptBlockForAttachWithPiston(block)), null); }
 
   public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side, @Nullable Predicate<Block> blockWhiteListFilter, @Nullable Predicate<Block> blockBlackListFilter)
   {
-    if(isLateral() && (!isWallMount())) {
+    if(isCube()) {
+      return true;
+    } else if(isLateral() && (!isWallMount())) {
       if(side != EnumFacing.UP) return false; // must be supported from the bottom.
-      return (world.getBlockState(pos.down()).getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
-    } else {
+      final IBlockState state = world.getBlockState(pos.down());
+      if((state==null) || (state.getBlockFaceShape(world, pos, EnumFacing.UP) != BlockFaceShape.SOLID)) return false;
+      if(material!=ModAuxiliaries.RsMaterials.MATERIAL_PLANT) return true;
+      return true;
+    } else if(isWallMount()) {
       if(isLateral() && ((side==EnumFacing.UP)||(side==EnumFacing.DOWN))) return false; // lateral blocks only on walls.
       final BlockPos blockpos = pos.offset(side.getOpposite());
       final IBlockState state = world.getBlockState(blockpos);
@@ -185,6 +213,8 @@ public abstract class RsBlock extends Block
       if(side == EnumFacing.UP) return (state.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
       if((blockWhiteListFilter!=null) && (blockWhiteListFilter.apply(state.getBlock()))) return true;
       return (!isExceptionBlockForAttaching(state.getBlock())) && (state.getBlockFaceShape(world, blockpos, side) == BlockFaceShape.SOLID);
+    } else {
+      return (super.canPlaceBlockOnSide(world, pos, side));
     }
   }
 
@@ -196,8 +226,10 @@ public abstract class RsBlock extends Block
       return state.withProperty(FACING, facing); // e.g. pulse/bistable switches. Placed on the wall with the ui facing to the player.
     } else if(isWallMount() && isLateral()) {
       return state.withProperty(FACING, facing.getOpposite()); // e.g. trap door switch. Placed on the wall the player clicked, reverse orientation.
+    } else if((!isWallMount()) && isLateral()) {
+      return state.withProperty(FACING, placer.getHorizontalFacing()); // e.g. contact mats or full blocks, placed in the direction the player is looking.
     } else {
-      return state.withProperty(FACING, placer.getHorizontalFacing()); // e.g. contact mats, placed in the direction the player is looking.
+      return state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()); // other switches, placed so that the UI side is facing the player.
     }
   }
 
@@ -213,6 +245,7 @@ public abstract class RsBlock extends Block
    * the facing defined in the block state.
    */
   @Override
+  @SuppressWarnings("deprecation")
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
   {
     final AxisAlignedBB bb = getUnrotatedBB(state);
@@ -255,6 +288,14 @@ public abstract class RsBlock extends Block
   { return false; }
 
   /**
+   * Overridden to indicate that the block is a standard cube, cannot be washed off, and is
+   * not explicitly attached to another block, so that it would pop off when that block,
+   * is destroyed. Also implies Block class overrides for cubes.
+   */
+  public boolean isCube()
+  { return false; }
+
+  /**
    * Returns the bounding box facing north. For other facing direction
    * block states, the corresponding facing will be calculated from this
    * data.
@@ -288,7 +329,9 @@ public abstract class RsBlock extends Block
    */
   protected boolean neighborChangedCheck(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos)
   {
-    if(!isWallMount()) {
+    if(isCube()) {
+      return true;
+    } else if(!isWallMount()) {
       if(!(pos.down().equals(neighborPos))) return false;
     } else if(!isLateral()) {
       if(!pos.offset(state.getValue(FACING).getOpposite()).equals(neighborPos)) return false;
@@ -301,7 +344,7 @@ public abstract class RsBlock extends Block
       if(!world.isRemote) {
         onRsBlockDestroyed(state, world, pos);
         world.setBlockToAir(pos);
-        this.dropBlockAsItem(world, pos, state, 0);
+        dropBlockAsItem(world, pos, state, 0);
       }
       return false;
     }
@@ -314,10 +357,10 @@ public abstract class RsBlock extends Block
    */
   protected boolean onBlockPlacedByCheck(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
   {
-    if(canPlaceBlockOnSide(world, pos, this.isWallMount() ? state.getValue(FACING) : EnumFacing.UP)) return true;
+    if(isCube() || canPlaceBlockOnSide(world, pos, isWallMount() ? state.getValue(FACING) : EnumFacing.UP)) return true;
     if(world.isRemote) return false;
     onRsBlockDestroyed(state, world, pos);
-    this.dropBlockAsItem(world, pos, state, 0);
+    dropBlockAsItem(world, pos, state, 0);
     world.setBlockToAir(pos);
     return false;
   }
@@ -325,7 +368,7 @@ public abstract class RsBlock extends Block
   /**
    * Main RsBlock derivate tile entity base
    */
-  public static class RsTileEntity<BlockType extends RsBlock> extends TileEntity
+  public static class RsTileEntity extends TileEntity
   {
     private static final int NBT_ENTITY_TYPE = 1; // forge-doc: use 1, does not matter, only used ba vanilla.
 
@@ -333,35 +376,42 @@ public abstract class RsBlock extends Block
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)  {} // overridden if NBT is needed
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState os, IBlockState ns) {
-      return (os.getBlock() != ns.getBlock()) || (!(os.getBlock() instanceof RsBlock)) || (!(ns.getBlock() instanceof RsBlock)); // Tile entity re-creation condition.
-    }
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState os, IBlockState ns)
+    { return (os.getBlock() != ns.getBlock()) || (!(os.getBlock() instanceof RsBlock)) || (!(ns.getBlock() instanceof RsBlock)); } // Tile entity re-creation condition.
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) { super.writeToNBT(nbt); this.writeNbt(nbt, false); return nbt; }
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
+    { super.writeToNBT(nbt); writeNbt(nbt, false); return nbt; }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) { super.readFromNBT(nbt); this.readNbt(nbt, false); }
+    public void readFromNBT(NBTTagCompound nbt)
+    { super.readFromNBT(nbt); readNbt(nbt, false); }
 
     @Override // on client
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) { super.readFromNBT(pkt.getNbtCompound()); this.readNbt(pkt.getNbtCompound(), true); super.onDataPacket(net, pkt); }
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+    { super.readFromNBT(pkt.getNbtCompound()); readNbt(pkt.getNbtCompound(), true); super.onDataPacket(net, pkt); }
 
     @Override // on server
-    public NBTTagCompound getUpdateTag() { NBTTagCompound nbt = new NBTTagCompound(); super.writeToNBT(nbt); this.writeNbt(nbt, true); return nbt; }
+    public NBTTagCompound getUpdateTag()
+    { NBTTagCompound nbt = new NBTTagCompound(); super.writeToNBT(nbt); writeNbt(nbt, true); return nbt; }
 
     @Override // on server
-    public SPacketUpdateTileEntity getUpdatePacket() { return new SPacketUpdateTileEntity(pos, NBT_ENTITY_TYPE, getUpdateTag()); }
+    public SPacketUpdateTileEntity getUpdatePacket()
+    { return new SPacketUpdateTileEntity(pos, NBT_ENTITY_TYPE, getUpdateTag()); }
 
     @Override // on client
-    public void handleUpdateTag(NBTTagCompound tag) { this.readFromNBT(tag); }
+    public void handleUpdateTag(NBTTagCompound tag)
+    { readFromNBT(tag); }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public double getMaxRenderDistanceSquared() { return 48 * 48; } // TESR
+    public double getMaxRenderDistanceSquared()
+    { return 48 * 48; } // TESR
 
     @SideOnly(Side.CLIENT)
     @Override
-    public AxisAlignedBB getRenderBoundingBox() { return new AxisAlignedBB(getPos(), getPos().add(1, 1, 1)); } // TESR
+    public AxisAlignedBB getRenderBoundingBox()
+    { return new AxisAlignedBB(getPos(), getPos().add(1, 1, 1)); } // TESR
   }
 
   /**
@@ -382,18 +432,11 @@ public abstract class RsBlock extends Block
     public double x = 0;
     public double y = 0;
 
-
     @Override
     public String toString()
     {
       return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",touch_configured:" + Boolean.toString(touch_configured)
           + ",wrenched:" + Boolean.toString(wrenched) + ",item_count:" + Integer.toString(item_count) + ",dye:" + Integer.toString(dye) + "}";
-    }
-
-    public static boolean wrenched(EntityPlayer player)
-    {
-      final ItemStack item = player.getHeldItemMainhand();
-      return (item != null) && ((","+ModConfig.accepted_wrenches+",").indexOf(","+item.getItem().getRegistryName().getResourcePath() + ",") >= 0);
     }
 
     public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
@@ -402,30 +445,30 @@ public abstract class RsBlock extends Block
       if((world==null) || (pos==null)) return ck;
       if(state==null) state = world.getBlockState(pos);
       if((state==null) || (!(state.getBlock() instanceof RsBlock))) return ck;
-      final RsBlock block = (RsBlock)(state.getBlock());
-      ck.wrenched = wrenched(player);
-      if(!ck.wrenched) {
-        final ItemStack item = player.getHeldItemMainhand();
-        if(item != null) {
-          if(item.getItem() == Items.REDSTONE) {
-            ck.item = Items.REDSTONE;
-            ck.item_count = item.getCount();
-          } else if(item.getItem() == Items.ENDER_PEARL) {
-            ck.item = Items.ENDER_PEARL;
-            ck.item_count = item.getCount();
-          } else if(item.getItem() == ModItems.SWITCH_LINK_PEARL) {
-            ck.item = ModItems.SWITCH_LINK_PEARL;
-            ck.item_count = item.getCount();
-          } else {
-            ck.item = Items.DYE;
-            ck.dye = DyeUtils.rawMetaFromStack(item);
-            if(ck.dye > 15) ck.dye = 15;
-          }
-        }
+      final ItemStack item = player.getHeldItemMainhand();
+      if(item == null) return ck;
+      if(item.getItem()==Items.AIR) {
+        ck.wrenched = true;
+      } else if(item.getItem() == Items.REDSTONE) {
+        ck.item = Items.REDSTONE;
+        ck.item_count = item.getCount();
+      } else if(item.getItem() == Items.ENDER_PEARL) {
+        ck.item = Items.ENDER_PEARL;
+        ck.item_count = item.getCount();
+      } else if(item.getItem() == ModItems.SWITCH_LINK_PEARL) {
+        ck.item = ModItems.SWITCH_LINK_PEARL;
+        ck.item_count = item.getCount();
+      } else if(DyeUtils.isDye(item)) {
+        ck.item = Items.DYE;
+        ck.dye = DyeUtils.rawMetaFromStack(item);
+        if(ck.dye > 15) ck.dye = 15;
+      } else {
+        ck.wrenched = ((","+ModConfig.zmisc.accepted_wrenches+",").contains(","+item.getItem().getRegistryName().getPath() + ","));
       }
 
       // Touch config check
-      if(facing==null) return ck;
+      if((facing==null) || (!ck.wrenched)) return ck;
+      final RsBlock block = (RsBlock)(state.getBlock());
       if(block.isLateral() && (facing != EnumFacing.UP)) return ck;
       if(block.isWallMount() && (facing != state.getValue(FACING))) return ck; // wall & floor covered above.
       double xo=0, yo=0;

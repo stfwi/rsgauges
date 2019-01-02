@@ -1,5 +1,10 @@
 package wile.rsgauges.items;
 
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.items.ModItems;
+import wile.rsgauges.blocks.BlockSwitch;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -22,11 +27,6 @@ import net.minecraft.init.Items;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import wile.rsgauges.ModAuxiliaries;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.ModItems;
-import wile.rsgauges.ModResources;
-import wile.rsgauges.blocks.SwitchBlock;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -74,6 +74,7 @@ public class ItemSwitchLinkPearl extends RsItem
   public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
   {
     final SwitchLink link = SwitchLink.fromItemStack(stack);
+    if(ModAuxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, (!link.valid))) return;
     if(!link.valid) return;
     final Block targetBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(link.block_name));
     if(targetBlock!=null) {
@@ -89,7 +90,7 @@ public class ItemSwitchLinkPearl extends RsItem
         tooltip.add(ModAuxiliaries.localizable(
           "switchlinking.switchlink_pearl.tooltip.linkeddistance",
           TextFormatting.GRAY, new Object[]{distance}).getFormattedText() + (
-            (((distance <= ModConfig.z_max_switch_linking_distance) || (ModConfig.z_max_switch_linking_distance<=0))) ? ("")
+            (((distance <= ModConfig.zmisc.max_switch_linking_distance) || (ModConfig.zmisc.max_switch_linking_distance<=0))) ? ("")
             : (" " + ModAuxiliaries.localizable("switchlinking.switchlink_pearl.tooltip.toofaraway", TextFormatting.DARK_RED).getFormattedText())
           )
         );
@@ -99,6 +100,7 @@ public class ItemSwitchLinkPearl extends RsItem
       "switchlinking.relayconfig.confval" + Integer.toString(link.relay()),
       TextFormatting.ITALIC
     ).getFormattedText());
+    super.addInformation(stack, world, tooltip, flag);
   }
 
   @Override
@@ -111,7 +113,7 @@ public class ItemSwitchLinkPearl extends RsItem
 
   @Override
   public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
-  { usePearl(world, player); return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, player.getHeldItem(hand)); }
+  { usePearl(world, player); return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand)); }
 
   public static final void usePearl(World world, EntityPlayer player)
   {
@@ -139,8 +141,8 @@ public class ItemSwitchLinkPearl extends RsItem
     if((world==null) || (player==null) || (pos==null)) return null;
     if((player.inventory==null) || (player.inventory.getCurrentItem()==null) || (player.inventory.getCurrentItem().getItem())!=Items.ENDER_PEARL) return null;
     final IBlockState state = world.getBlockState(pos);
-    if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return null;
-    final int rl = ((((SwitchBlock)state.getBlock()).config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) ? SwitchLink.SWITCHLINK_RELAY_ACTIVATE : SwitchLink.SWITCHLINK_RELAY_STATE;
+    if((state==null) || (!(state.getBlock() instanceof BlockSwitch))) return null;
+    final int rl = ((((BlockSwitch)state.getBlock()).config & BlockSwitch.SWITCH_CONFIG_PULSE)!=0) ? SwitchLink.SWITCHLINK_RELAY_ACTIVATE : SwitchLink.SWITCHLINK_RELAY_STATE;
     ItemStack stack = new ItemStack(ModItems.SWITCH_LINK_PEARL, player.inventory.getCurrentItem().getCount());
     stack.setTagCompound(SwitchLink.fromTargetPosition(world, pos).with_relay(rl).toNbt());
     return stack;
@@ -152,10 +154,10 @@ public class ItemSwitchLinkPearl extends RsItem
     final SwitchLink current_link = SwitchLink.fromItemStack(stack);
     if(!target_pos.equals(current_link.target_position)) return stack;
     final IBlockState state = world.getBlockState(current_link.target_position);
-    if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return stack;
-    final SwitchBlock block = (SwitchBlock)state.getBlock();
+    if((state==null) || (!(state.getBlock() instanceof BlockSwitch))) return stack;
+    final BlockSwitch block = (BlockSwitch)state.getBlock();
     int next = current_link.relay()+1;
-    if(((block.config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) && ((next < SwitchLink.SWITCHLINK_RELAY_ACTIVATE) || (next > SwitchLink.SWITCHLINK_RELAY_TOGGLE))) next = SwitchLink.SWITCHLINK_RELAY_ACTIVATE;
+    if(((block.config & BlockSwitch.SWITCH_CONFIG_PULSE)!=0) && ((next < SwitchLink.SWITCHLINK_RELAY_ACTIVATE) || (next > SwitchLink.SWITCHLINK_RELAY_TOGGLE))) next = SwitchLink.SWITCHLINK_RELAY_ACTIVATE;
     SwitchLink lnk = current_link.with_relay((next < SwitchLink.SWITCHLINK_RELAY_EOL) ? next : 0);
     if(!lnk.valid) return stack;
     stack.setTagCompound(lnk.toNbt());
@@ -177,7 +179,7 @@ public class ItemSwitchLinkPearl extends RsItem
     public static final int  SWITCHLINK_RELAY_STATE_INV         = 0x4;
     public static final int  SWITCHLINK_RELAY_EOL               = 0x5;
 
-    public static enum RequestResult { OK, NOT_MATCHED, INVALID_LINKDATA, TOO_FAR, BLOCK_UNLOADED, TARGET_GONE, REJECTED } ;
+    public enum RequestResult { OK, NOT_MATCHED, INVALID_LINKDATA, TOO_FAR, BLOCK_UNLOADED, TARGET_GONE, REJECTED }
     public final BlockPos target_position;
     public final String block_name;         // intentionally not Block, as this one could not be registered.
     public final long config;
@@ -214,9 +216,9 @@ public class ItemSwitchLinkPearl extends RsItem
     {
       if(targetPos==null) return new SwitchLink();
       final IBlockState state = world.getBlockState(targetPos);
-      if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return new SwitchLink();
-      final SwitchBlock block = (SwitchBlock)state.getBlock();
-      if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT)==0) return new SwitchLink();
+      if((state==null) || (!(state.getBlock() instanceof BlockSwitch))) return new SwitchLink();
+      final BlockSwitch block = (BlockSwitch)state.getBlock();
+      if((block.config & BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT)==0) return new SwitchLink();
       return new SwitchLink(targetPos, block.getRegistryName().toString(), SWITCHLINK_CONFIG_DEFAULT);
     }
 
@@ -248,27 +250,27 @@ public class ItemSwitchLinkPearl extends RsItem
     { return ((pos==null) || (!valid)) ? -1 : (int)Math.sqrt(target_position.distanceSq(pos)); }
 
     public boolean isTooFar(final BlockPos pos)
-    { return (((distance(pos) > ModConfig.z_max_switch_linking_distance) && (ModConfig.z_max_switch_linking_distance > 0))); }
+    { return (((distance(pos) > ModConfig.zmisc.max_switch_linking_distance) && (ModConfig.zmisc.max_switch_linking_distance > 0))); }
 
     public RequestResult request(final int req, final World world, final BlockPos source_pos, final @Nullable EntityPlayer player)
     {
       // Preconditions
-      if(ModConfig.z_without_switch_linking) return RequestResult.REJECTED;
+      if(ModConfig.optouts.without_switch_linking) return RequestResult.REJECTED;
       if(!valid) return RequestResult.INVALID_LINKDATA;
       if(isTooFar(source_pos)) return RequestResult.TOO_FAR;
       if(!world.isBlockLoaded(target_position)) return RequestResult.BLOCK_UNLOADED;
       final IBlockState target_state=world.getBlockState(target_position);
       if(target_state==null) return RequestResult.BLOCK_UNLOADED;
       final Block block = target_state.getBlock();
-      if((!(block instanceof SwitchBlock)) || (!block.getRegistryName().toString().equals(block_name))) return RequestResult.TARGET_GONE;
-      final SwitchBlock target_block = (SwitchBlock)block;
+      if((!(block instanceof BlockSwitch)) || (!block.getRegistryName().toString().equals(block_name))) return RequestResult.TARGET_GONE;
+      final BlockSwitch target_block = (BlockSwitch)block;
 
       // Match incoming request to the link config for requests coming from source switches
       if(player==null) {
         switch(relay()) {
           case SWITCHLINK_RELAY_STATE:
           case SWITCHLINK_RELAY_STATE_INV: {
-            boolean powered = target_state.getValue(SwitchBlock.POWERED);
+            boolean powered = target_state.getValue(BlockSwitch.POWERED);
             if(relay()==SWITCHLINK_RELAY_STATE_INV) powered = !powered;
             if(req == SWITCHLINK_RELAY_ACTIVATE) {
               if(powered) return RequestResult.NOT_MATCHED;
@@ -279,9 +281,9 @@ public class ItemSwitchLinkPearl extends RsItem
               // on falling edges. This opens some more usage options for the
               // player, and is probably also what the player expects as default,
               // if anything can be actually expected with these link mechanisms.
-              if((target_block.config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) return RequestResult.NOT_MATCHED;
+              if((target_block.config & BlockSwitch.SWITCH_CONFIG_PULSE)!=0) return RequestResult.NOT_MATCHED;
             }
-          };break;
+          } break;
           case SWITCHLINK_RELAY_ACTIVATE:
             if(req != SWITCHLINK_RELAY_ACTIVATE) return RequestResult.NOT_MATCHED;
             break;
