@@ -16,6 +16,19 @@ import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModConfig;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,19 +36,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.init.SoundEvents;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
@@ -1018,15 +1018,20 @@ public class ModBlocks
     new BlockSensitiveGlass("sensitiveglass_inverted" , 0x0002|0x00f0, 0xffffff)
   };
 
-
   private static final Block devBlocks[] = {
     new BlockSwitch("qube",
       new AxisAlignedBB(0,0,0,1,1,1), null,
-      BlockSwitch.SWITCH_CONFIG_FULLCUBIC_BLOCK|BlockSwitch.SWITCH_CONFIG_LATERAL|
-      BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+      BlockSwitch.SWITCH_CONFIG_FULLCUBIC_BLOCK|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
       BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-      null,null, null
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_SIDES_CONFIGURABLE
+      |BlockSwitch.SWITCH_DATA_SIDE_DISABLED_BOTTOM
+      |BlockSwitch.SWITCH_DATA_SIDE_DISABLED_TOP
+      |BlockSwitch.SWITCH_DATA_SIDE_DISABLED_FRONT
+      //|BlockSwitch.SWITCH_DATA_SIDE_DISABLED_BACK
+      |BlockSwitch.SWITCH_DATA_SIDE_DISABLED_LEFT
+      |BlockSwitch.SWITCH_DATA_SIDE_DISABLED_RIGHT
+      , null, null, null
     )
   };
 

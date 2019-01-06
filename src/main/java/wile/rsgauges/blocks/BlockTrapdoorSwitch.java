@@ -1,11 +1,13 @@
 /*
- * @file BlockContactSwitch.java
+ * @file BlockTrapdoorSwitch.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
  *
- * Basic class for blocks representing redstone signal sources, like
- * the vanilla lever or button.
+ * Basic class for blocks representing switches which swing
+ * open on activation, allowing entities to fall throuh.
+ * Different activation triggers possible: fall uppon, walk,
+ * etc.
  */
 package wile.rsgauges.blocks;
 
@@ -44,7 +46,7 @@ public class BlockTrapdoorSwitch extends BlockContactSwitch
     te.off_timer_reset( (te.active_time()<=0) ? (20) : ((te.active_time()*base_tick_rate)+1) );
     world.setBlockState(pos, state.withProperty(POWERED, true), 1|2);
     power_on_sound.play(world, pos);
-    notifyNeighbours(world, pos, state);
+    notifyNeighbours(world, pos, state, te, false);
     if(!world.isUpdateScheduled(pos, this)) world.scheduleUpdate(pos, this, 1);
     return true;
   }

@@ -142,6 +142,17 @@ reasons:
 ----
 ## Revision history
 
+    - v1.1.1-b1 [F] Fixed block notification issue when destroying contact plates
+                    while standing on them.
+                [M] Performance for redstone block updates of switches improved
+                    (update of affected blocks only).
+                [A] Subsystem for full block switches with configurable output
+                    sides implemented.
+                [A] Accepted wrenches (default: redstone torch) allow to configure
+                    switch outputs with a single (activation) right click in addition
+                    to empty handed left-double-click. (Feature added for creative
+                    mode and configuration of many switches).
+
                 -------------------------------------------------------------------
     - v1.1.0    [R] Release based on v1.1.0-b4.
                 -------------------------------------------------------------------

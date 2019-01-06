@@ -268,11 +268,11 @@ public class ModConfig
     @Config.Comment({
       "Comma sepatated list of items names that can be used alter configurable " +
       "blocks of this mod. This applies when the display side of the block is " +
-      "right click (activated) with the item in the main hand. Empty hand is 'air'.",
+      "right click (activated) with the item in the main hand.",
       "Affects server side only. Can be changed during operation."
     })
     @Config.Name("Accepted wrenches")
-    public String accepted_wrenches = "air";
+    public String accepted_wrenches = "redstone_torch";
 
     @Config.Comment({
       "Blocks and items opt'ed out in this config will not disabled in the " +
@@ -308,6 +308,10 @@ public class ModConfig
   { update(); }
 
   private static final void update()
-  {}
+  {
+    zmisc.accepted_wrenches = zmisc.accepted_wrenches.toLowerCase().replaceAll("[\\s]","").replaceAll(",,",",");
+    zmisc.accepted_wrenches = ("," + zmisc.accepted_wrenches + ",").replaceAll(",air,",",redstone_torch,"); // @todo added for version transition, normally .replaceAll(",air,",",")
+    zmisc.accepted_wrenches = zmisc.accepted_wrenches.replaceAll("[,]+$", "").replaceAll("^[,]+", "");
+  }
 
 }
