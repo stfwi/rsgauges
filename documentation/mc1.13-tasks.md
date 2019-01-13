@@ -35,8 +35,6 @@
              to the block constructor, and are final Similar for Items" [...]
 
 
-
-
       [X] Remove ItemMeshDefinition references.
           (Used in JitBakedModel, unused --> removed.)
 

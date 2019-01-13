@@ -39,10 +39,10 @@ import java.util.Random;
 public class BlockAutoSwitch extends BlockSwitch
 {
   public BlockAutoSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
-  { super(registryName, unrotatedBB, null, config|BlockSwitch.SWITCH_CONFIG_AUTOMATIC, powerOnSound, powerOffSound, material); }
+  { super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound, material); }
 
   public BlockAutoSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { super(registryName, unrotatedBB, null, config|BlockSwitch.SWITCH_CONFIG_AUTOMATIC, powerOnSound, powerOffSound, null); }
+  { super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound, null); }
 
   @Override
   public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final EntityPlayer player)

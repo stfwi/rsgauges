@@ -8,6 +8,9 @@
  */
 package wile.rsgauges.detail;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import wile.rsgauges.ModRsGauges;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -24,10 +27,12 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import org.lwjgl.input.Keyboard;
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -258,6 +263,157 @@ public class ModAuxiliaries
       @Override public boolean blocksMovement() { return false; }
       @Override public boolean isToolNotRequired() { return true; }
     }
+  }
+
+  public static class BlockCategories
+  {
+    // doing this using bit mask instead of enum list.
+    public static final long BLOCKCAT_NONE                = 0x0000000000000000l;
+    public static final long BLOCKCAT_NATURAL             = 0x0000000000000001l;
+    public static final long BLOCKCAT_ORE                 = 0x0000000000000002l;
+    public static final long BLOCKCAT_STAIR               = 0x0000000000000004l;
+    public static final long BLOCKCAT_SLAB                = 0x0000000000000008l;
+    public static final long BLOCKCAT_PLANK               = 0x0000000000000010l;
+    public static final long BLOCKCAT_SOIL                = 0x0000000000000020l;
+    public static final long BLOCKCAT_PLANT               = 0x0000000000000040l;
+    public static final long BLOCKCAT_SAPLING             = 0x0000000000000080l;
+    public static final long BLOCKCAT_CROP                = 0x0000000000000100l;
+    public static final long BLOCKCAT_MATERIAL_WOOD       = 0x0000000001000000l;
+    public static final long BLOCKCAT_MATERIAL_STONE      = 0x0000000002000000l;
+    public static final long BLOCKCAT_MATERIAL_GLASS      = 0x0000000004000000l;
+    public static final long BLOCKCAT_MATERIAL_CLAY       = 0x0000000008000000l;
+    public static final long BLOCKCAT_MATERIAL_IRON       = 0x0000000010000000l;
+    public static final long BLOCKCAT_MATERIAL_GOLD       = 0x0000000020000000l;
+    public static final long BLOCKCAT_MATERIAL_DIAMOND    = 0x0000000040000000l;
+    public static final long BLOCKCAT_MATERIAL_EMERALD    = 0x0000000080000000l;
+    public static final long BLOCKCAT_MATERIAL_OBSIDIAN   = 0x0000000100000000l;
+    public static final long BLOCKCAT_MATERIAL_REDSTONE   = 0x0000000200000000l;
+    public static final long BLOCKCAT_MATERIAL_QUARZ      = 0x0000000400000000l;
+    public static final long BLOCKCAT_MATERIAL_CONCRETE   = 0x0000000800000000l;
+    public static final long BLOCKCAT_MATERIAL_PRISMARINE = 0x0000001000000000l;
+    public static final long BLOCKCAT_MATERIAL_WATER      = 0x0000002000000000l;
+
+    private static Map<Block, Long> reverse_lut_ = Collections.synchronizedMap(new HashMap<>());
+
+    /**
+     * Should be called in postInit() and when ore dictionary update
+     * events are fired (e.g. when unlocking blocks due to age advancement).
+     */
+    public static void compose()
+    {
+      Map<Block, Long> map = new HashMap<Block, Long>();
+      for(String key: OreDictionary.getOreNames()) {
+        List<ItemStack> stacks = OreDictionary.getOres(key);
+        if(stacks==null) continue;
+        long mask = 0l;
+        // material categories
+        if(key.matches("(.+)Wood$")) mask |= BLOCKCAT_MATERIAL_WOOD;
+        if(key.matches("(.+)Obsidian$|(.+)Stone$|^stone[A-Z](.*)") || key.matches("(.*)(end|sand|cobble)stone$")) mask |= BLOCKCAT_MATERIAL_STONE;
+        if(key.matches("(.*)[a-z]Glass(.*)")) mask |= BLOCKCAT_MATERIAL_GLASS;
+        // block type categories
+        if(key.matches("^ore[A-Z](.*)")) mask |= BLOCKCAT_ORE;
+        else if(key.matches("^stair[A-Z](.*)")) mask |= BLOCKCAT_STAIR;
+        else if(key.matches("^plank[A-Z](.*)")) mask |= BLOCKCAT_PLANK;
+        else if(key.matches("^(grass|sand|dirt|farmland)($|[^a-z](.*))")) mask |= BLOCKCAT_SOIL;
+        else if(key.matches("^treeSapling(.*)")) mask |= BLOCKCAT_SAPLING|BLOCKCAT_PLANT;
+        for(ItemStack stack: stacks) {
+          if(!(stack.getItem() instanceof ItemBlock)) continue;
+          Block block = ((ItemBlock)stack.getItem()).getBlock();
+          if(block != null) map.put(block, map.getOrDefault(block, BLOCKCAT_NONE) | mask);
+        }
+        // Corrections what's missing, maybe push this into a config file?
+        BiConsumer<Block,Long> push = (blck, msk) -> map.put(blck, map.getOrDefault(blck, BLOCKCAT_NONE) | msk);
+        //
+        push.accept(Blocks.MYCELIUM, BLOCKCAT_SOIL);
+        push.accept(Blocks.SOUL_SAND, BLOCKCAT_SOIL);
+        push.accept(Blocks.FARMLAND, BLOCKCAT_SOIL);
+        //
+        push.accept(Blocks.PUMPKIN_STEM, BLOCKCAT_PLANT);
+        push.accept(Blocks.MELON_STEM, BLOCKCAT_PLANT);
+        push.accept(Blocks.CACTUS, BLOCKCAT_PLANT);
+        push.accept(Blocks.WATERLILY, BLOCKCAT_PLANT);
+        push.accept(Blocks.BROWN_MUSHROOM, BLOCKCAT_PLANT);
+        push.accept(Blocks.RED_MUSHROOM, BLOCKCAT_PLANT);
+        push.accept(Blocks.VINE, BLOCKCAT_PLANT);
+        push.accept(Blocks.LEAVES, BLOCKCAT_PLANT);
+        push.accept(Blocks.LEAVES2, BLOCKCAT_PLANT);
+        push.accept(Blocks.YELLOW_FLOWER, BLOCKCAT_PLANT);
+        push.accept(Blocks.CHORUS_FLOWER, BLOCKCAT_PLANT);
+        push.accept(Blocks.CHORUS_PLANT, BLOCKCAT_PLANT);
+        push.accept(Blocks.RED_FLOWER, BLOCKCAT_PLANT);
+        push.accept(Blocks.DOUBLE_PLANT, BLOCKCAT_PLANT);
+        push.accept(Blocks.TALLGRASS, BLOCKCAT_PLANT);
+        //
+        push.accept(Blocks.CARROTS, BLOCKCAT_PLANT|BLOCKCAT_CROP);
+        push.accept(Blocks.BEETROOTS, BLOCKCAT_PLANT|BLOCKCAT_CROP);
+        push.accept(Blocks.WHEAT, BLOCKCAT_PLANT|BLOCKCAT_CROP);
+        push.accept(Blocks.POTATOES, BLOCKCAT_PLANT|BLOCKCAT_CROP);
+        push.accept(Blocks.PUMPKIN, BLOCKCAT_PLANT|BLOCKCAT_CROP);
+        push.accept(Blocks.MELON_BLOCK, BLOCKCAT_PLANT|BLOCKCAT_CROP);
+        //
+        push.accept(Blocks.BOOKSHELF, BLOCKCAT_MATERIAL_WOOD);
+        push.accept(Blocks.BED, BLOCKCAT_MATERIAL_WOOD);
+        //
+        push.accept(Blocks.BEDROCK, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.MAGMA, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.MOSSY_COBBLESTONE, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.MOSSY_COBBLESTONE, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.STONE_BRICK_STAIRS, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.STONE_SLAB, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.STONE_SLAB2, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.STONE_STAIRS, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.STONEBRICK, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.BRICK_BLOCK, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.BRICK_STAIRS, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.DOUBLE_STONE_SLAB, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.BRICK_BLOCK, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.END_STONE, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.END_BRICKS, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.SANDSTONE_STAIRS, BLOCKCAT_MATERIAL_STONE);
+        push.accept(Blocks.RED_SANDSTONE_STAIRS, BLOCKCAT_MATERIAL_STONE);
+        //
+        push.accept(Blocks.GLOWSTONE, BLOCKCAT_MATERIAL_GLASS);
+        push.accept(Blocks.SEA_LANTERN, BLOCKCAT_MATERIAL_GLASS);
+        push.accept(Blocks.REDSTONE_LAMP, BLOCKCAT_MATERIAL_GLASS);
+        //
+        push.accept(Blocks.OBSIDIAN, BLOCKCAT_MATERIAL_OBSIDIAN);
+        push.accept(Blocks.ENCHANTING_TABLE, BLOCKCAT_MATERIAL_OBSIDIAN) ;
+        push.accept(Blocks.ENDER_CHEST, BLOCKCAT_MATERIAL_OBSIDIAN);
+        //
+        push.accept(Blocks.CLAY, BLOCKCAT_MATERIAL_CLAY);
+        push.accept(Blocks.HARDENED_CLAY, BLOCKCAT_MATERIAL_CLAY);
+        push.accept(Blocks.STAINED_HARDENED_CLAY, BLOCKCAT_MATERIAL_CLAY);
+        //
+        push.accept(Blocks.QUARTZ_BLOCK, BLOCKCAT_MATERIAL_QUARZ);
+        push.accept(Blocks.QUARTZ_STAIRS, BLOCKCAT_MATERIAL_QUARZ);
+        //
+        push.accept(Blocks.PRISMARINE, BLOCKCAT_MATERIAL_PRISMARINE);
+        //
+        push.accept(Blocks.ANVIL, BLOCKCAT_MATERIAL_IRON);
+        push.accept(Blocks.IRON_BLOCK, BLOCKCAT_MATERIAL_IRON);
+        push.accept(Blocks.IRON_BARS, BLOCKCAT_MATERIAL_IRON);
+        push.accept(Blocks.IRON_DOOR, BLOCKCAT_MATERIAL_IRON);
+        push.accept(Blocks.IRON_TRAPDOOR, BLOCKCAT_MATERIAL_IRON);
+        //
+        push.accept(Blocks.WATER, BLOCKCAT_MATERIAL_WATER);
+        push.accept(Blocks.FLOWING_WATER, BLOCKCAT_MATERIAL_WATER);
+        push.accept(Blocks.ICE, BLOCKCAT_MATERIAL_WATER);
+        push.accept(Blocks.FROSTED_ICE, BLOCKCAT_MATERIAL_WATER);
+        push.accept(Blocks.PACKED_ICE, BLOCKCAT_MATERIAL_WATER);
+        push.accept(Blocks.SNOW, BLOCKCAT_MATERIAL_WATER);
+        push.accept(Blocks.SNOW_LAYER, BLOCKCAT_MATERIAL_WATER);
+      }
+      // need synchronized?
+      reverse_lut_.clear();
+      reverse_lut_.putAll(map);
+    }
+
+    public static long lookup_block_categories(Block block)
+    { return (block==null) ? BLOCKCAT_NONE : reverse_lut_.getOrDefault(block, BLOCKCAT_NONE); }
+
+    public static boolean match_block_categories(Block block, long category_mask)
+    { return (block!=null) && ((reverse_lut_.getOrDefault(block, BLOCKCAT_NONE) & category_mask)!=0); }
+
   }
 
 }

@@ -4,14 +4,14 @@
       "type": "rsgauges:grc",
       "result": "rsgauges:flatgauge5",
       "items": [
-        "rsgauges:flatgauge4"
+        "rsgauges:flatgauge3"
       ]
     }
   ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "rsgauges:flatgauge4"
+      "item": "rsgauges:flatgauge3"
     }
   ],
   "result": {

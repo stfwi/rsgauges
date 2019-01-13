@@ -8,6 +8,7 @@
  */
 package wile.rsgauges;
 
+import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.blocks.ModBlocks;
 import wile.rsgauges.items.ModItems;
@@ -86,6 +87,7 @@ public class ModRsGauges
   {
     ModConfig.onPostInit(event);
     proxy.postInit(event);
+    ModAuxiliaries.BlockCategories.compose();
   }
 
   @Mod.EventBusSubscriber

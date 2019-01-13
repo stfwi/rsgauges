@@ -58,14 +58,15 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public static final long SWITCH_DATA_WEAK                     = 0x0000000000000200l;
   public static final long SWITCH_DATA_NOOUTPUT                 = 0x0000000000000400l;
   // -- Full block multiside output control
-  public static final long SWITCH_DATA_SIDE_DISABLED_BOTTOM     = 0x0000000000001000l;
-  public static final long SWITCH_DATA_SIDE_DISABLED_TOP        = 0x0000000000002000l;
-  public static final long SWITCH_DATA_SIDE_DISABLED_FRONT      = 0x0000000000004000l;
-  public static final long SWITCH_DATA_SIDE_DISABLED_BACK       = 0x0000000000008000l;
-  public static final long SWITCH_DATA_SIDE_DISABLED_LEFT       = 0x0000000000010000l;
-  public static final long SWITCH_DATA_SIDE_DISABLED_RIGHT      = 0x0000000000020000l;
-  public static final long SWITCH_DATA_SIDE_DISABLED_MASK       = 0x000000000003f000l;
-  public static final long SWITCH_DATA_SIDE_DISABLED_SHIFT      = 12;
+  public static final long SWITCH_DATA_SIDE_ENABLED_BOTTOM      = 0x0000000000001000l;
+  public static final long SWITCH_DATA_SIDE_ENABLED_TOP         = 0x0000000000002000l;
+  public static final long SWITCH_DATA_SIDE_ENABLED_FRONT       = 0x0000000000004000l;
+  public static final long SWITCH_DATA_SIDE_ENABLED_BACK        = 0x0000000000008000l;
+  public static final long SWITCH_DATA_SIDE_ENABLED_LEFT        = 0x0000000000010000l;
+  public static final long SWITCH_DATA_SIDE_ENABLED_RIGHT       = 0x0000000000020000l;
+  public static final long SWITCH_DATA_SIDE_ENABLED_ALL         = 0x000000000003f000l;
+  public static final long SWITCH_DATA_SIDE_ENABLED_MASK        = SWITCH_DATA_SIDE_ENABLED_ALL;
+  public static final long SWITCH_DATA_SIDE_ENABLED_SHIFT       = 12;
   public static final long SWITCH_DATA_ENTITY_DEFAULTS_MASK     = 0x000000000003ffffl;
 
   // -- Constant construction time switch config
@@ -78,17 +79,18 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public static final long SWITCH_CONFIG_BISTABLE               = 0x0000000010000000l;
   public static final long SWITCH_CONFIG_PULSE                  = 0x0000000020000000l;
   public static final long SWITCH_CONFIG_CONTACT                = 0x0000000040000000l;
-  public static final long SWITCH_CONFIG_AUTOMATIC              = 0x0000000080000000l;
   public static final long SWITCH_CONFIG_TIMER_DAYTIME          = 0x0000000100000000l; // uses environmental tile entity due to slow update rate
   public static final long SWITCH_CONFIG_TIMER_INTERVAL         = 0x0000000200000000l;
-  public static final long SWITCH_CONFIG_SENSOR_TIME            = SWITCH_CONFIG_TIMER_INTERVAL;
   public static final long SWITCH_CONFIG_SENSOR_VOLUME          = 0x0000000400000000l;
   public static final long SWITCH_CONFIG_SENSOR_LINEAR          = 0x0000000800000000l;
-  public static final long SWITCH_CONFIG_SENSOR_DETECTOR        = SWITCH_CONFIG_SENSOR_VOLUME|SWITCH_CONFIG_SENSOR_LINEAR;
   public static final long SWITCH_CONFIG_SENSOR_LIGHT           = 0x0000001000000000l;
   public static final long SWITCH_CONFIG_SENSOR_RAIN            = 0x0000002000000000l;
   public static final long SWITCH_CONFIG_SENSOR_LIGHTNING       = 0x0000004000000000l;
+  public static final long SWITCH_CONFIG_SENSOR_BLOCKDETECT     = 0x0000008000000000l;
+  public static final long SWITCH_CONFIG_SENSOR_TIME            = SWITCH_CONFIG_TIMER_INTERVAL;
+  public static final long SWITCH_CONFIG_SENSOR_DETECTOR        = SWITCH_CONFIG_SENSOR_VOLUME|SWITCH_CONFIG_SENSOR_LINEAR;
   public static final long SWITCH_CONFIG_SENSOR_ENVIRONMENTAL   = SWITCH_CONFIG_SENSOR_LIGHT|SWITCH_CONFIG_TIMER_DAYTIME|SWITCH_CONFIG_SENSOR_RAIN|SWITCH_CONFIG_SENSOR_LIGHTNING;
+  public static final long SWITCH_CONFIG_AUTOMATIC              = SWITCH_CONFIG_SENSOR_TIME|SWITCH_CONFIG_SENSOR_DETECTOR|SWITCH_CONFIG_SENSOR_ENVIRONMENTAL|SWITCH_CONFIG_SENSOR_BLOCKDETECT;
   public static final long SWITCH_CONFIG_WALLMOUNT              = 0x0000010000000000l;
   public static final long SWITCH_CONFIG_LATERAL                = 0x0000020000000000l;
   public static final long SWITCH_CONFIG_LATERAL_WALLMOUNT      = SWITCH_CONFIG_WALLMOUNT|SWITCH_CONFIG_LATERAL;
@@ -137,6 +139,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     power_off_sound = powerOffSound;
     setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));
     if((config & 0xff)==0) config |= 15; // default power=15 if not specified.
+    if((config & SWITCH_DATA_SIDE_ENABLED_MASK)!=0) config |= SWITCH_CONFIG_SIDES_CONFIGURABLE; // implicitly set flag if any side config is specified
     this.config = config;
   }
 
@@ -194,9 +197,9 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     } else if((config & SWITCH_CONFIG_SIDES_CONFIGURABLE)!=0) {
       // Notify only blocks where the output side is enabled
       if((te==null)) return;
-      final long disabled_sides = te.disabled_sides();
+      final long disabled_sides = te.enabled_sides();
       for(EnumFacing facing: EnumFacing.VALUES) {
-        if((disabled_sides & ((1l<<getAbsoluteFacing(state, facing).getIndex()) << SWITCH_DATA_SIDE_DISABLED_SHIFT)) != 0) continue;
+        if((disabled_sides & ((1l<<getAbsoluteFacing(state, facing).getIndex()) << SWITCH_DATA_SIDE_ENABLED_SHIFT)) == 0) continue;
         if(net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(world, pos, state, java.util.EnumSet.of(facing), false).isCanceled()) continue;
         world.neighborChanged(pos.offset(facing), this, pos);
         if(force || !te.weak()) world.notifyNeighborsOfStateExcept(pos.offset(facing), this, facing.getOpposite());
@@ -259,7 +262,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       // new code that will be applied for all later
       final TileEntitySwitch te = getTe((World)world, pos);
       if(te==null) return 0;
-      if((te.disabled_sides() & ((1l<<getAbsoluteFacing(state, side.getOpposite()).getIndex()) << SWITCH_DATA_SIDE_DISABLED_SHIFT)) != 0) return 0;
+      if((te.enabled_sides() & ((1l<<getAbsoluteFacing(state, side.getOpposite()).getIndex()) << SWITCH_DATA_SIDE_ENABLED_SHIFT)) == 0) return 0;
       return te.power(state, strong);
     }
   }
@@ -274,7 +277,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     final TileEntitySwitch te = getTe(world, pos);
     if(te == null) return true;
     boolean was_powered = state.getValue(POWERED);
-    if((config & SWITCH_CONFIG_BISTABLE)!=0) {
+    if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_SENSOR_BLOCKDETECT))!=0) {
       world.setBlockState(pos, (state=state.cycleProperty(POWERED)), 1|2);
       if(was_powered) power_off_sound.play(world, pos); else power_on_sound.play(world, pos);
     } else {
@@ -287,14 +290,14 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       if((config & SWITCH_CONFIG_PULSE_EXTENDABLE)==0) te.off_timer_reset();
       te.off_timer_extend();
     }
-    if(((config & (SWITCH_CONFIG_LINK_SOURCE_SUPPORT))!=0) && ((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))!=0)) {
+    if(((config & (SWITCH_CONFIG_LINK_SOURCE_SUPPORT))!=0) && ((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE|SWITCH_CONFIG_SENSOR_BLOCKDETECT))!=0)) {
       if(!was_powered) {
         // Manual switches fire link requests when changing from unpowered to powered,
         // no matter if they are inverted or not.
         if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
-      } else if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE)) == SWITCH_CONFIG_BISTABLE) {
+      } else if((config & SWITCH_CONFIG_PULSE) == 0) {
         if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
@@ -701,8 +704,8 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     public boolean nooutput()
     { return ((scd_ & ((int)SWITCH_DATA_NOOUTPUT)) != 0); }
 
-    public long disabled_sides()
-    { return (scd_ & (SWITCH_DATA_SIDE_DISABLED_MASK)); }
+    public long enabled_sides()
+    { return (scd_ & (SWITCH_DATA_SIDE_ENABLED_MASK)); }
 
     public void color_tint(int tint)
     { svd_ = (svd_ & ~((int)SWITCH_DATA_SVD_COLOR_MASK)) | ( (tint<<SWITCH_DATA_SVD_COLOR_SHIFT) & SWITCH_DATA_SVD_COLOR_MASK); }
@@ -722,8 +725,8 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     public void nooutput(boolean val)
     { if(val) scd_ |= ((int)SWITCH_DATA_NOOUTPUT); else scd_ &= ~((int)SWITCH_DATA_NOOUTPUT); }
 
-    public void disabled_sides(long mask)
-    { scd_ = (scd_ & ~((int)SWITCH_DATA_SIDE_DISABLED_MASK)) | ((int)(mask & SWITCH_DATA_SIDE_DISABLED_MASK)); }
+    public void enabled_sides(long mask)
+    { scd_ = (scd_ & ~((int)SWITCH_DATA_SIDE_ENABLED_MASK)) | ((int)(mask & SWITCH_DATA_SIDE_ENABLED_MASK)); }
 
     public void reset()
     { reset(getWorld()); }

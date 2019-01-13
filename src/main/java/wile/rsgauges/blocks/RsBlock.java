@@ -249,7 +249,7 @@ public abstract class RsBlock extends Block
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
   {
     final AxisAlignedBB bb = getUnrotatedBB(state);
-    if(isWallMount() && (!isLateral())) {
+    if(!isLateral()) {
       // Wall attached blocks where the UI is facing to the player.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(1-bb.maxX, 1-bb.maxZ, 1-bb.maxY, 1-bb.minX, 1-bb.minZ, 1-bb.minY); // D
@@ -259,7 +259,7 @@ public abstract class RsBlock extends Block
         case 4: return new AxisAlignedBB(1-bb.maxZ,   bb.minY,   bb.minX, 1-bb.minZ,   bb.maxY,   bb.maxX); // W
         case 5: return new AxisAlignedBB(  bb.minZ,   bb.minY, 1-bb.maxX,   bb.maxZ,   bb.maxY, 1-bb.minX); // E
       }
-    } else if(isLateral()) {
+    } else {
       // Wall or floor attached blocks where the UI and actuated facing is on the top.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); // D --> bb

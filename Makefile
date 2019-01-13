@@ -64,6 +64,7 @@ run:
 	@$(GRADLE) runClient
 
 install: $(MOD_JAR) |
+	@sleep 2s
 	@if [ ! -d "$(INSTALL_DIR)" ]; then echo "Cannot find installation minecraft directory."; false; fi
 	@echo "Installing '$(MOD_JAR)' to '$(INSTALL_DIR)/mods' ..."
 	@[ -d "$(INSTALL_DIR)/mods" ] || mkdir "$(INSTALL_DIR)/mods"
