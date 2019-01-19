@@ -148,7 +148,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
   @Override
   public AxisAlignedBB getUnrotatedBB(IBlockState state)
-  { return ((unrotated_bb_powered==null) || (state==null) || (state.getBlock()!=this) || (!state.getValue(POWERED))) ? super.getUnrotatedBB() : unrotated_bb_powered; }
+  { return ((state==null) || (state.getBlock()!=this) || (!state.getValue(POWERED))) ? super.getUnrotatedBB() : unrotated_bb_powered; }
 
   @Override
   public boolean isWallMount()

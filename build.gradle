@@ -1,5 +1,5 @@
 // @file build.gradle
-// rsgauges gradle build relay
+// rsgauges gradle build relay (mc1.12.2)
 //
 buildscript {
   repositories {

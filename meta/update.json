@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.12.2": {
+    "1.1.1": "[R] Release based on v1.1.1-b2.",
     "1.1.1-b2": "[M] Recipe of glass gauge changed to be crafted with a glass block.\n[A] Block detection switch added (configurable range, category filter, match threshold, debounce, output power). Filters are e.g. \"solid\", \"fluid\", \"air\", \"stone\", \"soil\", \"wooden\", \"plant\", \"crop\", \"mature crop\", and other ore dict based categories. Recipe similar to the entity detection switch.\n[M] German language file updated.",
     "1.1.1-b1": "[F] Fixed block notification issue when destroying contact plates while standing on them.\n[M] Performance for redstone block updates of switches improved (update of affected blocks only).\n[A] Subsystem for full block switches with configurable output sides implemented.\n[A] Accepted wrenches (default: redstone torch) allow to configure switch outputs with a single (activation) right click in addition to empty handed left-double-click. (Feature added for creative mode and configuration of many switches).",
     "1.1.0": "[R] Release based on v1.1.0-b4.",
@@ -35,7 +36,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "promos": {
-    "1.12.2-recommended": "1.1.0",
-    "1.12.2-latest": "1.1.1-b2"
+    "1.12.2-recommended": "1.1.1",
+    "1.12.2-latest": "1.1.1"
   }
 }

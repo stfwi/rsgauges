@@ -142,6 +142,10 @@ reasons:
 ----
 ## Revision history
 
+                -------------------------------------------------------------------
+    - v1.1.1    [R] Release based on v1.1.1-b2.
+                -------------------------------------------------------------------
+
     - v1.1.1-b2 [M] Recipe of glass gauge changed to be crafted with a glass block.
                 [A] Block detection switch added (configurable range, category filter,
                     match threshold, debounce, output power). Filters are e.g. "solid",
