@@ -10,8 +10,8 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.state.BlockStateContainer;
 import wile.rsgauges.detail.ModResources;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;

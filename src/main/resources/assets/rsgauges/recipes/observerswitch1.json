@@ -2,31 +2,35 @@
   "conditions": [
     {
       "type": "rsgauges:grc",
-      "result": "rsgauges:flatgauge4"
+      "result": "rsgauges:observerswitch1"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "NNN",
-    "NCN",
+    "NBN",
+    "NSN",
     "NRN"
   ],
   "key": {
+    "B": {
+      "item": "minecraft:stone",
+      "data": 0
+    },
     "N": {
       "item": "minecraft:iron_nugget",
       "data": 0
     },
     "R": {
-      "item": "minecraft:glass",
+      "item": "minecraft:redstone",
       "data": 0
     },
-    "C": {
-      "item": "minecraft:comparator",
+    "S": {
+      "item": "minecraft:ender_eye",
       "data": 0
     }
   },
   "result": {
-    "item": "rsgauges:flatgauge4",
+    "item": "rsgauges:observerswitch1",
     "data": 0
   }
 }

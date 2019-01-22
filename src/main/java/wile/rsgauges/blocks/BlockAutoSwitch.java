@@ -9,13 +9,13 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.material.Material;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.World;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +24,6 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -40,39 +39,21 @@ import java.util.Random;
 public class BlockAutoSwitch extends BlockSwitch
 {
   public BlockAutoSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
-  { super(registryName, unrotatedBB, null, config|BlockSwitch.SWITCH_CONFIG_AUTOMATIC, powerOnSound, powerOffSound, material); }
+  { super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound, material); }
 
   public BlockAutoSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { super(registryName, unrotatedBB, null, config|BlockSwitch.SWITCH_CONFIG_AUTOMATIC, powerOnSound, powerOffSound, null); }
+  { super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound, null); }
 
   @Override
   public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final EntityPlayer player)
   {
     if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote)) return false;
-    if((config & (SWITCH_CONFIG_TIMER_INTERVAL))==0) return false;
+    if((config & (SWITCH_CONFIG_TIMER_INTERVAL))==0) return false; // only interval timer can be a link target
     IBlockState state = world.getBlockState(pos);
     if((state == null) || (!(state.getBlock() instanceof BlockAutoSwitch))) return false;
     TileEntityAutoSwitch te = getTe(world, pos);
     if((te==null) || (!te.check_link_request(link))) return false;
     te.updateSwitchState(state, this, !state.getValue(POWERED), 0);
-    return true;
-  }
-
-  @Override
-  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-  {
-    if(world.isRemote) return true;
-    TileEntityAutoSwitch te = getTe(world, pos);
-    if(te == null) return true;
-    te.click_config(null);
-    if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
-    RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-    if((wac.touch_configured) && (state.getBlock() instanceof BlockAutoSwitch)) {
-      if(te.activation_config((BlockAutoSwitch)state.getBlock(), player, wac.x, wac.y)) return true;
-      if((config & (SWITCH_CONFIG_TIMER_INTERVAL))!=0) {
-        te.updateSwitchState(state, this, !state.getValue(POWERED), 0);
-      }
-    }
     return true;
   }
 
@@ -202,9 +183,9 @@ public class BlockAutoSwitch extends BlockSwitch
     { super.reset(); update_timer_=0; area_=null; sensor_range_=5; filter_=0; }
 
     @Override
-    public boolean activation_config(@Nullable BlockSwitch block, @Nullable EntityPlayer player, double x, double y)
+    public boolean activation_config(IBlockState state, @Nullable EntityPlayer player, double x, double y)
     {
-      if(block == null) return false;
+      if(state == null) return false;
       final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
       final int field = ((x>=2) && (x<=4)) ? (1) : (
               ((x>=5) && (x<=7)) ? (2) : (
@@ -350,9 +331,11 @@ public class BlockAutoSwitch extends BlockSwitch
     }
 
     @Override
-    public boolean activation_config(@Nullable BlockSwitch block, @Nullable EntityPlayer player, double x, double y)
+    public boolean activation_config(IBlockState state, @Nullable EntityPlayer player, double x, double y)
     {
-      if(block == null) return false;
+      if(state == null) return false;
+      final BlockSwitch block = (BlockSwitch)state.getBlock();
+
       // @TODO: Construction time list or lambla for field assignment.
       final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
       final int field = ((x>=2) && (x<=4)) ? (1) : (
@@ -623,9 +606,9 @@ public class BlockAutoSwitch extends BlockSwitch
     }
 
     @Override
-    public boolean activation_config(@Nullable BlockSwitch block, @Nullable EntityPlayer player, double x, double y)
+    public boolean activation_config(IBlockState state, @Nullable EntityPlayer player, double x, double y)
     {
-      if(block == null) return false;
+      if(state == null) return false;
       final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
       final int field = ((x>=2) && (x<=4)) ? (1) : (
               ((x>=5) && (x<=7)) ? (2) : (
@@ -644,8 +627,9 @@ public class BlockAutoSwitch extends BlockSwitch
       }
       {
         boolean switch_state = false;
-        try { switch_state = getWorld().getBlockState(getPos()).getValue(POWERED); } catch(Exception e) {}
+        try { switch_state = state.getValue(POWERED); } catch(Exception e) {}
         if(!selected) switch_state = !switch_state; // will be switched in turn.
+        updateSwitchState(state, (BlockAutoSwitch) state.getBlock(), switch_state, 0);
         {
           TextComponentString separator = (new TextComponentString(" | ")); separator.getStyle().setColor(TextFormatting.GRAY);
           ArrayList<Object> tr = new ArrayList<>();

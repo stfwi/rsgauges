@@ -15,9 +15,7 @@ package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.JitModelBakery;
-import wile.rsgauges.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -26,29 +24,28 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.SoundType;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.DyeUtils;
 import com.google.common.base.Predicate;
 import javax.annotation.Nullable;
 import java.util.List;
@@ -229,7 +226,10 @@ public abstract class RsBlock extends Block
     } else if((!isWallMount()) && isLateral()) {
       return state.withProperty(FACING, placer.getHorizontalFacing()); // e.g. contact mats or full blocks, placed in the direction the player is looking.
     } else {
-      return state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()); // other switches, placed so that the UI side is facing the player.
+      // other switches, placed so that the UI side is facing the player. That is: the front is looking towards the player.
+      // (south if the player is looking north when placing).
+      final Vec3d lv = placer.getLookVec();
+      return state.withProperty(FACING, EnumFacing.getFacingFromVector((float)lv.x, (float)lv.y, (float)lv.z));
     }
   }
 
@@ -249,7 +249,7 @@ public abstract class RsBlock extends Block
   public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
   {
     final AxisAlignedBB bb = getUnrotatedBB(state);
-    if(isWallMount() && (!isLateral())) {
+    if(!isLateral()) {
       // Wall attached blocks where the UI is facing to the player.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(1-bb.maxX, 1-bb.maxZ, 1-bb.maxY, 1-bb.minX, 1-bb.minZ, 1-bb.minY); // D
@@ -259,7 +259,7 @@ public abstract class RsBlock extends Block
         case 4: return new AxisAlignedBB(1-bb.maxZ,   bb.minY,   bb.minX, 1-bb.minZ,   bb.maxY,   bb.maxX); // W
         case 5: return new AxisAlignedBB(  bb.minZ,   bb.minY, 1-bb.maxX,   bb.maxZ,   bb.maxY, 1-bb.minX); // E
       }
-    } else if(isLateral()) {
+    } else {
       // Wall or floor attached blocks where the UI and actuated facing is on the top.
       switch(state.getValue(FACING).getIndex()) {
         case 0: return new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); // D --> bb
@@ -305,6 +305,31 @@ public abstract class RsBlock extends Block
 
   public AxisAlignedBB getUnrotatedBB(IBlockState state)
   { return getUnrotatedBB(); }
+
+  /**
+   * Lookup table for fast transformation from placed block facing to the absolute world facing.
+   */
+  private static final EnumFacing[][] fast_transform_lut = {
+    { EnumFacing.SOUTH, EnumFacing.NORTH, EnumFacing.UP, EnumFacing.DOWN, EnumFacing.WEST, EnumFacing.EAST }, // DOWN
+    { EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.DOWN, EnumFacing.UP, EnumFacing.WEST, EnumFacing.EAST }, // UP
+    { EnumFacing.DOWN, EnumFacing.UP, EnumFacing.SOUTH, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.EAST }, // NORTH
+    { EnumFacing.DOWN, EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST }, // SOUTH
+    { EnumFacing.DOWN, EnumFacing.UP, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.NORTH }, // WEST
+    { EnumFacing.DOWN, EnumFacing.UP, EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH }  // EAST
+  };
+
+  /**
+   * Transforms a facing from the relative side (front, back, left, right, top, bottom)
+   * to an absolute direction (north, south ...). The convention for the relative side
+   * is: front=south, hence back=north, right=east, left=west, top=up, bottom=down. This
+   * is not standard (like e.g. a furnace), but fatilitates model design (e.g. blockbench:
+   * looking north/having xy as known from 2D coord systems means that the front of the
+   * device is looking towards you) and player perspective (the front is facing the player
+   * when the block is placed, left and right etc is from the player perspective when
+   * standing in front of the device).
+   */
+  protected EnumFacing getAbsoluteFacing(IBlockState state, EnumFacing relativeSide)
+  { return ((state==null) || (relativeSide==null)) ? EnumFacing.NORTH : fast_transform_lut[state.getValue(FACING).getIndex()][relativeSide.getIndex()]; }
 
   /**
    * Returns the JIT model bakery instance for custom rendering, or null
@@ -414,96 +439,4 @@ public abstract class RsBlock extends Block
     { return new AxisAlignedBB(getPos(), getPos().add(1, 1, 1)); } // TESR
   }
 
-  /**
-   * Data class with static factory function to enable unified block activation
-   * click coordinates with respect to the device (UI) interface facing, normalised
-   * to 0..15. On `wrenched==true` the face was clicked with an valid wrench. If
-   * `touch_configured==false`, the block was not clicked on the main display
-   * facing side, and remaining instance data are not valid. If clicked with a
-   * redstone stack or dye, the corresponding data values will be non-default.
-   */
-  protected static final class WrenchActivationCheck
-  {
-    public boolean touch_configured = false;
-    public boolean wrenched = false;
-    public Item item = Items.AIR;
-    public int item_count = 0;
-    public int dye = -1;
-    public double x = 0;
-    public double y = 0;
-
-    @Override
-    public String toString()
-    {
-      return "{x:" + Double.toString(x) + ",y:" + Double.toString(y) + ",touch_configured:" + Boolean.toString(touch_configured)
-          + ",wrenched:" + Boolean.toString(wrenched) + ",item_count:" + Integer.toString(item_count) + ",dye:" + Integer.toString(dye) + "}";
-    }
-
-    public static WrenchActivationCheck onBlockActivatedCheck(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
-    {
-      final WrenchActivationCheck ck = new WrenchActivationCheck();
-      if((world==null) || (pos==null)) return ck;
-      if(state==null) state = world.getBlockState(pos);
-      if((state==null) || (!(state.getBlock() instanceof RsBlock))) return ck;
-      final ItemStack item = player.getHeldItemMainhand();
-      if(item == null) return ck;
-      if(item.getItem()==Items.AIR) {
-        ck.wrenched = true;
-      } else if(item.getItem() == Items.REDSTONE) {
-        ck.item = Items.REDSTONE;
-        ck.item_count = item.getCount();
-      } else if(item.getItem() == Items.ENDER_PEARL) {
-        ck.item = Items.ENDER_PEARL;
-        ck.item_count = item.getCount();
-      } else if(item.getItem() == ModItems.SWITCH_LINK_PEARL) {
-        ck.item = ModItems.SWITCH_LINK_PEARL;
-        ck.item_count = item.getCount();
-      } else if(DyeUtils.isDye(item)) {
-        ck.item = Items.DYE;
-        ck.dye = DyeUtils.rawMetaFromStack(item);
-        if(ck.dye > 15) ck.dye = 15;
-      } else {
-        ck.wrenched = ((","+ModConfig.zmisc.accepted_wrenches+",").contains(","+item.getItem().getRegistryName().getPath() + ","));
-      }
-
-      // Touch config check
-      if((facing==null) || (!ck.wrenched)) return ck;
-      final RsBlock block = (RsBlock)(state.getBlock());
-      if(block.isLateral() && (facing != EnumFacing.UP)) return ck;
-      if(block.isWallMount() && (facing != state.getValue(FACING))) return ck; // wall & floor covered above.
-      double xo=0, yo=0;
-      if((block.isWallMount()) && (!block.isLateral())) {
-        switch(facing.getIndex()) {
-          case 0: xo = 1-x; yo = 1-z; break; // DOWN
-          case 1: xo = 1-x; yo = z  ; break; // UP
-          case 2: xo = 1-x; yo = y  ; break; // NORTH
-          case 3: xo = x  ; yo = y  ; break; // SOUTH
-          case 4: xo = z  ; yo = y  ; break; // WEST
-          case 5: xo = 1-z; yo = y  ; break; // EAST
-        }
-        final AxisAlignedBB aa = block.getUnrotatedBB();
-        xo = Math.round(((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25);
-        yo = Math.round(((yo-aa.minY) * (1.0/(aa.maxY-aa.minY)) * 15.5) - 0.25);
-      } else if(block.isLateral()) {
-        facing = state.getValue(FACING);
-        switch(facing.getIndex()) {
-          case 0: xo =   x; yo =   z; break; // DOWN
-          case 1: xo =   x; yo =   z; break; // UP
-          case 2: xo =   x; yo = 1-z; break; // NORTH
-          case 3: xo = 1-x; yo =   z; break; // SOUTH
-          case 4: xo = 1-z; yo = 1-x; break; // WEST
-          case 5: xo =   z; yo =   x; break; // EAST
-        }
-        final AxisAlignedBB aa = block.getUnrotatedBB();
-        xo = 0.1 * Math.round(10.0 * (((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25));
-        yo = 0.1 * Math.round(10.0 * (((yo-(1.0-aa.maxZ)) * (1.0/(aa.maxZ-aa.minZ)) * 15.5) - 0.25));
-      } else {
-        return ck;
-      }
-      ck.x = ((xo > 15.0) ? (15.0) : ((xo < 0.0) ? 0.0 : xo));
-      ck.y = ((yo > 15.0) ? (15.0) : ((yo < 0.0) ? 0.0 : yo));
-      ck.touch_configured = true;
-      return ck;
-    }
-  }
 }

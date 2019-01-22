@@ -11,9 +11,9 @@ package wile.rsgauges.blocks;
 
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -25,7 +25,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.monster.*;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -40,39 +39,6 @@ public class BlockContactSwitch extends BlockSwitch
 
   public BlockContactSwitch(String registryName, AxisAlignedBB unrotatedBBUnpowered, AxisAlignedBB unrotatedBBPowered, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { this(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config|BlockSwitch.SWITCH_CONFIG_CONTACT, powerOnSound, powerOffSound, null); }
-
-
-  @Override
-  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-  {
-    if(world.isRemote) return true;
-    TileEntityContactSwitch te = getTe(world, pos); if(te == null) return true;
-    te.click_config(null);
-    if((config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)==0) return true;
-    if(player != null) {
-      RsBlock.WrenchActivationCheck wac = RsBlock.WrenchActivationCheck.onBlockActivatedCheck(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
-      if((wac.touch_configured) && (state.getBlock() instanceof BlockContactSwitch)) {
-        te.activation_config((BlockContactSwitch)state.getBlock(), player, wac.x, wac.y);
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
-  {
-    if(!((side == (state.getValue(FACING).getOpposite())) || ((side == EnumFacing.UP) && (!isWallMount())))) return 0;
-    TileEntityContactSwitch te = getTe((World)world, pos);
-    return (te==null) ? 0 : te.power(state, false);
-  }
-
-  @Override
-  public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
-  {
-    if(!((side == (state.getValue(FACING).getOpposite())) || ((side == EnumFacing.UP) && (!isWallMount())))) return 0;
-    TileEntitySwitch te = getTe((World)world, pos);
-    return (te==null) ? 0 : te.power(state, true);
-  }
 
   @Override
   public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side)
@@ -131,7 +97,7 @@ public class BlockContactSwitch extends BlockSwitch
       state = state.withProperty(POWERED, true);
       world.setBlockState(pos, state, 1|2);
       power_on_sound.play(world, pos);
-      notifyNeighbours(world, pos, state);
+      notifyNeighbours(world, pos, state, te, false);
       if((config & BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
         if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
@@ -209,9 +175,10 @@ public class BlockContactSwitch extends BlockSwitch
     { super.reset(); filter_=0; count_threshold_=1; high_sensitivity_=false; }
 
     @Override
-    public boolean activation_config(@Nullable BlockSwitch block, @Nullable EntityPlayer player, double x, double y)
+    public boolean activation_config(IBlockState state, @Nullable EntityPlayer player, double x, double y)
     {
-      if(block == null) return false;
+      if(state == null) return false;
+      final BlockSwitch block = (BlockSwitch)state.getBlock();
       int direction=0, field=0;
       if((block.config & (SWITCH_CONFIG_LATERAL)) != 0) {
         direction = ((y>=13) && (y<=15)) ? (1) : (((y>=10) && (y<=12)) ? (-1) : (0));

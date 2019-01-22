@@ -367,6 +367,26 @@ tile.rsgauges.timerswitch_glass1.help=§6A small device that emits a rectangular
                                     ${rsgauges.switch.feature.outputconfig.help} \
                                     As Switch Link target the timer toggles between run and standby mode.
 
+
+#-----------------------------------------------------------------------------------------------------------
+# Block observing and inspection switches
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.observerswitch1.name=Block detection switch (industrial series)
+#
+# Observing switch tooltip help
+#
+tile.rsgauges.observerswitch1.help=§6A switch emitting a redstone signal if one or more blocks in front if it match \
+                                    a configured type or category.§r\n\
+                                    The configuration is set using buttons at the opposite side of the detector and \
+                                    encompass the 'range' (observing how far), the 'threshold' \
+                                    (how many blocks have to match), the 'filter' (criteria, e.g. \
+                                    solid, fluid, wood log, ores, plants, crops, mature crops, and other ore dictionary \
+                                    based filters), the 'debouncing' (anti-jitter delay), and the output 'power' (at all sides \
+                                    except the detector side). Note: The detector recognises modded blocks only \
+                                    if they are correctly registered in the ore dictionary (you need to test it). \
+                                    §r\n\
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+
 #-----------------------------------------------------------------------------------------------------------
 # Link relay switch names
 #-----------------------------------------------------------------------------------------------------------
@@ -599,6 +619,36 @@ rsgauges.switchconfig.touchcontactmat.entity_filter.animals=animals
 rsgauges.switchconfig.touchcontactmat.entity_filter.villagers=villagers
 rsgauges.switchconfig.touchcontactmat.entity_filter.objects=objects
 rsgauges.switchconfig.touchcontactmat.output_power=power: %1$s
+
+#--------------------------------------------------
+# range: <int>  threshold: <int>  filter: <string>  power: <int>  debounce: <int>
+#
+rsgauges.switchconfig.blocksensor=%1$s%2$s%3$s%4$s%5$s
+rsgauges.switchconfig.blocksensor.range=range: %1$s
+rsgauges.switchconfig.blocksensor.threshold=threshold: %1$s
+rsgauges.switchconfig.blocksensor.output_power=power: %1$s
+rsgauges.switchconfig.blocksensor.debounce=debounce: %1$s
+rsgauges.switchconfig.blocksensor.filter=filter: %1$s
+# filters
+rsgauges.switchconfig.blocksensor.filter.any=any block
+rsgauges.switchconfig.blocksensor.filter.solid=solid
+rsgauges.switchconfig.blocksensor.filter.liquid=liquid
+rsgauges.switchconfig.blocksensor.filter.air=air
+rsgauges.switchconfig.blocksensor.filter.woodlog=wood log
+rsgauges.switchconfig.blocksensor.filter.fertile=fertile soil
+rsgauges.switchconfig.blocksensor.filter.soil=soil
+rsgauges.switchconfig.blocksensor.filter.plant=plant
+rsgauges.switchconfig.blocksensor.filter.crop=crop
+rsgauges.switchconfig.blocksensor.filter.crop_mature=mature crop
+rsgauges.switchconfig.blocksensor.filter.ore=ore (dict)
+rsgauges.switchconfig.blocksensor.filter.sapling=sapling (dict)
+rsgauges.switchconfig.blocksensor.filter.material_wood=wooden (dict)
+rsgauges.switchconfig.blocksensor.filter.material_stone=stone (dict)
+rsgauges.switchconfig.blocksensor.filter.material_glass=glass (dict)
+rsgauges.switchconfig.blocksensor.filter.material_water=water/ice
+rsgauges.switchconfig.blocksensor.filter.material_clay=clay/ceramics
+rsgauges.switchconfig.blocksensor.filter.planks=planks (dict)
+rsgauges.switchconfig.blocksensor.filter.slab=slab (dict)
 
 #-----------------------------------------------------------------------------------------------------------
 # Switch linking

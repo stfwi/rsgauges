@@ -143,6 +143,29 @@ reasons:
 ## Revision history
 
                 -------------------------------------------------------------------
+    - v1.1.1    [R] Release based on v1.1.1-b2.
+                -------------------------------------------------------------------
+
+    - v1.1.1-b2 [M] Recipe of glass gauge changed to be crafted with a glass block.
+                [A] Block detection switch added (configurable range, category filter,
+                    match threshold, debounce, output power). Filters are e.g. "solid",
+                    "fluid", "air", "stone", "soil", "wooden", "plant", "crop",
+                    "mature crop", and other ore dict based categories. Recipe similar
+                    to the entity detection switch.
+                [M] German language file updated.
+
+    - v1.1.1-b1 [F] Fixed block notification issue when destroying contact plates
+                    while standing on them.
+                [M] Performance for redstone block updates of switches improved
+                    (update of affected blocks only).
+                [A] Subsystem for full block switches with configurable output
+                    sides implemented.
+                [A] Accepted wrenches (default: redstone torch) allow to configure
+                    switch outputs with a single (activation) right click in addition
+                    to empty handed left-double-click. (Feature added for creative
+                    mode and configuration of many switches).
+
+                -------------------------------------------------------------------
     - v1.1.0    [R] Release based on v1.1.0-b4.
                 -------------------------------------------------------------------
 
@@ -543,6 +566,41 @@ allows to "reset" a switch by simply re-attaching it.
         If off and on light level are identical, the sensor switches only at exactly
         this light level. Higher debouncing values mean higher switching delays.
 
+    - **Block detection switches**: Switch on/off depending on the presence of selected
+      blocks that they see (using Ender eye based rock-radar technology). A block detector
+      scans a line (up to 8 blocks far) in font of it. Redstone outputs are at all sides
+      except the front. The touch config is at the opposite side:
+
+        - Radar range       : 0 to 8. How far the sensor shall look. 0 and 1 are basically
+                              the same, except that range=0 will update faster (because the
+                              "block update of the neighbour block" will be taken into account).
+                              Normal update interval of the switch is 0.5s (10 ticks).
+        - Match threshold   : 1 to range. The number of blocks that have to meet the selected
+                              filter (see below) to switch the output signal on. The value is
+                              clamped to the range value.
+        - Output power      : 1 to 15.
+        - Debouncing        : 0 to 10. Delays switching to ensure a stable detector signal.
+                              Useful e.g. for fluids, which may otherwise cause jitters when
+                              removed with a bucket.
+        - Filter            : Category selection for block detection. The sensor will only count
+                              blocks matching the selected types. Some of the criteria are at least
+                              partially ore dicrionary based (see Forge oredict). Categories are:
+                              "any block", "solid blocks", "fluids", "air/nothing", "plants",
+                              "wooden", "stone", "glass", "clay", "water", "ore", "wood log",
+                              "crop", "mature crop", "sapling", "soil", "fertile soil", "planks",
+                              and "slabs".
+                              Most of the strict criteria are adapted in a way that should yield
+                              expected results to the player. E.g. "water" also matches ice and snow,
+                              "soil" match dirt, grass, sand, and soul sand. "clay" also matches
+                              terracotta, "wooden" also matches a book shelf, "stone" also matches
+                              terracotta, obsidian, and quarz.
+                              *Unfortunately not all blocks (mainly blocks from mods) can be matched
+                              correctly for every category. It depends on the ore dictionary registration
+                              and on which vanilla blocks they are based. (Means e.g. not all modded
+                              blocks that look clearly made out of stone tell the game that they are
+                              stone). Simply check out what's possible and maybe circumvent the problem
+                              by choosing another setup and filter*.
+
 ### Switch link details
 
 Linking switches means establishing a "wireless" remote activation of switches based
@@ -660,7 +718,6 @@ Mods covering similar features:
 
 - The [Immersive Engineering](https://github.com/BluSunrize/ImmersiveEngineering/) low voltage switch is a stylish redstone lever, too.
 
-Making this mod was basically a weekend project for me to check what's new in Java. To learn how mods work
-took a look at the following codes and resources to get started, and like to give the authors credits accordingly:
-lothazar (cyclic), blusunrize (ie), vazkii (botania), the Forge smiths and documenters, thegrayghost (minecraft
-by example).
+Making this mod was basically a weekend project for me to check what's new in Java - well, let's just say I caught fire ;).
+To learn how mods work I took a look at the following codes and resources to get started, and like to give the authors
+credits accordingly: lothazar:cyclic, blusunrize:ie, vazkii:botania; the Forge smiths and documenters, thegrayghost.
