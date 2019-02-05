@@ -431,10 +431,13 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     te.click_config(null, false); // reset double click tracking
     ClickInteraction ck = ClickInteraction.get(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
     if(ck.touch_configured) {
-      te.activation_config(state, player, ck.x, ck.y);
+      if(te.activation_config(state, player, ck.x, ck.y)) {
+        ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
+      }
       return true;
     } else if(ck.wrenched) {
       if(te.click_config(this, false)) {
+        ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
         ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((BlockSwitch) state.getBlock()));
       }
       return true;
@@ -541,6 +544,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     }
     if((item_held==Items.AIR) && te.click_config(this, true)) {
       // left double click config
+      ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
       ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((BlockSwitch)state.getBlock()));
       return;
     }
@@ -584,7 +588,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public TileEntity createTileEntity(World world, IBlockState state)
   { return new TileEntitySwitch(); }
 
-  public TileEntitySwitch getTe(World world, BlockPos pos)
+  public TileEntitySwitch getTe(IBlockAccess world, BlockPos pos)
   {
     if(world==null) return null;
     final TileEntity te = world.getTileEntity(pos);
@@ -622,6 +626,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     @Override
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)
     {
+      int previous_scd = scd_;
       int previous_svd = svd_;
       scd_ = nbt.getInteger("scd");
       svd_ = nbt.getInteger("svd");
@@ -640,7 +645,10 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
           links_ = links;
         }
       } else { // Client network packet reading
-        if((svd_ & SWITCH_DATA_SVD_COLOR_MASK) != (previous_svd & SWITCH_DATA_SVD_COLOR_MASK)) {
+        if(
+          ((svd_ & SWITCH_DATA_SVD_COLOR_MASK) != (previous_svd & SWITCH_DATA_SVD_COLOR_MASK)) ||
+          ((scd_ & SWITCH_DATA_POWERED_POWER_MASK) != (previous_scd & SWITCH_DATA_POWERED_POWER_MASK))
+        ) {
           if((getWorld() != null) && (getWorld().isRemote)) {
             world.markBlockRangeForRenderUpdate(getPos(), getPos());
           }
@@ -959,59 +967,75 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
         + ",wrenched:" + Boolean.toString(wrenched) + ",item_count:" + Integer.toString(item_count) + ",dye:" + Integer.toString(dye) + "}";
     }
 
-    public static ClickInteraction get(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
+    /**
+     * Returns a ClickInteraction object, where x and y are assigned to the coordinates clicke with respect
+     * to the blocks bounding box. x/y are normalised to 16. `touch_configured` true when the player clicked
+     * on a block surface that faces the player.
+     */
+    private static ClickInteraction touch(ClickInteraction ck, World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
     {
-      final ClickInteraction ck = new ClickInteraction();
+      final BlockSwitch block = (BlockSwitch)(state.getBlock());
+      // Touch config check
+      if(facing==null) return ck;
+      double xo=0, yo=0;
+      if((block.isCube()) || ((block.isWallMount()) && (!block.isLateral()))) {
+        // UI facing the player in horizontal direction
+        if(!block.isCube()) {
+          if(facing != state.getValue(FACING)) return ck;
+        } else {
+          if(facing != state.getValue(FACING).getOpposite()) return ck;
+        }
+        switch(facing.getIndex()) {
+          case 0: xo = 1-x; yo = 1-z; break; // DOWN
+          case 1: xo = 1-x; yo = z  ; break; // UP
+          case 2: xo = 1-x; yo = y  ; break; // NORTH
+          case 3: xo = x  ; yo = y  ; break; // SOUTH
+          case 4: xo = z  ; yo = y  ; break; // WEST
+          case 5: xo = 1-z; yo = y  ; break; // EAST
+        }
+        final AxisAlignedBB aa = block.getUnrotatedBB();
+        xo = Math.round(((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25);
+        yo = Math.round(((yo-aa.minY) * (1.0/(aa.maxY-aa.minY)) * 15.5) - 0.25);
+      } else if(block.isLateral()) {
+        // Floor mounted UI facing up
+        if(facing != EnumFacing.UP) return ck;
+        facing = state.getValue(FACING);
+        switch(facing.getIndex()) {
+          case 0: xo =   x; yo =   z; break; // DOWN
+          case 1: xo =   x; yo =   z; break; // UP
+          case 2: xo =   x; yo = 1-z; break; // NORTH
+          case 3: xo = 1-x; yo =   z; break; // SOUTH
+          case 4: xo = 1-z; yo = 1-x; break; // WEST
+          case 5: xo =   z; yo =   x; break; // EAST
+        }
+        final AxisAlignedBB aa = block.getUnrotatedBB();
+        xo = 0.1 * Math.round(10.0 * (((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25));
+        yo = 0.1 * Math.round(10.0 * (((yo-(1.0-aa.maxZ)) * (1.0/(aa.maxZ-aa.minZ)) * 15.5) - 0.25));
+      } else {
+        return ck;
+      }
+      ck.x = ((xo > 15.0) ? (15.0) : ((xo < 0.0) ? 0.0 : xo));
+      ck.y = ((yo > 15.0) ? (15.0) : ((yo < 0.0) ? 0.0 : yo));
+      ck.touch_configured = true;
+      return ck;
+    }
+
+    public static ClickInteraction get(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
+    { return get(world, pos, state, player, hand, facing, x, y, z,false); }
+
+    /**
+     *
+     */
+    public static ClickInteraction get(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z, boolean prefer_touch_config)
+    {
+      ClickInteraction ck = new ClickInteraction();
       if((world==null) || (pos==null)) return ck;
       if(state==null) state = world.getBlockState(pos);
       if((state==null) || (!(state.getBlock() instanceof BlockSwitch))) return ck;
       final BlockSwitch block = (BlockSwitch)(state.getBlock());
       final ItemStack item = player.getHeldItemMainhand();
       if(item == null) return ck;
-      if((item.getItem() == Items.AIR) && ((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0)) {
-        // Touch config check
-        if(facing==null) return ck;
-        double xo=0, yo=0;
-        if((block.isCube()) || ((block.isWallMount()) && (!block.isLateral()))) {
-          // UI facing the player in horizontal direction
-          if(!block.isCube()) {
-            if(facing != state.getValue(FACING)) return ck;
-          } else {
-            if(facing != state.getValue(FACING).getOpposite()) return ck;
-          }
-          switch(facing.getIndex()) {
-            case 0: xo = 1-x; yo = 1-z; break; // DOWN
-            case 1: xo = 1-x; yo = z  ; break; // UP
-            case 2: xo = 1-x; yo = y  ; break; // NORTH
-            case 3: xo = x  ; yo = y  ; break; // SOUTH
-            case 4: xo = z  ; yo = y  ; break; // WEST
-            case 5: xo = 1-z; yo = y  ; break; // EAST
-          }
-          final AxisAlignedBB aa = block.getUnrotatedBB();
-          xo = Math.round(((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25);
-          yo = Math.round(((yo-aa.minY) * (1.0/(aa.maxY-aa.minY)) * 15.5) - 0.25);
-        } else if(block.isLateral()) {
-          // Floor mounted UI facing up
-          if(facing != EnumFacing.UP) return ck;
-          facing = state.getValue(FACING);
-          switch(facing.getIndex()) {
-            case 0: xo =   x; yo =   z; break; // DOWN
-            case 1: xo =   x; yo =   z; break; // UP
-            case 2: xo =   x; yo = 1-z; break; // NORTH
-            case 3: xo = 1-x; yo =   z; break; // SOUTH
-            case 4: xo = 1-z; yo = 1-x; break; // WEST
-            case 5: xo =   z; yo =   x; break; // EAST
-          }
-          final AxisAlignedBB aa = block.getUnrotatedBB();
-          xo = 0.1 * Math.round(10.0 * (((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25));
-          yo = 0.1 * Math.round(10.0 * (((yo-(1.0-aa.maxZ)) * (1.0/(aa.maxZ-aa.minZ)) * 15.5) - 0.25));
-        } else {
-          return ck;
-        }
-        ck.x = ((xo > 15.0) ? (15.0) : ((xo < 0.0) ? 0.0 : xo));
-        ck.y = ((yo > 15.0) ? (15.0) : ((yo < 0.0) ? 0.0 : yo));
-        ck.touch_configured = true;
-      } else if(item.getItem() == Items.REDSTONE) {
+      if(item.getItem() == Items.REDSTONE) {
         ck.item = Items.REDSTONE;
         ck.item_count = item.getCount();
       } else if(item.getItem() == Items.ENDER_PEARL) {
@@ -1025,9 +1049,14 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
         ck.dye = DyeUtils.rawMetaFromStack(item);
         if(ck.dye > 15) ck.dye = 15;
       } else if(item.getItem() != Items.AIR) {
-        ck.wrenched = ((","+ModConfig.zmisc.accepted_wrenches+",").contains("," + item.getItem().getRegistryName().getPath() + ","));
+        ck.wrenched = (("," + ModConfig.zmisc.accepted_wrenches + ",").contains("," + item.getItem().getRegistryName().getPath() + ","));
+        if(ck.wrenched) return ck;
       }
-      return ck;
+      if(((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0) && (prefer_touch_config || (item.getItem()==Items.AIR))) {
+        return touch(ck, world, pos, state, player, hand, facing, x,y,z);
+      } else {
+        return ck;
+      }
     }
   }
 

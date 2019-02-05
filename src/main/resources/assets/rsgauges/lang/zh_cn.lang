@@ -388,10 +388,26 @@ tile.rsgauges.observerswitch1.name=Block detection switch (industrial series)
                                     ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
 
 #-----------------------------------------------------------------------------------------------------------
+# Dimmer switches
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.dimmerswitch1.name=Dimmer switch (industrial series)
+
+rsgauges.switchconfig.dimmerswitch.output_power=power: %1$s
+#
+# Dimmer switch help
+#
+#tile.rsgauges.dimmerswitch1.help=§6An industrial manual redstone power dimmer.§r\n\
+                                Allows to manually set an output signal between 0 and 15 at the back side \
+                                of the device. The vertical click position defines the signal strength. \
+                                ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+
+#-----------------------------------------------------------------------------------------------------------
 # Link relay switch names
 #-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.relay_bistableswitchrx1.name=Switch link receiver (industrial)
+tile.rsgauges.relay_bistableswitchrx2.name=Cased switch link receiver (industrial)
 tile.rsgauges.relay_pulseswitchrx1.name=Switch link pulse receiver (industrial)
+tile.rsgauges.relay_pulseswitchrx2.name=Cased switch link pulse receiver (industrial)
 tile.rsgauges.relay_bistableswitchtx1.name=Switch link relay (industrial)
 tile.rsgauges.relay_pulseswitchtx1.name=Switch link pulse relay (industrial)
 #
@@ -403,7 +419,20 @@ tile.rsgauges.relay_pulseswitchtx1.name=Switch link pulse relay (industrial)
                                            Can also be manually activated like a lever. \
                                            ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} \
                                            ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.relay_bistableswitchrx2.help=§6A full block cased industrial bistable switching device that is optimised to be \
+                                           used as a Switch Link target.§r\n\
+                                           The relay inside is muffled and therefore very silent. \
+                                           Can also be manually activated like a lever. \
+                                           ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} \
+                                           ${rsgauges.switch.feature.linksource.help}
 #tile.rsgauges.relay_pulseswitchrx1.help=§6A small industrial pulse switching device that is optimised to be used as a Switch Link \
+                                           target.§r\n\
+                                           Like a normal pulse switch it activates for a short time when manually clicked or triggered \
+                                           by a switch link. \
+                                           The relay inside is muffled and therefore very silent. \
+                                           ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} \
+                                           ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.pulsetime.help}
+#tile.rsgauges.relay_pulseswitchrx2.help=§6A full block industrial pulse switching device that is optimised to be used as a Switch Link \
                                            target.§r\n\
                                            Like a normal pulse switch it activates for a short time when manually clicked or triggered \
                                            by a switch link. \

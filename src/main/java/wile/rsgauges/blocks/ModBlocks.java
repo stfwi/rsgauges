@@ -144,6 +144,8 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:relay_bistableswitchtx1")    public static final BlockSwitch relayBistableRelaySwitch1Block = null;
   // Block inspction / observing switchs
   @GameRegistry.ObjectHolder("rsgauges:observerswitch1")            public static final BlockSwitch observerSwitch1Block = null;
+  // Dimmer switches
+  @GameRegistry.ObjectHolder("rsgauges:dimmerswitch1")              public static final BlockSwitch dimmerSwitch1Block = null;
   // Sensitive glass
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")             public static final BlockSensitiveGlass sensitiveGlassBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_white")       public static final BlockSensitiveGlass whiteSensitiveGlassBlock = null;
@@ -218,7 +220,7 @@ public class ModBlocks
     new BlockIndicator("soundindicator1",
       new AxisAlignedBB((4d/16),(6.5d/16),(0d/16), (11.5d/16),(9.5d/16),(4d/16)),
       1, 1500, // light level scaling, blink frequency
-      new ModResources.BlockSoundEvent(ModResources.alarm_siren_sound),
+      new ModResources.BlockSoundEvent(ModResources.ALARM_SIREN_SOUND),
       null
     ),
 
@@ -962,8 +964,8 @@ public class ModBlocks
       BlockSwitch.SWITCH_DATA_SIDE_ENABLED_BOTTOM|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_TOP|
       BlockSwitch.SWITCH_DATA_SIDE_ENABLED_FRONT|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_LEFT|
       BlockSwitch.SWITCH_DATA_SIDE_ENABLED_RIGHT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.4f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.4f, 1.2f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.2f),
       ModAuxiliaries.RsMaterials.MATERIAL_METALLIC
     ),
 
@@ -982,15 +984,40 @@ public class ModBlocks
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
     ),
+    // Industrial full block pulse link relay receiver switch
+    new BlockSwitch("relay_pulseswitchrx2",
+      new AxisAlignedBB((0),(0),(0),(1),(1),(1)),
+      new AxisAlignedBB((0),(0),(0),(1),(1),(1)),
+      BlockSwitch.SWITCH_CONFIG_FULLCUBIC_BLOCK|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+        BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_DATA_WEAK|
+        BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+        BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_ALL|
+        BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+      ModAuxiliaries.RsMaterials.MATERIAL_METALLIC
+    ),
     // Industrial bistable link relay receiver switch
     new BlockSwitch("relay_bistableswitchrx1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       BlockSwitch.SWITCH_CONFIG_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_BISTABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
       BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    ),
+    // Industrial full block bistable link relay receiver switch
+    new BlockSwitch("relay_bistableswitchrx2",
+      new AxisAlignedBB((0),(0),(0),(1),(1),(1)),
+      new AxisAlignedBB((0),(0),(0),(1),(1),(1)),
+      BlockSwitch.SWITCH_CONFIG_FULLCUBIC_BLOCK|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_DATA_WEAK|
+      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_ALL|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+      ModAuxiliaries.RsMaterials.MATERIAL_METALLIC
     ),
     // Industrial pulse link relay
     new BlockSwitch("relay_pulseswitchtx1",
@@ -1014,6 +1041,20 @@ public class ModBlocks
       BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    ),
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- Manual dimmers
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // Industrial dimmer switch
+    new BlockDimmerSwitch("dimmerswitch1",
+      new AxisAlignedBB((5d/16),(1.5d/16),(0d/16), (11d/16),(14.25d/16),(0.60d/16)),
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+      ModAuxiliaries.RsMaterials.MATERIAL_METALLIC
     ),
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -381,10 +381,26 @@ tile.rsgauges.observerswitch1.help=§6Ein Schaltgerät, das ein Redstone-Signal 
                                     ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
 
 #-----------------------------------------------------------------------------------------------------------
+# Dimmer switches
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.dimmerswitch1.name=Schieberegler (industriell)
+
+rsgauges.switchconfig.dimmerswitch.output_power=power: %1$s
+#
+# Dimmer switch help
+#
+tile.rsgauges.dimmerswitch1.help=§6Manueller Redstone-Schieberegler.§r\n\
+                                Erlaubt es zwischen 0 und 15 ein Ausgangssignal an der Rückseite des Dimmers \
+                                zu erzeugen. Signalstärke wird durch die vertikale Klickposition bestimmt. \
+                                ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+
+#-----------------------------------------------------------------------------------------------------------
 # Link relay switch names
 #-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.relay_bistableswitchrx1.name=Switch-Link Empfänger (industriell)
+tile.rsgauges.relay_bistableswitchrx2.name=Eingefasster Switch-Link Empfänger (industriell)
 tile.rsgauges.relay_pulseswitchrx1.name=Switch-Link Pulsempfänger (industriell)
+tile.rsgauges.relay_pulseswitchrx2.name=Eingefasster Switch-Link Pulsempfänger (industriell)
 tile.rsgauges.relay_bistableswitchtx1.name=Switch-Link Signalwandler (industriell)
 tile.rsgauges.relay_pulseswitchtx1.name=Switch-Link Signal-Pulswandler (industriell)
 #
@@ -395,7 +411,17 @@ tile.rsgauges.relay_bistableswitchrx1.help=§6Industrielles bi-stabiles Schaltge
                                            Kann auch manuell (wie ein Hebel) bedient werden. \
                                            ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} \
                                            ${rsgauges.switch.feature.linksource.help}
+tile.rsgauges.relay_bistableswitchrx2.help=§6Industrielles bi-stabiles Schaltgerät, optimiert als Link-Target verwendet zu werden.§r\n\
+                                           Das integrierte Relais ist schallgedämmt und deshalb sehr leise. \
+                                           Kann auch manuell (wie ein Hebel) bedient werden. \
+                                           ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} \
+                                           ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.relay_pulseswitchrx1.help=§6Industrielles Puls-Schaltgerät, optimiert als Link-Target verwendet zu werden.§r\n\
+                                           Das integrierte Relais ist schallgedämmt und deshalb sehr leise. \
+                                           Kann auch manuell (wie ein Taster) bedient werden. \
+                                           ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} \
+                                           ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.pulsetime.help}
+tile.rsgauges.relay_pulseswitchrx2.help=§6Industrielles Puls-Schaltgerät, optimiert als Link-Target verwendet zu werden.§r\n\
                                            Das integrierte Relais ist schallgedämmt und deshalb sehr leise. \
                                            Kann auch manuell (wie ein Taster) bedient werden. \
                                            ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} \

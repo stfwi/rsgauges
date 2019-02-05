@@ -142,6 +142,12 @@ reasons:
 ----
 ## Revision history
 
+    - v1.1.2-b1 [A] Added Cased switch link receiver (bistable, silent, full-block).
+                [A] Added Cased pulse switch link receiver (pulse, silent, full-block).
+                [A] Manual dimmer switch added (industrial vertical slide, 0 to 15).
+                [M] Switches and gauge do not get washed off by fluids.
+                [M] Faint touch config button sound added.
+
                 -------------------------------------------------------------------
     - v1.1.1    [R] Release based on v1.1.1-b2.
                 -------------------------------------------------------------------

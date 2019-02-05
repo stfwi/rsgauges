@@ -9,6 +9,7 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.world.IBlockAccess;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
@@ -80,7 +81,7 @@ public class BlockAutoSwitch extends BlockSwitch
   }
 
   @Override
-  public TileEntityAutoSwitch getTe(World world, BlockPos pos)
+  public TileEntityAutoSwitch getTe(IBlockAccess world, BlockPos pos)
   {
     TileEntity te = world.getTileEntity(pos);
     if((!(te instanceof TileEntityAutoSwitch))) return null;
