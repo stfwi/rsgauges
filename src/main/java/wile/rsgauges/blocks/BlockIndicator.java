@@ -10,6 +10,10 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.properties.PropertyBool;
@@ -22,14 +26,14 @@ public class BlockIndicator extends BlockGauge
 {
   public static final PropertyBool POWER = PropertyBool.create("power");
 
-  public BlockIndicator(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { super(registryName, unrotatedBB, powerToLightValueScaling0To15, blinkInterval, powerOnSound, powerOffSound); }
+  public BlockIndicator(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  { super(registryName, unrotatedBB, config, powerOnSound, powerOffSound); }
 
-  public BlockIndicator(String registryName, AxisAlignedBB unrotatedBB, int powerToLightValueScaling0To15, int blinkInterval)
-  { super(registryName, unrotatedBB, powerToLightValueScaling0To15, blinkInterval, null, null); }
+  public BlockIndicator(String registryName, AxisAlignedBB unrotatedBB, long config)
+  { super(registryName, unrotatedBB, config, null, null); }
 
   public BlockIndicator(String registryName, AxisAlignedBB unrotatedBB)
-  { super(registryName, unrotatedBB, 0, 0, null, null); }
+  { super(registryName, unrotatedBB, 0,null, null); }
 
   @Override
   public IBlockState getBlockStateWithPower(IBlockState orig, int power)
@@ -42,6 +46,15 @@ public class BlockIndicator extends BlockGauge
   @Override
   public boolean cmpBlockStatePower(IBlockState state, int power)
   { return state.getValue(POWER) == (power!=0); }
+
+  @Override
+  public int getColorMultiplierRGBA(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos)
+  {
+    if((pos==null) || (world==null)) return 0xffffffff;
+    final TileEntityGauge te = getTe(world, pos);
+    if(te==null) return 0xffffffff;
+    return ModAuxiliaries.DyeColorFilters.byIndex(te.color_tint());
+  }
 
   @Override
   protected BlockStateContainer createBlockState()

@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:automaticswitch3block",
+    "model": "rsgauges:autoswitch/automaticswitch3block",
     "textures": {
         "front": "rsgauges:blocks/common/darkmachinemetal",
         "parts": "rsgauges:blocks/common/darkroughmetal",

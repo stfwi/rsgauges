@@ -44,6 +44,8 @@ tile.rsgauges.gauge_rustic2.help=${tile.rsgauges.flatgauge1.help}
 #-----------------------------------------------------------------------------------------------------------
 # Binary state indicator names
 #-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.indicator_led_white.name=Redstone indicator (small square white light)
+tile.rsgauges.indicator_led_white_blink.name=Redstone indicator (blinking small square white light)
 tile.rsgauges.indicator1.name=Redstone indicator (small square green light)
 tile.rsgauges.indicator2.name=Redstone indicator (small square yellow light)
 tile.rsgauges.indicator3.name=Redstone indicator (small square red light)
@@ -52,21 +54,32 @@ tile.rsgauges.indicator1blink1.name=Redstone indicator (blinking small square gr
 tile.rsgauges.indicator2blink1.name=Redstone indicator (blinking small square yellow light)
 tile.rsgauges.indicator3blink1.name=Redstone indicator (blinking small square red light)
 tile.rsgauges.soundindicator1.name=Redstone sound indicator (alarm siren)
+tile.rsgauges.indicator_rustic_flag.name=Redstone indicator (small rustic flag semaphore)
+
 # tooltip help
-tile.rsgauges.indicator1.help=§6A small device that can be attached to a block to indicate \
+tile.rsgauges.indicator_led_white.help=§6A small device that can be attached to a block to indicate \
                               if that block is powered.§r\n\
-                              If the block can provide power itself, it uses \
-                              the output of the block, otherwise it looks up the power that the \
-                              block receives from adjacent blocks.
-tile.rsgauges.indicator2.help=${tile.rsgauges.indicator1.help}
-tile.rsgauges.indicator3.help=${tile.rsgauges.indicator1.help}
-tile.rsgauges.indicator1blink1.help=${tile.rsgauges.indicator1.help} Blinks with a frequency of about 0.5Hz.
-tile.rsgauges.indicator2blink1.help=${tile.rsgauges.indicator1.help} Blinks with a frequency of about 0.5Hz.
-tile.rsgauges.indicator3blink1.help=${tile.rsgauges.indicator1.help} Blinks with a frequency of about 0.5Hz.
+                              If the block can provide power itself, it uses the output of the block, \
+                              otherwise it looks up the power that the block receives from adjacent \
+                              blocks.\n\
+                              Left click with dye to change the LED color.
+tile.rsgauges.indicator1.help=${tile.rsgauges.indicator_led_white.help}
+tile.rsgauges.indicator2.help=${tile.rsgauges.indicator_led_white.help}
+tile.rsgauges.indicator3.help=${tile.rsgauges.indicator_led_white.help}
+tile.rsgauges.indicator_led_white_blink.help=${tile.rsgauges.indicator_led_white.help} Blinks with a frequency of about 0.5Hz.
+tile.rsgauges.indicator1blink1.help=${tile.rsgauges.indicator_led_white.help} Blinks with a frequency of about 0.5Hz.
+tile.rsgauges.indicator2blink1.help=${tile.rsgauges.indicator_led_white.help} Blinks with a frequency of about 0.5Hz.
+tile.rsgauges.indicator3blink1.help=${tile.rsgauges.indicator_led_white.help} Blinks with a frequency of about 0.5Hz.
 tile.rsgauges.indicator4.help=§6A red lamp that blinks when detecting a redstone signal from the block \
                               it is attached to.§r Emits light when active.
 tile.rsgauges.soundindicator1.help=§6A siren that frequently emits an alarm sound when detecting a redstone \
                               signal from the block it is attached to.
+tile.rsgauges.indicator_rustic_flag.help=§6A small metal case with a semaphore flag, which raises \
+                              when the block to that the indicator is attached to is powered.§r\n\
+                              If the block can provide power itself, it uses the output of the block, \
+                              otherwise it looks up the power that the block receives from adjacent \
+                              blocks.\n\
+                              Left click with dye to tint the flag.
 
 #-----------------------------------------------------------------------------------------------------------
 # Switch tooltip help aspects

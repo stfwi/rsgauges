@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:bistableswitch3block_s00",
+    "model": "rsgauges:bistableswitch/bistableswitch3block_s00",
     "textures": {
       "front": "rsgauges:blocks/bistableswitch/bistableswitch3texture_front",
       "side":  "rsgauges:blocks/bistableswitch/bistableswitch3texture_side",
@@ -16,7 +16,7 @@
     "powered": {
       "false":  {},
       "true":   {
-        "model": "rsgauges:bistableswitch3block_s15",
+        "model": "rsgauges:bistableswitch/bistableswitch3block_s15",
         "textures": {
             "onbutton": "rsgauges:blocks/bistableswitch/bistableswitch3texture_green_s15",
             "offbutton": "rsgauges:blocks/bistableswitch/bistableswitch3texture_red_s15"

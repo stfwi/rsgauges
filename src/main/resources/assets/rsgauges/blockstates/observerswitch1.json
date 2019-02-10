@@ -1,6 +1,6 @@
 {
   "forge_marker": 1,
-  "defaults": { "model": "rsgauges:observerswitch1block" },
+  "defaults": { "model": "rsgauges:observerswitch/observerswitch1block" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],

@@ -58,10 +58,13 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:indicator2")                 public static final BlockGauge indicator2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator3")                 public static final BlockGauge indicator3Block = null;
   // Blinking indicators
+  @GameRegistry.ObjectHolder("rsgauges:indicator_led_white")        public static final BlockGauge indicatorLedWhiteBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:indicator_led_white_blink")  public static final BlockGauge indicatorLedWhiteBlinkBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator1blink1")           public static final BlockGauge indicator1Blink1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator2blink1")           public static final BlockGauge indicator2Blink1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator3blink1")           public static final BlockGauge indicator3Blink1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator4")                 public static final BlockGauge indicator4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:indicator_rustic_flag")      public static final BlockGauge indicatorRusticFlag = null;
   // Sound indicators
   @GameRegistry.ObjectHolder("rsgauges:soundindicator1")            public static final BlockGauge soundIndicator1Block = null;
   // Bi-stable switches
@@ -171,13 +174,34 @@ public class ModBlocks
     // -----------------------------------------------------------------------------------------------------------------
     // -- gauges
     // -----------------------------------------------------------------------------------------------------------------
-    new BlockGauge("flatgauge1", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) ),
-    new BlockGauge("flatgauge2", new AxisAlignedBB((4d/16),(2d/16),(0d/16), (12d/16),(14d/16),(1d/16)) ),
-    new BlockGauge("flatgauge3", new AxisAlignedBB((4d/16),(5d/16),(0d/16), (12d/16),(11d/16),(1d/16)) ),
-    new BlockGauge("flatgauge4", new AxisAlignedBB((7d/16),(3.7d/16),(0d/16), (10d/16),(12d/16),(0.4d/16)) ),
-    new BlockGauge("flatgauge5", new AxisAlignedBB((7d/16),(4d/16),(0d/16), (9d/16),(12d/16),(3d/16)) ),
-    new BlockGauge("flatgauge6", new AxisAlignedBB((2d/16),(4d/16),(0d/16), (14d/16),(12d/16),(1d/16)) ),
-    new BlockGauge("gauge_rustic2", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) ),
+    new BlockGauge("flatgauge1",
+      new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge2",
+      new AxisAlignedBB((4d/16),(2d/16),(0d/16), (12d/16),(14d/16),(1d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge3",
+      new AxisAlignedBB((4d/16),(5d/16),(0d/16), (12d/16),(11d/16),(1d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge4",
+      new AxisAlignedBB((7d/16),(3.7d/16),(0d/16), (10d/16),(12d/16),(0.4d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge5",
+      new AxisAlignedBB((7d/16),(4d/16),(0d/16), (9d/16),(12d/16),(3d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge6",
+      new AxisAlignedBB((2d/16),(4d/16),(0d/16), (14d/16),(12d/16),(1d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("gauge_rustic2",
+      new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)),
+      0 // no color tint.
+    ),
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- indicators
@@ -186,42 +210,52 @@ public class ModBlocks
     // square LED
     new BlockIndicator("indicator1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 0  // light level, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|(13<<BlockGauge.GAUGE_DATA_COLOR_SHIFT) // green
     ),
     new BlockIndicator("indicator2",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 0  // light level, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|(5<<BlockGauge.GAUGE_DATA_COLOR_SHIFT) // yellow
     ),
     new BlockIndicator("indicator3",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 0  // light level, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT) // red
     ),
-
+    new BlockIndicator("indicator_led_white",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
+    ),
     // Blinking square LEDs
     new BlockIndicator("indicator1blink1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 2000  // light level scaling, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
     new BlockIndicator("indicator2blink1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 2000  // light level scaling, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
     new BlockIndicator("indicator3blink1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 2000  // light level scaling, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
+    ),
+    new BlockIndicator("indicator_led_white_blink",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
     ),
     // alarm lamp
     new BlockIndicator("indicator4",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(4d/16)),
-      8, 1500  // light level scaling, blink frequency
+      (8<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
-
     // Alarm siren
     new BlockIndicator("soundindicator1",
       new AxisAlignedBB((4d/16),(6.5d/16),(0d/16), (11.5d/16),(9.5d/16),(4d/16)),
-      1, 1500, // light level scaling, blink frequency
+      (1<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT) | (8<<BlockGauge.GAUGE_DATA_BLINK_SHIFT),
       new ModResources.BlockSoundEvent(ModResources.ALARM_SIREN_SOUND),
       null
+    ),
+    new BlockIndicator("indicator_rustic_flag",
+      new AxisAlignedBB((5d/16),(8d/16),(0d/16), (12d/16),(10d/16),(0.5d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
     ),
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -1119,7 +1153,7 @@ public class ModBlocks
     if(block instanceof BlockIndicator) {
       BlockIndicator bl = ((BlockIndicator)block);
       if(ModConfig.optouts.without_indicators) return false;
-      if((ModConfig.optouts.without_blinking_indicators) && (bl.blink_interval > 0)) return false;
+      if((ModConfig.optouts.without_blinking_indicators) && (bl.blink_interval() > 0)) return false;
       if((ModConfig.optouts.without_sound_indicators) && ((bl.power_on_sound != null) || (bl.power_off_sound != null))) return false;
     } if(block instanceof BlockGauge) {
       BlockGauge bl = ((BlockGauge)block);

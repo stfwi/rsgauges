@@ -43,6 +43,8 @@ tile.rsgauges.gauge_rustic2.help=${tile.rsgauges.flatgauge1.help}
 #-----------------------------------------------------------------------------------------------------------
 # Binary state indicator names
 #-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.indicator_led_white.name=Redstone-Indikator (weiße rechteckige Signalleuchte)
+tile.rsgauges.indicator_led_white_blink.name=Redstone-Indikator (blinkende weiße Signalleuchte)
 tile.rsgauges.indicator1.name=Redstone-Indikator (grüne rechteckige Signalleuchte)
 tile.rsgauges.indicator2.name=Redstone-Indikator (gelbe rechteckige Signalleuchte)
 tile.rsgauges.indicator3.name=Redstone-Indikator (rote rechteckige Signalleuchte)
@@ -51,21 +53,29 @@ tile.rsgauges.indicator1blink1.name=Redstone-Indikator (blinkende grüne Signall
 tile.rsgauges.indicator2blink1.name=Redstone-Indikator (blinkende gelbe Signalleuchte)
 tile.rsgauges.indicator3blink1.name=Redstone-Indikator (blinkende rote Signalleuchte)
 tile.rsgauges.soundindicator1.name=Akustischer Redstone-Indikator (Alarmsirene)
+tile.rsgauges.indicator_rustic_flag.name=Redstone-Indikator (kleine rustikale Fahnensemaphore)
+
 # tooltip help
-tile.rsgauges.indicator1.help=§6Eine kleine Anzeige, die an einem Block angebracht werden kann, um anzuzeigen ob \
+tile.rsgauges.indicator_led_white.help=§6Eine kleine Anzeige, die an einem Block angebracht werden kann, um anzuzeigen ob \
                               an diesem Block ein Redstone-Signal anliegt.§r\n\
                               Wenn der Block selbst Redstone-Ausgänge hat, dann wird das Signal von diesem Block \
                               angezeigt. Ansonsten misst die Anzeige indirekt, ob an dem Block (von seinen Nachbarn) \
-                              her ein Signal ansteht.
-tile.rsgauges.indicator2.help=${tile.rsgauges.indicator1.help}
-tile.rsgauges.indicator3.help=${tile.rsgauges.indicator1.help}
-tile.rsgauges.indicator1blink1.help=${tile.rsgauges.indicator1.help} Blinkt mit ca. 0.5Hz.
-tile.rsgauges.indicator2blink1.help=${tile.rsgauges.indicator1.help} Blinkt mit ca. 0.5Hz.
-tile.rsgauges.indicator3blink1.help=${tile.rsgauges.indicator1.help} Blinkt mit ca. 0.5Hz.
+                              her ein Signal ansteht. Linksklick mit Farbe zum Einfärben.
+tile.rsgauges.indicator1.help=${tile.rsgauges.indicator_led_white.help}
+tile.rsgauges.indicator2.help=${tile.rsgauges.indicator_led_white.help}
+tile.rsgauges.indicator3.help=${tile.rsgauges.indicator_led_white.help}
+tile.rsgauges.indicator_led_white_blink.help=${tile.rsgauges.indicator_led_white.help} Blinkt mit ca. 0.5Hz.
+tile.rsgauges.indicator1blink1.help=${tile.rsgauges.indicator_led_white.help} Blinkt mit ca. 0.5Hz.
+tile.rsgauges.indicator2blink1.help=${tile.rsgauges.indicator_led_white.help} Blinkt mit ca. 0.5Hz.
+tile.rsgauges.indicator3blink1.help=${tile.rsgauges.indicator_led_white.help} Blinkt mit ca. 0.5Hz.
 tile.rsgauges.indicator4.help=§6Eine rote Lampe. Blinkt wenn sie vom Block, an dem sie befestigt ist, \
                               ein Redstone-Signal erhält$r\n(Anmerkung: "leuchtet" auch im Bezug auf "Light-Level").
 tile.rsgauges.soundindicator1.help=§6Eine Sirene, die bei einem Redstone-Signal regelmäßig heult (industrielles \
                               Alarmgeräusch).$r\nRedstone-Eingang ist am Fuß (unten).
+tile.rsgauges.indicator_rustic_flag.help=§6Kleines Gehäuse mit Fahnen-Semaphore, die gehoben wird \
+                              wenn am Block, an dem die Semaphore befestigt ist, ein Redstone-Signal \
+                              anliegt.§r\n\
+                              Linksklick mit Farbe zum Einfärben des Fähnchens.
 
 #-----------------------------------------------------------------------------------------------------------
 # Switch tooltip help aspects

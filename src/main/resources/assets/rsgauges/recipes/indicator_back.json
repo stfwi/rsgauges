@@ -4,14 +4,14 @@
       "type": "rsgauges:grc",
       "result": "rsgauges:indicator1",
       "items": [
-        "rsgauges:indicator3"
+        "rsgauges:indicator_led_white"
       ]
     }
   ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "rsgauges:indicator3"
+      "item": "rsgauges:indicator_led_white"
     }
   ],
   "result": {

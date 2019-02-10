@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:trapdoorswitch1block_s00"
+    "model": "rsgauges:trapdoorswitch/trapdoorswitch1block_s00"
   },
   "variants": {
     "normal": [{}],
@@ -9,7 +9,7 @@
     "facing": {"north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{}, "down":{} },
     "powered": {
       "false": {},
-      "true":  { "model": "rsgauges:trapdoorswitch1block_s15" }
+      "true":  { "model": "rsgauges:trapdoorswitch/trapdoorswitch1block_s15" }
     }
   }
 }

@@ -138,7 +138,8 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     power_on_sound = powerOnSound;
     power_off_sound = powerOffSound;
     setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(POWERED, false));
-    if((config & 0xff)==0) config |= 15; // default power=15 if not specified.
+    if((config & 0xff)==0xff) config &= ~0xffL; // explicitly initialise on and power with 0.
+    else if((config & 0xff)==0) config |= 15; // default power=15 if not specified.
     if((config & SWITCH_DATA_SIDE_ENABLED_MASK)!=0) config |= SWITCH_CONFIG_SIDES_CONFIGURABLE; // implicitly set flag if any side config is specified
     this.config = config;
   }
@@ -164,14 +165,15 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
   @Override
   public boolean hasColorMultiplierRGBA()
-  { return (!ModConfig.optouts.without_switch_colortinting) && ((config & SWITCH_CONFIG_COLOR_TINT_SUPPORT) != 0); }
+  { return (!ModConfig.optouts.without_color_tinting) && ((config & SWITCH_CONFIG_COLOR_TINT_SUPPORT) != 0); }
 
   @Override
   public int getColorMultiplierRGBA(@Nullable IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos)
   {
     if((pos==null) || (world==null)) return 0xffffffff;
-    final TileEntity te = world.getTileEntity(pos);
-    return (te instanceof TileEntitySwitch)  ? (ModAuxiliaries.DyeColorFilters.byIndex[((TileEntitySwitch)te).color_tint() & 0xf]) : (0xffffffff);
+    final TileEntitySwitch te = getTe(world, pos);
+    if(te==null) return 0xffffffff;
+    return ModAuxiliaries.DyeColorFilters.byIndex(te.color_tint());
   }
 
   public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final EntityPlayer player)
@@ -473,7 +475,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       }
     } else if((ck.dye >= 0) && (((BlockSwitch)state.getBlock()).config & SWITCH_CONFIG_COLOR_TINT_SUPPORT) != 0) {
       // Switch color tinting
-      if((!ModConfig.optouts.without_switch_colortinting) && (ck.dye <= 15)) {
+      if((!ModConfig.optouts.without_color_tinting) && (ck.dye <= 15)) {
         te.color_tint(ck.dye);
         world.markAndNotifyBlock(pos, null, state, state, 1|2|4|16);
         ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.tinting", null, new Object[]{ModAuxiliaries.localizable("switchconfig.tinting." + ModAuxiliaries.DyeColorFilters.nameByIndex[ck.dye & 0xf], null)}));
@@ -743,7 +745,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
      * Resets internal entity values to the defaults, the serialised config data (scd) are
      * set to the defaults of the block config accordingly.
      */
-    public void reset(World world)
+    public void reset(IBlockAccess world)
     {
       off_timer_ = 0;
       click_config_time_lastclicked_ = 0;

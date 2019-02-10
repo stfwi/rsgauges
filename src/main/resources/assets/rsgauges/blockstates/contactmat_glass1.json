@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:contactmat_glassxblock_thin",
+    "model": "rsgauges:contactmat/contactmat_glassxblock_thin",
     "textures": {
       "front": "rsgauges:blocks/contactswitch/contactmat_glass1_s00",
       "side": "rsgauges:blocks/common/cleargrayglass"

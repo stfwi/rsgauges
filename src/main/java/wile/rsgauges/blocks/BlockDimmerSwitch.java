@@ -33,7 +33,7 @@ public class BlockDimmerSwitch extends BlockSwitch
   public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
 
   public BlockDimmerSwitch(String registryName, AxisAlignedBB unrotatedBB, long config, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, @Nullable Material material)
-  { super(registryName, unrotatedBB, null, config, powerOnSound, powerOffSound, material); }
+  { super(registryName, unrotatedBB, null, config|0xff, powerOnSound, powerOffSound, material); }
 
   @Override
   public int tickRate(World world)

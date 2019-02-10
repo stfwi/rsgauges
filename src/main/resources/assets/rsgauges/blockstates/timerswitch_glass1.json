@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:timerswitch_glass1block",
+    "model": "rsgauges:autoswitch/timerswitch_glass1block",
     "textures": { "led": "rsgauges:blocks/indicator/indicator_fg_yellow_on_texture" }
   },
   "variants": {

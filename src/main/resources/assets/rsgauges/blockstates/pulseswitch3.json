@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:pulseswitch3block_s00",
+    "model": "rsgauges:pulseswitch/pulseswitch3block_s00",
     "textures": {
       "base": "rsgauges:blocks/common/darkmachinemetal",
       "side":  "rsgauges:blocks/common/darkgraymetal",
@@ -14,7 +14,7 @@
     "facing": { "north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{"x":-90}, "down":{"x":90} },
     "powered": {
       "false":  {},
-      "true":   { "model": "rsgauges:pulseswitch3block_s15" }
+      "true":   { "model": "rsgauges:pulseswitch/pulseswitch3block_s15" }
     }
   }
 }

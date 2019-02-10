@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:sensitiveglassstainedblock",
+    "model": "rsgauges:sensitiveglass/sensitiveglassstainedblock",
     "textures": { "side": "rsgauges:blocks/sensitiveglass/sensitiveglass_stained_s15"}
   },
   "variants": {
@@ -10,4 +10,3 @@
     "powered": { "true":{}, "false": {"textures":{ "side": "rsgauges:blocks/sensitiveglass/sensitiveglass_stained_s00" } } }
   }
 }
-
