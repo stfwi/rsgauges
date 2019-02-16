@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:contactmat2block",
+    "model": "rsgauges:contactmat/contactmat2block",
     "textures": {
       "side": "rsgauges:blocks/common/darkgraymetal",
       "led": "rsgauges:blocks/indicator/indicator_fg_green_off_texture"

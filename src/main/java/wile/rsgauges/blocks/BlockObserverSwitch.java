@@ -29,6 +29,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import com.google.common.base.Predicate;
@@ -62,7 +63,7 @@ public class BlockObserverSwitch extends BlockSwitch
   }
 
   @Override
-  public TileEntityObserverSwitch getTe(World world, BlockPos pos)
+  public TileEntityObserverSwitch getTe(IBlockAccess world, BlockPos pos)
   {
     TileEntity te = world.getTileEntity(pos);
     if((!(te instanceof TileEntityObserverSwitch))) return null;

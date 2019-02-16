@@ -112,7 +112,7 @@ public class BlockContactSwitch extends BlockSwitch
   { return new TileEntityContactSwitch(); }
 
   @Override
-  public TileEntityContactSwitch getTe(World world, BlockPos pos)
+  public TileEntityContactSwitch getTe(IBlockAccess world, BlockPos pos)
   {
     TileEntity te = world.getTileEntity(pos);
     if((!(te instanceof TileEntityContactSwitch))) return null;

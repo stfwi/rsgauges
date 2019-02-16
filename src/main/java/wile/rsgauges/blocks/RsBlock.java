@@ -58,7 +58,7 @@ public abstract class RsBlock extends Block
 
   public RsBlock(String registryName, @Nullable AxisAlignedBB unrotatedBoundingBox, @Nullable Material material)
   {
-    super((material!=null) ? (material) : (Material.CIRCUITS));
+    super((material!=null) ? (material) : (ModAuxiliaries.RsMaterials.MATERIAL_METALLIC));
     unrotatedBB = (unrotatedBoundingBox!=null) ? (unrotatedBoundingBox) : (new AxisAlignedBB(0,0,0,1,1,1));
     setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(ModRsGauges.MODID, registryName);

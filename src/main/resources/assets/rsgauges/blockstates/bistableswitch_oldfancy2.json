@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:bistableswitch_oldfancy2block_s00",
+    "model": "rsgauges:bistableswitch/bistableswitch_oldfancy2block_s00",
     "textures": { "side": "rsgauges:blocks/common/old_iron" }
   },
   "variants": {
@@ -11,7 +11,7 @@
     "powered": {
       "false":  {},
       "true":   {
-        "model": "rsgauges:bistableswitch_oldfancy2block_s15",
+        "model": "rsgauges:bistableswitch/bistableswitch_oldfancy2block_s15",
         "textures": {}
       }
     }

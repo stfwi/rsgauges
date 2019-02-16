@@ -125,13 +125,13 @@ public class ModConfig
     public boolean without_pulsetime_config = false;
 
     @Config.Comment({
-      "Disable color tinting for switches.",
+      "Disable color tinting for switches and gauges.",
       "Affects client and server side. Can be changed during server operation," +
       "requires client restart.",
     })
-    @Config.Name("Without switch color tinting")
+    @Config.Name("Without color tinting")
     @Config.RequiresMcRestart
-    public boolean without_switch_colortinting = false;
+    public boolean without_color_tinting = false;
 
     @Config.Comment({
       "Disable the 'no output' config option for switches.",

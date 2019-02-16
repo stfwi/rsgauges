@@ -58,10 +58,13 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:indicator2")                 public static final BlockGauge indicator2Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator3")                 public static final BlockGauge indicator3Block = null;
   // Blinking indicators
+  @GameRegistry.ObjectHolder("rsgauges:indicator_led_white")        public static final BlockGauge indicatorLedWhiteBlock = null;
+  @GameRegistry.ObjectHolder("rsgauges:indicator_led_white_blink")  public static final BlockGauge indicatorLedWhiteBlinkBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator1blink1")           public static final BlockGauge indicator1Blink1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator2blink1")           public static final BlockGauge indicator2Blink1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator3blink1")           public static final BlockGauge indicator3Blink1Block = null;
   @GameRegistry.ObjectHolder("rsgauges:indicator4")                 public static final BlockGauge indicator4Block = null;
+  @GameRegistry.ObjectHolder("rsgauges:indicator_rustic_flag")      public static final BlockGauge indicatorRusticFlag = null;
   // Sound indicators
   @GameRegistry.ObjectHolder("rsgauges:soundindicator1")            public static final BlockGauge soundIndicator1Block = null;
   // Bi-stable switches
@@ -144,6 +147,8 @@ public class ModBlocks
   @GameRegistry.ObjectHolder("rsgauges:relay_bistableswitchtx1")    public static final BlockSwitch relayBistableRelaySwitch1Block = null;
   // Block inspction / observing switchs
   @GameRegistry.ObjectHolder("rsgauges:observerswitch1")            public static final BlockSwitch observerSwitch1Block = null;
+  // Dimmer switches
+  @GameRegistry.ObjectHolder("rsgauges:dimmerswitch1")              public static final BlockSwitch dimmerSwitch1Block = null;
   // Sensitive glass
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass")             public static final BlockSensitiveGlass sensitiveGlassBlock = null;
   @GameRegistry.ObjectHolder("rsgauges:sensitiveglass_white")       public static final BlockSensitiveGlass whiteSensitiveGlassBlock = null;
@@ -169,13 +174,34 @@ public class ModBlocks
     // -----------------------------------------------------------------------------------------------------------------
     // -- gauges
     // -----------------------------------------------------------------------------------------------------------------
-    new BlockGauge("flatgauge1", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) ),
-    new BlockGauge("flatgauge2", new AxisAlignedBB((4d/16),(2d/16),(0d/16), (12d/16),(14d/16),(1d/16)) ),
-    new BlockGauge("flatgauge3", new AxisAlignedBB((4d/16),(5d/16),(0d/16), (12d/16),(11d/16),(1d/16)) ),
-    new BlockGauge("flatgauge4", new AxisAlignedBB((7d/16),(3.7d/16),(0d/16), (10d/16),(12d/16),(0.4d/16)) ),
-    new BlockGauge("flatgauge5", new AxisAlignedBB((7d/16),(4d/16),(0d/16), (9d/16),(12d/16),(3d/16)) ),
-    new BlockGauge("flatgauge6", new AxisAlignedBB((2d/16),(4d/16),(0d/16), (14d/16),(12d/16),(1d/16)) ),
-    new BlockGauge("gauge_rustic2", new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)) ),
+    new BlockGauge("flatgauge1",
+      new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge2",
+      new AxisAlignedBB((4d/16),(2d/16),(0d/16), (12d/16),(14d/16),(1d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge3",
+      new AxisAlignedBB((4d/16),(5d/16),(0d/16), (12d/16),(11d/16),(1d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge4",
+      new AxisAlignedBB((7d/16),(3.7d/16),(0d/16), (10d/16),(12d/16),(0.4d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge5",
+      new AxisAlignedBB((7d/16),(4d/16),(0d/16), (9d/16),(12d/16),(3d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("flatgauge6",
+      new AxisAlignedBB((2d/16),(4d/16),(0d/16), (14d/16),(12d/16),(1d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT
+    ),
+    new BlockGauge("gauge_rustic2",
+      new AxisAlignedBB((2d/16),(2d/16),(0d/16), (14d/16),(14d/16),(1d/16)),
+      0 // no color tint.
+    ),
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- indicators
@@ -184,42 +210,52 @@ public class ModBlocks
     // square LED
     new BlockIndicator("indicator1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 0  // light level, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|(13<<BlockGauge.GAUGE_DATA_COLOR_SHIFT) // green
     ),
     new BlockIndicator("indicator2",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 0  // light level, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|(5<<BlockGauge.GAUGE_DATA_COLOR_SHIFT) // yellow
     ),
     new BlockIndicator("indicator3",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 0  // light level, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT) // red
     ),
-
+    new BlockIndicator("indicator_led_white",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
+    ),
     // Blinking square LEDs
     new BlockIndicator("indicator1blink1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 2000  // light level scaling, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
     new BlockIndicator("indicator2blink1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 2000  // light level scaling, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
     new BlockIndicator("indicator3blink1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
-      2, 2000  // light level scaling, blink frequency
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
+    ),
+    new BlockIndicator("indicator_led_white_blink",
+      new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(0.5d/16)),
+      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
     ),
     // alarm lamp
     new BlockIndicator("indicator4",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16), (10d/16),(10d/16),(4d/16)),
-      8, 1500  // light level scaling, blink frequency
+      (8<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
-
     // Alarm siren
     new BlockIndicator("soundindicator1",
       new AxisAlignedBB((4d/16),(6.5d/16),(0d/16), (11.5d/16),(9.5d/16),(4d/16)),
-      1, 1500, // light level scaling, blink frequency
-      new ModResources.BlockSoundEvent(ModResources.alarm_siren_sound),
+      (1<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT) | (8<<BlockGauge.GAUGE_DATA_BLINK_SHIFT),
+      new ModResources.BlockSoundEvent(ModResources.ALARM_SIREN_SOUND),
       null
+    ),
+    new BlockIndicator("indicator_rustic_flag",
+      new AxisAlignedBB((5d/16),(8d/16),(0d/16), (12d/16),(10d/16),(0.5d/16)),
+      BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
     ),
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -962,8 +998,8 @@ public class ModBlocks
       BlockSwitch.SWITCH_DATA_SIDE_ENABLED_BOTTOM|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_TOP|
       BlockSwitch.SWITCH_DATA_SIDE_ENABLED_FRONT|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_LEFT|
       BlockSwitch.SWITCH_DATA_SIDE_ENABLED_RIGHT,
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.4f, 1.3f),
-      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.4f, 1.2f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.2f),
       ModAuxiliaries.RsMaterials.MATERIAL_METALLIC
     ),
 
@@ -982,15 +1018,40 @@ public class ModBlocks
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
     ),
+    // Industrial full block pulse link relay receiver switch
+    new BlockSwitch("relay_pulseswitchrx2",
+      new AxisAlignedBB((0),(0),(0),(1),(1),(1)),
+      new AxisAlignedBB((0),(0),(0),(1),(1),(1)),
+      BlockSwitch.SWITCH_CONFIG_FULLCUBIC_BLOCK|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+        BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_DATA_WEAK|
+        BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+        BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_ALL|
+        BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+      ModAuxiliaries.RsMaterials.MATERIAL_METALLIC
+    ),
     // Industrial bistable link relay receiver switch
     new BlockSwitch("relay_bistableswitchrx1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
       BlockSwitch.SWITCH_CONFIG_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_BISTABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
       BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    ),
+    // Industrial full block bistable link relay receiver switch
+    new BlockSwitch("relay_bistableswitchrx2",
+      new AxisAlignedBB((0),(0),(0),(1),(1),(1)),
+      new AxisAlignedBB((0),(0),(0),(1),(1),(1)),
+      BlockSwitch.SWITCH_CONFIG_FULLCUBIC_BLOCK|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_DATA_WEAK|
+      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_ALL|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+      ModAuxiliaries.RsMaterials.MATERIAL_METALLIC
     ),
     // Industrial pulse link relay
     new BlockSwitch("relay_pulseswitchtx1",
@@ -1014,6 +1075,20 @@ public class ModBlocks
       BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    ),
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- Manual dimmers
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // Industrial dimmer switch
+    new BlockDimmerSwitch("dimmerswitch1",
+      new AxisAlignedBB((5d/16),(1.5d/16),(0d/16), (11d/16),(14.25d/16),(0.60d/16)),
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+      ModAuxiliaries.RsMaterials.MATERIAL_METALLIC
     ),
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -1078,7 +1153,7 @@ public class ModBlocks
     if(block instanceof BlockIndicator) {
       BlockIndicator bl = ((BlockIndicator)block);
       if(ModConfig.optouts.without_indicators) return false;
-      if((ModConfig.optouts.without_blinking_indicators) && (bl.blink_interval > 0)) return false;
+      if((ModConfig.optouts.without_blinking_indicators) && (bl.blink_interval() > 0)) return false;
       if((ModConfig.optouts.without_sound_indicators) && ((bl.power_on_sound != null) || (bl.power_off_sound != null))) return false;
     } if(block instanceof BlockGauge) {
       BlockGauge bl = ((BlockGauge)block);

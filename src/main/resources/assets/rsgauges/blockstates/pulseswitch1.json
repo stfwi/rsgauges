@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:pulseswitch1block_s00",
+    "model": "rsgauges:pulseswitch/pulseswitch1block_s00",
     "textures": {
       "front": "rsgauges:blocks/pulseswitch/pulseswitch1texture_s00",
       "handle": "rsgauges:blocks/pulseswitch/pulseswitch1texture_handle_s00",
@@ -15,7 +15,7 @@
     "powered": {
       "false":  {},
       "true":   {
-        "model": "rsgauges:pulseswitch1block_s15",
+        "model": "rsgauges:pulseswitch/pulseswitch1block_s15",
         "textures": {
             "front": "rsgauges:blocks/pulseswitch/pulseswitch1texture_s15",
             "handle": "rsgauges:blocks/pulseswitch/pulseswitch1texture_handle_s15"

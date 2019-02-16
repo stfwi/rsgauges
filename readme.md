@@ -143,6 +143,22 @@ reasons:
 ## Revision history
 
                 -------------------------------------------------------------------
+    - v1.1.2    [R] Release based on v1.1.2-b2.
+                -------------------------------------------------------------------
+
+    - v1.1.2-b2 [M] Indicator blinking is client side only (using texture animations,
+                    it was overdue to keep this away from the server).
+                [A] Added gauges color tinting support (left click with dye like switches).
+                [A] Added industrial, color tintable, white LED indicator (dye left click).
+                [A] Added rustic flag semaphore indicator.
+
+    - v1.1.2-b1 [A] Added Cased switch link receiver (bistable, silent, full-block).
+                [A] Added Cased pulse switch link receiver (pulse, silent, full-block).
+                [A] Manual dimmer switch added (industrial vertical slide, 0 to 15).
+                [M] Switches and gauge do not get washed off by fluids.
+                [M] Faint config click sound added (applies to all switches).
+
+                -------------------------------------------------------------------
     - v1.1.1    [R] Release based on v1.1.1-b2.
                 -------------------------------------------------------------------
 

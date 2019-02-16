@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rsgauges:indicator1block",
+    "model": "rsgauges:indicator/indicator1block",
     "textures": {
       "lamp": "rsgauges:blocks/indicator/indicator_fg_green_on_texture",
       "side":  "rsgauges:blocks/common/darkgraymetal"

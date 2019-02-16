@@ -236,8 +236,22 @@ public class ModAuxiliaries
     public static final int GREEN       = 0x5E7C16;
     public static final int RED         = 0xB02E26;
     public static final int BLACK       = 0x111111;
-    public static final int[] byIndex = { WHITE,ORANGE,MAGENTA,LIGHTBLUE,YELLOW,LIME,PINK,GRAY,SILVER,CYAN,PURPLE,BLUE,BROWN,GREEN,RED,BLACK };
+    public static final int[] byIndex_  = { WHITE,ORANGE,MAGENTA,LIGHTBLUE,YELLOW,LIME,PINK,GRAY,SILVER,CYAN,PURPLE,BLUE,BROWN,GREEN,RED,BLACK };
     public static final String[] nameByIndex = { "white","orange","magenta","lightblue","yellow","lime","pink","gray","silver","cyan","purple","blue","brown","green","red","black" };
+
+    public static int byIndex(int idx)
+    { return byIndex_[idx & 0xf]; }
+
+    public static final int[] lightTintByIndex_ = {
+      0xffffff,0xfcbc88,0xe8b5e4,0x9cd8ec,
+      0xffefb3,0xd2f1a7,0xfad1dd,0x97a1a5,
+      0xcececa,0x67e9e9,0xcc9fe5,0x959ada,
+      0xd1a585,0xc4e774,0xe79792,0x808080
+    };
+
+    public static int lightTintByIndex(int idx)
+    { return lightTintByIndex_[idx & 0xf]; }
+
   }
 
   /**
