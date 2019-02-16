@@ -142,6 +142,10 @@ reasons:
 ----
 ## Revision history
 
+                -------------------------------------------------------------------
+    - v1.1.2    [R] Release based on v1.1.2-b2.
+                -------------------------------------------------------------------
+
     - v1.1.2-b2 [M] Indicator blinking is client side only (using texture animations,
                     it was overdue to keep this away from the server).
                 [A] Added gauges color tinting support (left click with dye like switches).

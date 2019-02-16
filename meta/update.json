@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.12.2": {
+    "1.1.2": "[R] Release based on v1.1.2-b2.",
     "1.1.2-b2": "[M] Indicator blinking is client side only (using texture animations, it was overdue to keep this away from the server).\n[A] Added gauges color tinting support (left click with dye like switches).\n[A] Added industrial, color tintable, white LED indicator (dye left click).\n[A] Added rustic flag semaphore indicator.",
     "1.1.2-b1": "[A] Added Cased switch link receiver (bistable, silent, full-block).\n[A] Added Cased pulse switch link receiver (pulse, silent, full-block).\n[A] Manual dimmer switch added (industrial vertical slide, 0 to 15).\n[M] Switches and gauge do not get washed off by fluids.\n[M] Faint config click sound added (applies to all switches).",
     "1.1.1": "[R] Release based on v1.1.1-b2.",
@@ -38,7 +39,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "promos": {
-    "1.12.2-recommended": "1.1.1",
-    "1.12.2-latest": "1.1.2-b2"
+    "1.12.2-recommended": "1.1.2",
+    "1.12.2-latest": "1.1.2"
   }
 }
