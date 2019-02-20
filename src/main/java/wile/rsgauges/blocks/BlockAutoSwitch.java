@@ -9,17 +9,18 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.world.IBlockAccess;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.monster.*;
 import net.minecraft.tileentity.TileEntity;
@@ -130,8 +131,8 @@ public class BlockAutoSwitch extends BlockSwitch
    */
   public static class TileEntityDetectorSwitch extends TileEntityAutoSwitch implements ITickable
   {
-    public static final Class<?> filter_classes[] = { EntityLivingBase.class, EntityPlayer.class, EntityMob.class, EntityAnimal.class, EntityVillager.class, Entity.class };
-    public static final String filter_class_names[] = { "creatures", "players", "mobs", "animals", "villagers", "everything" };
+    public static final Class<?> filter_classes[] = { EntityLivingBase.class, EntityPlayer.class, EntityMob.class, EntityAnimal.class, EntityVillager.class, EntityItem.class, Entity.class };
+    public static final String filter_class_names[] = { "creatures", "players", "mobs", "animals", "villagers", "objects", "everything" };
     private static final int max_sensor_range_ = 16;
     private int sensor_entity_count_threshold_ = 1;
     private int sensor_range_ = 5;

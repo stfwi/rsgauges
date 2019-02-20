@@ -313,10 +313,9 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   {
     final TileEntitySwitch te = getTe(world, pos);
     if(te!=null) te.unlink_all(true);
-    boolean no = te.nooutput();
     te.nooutput(true);
+    world.setBlockToAir(pos);
     notifyNeighbours(world, pos, state,  te, true);
-    te.nooutput(no);
   }
 
   ///
@@ -391,7 +390,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   {
     if(!neighborChangedCheck(state, world, pos, neighborBlock, neighbourPos)) return;
     if((config & SWITCH_CONFIG_LINK_RELAY)==0) return;
-    final TileEntitySwitch te = getTe((World)world, pos);
+    final TileEntitySwitch te = getTe(world, pos);
     if(te==null) return;
     boolean powered = world.isSidePowered(neighbourPos, state.getValue(FACING).getOpposite());
     if(((config & SWITCH_CONFIG_INVERTABLE)!=0) && (te.inverted())) powered = !powered; // inverted==redstone input state inverted

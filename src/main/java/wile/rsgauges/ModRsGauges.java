@@ -8,8 +8,9 @@
  */
 package wile.rsgauges;
 
-import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.detail.DataFixing;
+import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.blocks.ModBlocks;
 import wile.rsgauges.items.ModItems;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -67,11 +68,11 @@ public class ModRsGauges
   public void preInit(FMLPreInitializationEvent event)
   {
     logger = event.getModLog();
-    logger.info(MODNAME + ": Version " + MODMCVERSION + "-" + MODVERSION + ( (MODBUILDID=="@"+"MOD_BUILDID"+"@") ? "" : (" "+MODBUILDID) ) + ".");
-    if(MODFINGERPRINT=="@"+"MOD_SIGNSHA1"+"@") {
-      logger.warn(MODNAME + ": Mod is NOT signed by the author.");
+    logger.info(MODNAME + ": Version " + MODMCVERSION + "-" + MODVERSION + ( (MODBUILDID.equals("@"+"MOD_BUILDID"+"@")) ? "" : (" "+MODBUILDID) ) + ".");
+    if(MODFINGERPRINT.equals("@"+"MOD_SIGNSHA1"+"@")) {
+      logger.warn(MODNAME + ": Mod is NOT signed.");
     } else {
-      logger.info(MODNAME + ": Found valid fingerprint " + MODFINGERPRINT + ".");
+      logger.info(MODNAME + ": Found fingerprint " + MODFINGERPRINT + ".");
     }
     proxy.preInit(event);
   }
@@ -79,6 +80,7 @@ public class ModRsGauges
   @Mod.EventHandler
   public void init(FMLInitializationEvent event)
   {
+    DataFixing.registerDataFixers();
     proxy.init(event);
   }
 

@@ -10,8 +10,6 @@
  */
 package wile.rsgauges.detail;
 
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.Mod;

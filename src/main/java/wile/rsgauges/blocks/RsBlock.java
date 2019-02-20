@@ -365,7 +365,7 @@ public abstract class RsBlock extends Block
     }
     final IBlockState neighborState = world.getBlockState(neighborPos);
     if(neighborState == null) return false;
-    if(((neighborState.getMaterial() == Material.AIR) || neighborState.getMaterial().isLiquid())) {
+    if((world.isAirBlock(neighborPos)) || (neighborState.getMaterial().isLiquid())) {
       if(!world.isRemote) {
         onRsBlockDestroyed(state, world, pos);
         world.setBlockToAir(pos);

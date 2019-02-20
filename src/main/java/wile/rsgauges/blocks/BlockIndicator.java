@@ -13,7 +13,6 @@ package wile.rsgauges.blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.properties.PropertyBool;
