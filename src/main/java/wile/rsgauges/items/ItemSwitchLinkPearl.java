@@ -3,7 +3,6 @@ package wile.rsgauges.items;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.ModItems;
 import wile.rsgauges.blocks.BlockSwitch;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

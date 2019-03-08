@@ -259,20 +259,7 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
     public void readNbt(NBTTagCompound nbt, boolean updatePacket)
     {
       scd_= nbt.getLong("scd");
-      // Client re-render on NBT power change
-      if(updatePacket && (world!=null) && (world.isRemote)) {
-        IBlockState state = world.getBlockState(pos);
-        if((state!=null) && (state.getBlock() instanceof BlockGauge)) {
-          state = ((BlockGauge) state.getBlock()).getBlockStateWithPower(state, power());
-          if(last_state_ != state) {
-            last_state_ = state;
-            world.setBlockState(pos, state, 16);
-            world.markBlockRangeForRenderUpdate(pos, pos);
-          }
-        } else {
-          last_state_ = null;
-        }
-      }
+      if(updatePacket && (world!=null) && (world.isRemote)) trigger_timer_ = 0; // Client re-render on NBT power change
     }
 
     @Override
@@ -282,57 +269,73 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
     @Override
     public void update()
     {
-      if(world.isRemote || (--trigger_timer_ > 0)) return;
-      trigger_timer_ = ModConfig.tweaks.gauge_update_interval;
-      try {
+      if(--trigger_timer_ > 0) return;
+      if(world.isRemote) {
+        trigger_timer_ = ModConfig.tweaks.gauge_update_interval * 2;
         IBlockState state = world.getBlockState(pos);
-        final BlockGauge block = (BlockGauge) state.getBlock();
-        final BlockPos pos = getPos();
-        force_off_ = (block.blink_interval() > 0) && ((System.currentTimeMillis() % block.blink_interval()) > (block.blink_interval() /2));
-        if(block.blink_interval() > 0) trigger_timer_ = 5;
-        {
-          final BlockPos neighbourPos = pos.offset((EnumFacing)state.getValue(BlockGauge.FACING), -1);
-          if(!world.isBlockLoaded(neighbourPos)) return; // Gauge is placed on a chunk boundary, don't forge loading of neighbour chunk.
-          final IBlockState neighborState = world.getBlockState(neighbourPos);
-          int p = 0;
-          if(neighborState != null) {
-            if(neighborState.canProvidePower()) {
-              p = Math.max(
+        if((state!=null) && (state.getBlock() instanceof BlockGauge)) {
+          state = ((BlockGauge) state.getBlock()).getBlockStateWithPower(state, power());
+          if(last_state_ != state) {
+            last_state_ = state;
+            //world.setBlockState(pos, state, 4|16);
+            world.markBlockRangeForRenderUpdate(pos, pos);
+          }
+        } else {
+          last_state_ = null;
+        }
+      } else {
+        trigger_timer_ = ModConfig.tweaks.gauge_update_interval;
+        try {
+          IBlockState state = world.getBlockState(pos);
+          final BlockGauge block = (BlockGauge) state.getBlock();
+          final BlockPos pos = getPos();
+          force_off_ = (block.blink_interval() > 0) && ((System.currentTimeMillis() % block.blink_interval()) > (block.blink_interval() / 2));
+          if(block.blink_interval() > 0) trigger_timer_ = 5;
+          {
+            final BlockPos neighbourPos = pos.offset((EnumFacing) state.getValue(BlockGauge.FACING), -1);
+            if(!world.isBlockLoaded(neighbourPos))
+              return; // Gauge is placed on a chunk boundary, don't forge loading of neighbour chunk.
+            final IBlockState neighborState = world.getBlockState(neighbourPos);
+            int p = 0;
+            if(neighborState != null) {
+              if(neighborState.canProvidePower()) {
+                p = Math.max(
                   neighborState.getWeakPower(world, neighbourPos, state.getValue(FACING).getOpposite()),
                   neighborState.getStrongPower(world, neighbourPos, state.getValue(FACING).getOpposite())
-              );
-            } else if(ModConfig.optouts.without_gauge_weak_power_measurement) {
-              p = world.getStrongPower(neighbourPos);
-            } else {
-              for(EnumFacing nbf:EnumFacing.values()) {
-                if(p >= 15) break;
-                // Check if the block next to the neighbour is actually a redstone source block or just a strong powered normal block.
-                final BlockPos nbp = neighbourPos.offset(nbf);
-                final IBlockState nbs = world.getBlockState(nbp);
-                if((nbs == null) || (!nbs.canProvidePower()) || (nbs.getBlock() instanceof BlockGauge)) continue;
-                int pa = Math.max(nbs.getStrongPower(world, nbp, nbf), nbs.getWeakPower(world, nbp, nbf));
-                if(p < pa) p = pa;
+                );
+              } else if(ModConfig.optouts.without_gauge_weak_power_measurement) {
+                p = world.getStrongPower(neighbourPos);
+              } else {
+                for(EnumFacing nbf : EnumFacing.values()) {
+                  if(p >= 15) break;
+                  // Check if the block next to the neighbour is actually a redstone source block or just a strong powered normal block.
+                  final BlockPos nbp = neighbourPos.offset(nbf);
+                  final IBlockState nbs = world.getBlockState(nbp);
+                  if((nbs == null) || (!nbs.canProvidePower()) || (nbs.getBlock() instanceof BlockGauge)) continue;
+                  int pa = Math.max(nbs.getStrongPower(world, nbp, nbf), nbs.getWeakPower(world, nbp, nbf));
+                  if(p < pa) p = pa;
+                }
               }
             }
+            if((block.blink_interval() > 0) && force_off()) p = 0;
+            final boolean sync = (power() != p);
+            if((block.power_on_sound != null) && (power() == 0) && (p > 0)) {
+              block.power_on_sound.play(world, pos);
+            } else if((block.power_off_sound != null) && (power() > 0) && (p == 0)) {
+              block.power_off_sound.play(world, pos);
+            }
+            power(p);
+            if(sync) {
+              world.markChunkDirty(pos, this);
+              world.notifyBlockUpdate(pos, state, block.getBlockStateWithPower(state, p), 2|4|16); // without observer and comparator stuff
+            } else if(!block.cmpBlockStatePower(state, p)) {
+              world.setBlockState(pos, block.getBlockStateWithPower(state, p), 4|16);
+            }
           }
-          if((block.blink_interval() > 0) && force_off()) p = 0;
-          final boolean sync = (power() != p);
-          if((block.power_on_sound != null) && (power() == 0) && (p > 0)) {
-            block.power_on_sound.play(world, pos);
-          } else if((block.power_off_sound != null) && (power() > 0) && (p == 0)) {
-            block.power_off_sound.play(world, pos);
-          }
-          power(p);
-          if(sync) {
-            world.markChunkDirty(pos, this);
-            world.notifyBlockUpdate(pos, state, block.getBlockStateWithPower(state, p), 2|16); // without observer and comparator stuff
-          } else if(!block.cmpBlockStatePower(state, p)) {
-            world.setBlockState(pos, block.getBlockStateWithPower(state, p), 16);
-          }
+        } catch(Throwable e) {
+          trigger_timer_ = 100;
+          ModRsGauges.logger.error("TE update() failed: " + e);
         }
-      } catch(Throwable e) {
-        trigger_timer_ = 100;
-        ModRsGauges.logger.error("TE update() failed: " + e);
       }
     }
   }

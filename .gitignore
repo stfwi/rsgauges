@@ -22,3 +22,4 @@ signing.*
 src/main/java/archive
 src/main/resources/assets/minecraft
 .vscode
+classes

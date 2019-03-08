@@ -1140,6 +1140,7 @@ public class ModBlocks
 
     public static final void registerTileEntity(Class<? extends net.minecraft.tileentity.TileEntity> tileEntityClass, String key)
     {
+      // ok, depite of data fixing the TEs don't work correctly if these old names are not registered, and I've no idea why.
       ModRsGauges.logger.info("Registering old underscore-prefixed tile entity for version transition, this may cause a warning.");
       GameRegistry.registerTileEntity(tileEntityClass, new ResourceLocation("minecraft", ModRsGauges.MODID + "_" + key));
     }

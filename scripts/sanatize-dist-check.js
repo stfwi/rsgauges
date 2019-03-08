@@ -24,9 +24,9 @@ if(!gittags.filter(function(s){return s.indexOf(version_rsgauges.replace(/[-]/g,
 if(git_remote.replace(/[\s]/g,"").indexOf("git@github.com:stfwi/rsgauges.git(push)") < 0) fails.push("Not the reference repository.");
 if((git_branch != "develop") && (git_branch != "master")) {
   fails.push("No valid branch for dist. (branch:'"+git_branch+"')");
-} else if((git_branch == "develop") && (version_rsgauges.replace(/[^\w\.-]/g,"")=="")) {
+} else if((git_branch == "develop") && (version_rsgauges.replace(/[^abrc]/ig,"")=="")) {
   fails.push("Cannot make release dist on develop branch.");
-} else if((git_branch == "master") && (version_rsgauges.replace(/[^\w\.-]/g,"")!="")) {
+} else if((git_branch == "master") && (version_rsgauges.replace(/[^abrc]/ig,"")!="")) {
   fails.push("Cannot make beta dist on master branch.");
 }
 if(git_diff !== "") fails.push("Not everything committed to the GIT repository.");

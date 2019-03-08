@@ -586,6 +586,7 @@ rsgauges.switchconfig.detector.entity_filter.players=Spieler
 rsgauges.switchconfig.detector.entity_filter.mobs=Mobs
 rsgauges.switchconfig.detector.entity_filter.animals=Tiere
 rsgauges.switchconfig.detector.entity_filter.villagers=Dorfleute
+rsgauges.switchconfig.detector.entity_filter.objects=Objekte
 rsgauges.switchconfig.detector.entity_filter.everything=Alles
 rsgauges.switchconfig.detector.entity_threshold=Anzahl: %1$s
 rsgauges.switchconfig.detector.output_power=Power: %1$s

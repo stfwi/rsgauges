@@ -605,6 +605,7 @@ rsgauges.switchconfig.detector.entity_filter.players=players
 rsgauges.switchconfig.detector.entity_filter.mobs=mobs
 rsgauges.switchconfig.detector.entity_filter.animals=animals
 rsgauges.switchconfig.detector.entity_filter.villagers=villagers
+rsgauges.switchconfig.detector.entity_filter.objects=objects
 rsgauges.switchconfig.detector.entity_filter.everything=everything
 rsgauges.switchconfig.detector.entity_threshold=entity threshold: %1$s
 rsgauges.switchconfig.detector.output_power=power: %1$s

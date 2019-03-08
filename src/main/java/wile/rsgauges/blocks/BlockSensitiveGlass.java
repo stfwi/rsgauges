@@ -12,7 +12,6 @@ package wile.rsgauges.blocks;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModConfig;
-import wile.rsgauges.blocks.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -68,6 +67,12 @@ public class BlockSensitiveGlass extends Block implements ModBlocks.Colors.Color
   @SideOnly(Side.CLIENT)
   public void initModel()
   { ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory")); }
+
+  @Override
+  @SideOnly(Side.CLIENT)
+  @SuppressWarnings("deprecation")
+  public float getAmbientOcclusionLightValue(IBlockState state)
+  { return 1.0F; }
 
   @Override
   @SuppressWarnings("deprecation")

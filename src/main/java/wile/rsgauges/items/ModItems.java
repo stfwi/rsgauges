@@ -18,7 +18,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ModItems
 {
