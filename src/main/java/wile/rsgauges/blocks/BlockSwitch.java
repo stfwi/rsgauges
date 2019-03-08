@@ -309,12 +309,12 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   }
 
   @Override
-  protected void onRsBlockDestroyed(IBlockState state, World world, BlockPos pos)
+  protected void onRsBlockDestroyed(IBlockState state, World world, BlockPos pos, boolean isUpdateEvent)
   {
     final TileEntitySwitch te = getTe(world, pos);
     if(te!=null) te.unlink_all(true);
     te.nooutput(true);
-    world.setBlockToAir(pos);
+    if(isUpdateEvent) world.setBlockToAir(pos);
     notifyNeighbours(world, pos, state,  te, true);
   }
 

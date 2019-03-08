@@ -142,6 +142,11 @@ reasons:
 ----
 ## Revision history
 
+                -------------------------------------------------------------------
+    - v1.1.3    [R] Release build.
+                -------------------------------------------------------------------
+                [F] Glass ambient occlusion fixed.
+
     - v1.1.3-b1 [F] Fixed cyclic switch destruction issue.
                 [A] Entity detector switches can now also trigger on objects/items.
                 [A] Tile entity name data fixer added (for version transitions).

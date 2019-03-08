@@ -236,7 +236,7 @@ public abstract class RsBlock extends Block
   @Override
   public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
   {
-    onRsBlockDestroyed(state, world, pos);
+    onRsBlockDestroyed(state, world, pos, false);
     return super.removedByPlayer(state, world, pos, player, willHarvest);
   }
 
@@ -343,7 +343,7 @@ public abstract class RsBlock extends Block
    * Allows actions in the tile entity to happen before the forge/MC
    * block dropping actions are invoked.
    */
-  protected void onRsBlockDestroyed(IBlockState state, World world, BlockPos pos)
+  protected void onRsBlockDestroyed(IBlockState state, World world, BlockPos pos, boolean isUpdateEvent)
   {}
 
   /**
@@ -367,7 +367,7 @@ public abstract class RsBlock extends Block
     if(neighborState == null) return false;
     if((world.isAirBlock(neighborPos)) || (neighborState.getMaterial().isLiquid())) {
       if(!world.isRemote) {
-        onRsBlockDestroyed(state, world, pos);
+        onRsBlockDestroyed(state, world, pos, true);
         world.setBlockToAir(pos);
         dropBlockAsItem(world, pos, state, 0);
       }
@@ -384,7 +384,7 @@ public abstract class RsBlock extends Block
   {
     if(isCube() || canPlaceBlockOnSide(world, pos, isWallMount() ? state.getValue(FACING) : EnumFacing.UP)) return true;
     if(world.isRemote) return false;
-    onRsBlockDestroyed(state, world, pos);
+    onRsBlockDestroyed(state, world, pos, false);
     dropBlockAsItem(world, pos, state, 0);
     world.setBlockToAir(pos);
     return false;

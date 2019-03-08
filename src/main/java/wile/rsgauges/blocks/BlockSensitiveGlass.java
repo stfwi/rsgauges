@@ -69,6 +69,12 @@ public class BlockSensitiveGlass extends Block implements ModBlocks.Colors.Color
   { ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory")); }
 
   @Override
+  @SideOnly(Side.CLIENT)
+  @SuppressWarnings("deprecation")
+  public float getAmbientOcclusionLightValue(IBlockState state)
+  { return 1.0F; }
+
+  @Override
   @SuppressWarnings("deprecation")
   public boolean isOpaqueCube(IBlockState state)
   { return false; }
