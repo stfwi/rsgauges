@@ -1,5 +1,6 @@
 {
   "parent": "block/cube",
+  "ambientocclusion": false,
   "textures": { "particle": "#base" },
   "display": {
     "gui":    { "rotation": [ 0, 180, 0 ], "translation": [  0.00, 0.50,   0.00 ], "scale": [ 1.00, 1.00, 1.00 ] },

@@ -1,6 +1,7 @@
 {
 	"credit": "I made this with the Blockbench",
-	"parent": "block/cube",
+  "parent": "block/cube",
+  "ambientocclusion": false,
 	"textures": {
 		"11": "rsgauges:blocks/observerswitch/observerswitch1ui_texture",
 		"led": "rsgauges:blocks/indicator/indicator_fg_red_off_texture",

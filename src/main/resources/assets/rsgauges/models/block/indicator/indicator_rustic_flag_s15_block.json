@@ -1,6 +1,7 @@
 {
 	"credit": "I made this with the Blockbench",
-	"parent": "block/cube",
+  "parent": "block/cube",
+  "ambientocclusion": false,
 	"textures": {
 		"dm": "rsgauges:blocks/common/darkroughmetal",
 		"f": "rsgauges:blocks/indicator/indicator_fg_white_on_texture",

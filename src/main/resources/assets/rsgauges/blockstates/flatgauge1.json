@@ -1,15 +1,6 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:gauge/flatgauge1block",
-    "textures": {
-      "front": "rsgauges:blocks/gauge/flatgauge1texture_s00",
-      "scale":  "rsgauges:blocks/gauge/flatgauge1bg",
-      "side":  "rsgauges:blocks/common/darkmachinemetal",
-      "bulk":  "rsgauges:blocks/common/lightmachinemetal",
-      "glass":  "rsgauges:blocks/common/cleargrayglass"
-    }
-  },
+  "defaults": { "model": "rsgauges:gauge/flatgauge1block" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],

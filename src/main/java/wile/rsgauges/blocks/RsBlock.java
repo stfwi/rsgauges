@@ -87,6 +87,12 @@ public abstract class RsBlock extends Block
   }
 
   @Override
+  @SideOnly(Side.CLIENT)
+  @SuppressWarnings("deprecation")
+  public float getAmbientOcclusionLightValue(IBlockState state)
+  { return 1.0F; }
+
+  @Override
   @SuppressWarnings("deprecation")
   public boolean isOpaqueCube(IBlockState state)
   { return false; }

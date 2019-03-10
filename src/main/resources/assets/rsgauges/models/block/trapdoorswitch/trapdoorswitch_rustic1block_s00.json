@@ -1,6 +1,7 @@
 {
 	"credit": "Made with the Blockbench",
-	"parent": "block/cube",
+  "parent": "block/cube",
+  "ambientocclusion": false,
 	"textures": {
 		"metal": "rsgauges:blocks/common/old_iron",
 		"particle": "rsgauges:blocks/common/old_iron"

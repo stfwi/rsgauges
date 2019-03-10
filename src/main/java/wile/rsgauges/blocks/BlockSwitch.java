@@ -875,7 +875,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
      */
     public boolean check_link_request(final ItemSwitchLinkPearl.SwitchLink link)
     {
-      final long t = world.getWorldTime();
+      final long t = ModAuxiliaries.systemTimeTicks();
       if((world.isRemote) || (last_link_request_ == t)) return false; // not in the same tick, people could try to link A to B and B to A.
       last_link_request_ = t;
       final IBlockState state = world.getBlockState(pos);
@@ -927,7 +927,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     public boolean activate_links(final int req)
     {
       if(ModConfig.optouts.without_switch_linking) return true;
-      last_link_request_ = world.getWorldTime();
+      last_link_request_ = ModAuxiliaries.systemTimeTicks();
       if(links_==null) return true;
       int n_fails = 0;
       for(ItemSwitchLinkPearl.SwitchLink lnk:links_) {

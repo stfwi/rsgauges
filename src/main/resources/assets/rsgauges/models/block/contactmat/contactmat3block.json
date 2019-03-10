@@ -1,6 +1,7 @@
 {
 	"credit": "Made with the Blockbench",
-	"parent": "block/cube",
+  "parent": "block/cube",
+  "ambientocclusion": false,
 	"textures": {
 		"side": "rsgauges:blocks/common/darkgraymetal",
 		"particle": "rsgauges:blocks/common/darkgraymetal",

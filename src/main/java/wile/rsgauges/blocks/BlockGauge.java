@@ -55,7 +55,7 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
   public static final int  GAUGE_DATA_COLOR_SHIFT           = 12;
   //
   public static final long GAUGE_CONFIG_COLOR_TINT_SUPPORT  = 0x0000000000010000l;
-
+  public static final long GAUGE_CONFIG_TRANSLUCENT         = 0x0000000000020000l;
 
   public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
   public final long config;
@@ -135,7 +135,7 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
   @Override
   @SideOnly(Side.CLIENT)
   public BlockRenderLayer getRenderLayer()
-  { return (light_value() > 0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
+  { return (((config & GAUGE_CONFIG_TRANSLUCENT)!=0) || (light_value() > 0)) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
 
   @Override
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)

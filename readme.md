@@ -142,6 +142,11 @@ reasons:
 ----
 ## Revision history
 
+    - v1.1.4-b1 [F] Fixed linking issue when the game time is stopped (thanks
+                    to mrossi80).
+                [F] Fixed rain sensor trigger condition.
+                [F] Fixed optifine gauge model issues (thanks mike linn).
+
                 -------------------------------------------------------------------
     - v1.1.3    [R] Release build.
                 -------------------------------------------------------------------

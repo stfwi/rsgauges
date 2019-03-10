@@ -214,6 +214,15 @@ public class ModAuxiliaries
   { return (FMLCommonHandler.instance().getSide() == Side.CLIENT); }
 
   /**
+   * Returns the current server/client (real!) system time in ticks.
+   * This time is not affected by time manipulations in the game,
+   * and does not correspond to total world time.
+   * @return long
+   */
+  public static long systemTimeTicks()
+  { return System.currentTimeMillis() / 50; }
+
+  /**
    * Class allowing to have the dye colors also available on
    * server side. (EnumDyeColor not available on dedicated servers).
    * Server and client side usage.

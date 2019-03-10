@@ -491,7 +491,7 @@ public class BlockAutoSwitch extends BlockSwitch
         }
       } else if((block.config & SWITCH_CONFIG_SENSOR_RAIN)!=0) {
         if((state.getValue(FACING)!=EnumFacing.UP) && (state.getValue(FACING)!=EnumFacing.DOWN)) {
-          debounce_counter_ += getWorld().isRainingAt(getPos()) ? 1 : -1;
+          debounce_counter_ += getWorld().isRainingAt(getPos().offset(EnumFacing.UP, 1)) ? 1 : -1;
           if(debounce_counter_ <= 0) {
             debounce_counter_ = 0;
             active = false;

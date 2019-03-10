@@ -1,5 +1,6 @@
 {
   "parent": "block/cube",
+  "ambientocclusion": false,
   "textures": {
     "particle": "rsgauges:blocks/common/darkgraymetal",
     "side": "rsgauges:blocks/common/darkgraymetal",
