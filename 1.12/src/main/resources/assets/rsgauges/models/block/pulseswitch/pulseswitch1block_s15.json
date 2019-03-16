@@ -1,0 +1,35 @@
+{
+  "parent": "block/cube",
+  "ambientocclusion": false,
+  "textures": { "particle": "#front" },
+  "display": {
+    "gui":    { "rotation": [ 0, 180, 0 ], "translation": [  0.00, 0.50,   0.00 ], "scale": [ 1.00, 1.00, 1.00 ] },
+    "fixed":  { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 1.00, 1.00, 1.00 ] },
+    "ground": { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 0.75, 0.75, 0.75 ] }
+  },
+  "elements": [
+    {
+      "from": [  5,  5, 15 ],
+      "to"  : [ 11, 11, 16 ],
+      "faces": {
+        "down":  { "texture": "#side" },
+        "up":    { "texture": "#side" },
+        "north": { "texture": "#front" },
+        "south": { "texture": "#side" },
+        "west":  { "texture": "#side" },
+        "east":  { "texture": "#side" }
+      }
+    },
+    {
+      "from": [ 7, 7, 14.8 ],
+      "to"  : [ 9, 9, 15 ],
+      "faces": {
+        "down":  { "texture": "#handle" },
+        "up":    { "texture": "#handle" },
+        "north": { "texture": "#handle" },
+        "west":  { "texture": "#handle" },
+        "east":  { "texture": "#handle" }
+      }
+    }
+  ]
+}

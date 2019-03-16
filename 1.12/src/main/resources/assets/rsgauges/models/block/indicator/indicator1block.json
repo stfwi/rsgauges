@@ -1,0 +1,19 @@
+{
+  "parent": "block/cube",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "rsgauges:blocks/common/darkgraymetal",
+    "side": "rsgauges:blocks/common/darkgraymetal",
+    "lamp": "rsgauges:blocks/indicator/indicator_fg_white_on_texture"
+  },
+  "display": {
+    "gui":    { "rotation": [ 0, 180, 0 ], "translation": [  0.00, 0.50,   0.00 ], "scale": [ 1.00, 1.00, 1.00 ] },
+    "fixed":  { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 1.00, 1.00, 1.00 ] },
+    "ground": { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 0.75, 0.75, 0.75 ] }
+  },
+  "elements": [
+    { "from": [  6.0,  6.0, 15.3 ], "to": [ 10.0, 10.0, 16.0 ], "faces": { "down":  { "texture": "#side" }, "up": { "texture": "#side" }, "north": { "texture": "#side" }, "south": { "texture": "#side" }, "west":  { "texture": "#side" }, "east":  { "texture": "#side" } } },
+    { "from": [  6.5,  6.5, 15.2 ], "to": [  9.5,  9.5, 15.3 ], "faces": { "down":  { "texture": "#lamp", "tintindex": 0 }, "up": { "texture": "#lamp", "tintindex": 0 }, "north": { "texture": "#lamp", "tintindex": 0 }, "west":  { "texture": "#lamp", "tintindex": 0 }, "east":  { "texture": "#lamp", "tintindex": 0 } } },
+    { "from": [  6.8,  6.8, 15.1 ], "to": [  9.2,  9.2, 15.2 ], "faces": { "down":  { "texture": "#lamp", "tintindex": 0 }, "up": { "texture": "#lamp", "tintindex": 0 }, "north": { "texture": "#lamp", "tintindex": 0 }, "west":  { "texture": "#lamp", "tintindex": 0 }, "east":  { "texture": "#lamp", "tintindex": 0 } } }
+  ]
+}
