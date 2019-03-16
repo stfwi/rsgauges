@@ -11,6 +11,13 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Revision history
 
+                -------------------------------------------------------------------
+    - v1.1.4    [R] Release build based on v1.1.4-b1:
+                    * Linking issue fixed.
+                    * Rain sensor fixed.
+                    * Optifine fixes.
+                -------------------------------------------------------------------
+
     - v1.1.4-b1 [F] Fixed linking issue when the game time is stopped (thanks
                     to mrossi80).
                 [F] Fixed rain sensor trigger condition.
