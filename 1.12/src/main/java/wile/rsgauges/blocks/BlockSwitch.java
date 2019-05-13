@@ -600,7 +600,8 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   /**
    * Tile entity
    */
-  public static class TileEntitySwitch extends RsTileEntity {
+  public static class TileEntitySwitch extends RsTileEntity
+  {
     protected int off_timer_ = 0; // pulse time down-counter
     protected int scd_ = 0; // serialised configuration data
     protected int svd_ = 0; // serialised value data
