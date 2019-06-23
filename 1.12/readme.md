@@ -12,6 +12,12 @@ Mod sources for Minecraft version 1.12.2.
 ## Revision history
 
                 -------------------------------------------------------------------
+    - v1.1.5    [R] Release build based on v1.1.5-b1
+                -------------------------------------------------------------------
+
+    - v1.1.5-b1 [M] Lang files ch_cn updated by scikirbypoke.
+
+                -------------------------------------------------------------------
     - v1.1.4    [R] Release build based on v1.1.4-b1:
                     * Linking issue fixed.
                     * Rain sensor fixed.
