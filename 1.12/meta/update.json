@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.12.2": {
+    "1.1.5": "[R] Release build based on v1.1.5-b1",
     "1.1.5-b1": "[M] Lang files ch_cn updated by scikirbypoke.",
     "1.1.4": "[R] Release build based on v1.1.4-b1: * Linking issue fixed. * Rain sensor fixed. * Optifine fixes.",
     "1.1.4-b1": "[F] Fixed linking issue when the game time is stopped (thanks to mrossi80).\n[F] Fixed rain sensor trigger condition.\n[F] Fixed optifine gauge model issues (thanks mike linn).",
@@ -44,7 +45,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "promos": {
-    "1.12.2-recommended": "1.1.4",
-    "1.12.2-latest": "1.1.5-b1"
+    "1.12.2-recommended": "1.1.5",
+    "1.12.2-latest": "1.1.5"
   }
 }
