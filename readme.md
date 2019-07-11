@@ -13,11 +13,11 @@ Main distribution channel for this mod is CurseForge:
   - All versions: https://minecraft.curseforge.com/projects/redstone-gauges-and-switches/files
 
 ----
-## Additional resource pack sources branch
+## Additional resource packs
 
-This branch contains no mod sources (checkout `master` or `develop`), but resource
-packs with blockstate files, models and textures.
+This branch contains no mod sources (checkout `master` or `develop` for this),
+but resource packs with blockstate files, models and textures.
 
-To apply a resource pack, download move the file with the correct Minecraft version
+To apply a resource pack, download the zip file with the correct Minecraft version
 (marked with "-mc1.xx.x"), and move it into your ".minecraft/resourcepacks" folder.
-Then, after starting the Game, you can select the pack in the game config.
+Then, after starting the game, you can select the pack in the game config.
