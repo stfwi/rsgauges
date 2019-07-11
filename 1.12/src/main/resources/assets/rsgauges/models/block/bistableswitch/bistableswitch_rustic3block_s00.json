@@ -1,7 +1,6 @@
 {
-	"credit": "I made this with the Blockbench",
-  "parent": "block/cube",
-  "ambientocclusion": false,
+	"parent": "block/cube",
+	"ambientocclusion": false,
 	"textures": {
 		"0": "rsgauges:blocks/common/darkroughmetal",
 		"3": "rsgauges:blocks/common/old_wood",
@@ -827,16 +826,32 @@
 		}
 	],
 	"display": {
+		"thirdperson_righthand": {
+			"rotation": [17, 87, -73],
+			"translation": [-3.75, -1, 2.75],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"firstperson_righthand": {
+			"rotation": [82, 85, -18],
+			"translation": [-2.5, 0, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 78, 20],
+			"translation": [-1, -2.25, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
 		"ground": {
-			"translation": [0, 0, -7],
+			"translation": [0, -3.25, -3],
 			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
-			"rotation": [0, 180, 0],
-			"translation": [0, 0.5, 0]
+			"rotation": [30, -130, 0],
+			"translation": [7, -8.75, 0],
+			"scale": [1.4, 1.4, 1.4]
 		},
 		"fixed": {
-			"translation": [0, 0, -11]
+			"translation": [0, -2.25, -7.75]
 		}
 	}
 }

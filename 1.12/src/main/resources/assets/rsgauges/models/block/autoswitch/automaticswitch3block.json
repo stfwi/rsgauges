@@ -1,13 +1,9 @@
 {
-  "credit": "Thanks Jannis for the Blockbench.",
-  "parent": "block/cube",
-  "ambientocclusion": false,
-  "textures": { "particle": "#side" },
-  "display": {
-    "gui":    { "rotation": [ 0, 180, 0 ], "translation": [  0.00, 0.50,   0.00 ], "scale": [ 1.20, 1.20, 1.20 ] },
-    "fixed":  { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00, -11.00 ], "scale": [ 1.20, 1.20, 1.20 ] },
-    "ground": { "rotation": [ 0,   0, 0 ], "translation": [  0.00, 0.00,  -7.00 ], "scale": [ 0.75, 0.75, 0.75 ] }
-  },
+	"parent": "block/cube",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "#side"
+	},
 	"elements": [
 		{
 			"from": [6, 6, 15.5],
@@ -393,5 +389,30 @@
 				"down": {"uv": [8, 0.25, 8.25, 1], "texture": "#wires"}
 			}
 		}
-	]
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [1, 88, 166],
+			"translation": [-5.75, -1.25, -1.5],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 60, 49],
+			"translation": [-1.5, 2.5, 1.25],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 1, -7],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"gui": {
+			"rotation": [0, 180, 0],
+			"translation": [0.25, 2.25, 0],
+			"scale": [2, 2, 2]
+		},
+		"fixed": {
+			"translation": [0, 0, -9.25],
+			"scale": [1.2, 1.2, 1.2]
+		}
+	}
 }

@@ -1,7 +1,6 @@
 {
-	"credit": "I made this with the Blockbench",
-  "parent": "block/cube",
-  "ambientocclusion": false,
+	"parent": "block/cube",
+	"ambientocclusion": false,
 	"textures": {
 		"dm": "rsgauges:blocks/common/darkroughmetal",
 		"f": "rsgauges:blocks/indicator/indicator_fg_white_on_texture",
@@ -450,16 +449,27 @@
 		}
 	],
 	"display": {
+		"thirdperson_righthand": {
+			"rotation": [-57, 92, 0],
+			"translation": [-4.75, -1.5, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"firstperson_righthand": {
+			"rotation": [22, 78, 0],
+			"translation": [-2, 0, -1.75],
+			"scale": [0.6, 0.6, 0.6]
+		},
 		"ground": {
-			"translation": [0, 0, -7],
+			"translation": [0, -1.25, -4.5],
 			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
-			"rotation": [0, 180, 0],
-			"translation": [0, 0.5, 0]
+			"rotation": [30, -135, 0],
+			"translation": [10, -7, 0],
+			"scale": [2, 2, 2]
 		},
 		"fixed": {
-			"translation": [0, 0, -11]
+			"translation": [0, 0, -8]
 		}
 	},
 	"groups": [

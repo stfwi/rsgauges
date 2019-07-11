@@ -1,7 +1,6 @@
 {
-	"credit": "I made this with the Blockbench",
-  "parent": "block/cube",
-  "ambientocclusion": false,
+	"parent": "block/cube",
+	"ambientocclusion": false,
 	"textures": {
 		"11": "rsgauges:blocks/observerswitch/observerswitch1ui_texture",
 		"led": "rsgauges:blocks/indicator/indicator_fg_red_off_texture",
@@ -1465,14 +1464,21 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 2.25, 0]
+			"rotation": [66, -3, 0],
+			"translation": [0.5, -1, -2.5],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_righthand": {
+			"rotation": [-3, -27, 0],
+			"translation": [1.25, 0, 0],
+			"scale": [0.3, 0.3, 0.3]
 		},
 		"ground": {
 			"scale": [0.2, 0.2, 0.2]
 		},
 		"gui": {
-			"rotation": [30, 225, 0],
-			"scale": [0.625, 0.625, 0.625]
+			"rotation": [30, -135, 0],
+			"scale": [0.6, 0.6, 0.6]
 		},
 		"fixed": {
 			"scale": [0.5, 0.5, 0.5]
