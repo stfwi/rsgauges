@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.12.2": {
+    "1.1.6": "[R] Release build v1.1.6\n[M] Model display rotations/translations of all blocks for GUI, 1st/3rd person improved.",
     "1.1.5": "[R] Release build based on v1.1.5-b1",
     "1.1.5-b1": "[M] Lang files ch_cn updated by scikirbypoke.",
     "1.1.4": "[R] Release build based on v1.1.4-b1: * Linking issue fixed. * Rain sensor fixed. * Optifine fixes.",
@@ -44,8 +45,13 @@
     "1.0.0-rc2": "[F] Fix: Server based gauge processing to measure indirect weak power.",
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
+  "1.14.3": {
+    "1.1.5-b1": "[A] Initial 1.14.3 port of basic functionality."
+  },
   "promos": {
-    "1.12.2-recommended": "1.1.5",
-    "1.12.2-latest": "1.1.5"
+    "1.12.2-recommended": "1.1.6",
+    "1.12.2-latest": "1.1.6",
+    "1.14.3-recommended": "",
+    "1.14.3-latest": "1.1.5-b1"
   }
 }

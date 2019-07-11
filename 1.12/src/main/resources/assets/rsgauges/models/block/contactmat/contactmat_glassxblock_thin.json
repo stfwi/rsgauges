@@ -1,41 +1,47 @@
 {
-  "credit": "Thanks Jannis for the Blockbench.",
-  "parent": "block/cube",
-  "ambientocclusion": false,
+	"parent": "block/cube",
+	"ambientocclusion": false,
 	"textures": {
-    "front": "rsgauges:blocks/common/cleargrayglass",
+		"front": "rsgauges:blocks/common/cleargrayglass",
 		"side": "rsgauges:blocks/common/cleargrayglass",
 		"particle": "rsgauges:blocks/common/cleargrayglass"
 	},
 	"elements": [
 		{
-			"name": "cube",
 			"from": [0, 0, 0],
 			"to": [16, 0.25, 16],
 			"faces": {
-				"north": {"texture": "#side", "tintindex": 0},
-				"east": {"texture": "#side", "tintindex": 0},
-				"south": {"texture": "#side", "tintindex": 0},
-				"west": {"texture": "#side", "tintindex": 0},
-				"up": {"texture": "#front", "tintindex": 0},
-				"down": {"texture": "#side", "tintindex": 0}
+				"north": {"uv": [0, 15.75, 16, 16], "texture": "#side", "tintindex": 0},
+				"east": {"uv": [0, 15.75, 16, 16], "texture": "#side", "tintindex": 0},
+				"south": {"uv": [0, 15.75, 16, 16], "texture": "#side", "tintindex": 0},
+				"west": {"uv": [0, 15.75, 16, 16], "texture": "#side", "tintindex": 0},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#front", "tintindex": 0},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#side", "tintindex": 0}
 			}
 		}
 	],
 	"display": {
+		"thirdperson_righthand": {
+			"rotation": [13, -1, 90],
+			"translation": [-2.5, 0, -2.25],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 105, 0],
+			"translation": [2.25, 0, -2.25],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"scale": [0.5, 0.5, 0.5]
+		},
 		"gui": {
-			"rotation": [30, 30, 0],
-			"translation": [0, 4, 0],
+			"rotation": [30, 45, 0],
+			"translation": [0, 1.25, 0],
 			"scale": [0.7, 0.7, 0.7]
 		},
 		"fixed": {
-			"rotation": [0, 0, 0],
-			"translation": [0, 0, 0],
-			"scale": [0.5, 0.5, 0.5]
-		},
-		"ground": {
-			"rotation": [90, 0, 0],
-			"translation": [0, 0, 0],
+			"rotation": [-90, 0, 0],
+			"translation": [0, 0, -4],
 			"scale": [0.5, 0.5, 0.5]
 		}
 	}

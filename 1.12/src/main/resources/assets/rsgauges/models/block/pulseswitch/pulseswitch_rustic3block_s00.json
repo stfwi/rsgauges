@@ -1,18 +1,11 @@
 {
-  "credit": "Thanks Jannis for the Blockbench.",
-  "parent": "block/cube",
-  "ambientocclusion": false,
+	"parent": "block/cube",
+	"ambientocclusion": false,
 	"textures": {
 		"0": "rsgauges:blocks/common/darkroughmetal",
-		"3": "rsgauges:blocks/common/old_wood",
 		"5": "rsgauges:blocks/common/old_iron",
 		"particle": "rsgauges:blocks/common/old_iron"
 	},
-  "display": {
-    "gui":    { "rotation": [ 0, 180, 0 ], "translation": [  0.00, -3,   0.00 ], "scale": [ 1.20, 1.20, 1.20 ] },
-    "fixed":  { "rotation": [ 0,   0, 0 ], "translation": [  0.00, -3, -11.00 ], "scale": [ 1.20, 1.20, 1.20 ] },
-    "ground": { "rotation": [ 0,   0, 0 ], "translation": [  0.00, -3,  -7.00 ], "scale": [ 0.75, 0.75, 0.75 ] }
-  },
 	"elements": [
 		{
 			"from": [7.25, 13.25, 15.75],
@@ -686,5 +679,30 @@
 				"down": {"uv": [6, 8.5, 9.25, 12.25], "texture": "#0"}
 			}
 		}
-	]
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [69, 7, 12],
+			"translation": [0.25, 2.5, -5],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 57, 0],
+			"translation": [-1.5, -0.25, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"ground": {
+			"translation": [0, -3, -4.25],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"gui": {
+			"rotation": [30, -135, 0],
+			"translation": [7.5, -8.25, 0],
+			"scale": [1.6, 1.6, 1.6]
+		},
+		"fixed": {
+			"translation": [0, -3, -9.5],
+			"scale": [1.2, 1.2, 1.2]
+		}
+	}
 }

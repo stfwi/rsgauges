@@ -12,6 +12,12 @@ Mod sources for Minecraft version 1.12.2.
 ## Revision history
 
                 -------------------------------------------------------------------
+    - v1.1.6    [R] Release build v1.1.6
+                -------------------------------------------------------------------
+                [M] Model display rotations/translations of all blocks for GUI,
+                    1st/3rd person improved.
+
+                -------------------------------------------------------------------
     - v1.1.5    [R] Release build based on v1.1.5-b1
                 -------------------------------------------------------------------
 

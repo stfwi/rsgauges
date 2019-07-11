@@ -1175,7 +1175,7 @@ public class ModBlocks
   private static ArrayList<Block> registeredBlocks = new ArrayList<>();
 
   @Nonnull
-  public static List getRegisteredBlocks()
+  public static List<Block> getRegisteredBlocks()
   { return Collections.unmodifiableList(registeredBlocks); }
 
   // Invoked from CommonProxy.registerBlocks()
