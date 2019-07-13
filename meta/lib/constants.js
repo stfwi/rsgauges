@@ -1,6 +1,7 @@
 "use strict";
 (function(){
   var c = {};
+  c.modid = "rsgauges";
   c.mod_registry_name = function() { return "rsgauges" }
   c.local_assets_root = function() { return "src/main/resources/assets/" + c.mod_registry_name(); }
   c.reference_repository = function() { return "https://github.com/stfwi/rsgauges.git"; }

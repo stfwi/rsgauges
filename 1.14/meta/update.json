@@ -1,10 +1,8 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
-  "1.14.3": {
-    "1.1.5-b1": "[A] Initial 1.14.3 port of basic functionality."
-  },
+  "1.14.3": {},
   "promos": {
     "1.14.3-recommended": "",
-    "1.14.3-latest": "1.1.5-b1"
+    "1.14.3-latest": ""
   }
 }

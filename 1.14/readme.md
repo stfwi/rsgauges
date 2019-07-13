@@ -10,6 +10,6 @@ Mod sources for Minecraft version 1.14.3.
 ----
 ## Version history
 
-    - v1.1.5-b1 [A] Initial 1.14.3 port of basic functionality.
+    ~ v1.1.5-b1 [A] Initial 1.14.3 port of basic functionality.
 
 ----

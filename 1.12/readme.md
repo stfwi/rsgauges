@@ -9,7 +9,11 @@ Mod sources for Minecraft version 1.12.2.
 - Compiled mod distribution channel is curseforge: https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/.
 
 ----
-## Revision history
+## Version history
+
+    ~ v1.1.7-b1 [M] Locations/names of all models adapted and model permutations
+                    separated from Forge blockstate format to prepare 1.14 porting.
+                [A] JEI integration skel added for extended config options.
 
                 -------------------------------------------------------------------
     - v1.1.6    [R] Release build v1.1.6

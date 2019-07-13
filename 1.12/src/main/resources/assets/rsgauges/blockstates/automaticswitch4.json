@@ -1,22 +1,10 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:autoswitch/automaticswitch4block",
-    "textures": {
-        "front": "rsgauges:blocks/common/darkmachinemetal",
-        "parts": "rsgauges:blocks/common/darkroughmetal",
-        "side": "rsgauges:blocks/common/darkgraymetal",
-        "led": "rsgauges:blocks/indicator/indicator_fg_green_off_texture",
-        "ui": "rsgauges:blocks/automaticswitch/automaticswitch_uis",
-        "uibg": "rsgauges:blocks/automaticswitch/automaticswitch4_uibg",
-        "wires": "rsgauges:blocks/indicator/indicator_fg_red_off_texture",
-        "sensorsurface": "rsgauges:blocks/indicator/indicator_fg_yellow_off_texture"
-    }
-  },
+  "defaults": { "model": "rsgauges:autoswitch/industrial/daytimer_industrial_model_s00" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": { "north": {"y":0}, "south": {"y":180}, "west": {"y":-90}, "east": {"y":90}, "up": {"x":-90}, "down": {"x":90} },
-    "powered": { "false":{}, "true":{ "textures": { "led": "rsgauges:blocks/indicator/indicator_fg_green_on_texture" } } }
+    "powered": { "false":{}, "true":{ "model": "rsgauges:autoswitch/industrial/daytimer_industrial_model_s15" } }
   }
 }

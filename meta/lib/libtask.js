@@ -334,7 +334,6 @@
     fs.mkdir("./meta");
     fs.writefile("./meta/update.json", JSON.stringify(json, null, 2));
   };
-
   stdtasks["dump-languages"] = function() {
     const lang_version = (me.parsing.gradle_properties("gradle.properties").version_minecraft.search("1.12.")==0) ? "1.12" : "1.13";
     const lang_extension = (lang_version == "1.12") ? ("lang") : ("json");
@@ -348,7 +347,65 @@
     });
     print(JSON.stringify(lang_files,null,1));
   };
+  stdtasks["replace-model-paths"] = function(args) {
+    const from = args[0];
+    const to = args[1];
+    const simulate = args[2];
+    if(!from || !to) throw new Error("Usage: replace-model-paths <from> <to> <simulate=false>");
+    const libassets = include("../meta/lib/libassets.js")(constants);
+    const r = libassets.replace_model_paths(constants.local_assets_root(), from, to, !!simulate);
+    var nerr = 0;
+    var nok = 0;
+    for(var p in r) if(!r[p]) ++nerr; else ++nok;
+    if(Object.keys(r).length > 0) print('Replaced "'+from+'"->"'+to+'" in: ' + JSON.stringify(r,null,1));
+    print(""+nok+" replaced" + ((nerr==0) ? "." : (", "+ nerr+" failed.")));
+    return (nerr==0);
+  }
+  stdtasks["rename-files"] = function(args) {
+    const dir = args[0];
+    const ssearch = args[1];
+    const sreplace = args[2];
+    const simulate = args[3];
+    if(!dir || !ssearch || !sreplace) throw new Error("Usage: rename-files <dir> <search> <replace> <simulate=false>");
+    const libassets = include("../meta/lib/libassets.js")(constants);
+    const r = libassets.rename_files(dir, ssearch, sreplace, simulate);
+    var nerr = 0;
+    var nok = 0;
+    for(var p in r) if(!r[p]) ++nerr; else ++nok;
+    if(Object.keys(r).length > 0) print('Renamed "'+ssearch+'"->"'+sreplace+'" for: ' + JSON.stringify(r,null,1));
+    print(""+nok+" replaced" + ((nerr==0) ? "." : (", "+ nerr+" failed.")));
+    return (nerr==0);
+  }
 
+  stdtasks["rename-block-model"] = function(args) {
+    const libassets = include("../meta/lib/libassets.js")(constants);
+    var dir = constants.local_assets_root()+"/models/block";
+    const ssearch = args[0];
+    const sreplace = args[1];
+    const simulate = args[2];
+    var fsearch = ssearch;
+    var freplace = sreplace;
+    var nerr=0, nok=0;
+    if(!ssearch || !sreplace) throw new Error("Usage: rename-block-model <search> <replace> <simulate=false>");
+    if((ssearch.search(/(\\|\/)/) >= 0) || (sreplace.search(/(\\|\/)/) >= 0)) {
+      var d_ssearch = fs.dirname(ssearch);
+      var d_sreplace = fs.dirname(sreplace);
+      if(d_ssearch != d_sreplace) throw new Error("Only rename files, not move. The directories must be the same.");
+      dir += "/" + d_ssearch;
+      fsearch = fs.basename(ssearch);
+      freplace = fs.basename(sreplace);
+    }
+    const file_replaces = libassets.rename_files(dir, fsearch, freplace, simulate);
+    for(var p in file_replaces) if(!file_replaces[p]) ++nerr; else ++nok;
+    if(Object.keys(file_replaces).length > 0) print('Renamed "'+fsearch+'"->"'+freplace+'" for: ' + JSON.stringify(file_replaces,null,1));
+
+    const text_replaces = libassets.replace_model_paths(constants.local_assets_root(), ssearch, sreplace, simulate);
+    for(var p in text_replaces) if(!text_replaces[p]) ++nerr; else ++nok;
+    if(Object.keys(text_replaces).length > 0) print('Replaced "'+ssearch+'"->"'+sreplace+'" in: ' + JSON.stringify(text_replaces,null,1));
+
+    print(""+nok+" replaced" + ((nerr==0) ? "." : (", "+ nerr+" failed.")));
+    return (nerr==0);
+  }
 
   /**
    * Task main
