@@ -288,9 +288,9 @@
   };
 
   // Standard tasks
-  var stdtasks = {};
+  me.stdtasks = {};
 
-  stdtasks["dist-check"] = function() {
+  me.stdtasks["dist-check"] = function() {
     var fails = me.tasks.dist_check();
     if(fails.length == 0) return;
     for(var i in fails) fails[i] = "  - " + fails[i];
@@ -298,7 +298,7 @@
     alert(fails.join("\n")+"\n");
     exit(1);
   };
-  stdtasks["version-check"] = function(args) {
+  me.stdtasks["version-check"] = function(args) {
     var r = me.tasks.version_check(!args.join().search("--no-preversions")>=0);
     if(r.fails.length == 0) return;
     for(var i in r.fails) r.fails[i] = "  - " + r.fails[i];
@@ -309,32 +309,32 @@
     if(!!r.preversion_found) alert(" - PREVERSION FOUND  : '~" + r.version_mod + "'");
     exit(1);
   };
-  stdtasks["version-html"] = function() {
+  me.stdtasks["version-html"] = function() {
     if(!fs.isdir("dist")) throw new Error("'dist' directory does not exist.");
     const hist = me.parsing.readme_history_section("readme.md");
     const html = "<pre>\n" + (hist.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")) + "\n</pre>";
     fs.writefile("dist/revision-history.html", html);
   };
-  stdtasks["tabs-to-spaces"] = function() {
+  me.stdtasks["tabs-to-spaces"] = function() {
     me.sanatizing.tabs_to_spaces(['java','lang']);
   };
-  stdtasks["trailing-whitespaces"] = function() {
+  me.stdtasks["trailing-whitespaces"] = function() {
     me.sanatizing.remove_trailing_whitespaces(['java','json','lang']);
   };
-  stdtasks["sanatize"] = function() {
-    stdtasks["trailing-whitespaces"]();
-    stdtasks["tabs-to-spaces"]();
+  me.stdtasks["sanatize"] = function() {
+    me.stdtasks["trailing-whitespaces"]();
+    me.stdtasks["tabs-to-spaces"]();
   }
-  stdtasks["dist"] = function() {
-    stdtasks["version-html"]();
+  me.stdtasks["dist"] = function() {
+    me.stdtasks["version-html"]();
   };
-  stdtasks["update-json"] = function() {
+  me.stdtasks["update-json"] = function() {
     const version_minecraft = me.parsing.gradle_properties("gradle.properties").version_minecraft;
     const json = me.tasks.changelog_data(version_minecraft);
     fs.mkdir("./meta");
     fs.writefile("./meta/update.json", JSON.stringify(json, null, 2));
   };
-  stdtasks["dump-languages"] = function() {
+  me.stdtasks["dump-languages"] = function() {
     const lang_version = (me.parsing.gradle_properties("gradle.properties").version_minecraft.search("1.12.")==0) ? "1.12" : "1.13";
     const lang_extension = (lang_version == "1.12") ? ("lang") : ("json");
     const liblang = include("../meta/lib/liblang."+lang_version+".js")(constants);
@@ -347,7 +347,7 @@
     });
     print(JSON.stringify(lang_files,null,1));
   };
-  stdtasks["replace-model-paths"] = function(args) {
+  me.stdtasks["replace-model-paths"] = function(args) {
     const from = args[0];
     const to = args[1];
     const simulate = args[2];
@@ -361,7 +361,7 @@
     print(""+nok+" replaced" + ((nerr==0) ? "." : (", "+ nerr+" failed.")));
     return (nerr==0);
   }
-  stdtasks["rename-files"] = function(args) {
+  me.stdtasks["rename-files"] = function(args) {
     const dir = args[0];
     const ssearch = args[1];
     const sreplace = args[2];
@@ -376,8 +376,7 @@
     print(""+nok+" replaced" + ((nerr==0) ? "." : (", "+ nerr+" failed.")));
     return (nerr==0);
   }
-
-  stdtasks["rename-block-model"] = function(args) {
+  me.stdtasks["rename-block-model"] = function(args) {
     const libassets = include("../meta/lib/libassets.js")(constants);
     var dir = constants.local_assets_root()+"/models/block";
     const ssearch = args[0];
@@ -415,8 +414,8 @@
     if(!fs.chdir(fs.dirname(fs.realpath(sys.script)))) throw new Error("Failed to switch to mod source directory.");
     if(!fs.isdir(rel_root_path+"/.git")) throw new Error("Missing git repository in parent directory of mod source.");
     if(!no_std_tasks) {
-      for(var key in stdtasks) {
-        if(tasks[key]===undefined) tasks[key] = stdtasks[key];
+      for(var key in me.stdtasks) {
+        if(tasks[key]===undefined) tasks[key] = me.stdtasks[key];
       }
     }
     const task_name = args[0];

@@ -67,8 +67,8 @@
         key = key.split(".", 2);
         const item = key[0];
         const prop = key[1];
-        if(data.items[item]===undefined) data.blocks[item] = {};
-        data.blocks[item][prop] = text;
+        if(data.items[item]===undefined) data.items[item] = {};
+        data.items[item][prop] = text;
       } else if(key.search(modid + ".config.title")==0) {
         data.config_title = text;
       } else if(key.search("itemGroup.tab" + modid)==0) {
