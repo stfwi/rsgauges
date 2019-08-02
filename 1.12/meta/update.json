@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.12.2": {
+    "1.1.7-b1": "[M] Locations/names of all models adapted and model permutations separated from Forge blockstate format for compliant 1.14 porting.\n[A] JEI integration skel added for extended config options.\n[M] Industrial bistable switch models/textures updated.",
     "1.1.6": "[R] Release build v1.1.6\n[M] Model display rotations/translations of all blocks for GUI, 1st/3rd person improved.",
     "1.1.5": "[R] Release build based on v1.1.5-b1",
     "1.1.5-b1": "[M] Lang files ch_cn updated by scikirbypoke.",
@@ -47,6 +48,6 @@
   },
   "promos": {
     "1.12.2-recommended": "1.1.6",
-    "1.12.2-latest": "1.1.6"
+    "1.12.2-latest": "1.1.7-b1"
   }
 }

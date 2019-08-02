@@ -10,6 +10,10 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+    - v1.1.6-b1 [A] Color tint support of gauges, glass switches,
+                    and sensitive glass ported.
+                [M] Block detector switch patterns support tags.
+
     - v1.1.5-b1 [A] Initial 1.12.2 to 1.14.4 port of all
                     features except color tinting and
                     Forge ore dictionary dependent blocks.
