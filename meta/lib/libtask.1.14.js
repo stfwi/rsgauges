@@ -21,9 +21,10 @@
     try {
       if(!fs.chdir(constants.local_assets_root()+"/blockstates")) throw new Error("Failed to switch to blockstates dir.");
       for(var oldname in rnmap) {
+        const oldfile = oldname+".json";
+        const newfile = rnmap[oldname]+".json";
+        if(oldfile==newfile) continue;
         if(fs.isfile(oldname+".json")) {
-          const oldfile = oldname+".json";
-          const newfile = rnmap[oldname]+".json";
           if(fs.isfile(newfile)) {
             log("blockstate file skipped: '" + oldfile + "' -> '" + newfile + "' (new file already exists)");
           } else if(!fs.rename(oldfile, newfile)) {
@@ -143,6 +144,9 @@
         var replaced_code = ""+original_code;
         if(original_code===undefined) throw new Error("Failed to read '"+ path +"'.");
         for(var oldname in rnmap) {
+          if(oldname == rnmap[oldname]) {
+            continue;
+          }
           {
             const sfind = '"'+constants.modid+':'+oldname+'"';
             const srepl = '"'+constants.modid+':'+rnmap[oldname]+'"';
@@ -188,8 +192,10 @@
         njtext = njtext.replace(new RegExp(pref, "g"), pref + 'block/'); // actually faster to simply replace all and correct doubles.
         njtext = njtext.replace(new RegExp(pref + 'block/block/', "g"), pref + 'block/');
         njtext = njtext.replace("\n\n", "\n");
-        fs.writefile(blockstate_files[fit], njtext);
-        log("Forge blockstate '"+ fs.basename(blockstate_files[fit]) +"' patched.");
+        if(jtxt !== njtext) {
+          fs.writefile(blockstate_files[fit], njtext);
+          log("Forge blockstate '"+ fs.basename(blockstate_files[fit]) +"' patched.");
+        }
       }
     } finally {
       fs.chdir(cwd);
@@ -276,13 +282,13 @@
 
   me.stdtasks = {};
   me.stdtasks["assets"] = function() {
-    //me.tasks.map_regnames_blockstate_filenames();
-    //me.tasks.map_regnames_lang_file_keys();
-    //me.tasks.patch_texture_paths_in_models();
-    //me.tasks.create_missing_block_items();
-    //me.tasks.patch_registry_names_in_java_files();
-    //me.tasks.patch_forge_blockstates();
-    //me.tasks.map_recipe_filenames();
+    me.tasks.map_regnames_blockstate_filenames();
+    me.tasks.map_regnames_lang_file_keys();
+    me.tasks.patch_texture_paths_in_models();
+    me.tasks.create_missing_block_items();
+    me.tasks.patch_registry_names_in_java_files();
+    me.tasks.patch_forge_blockstates();
+    me.tasks.map_recipe_filenames();
     me.tasks.map_recipe_contents();
   };
 

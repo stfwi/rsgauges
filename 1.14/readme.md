@@ -10,6 +10,10 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+    - v1.1.7-b2 [A] Entity detectors have configurable pulse time.
+                [M] Industrial bistable switch model changes ported
+                    from 1.12.
+
     - v1.1.6-b1 [A] Color tint support of gauges, glass switches,
                     and sensitive glass ported.
                 [M] Block detector switch patterns support tags.
