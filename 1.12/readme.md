@@ -11,6 +11,11 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    - v1.1.7-b2 [A] Entity detectors have now a configurable on-time (redstone stack
+                    config like pulse switches).
+                [M] Pulse switch scheduling adapted to compensate for world time
+                    alterations (issue #9).
+
     - v1.1.7-b1 [M] Locations/names of all models adapted and model permutations
                     separated from Forge blockstate format for compliant 1.14 porting.
                 [A] JEI integration skel added for extended config options.

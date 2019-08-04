@@ -872,7 +872,7 @@ public class ModBlocks
     // Infrared motion_sensor
     new BlockAutoSwitch("automaticswitch1",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_SENSOR_VOLUME|
+      BlockSwitch.SWITCH_CONFIG_SENSOR_VOLUME|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
       BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
       BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
       BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -882,7 +882,7 @@ public class ModBlocks
     // Linear laser motion sensor
     new BlockAutoSwitch("automaticswitch2",
       new AxisAlignedBB((6d/16),(6d/16),(0d/16),(10d/16),(10d/16),(1d/16)),
-      BlockSwitch.SWITCH_CONFIG_SENSOR_LINEAR|
+      BlockSwitch.SWITCH_CONFIG_SENSOR_LINEAR|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
       BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
       BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
       BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -942,7 +942,7 @@ public class ModBlocks
     // Glass infrared motion sensor
     new BlockAutoSwitch("detectorswitch_glass1",
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_SENSOR_VOLUME|
+      BlockSwitch.SWITCH_CONFIG_SENSOR_VOLUME|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
       BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
       BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
       BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|
@@ -953,7 +953,7 @@ public class ModBlocks
     // Glass laser motion sensor
     new BlockAutoSwitch("detectorswitch_glass2",
       new AxisAlignedBB((5.5d/16),(5.5d/16),(0d/16),(10.5d/16),(10.5d/16),(0.1d/16)),
-      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
       BlockSwitch.SWITCH_CONFIG_SENSOR_LINEAR|
       BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
       BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|

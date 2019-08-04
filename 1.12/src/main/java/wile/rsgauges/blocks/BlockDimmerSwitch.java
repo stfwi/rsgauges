@@ -36,10 +36,6 @@ public class BlockDimmerSwitch extends BlockSwitch
   { super(registryName, unrotatedBB, null, config|0xff, powerOnSound, powerOffSound, material); }
 
   @Override
-  public int tickRate(World world)
-  { return 200; }
-
-  @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
   {}
 

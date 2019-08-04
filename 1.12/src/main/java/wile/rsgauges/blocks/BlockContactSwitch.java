@@ -70,12 +70,13 @@ public class BlockContactSwitch extends BlockSwitch
 
   protected void onEntityCollided(World world, BlockPos pos, IBlockState state, Entity entity, AxisAlignedBB detectionVolume)
   {
-    if((world.isRemote) || (state==null) || (entity==null)) return;
-    TileEntityContactSwitch te = getTe(world, pos); if(te == null) return;
+    if(world.isRemote) return;
+    TileEntityContactSwitch te = getTe(world, pos);
+    if(te == null) return;
     boolean active = false;
     boolean powered = state.getValue(POWERED);
-    if(powered && (te.off_timer() > 2)) {
-      active = true; // anyway on at the next update.
+    if(powered && (te.on_time_remaining() > 3) && ((world.getTotalWorldTime() & 0x3)!=0)) {
+      active = true; // save some entity lookup cpu time by reducing the sampling rate.
     } else {
       @SuppressWarnings("unchecked")
       List<Entity> hits = world.getEntitiesWithinAABB((Class<Entity>)te.filter_class(), detectionVolume);
@@ -90,8 +91,11 @@ public class BlockContactSwitch extends BlockSwitch
             }
           }
         }
-        if(active) te.off_timer_reset( (te.active_time()<=0) ? (20) : ((te.active_time()*base_tick_rate)+1) );
       }
+    }
+    if(active) {
+      int t = te.configured_on_time();
+      te.on_timer_reset( (t==0) ? (default_pulse_on_time) : ((t<4) ? 4 : t));
     }
     if(active && (!powered)) {
       state = state.withProperty(POWERED, true);
@@ -104,7 +108,7 @@ public class BlockContactSwitch extends BlockSwitch
         }
       }
     }
-    if(!world.isUpdateScheduled(pos, this)) { world.scheduleUpdate(pos, this, 1); }
+    te.reschedule_block_tick();
   }
 
   @Override

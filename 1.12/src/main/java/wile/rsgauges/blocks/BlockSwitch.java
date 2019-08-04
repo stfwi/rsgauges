@@ -116,6 +116,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public static final int SWITCH_DATA_SVD_COLOR_SHIFT           = 8;
 
   public static final int base_tick_rate = 2;
+  public static final int default_pulse_on_time = 20; // ticks
   public final long config;
 
   @Nullable protected final AxisAlignedBB unrotated_bb_powered;
@@ -286,11 +287,13 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       world.setBlockState(pos, state.withProperty(POWERED, true), 1|2);
       power_on_sound.play(world, pos);
     }
-    if((config & SWITCH_CONFIG_LINK_RELAY)==0) notifyNeighbours(world, pos, state, te, false);
+    if((config & SWITCH_CONFIG_LINK_RELAY)==0) {
+      notifyNeighbours(world, pos, state, te, false);
+    }
     if((config & SWITCH_CONFIG_PULSE)!=0) {
-      world.scheduleUpdate(pos, this, base_tick_rate);
-      if((config & SWITCH_CONFIG_PULSE_EXTENDABLE)==0) te.off_timer_reset();
-      te.off_timer_extend();
+      if((config & SWITCH_CONFIG_PULSE_EXTENDABLE)==0) te.on_timer_reset();
+      te.on_timer_extend();
+      te.reschedule_block_tick();
     }
     if(((config & (SWITCH_CONFIG_LINK_SOURCE_SUPPORT))!=0) && ((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE|SWITCH_CONFIG_SENSOR_BLOCKDETECT))!=0)) {
       if(!was_powered) {
@@ -468,7 +471,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     } else if((ck.item==Items.REDSTONE) && (((BlockSwitch)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0) {
       // Exact pulse time configuration
       if(!ModConfig.optouts.without_pulsetime_config) {
-        te.active_time(ck.item_count);
+        te.configured_on_time(ck.item_count * 2); // 0.1s per stack item -> 2 .. 128 ticks off time config
         ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((BlockSwitch)state.getBlock()));
         return;
       }
@@ -551,7 +554,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     }
     if((config & (SWITCH_CONFIG_LCLICK_RESETTABLE))!=0) {
       // left click disabling pulse switches
-      te.off_timer_reset();
+      te.on_timer_reset();
       if(!state.getValue(POWERED)) return;
       world.setBlockState(pos, state.withProperty(POWERED, false), 1|2);
       power_off_sound.play(world, pos);
@@ -563,14 +566,14 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
   @Override
   public int tickRate(World world)
-  { return 1; }
+  { return base_tick_rate; }
 
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
   {
     if((world.isRemote) || (!state.getValue(POWERED))) return; // scheduler tick only allowed when currently active.
     final TileEntitySwitch te = getTe(world, pos);
-    if((te!=null) && (te.off_timer_tick() > 0) && (!world.isUpdateScheduled(pos, this)) ) { world.scheduleUpdate(pos, this, 1); return; }
+    if((te!=null) && (te.on_time_remaining() > 0)) { te.reschedule_block_tick(); return; }
     world.setBlockState(pos, (state=state.withProperty(POWERED, false)));
     power_off_sound.play(world, pos);
     if((config & SWITCH_CONFIG_LINK_RELAY)==0) notifyNeighbours(world, pos, state, te, false);
@@ -602,7 +605,8 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
    */
   public static class TileEntitySwitch extends RsTileEntity
   {
-    protected int off_timer_ = 0; // pulse time down-counter
+    protected static final int max_pulse_time = 200;
+    protected long pulse_off_deadline_ = 0;     // pulse switch-off deadline, world ticks
     protected int scd_ = 0; // serialised configuration data
     protected int svd_ = 0; // serialised value data
     protected long click_config_time_lastclicked_ = 0; // tracking of double left clicks (needed for configurable timing)
@@ -668,33 +672,11 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     public int scd()
     { return scd_; }
 
-    public int off_timer()
-    { return off_timer_; }
-
-    public void off_timer_reset()
-    { off_timer_ = 0; }
-
-    public int off_timer_tick()
-    { return  ((--off_timer_ <= 0) ? 0 : off_timer_); }
-
-    public int active_time()
+    public int configured_on_time()
     { return ((svd_ & SWITCH_DATA_SVD_ACTIVE_TIME_MASK) >> 0); }
 
-    public void active_time(int t)
+    public void configured_on_time(int t)
     { svd_ = (svd_ & (~SWITCH_DATA_SVD_ACTIVE_TIME_MASK)) | ((t & SWITCH_DATA_SVD_ACTIVE_TIME_MASK) << 0); }
-
-    public void off_timer_reset(int preset)
-    { if(preset > 0) off_timer_ = preset; else off_timer_ = 0; }
-
-    public void off_timer_extend()
-    {
-      if(active_time() > 0) off_timer_ = (active_time()*base_tick_rate)-1;
-      else if(off_timer_ > (190/base_tick_rate)) off_timer_  = 400/base_tick_rate;
-      else if(off_timer_ > ( 90/base_tick_rate)) off_timer_  = 200/base_tick_rate;
-      else if(off_timer_ > ( 30/base_tick_rate)) off_timer_  = 100/base_tick_rate;
-      else if(off_timer_ > (  1/base_tick_rate)) off_timer_  =  60/base_tick_rate;
-      else off_timer_ = 40/base_tick_rate;
-    }
 
     public int color_tint()
     { return ((svd_ & ((int)SWITCH_DATA_SVD_COLOR_MASK)) >> SWITCH_DATA_SVD_COLOR_SHIFT); }
@@ -738,6 +720,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     public void enabled_sides(long mask)
     { scd_ = (scd_ & ~((int)SWITCH_DATA_SIDE_ENABLED_MASK)) | ((int)(mask & SWITCH_DATA_SIDE_ENABLED_MASK)); }
 
+
     public void reset()
     { reset(getWorld()); }
 
@@ -747,7 +730,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
      */
     public void reset(IBlockAccess world)
     {
-      off_timer_ = 0;
+      pulse_off_deadline_ = 0;
       click_config_time_lastclicked_ = 0;
       svd_ = 0;
       try {
@@ -765,6 +748,43 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
      */
     public int power(IBlockState state, boolean strong)
     { return nooutput() ? (0) : ((strong && weak()) ? (0) : ( (inverted() == state.getValue(POWERED)) ? off_power() : on_power() )); }
+
+    /**
+     * Schedules the off_timer_ value ahead.
+     */
+    public void reschedule_block_tick()
+    {
+      int t = on_time_remaining();
+      if(t <= 0) return;
+      final Block block = getBlockType();
+      if(!world.isUpdateScheduled(pos, block)) {
+        world.scheduleUpdate(pos, block, t);
+      }
+    }
+
+    public int on_time_remaining()
+    {
+      long dt = Math.max(0, pulse_off_deadline_ - world.getTotalWorldTime());
+      return (dt > max_pulse_time) ? 0 : (int)dt; // 0 if something messed with the total world time.
+    }
+
+    public void on_timer_reset()
+    { on_timer_reset(0); }
+
+    public void on_timer_reset(int preset_ticks)
+    { pulse_off_deadline_ = world.getTotalWorldTime() + ((Math.min(preset_ticks, max_pulse_time) > 0) ? (preset_ticks) : (0)); }
+
+    public void on_timer_extend()
+    {
+      int t = on_time_remaining();
+      if(configured_on_time() >= base_tick_rate) t = configured_on_time();
+      else if(t > (90)) t  = max_pulse_time;
+      else if(t > (45)) t  = 100;
+      else if(t > (15)) t  = 50;
+      else if(t > ( 1)) t  = 30;
+      else t = default_pulse_on_time;
+      on_timer_reset(t);
+    }
 
     /**
      * Configuration via block right clicking, x and z are normalised
@@ -855,11 +875,11 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
         if(statusset) status.appendSibling(separator.createCopy()); statusset=true;
         status.appendSibling(ModAuxiliaries.localizable("switchconfig.options." + (weak() ? "weakinverted" : "stronginverted"), TextFormatting.DARK_AQUA));
       }
-      if(active_time() > 0) {
+      if(configured_on_time() > 0) {
         if(statusset) status.appendSibling(separator.createCopy()); statusset=true;
         status.appendSibling(ModAuxiliaries.localizable("switchconfig.options.pulsetime", TextFormatting.GOLD, new Object[]{
-          Double.toString( (((double)(base_tick_rate) * active_time()))/20 ),
-          Integer.toString(base_tick_rate * active_time())
+          Double.toString( ((double)(configured_on_time()))/20 ),
+          Integer.toString(configured_on_time())
         }));
       }
       return status;
@@ -867,6 +887,9 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
 
     public boolean has_links()
     { return (links_!=null) && (!links_.isEmpty()); }
+
+    public static long linktime()
+    { return System.currentTimeMillis(); } // not using ticks because there are scenarios where the world time is disabled.
 
     /**
      * Called when link pearl requests are sent to the addressed switch. This can be via
@@ -876,7 +899,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
      */
     public boolean check_link_request(final ItemSwitchLinkPearl.SwitchLink link)
     {
-      final long t = ModAuxiliaries.systemTimeTicks();
+      final long t = linktime();
       if((world.isRemote) || (last_link_request_ == t)) return false; // not in the same tick, people could try to link A to B and B to A.
       last_link_request_ = t;
       final IBlockState state = world.getBlockState(pos);
@@ -928,7 +951,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
     public boolean activate_links(final int req)
     {
       if(ModConfig.optouts.without_switch_linking) return true;
-      last_link_request_ = ModAuxiliaries.systemTimeTicks();
+      last_link_request_ = linktime();
       if(links_==null) return true;
       int n_fails = 0;
       for(ItemSwitchLinkPearl.SwitchLink lnk:links_) {

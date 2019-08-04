@@ -37,17 +37,17 @@ public class BlockTrapdoorSwitch extends BlockContactSwitch
   @Override
   public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, final @Nullable EntityPlayer player)
   {
-    if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote)) return false;
+    if((world.isRemote) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0)) return false;
     IBlockState state = world.getBlockState(pos);
     if((state == null) || (!(state.getBlock() instanceof BlockTrapdoorSwitch))) return false;
     if(state.getValue(POWERED)) return true; // already active
     TileEntityContactSwitch te = getTe(world, pos);
     if((te==null) || (!te.check_link_request(link))) return false;
-    te.off_timer_reset( (te.active_time()<=0) ? (20) : ((te.active_time()*base_tick_rate)+1) );
     world.setBlockState(pos, state.withProperty(POWERED, true), 1|2);
     power_on_sound.play(world, pos);
     notifyNeighbours(world, pos, state, te, false);
-    if(!world.isUpdateScheduled(pos, this)) world.scheduleUpdate(pos, this, 1);
+    te.on_timer_reset( (te.configured_on_time()==0) ? (default_pulse_on_time) : ( (te.configured_on_time() < 2) ? 2 : te.configured_on_time()) );
+    te.reschedule_block_tick();
     return true;
   }
 

@@ -48,10 +48,6 @@ public class BlockObserverSwitch extends BlockSwitch
   { super(registryName, unrotatedBBUnpowered, unrotatedBBPowered, config, powerOnSound, powerOffSound, null); }
 
   @Override
-  public int tickRate(World world)
-  { return 200; }
-
-  @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
   {}
 
