@@ -2,11 +2,12 @@
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "promos": {
     "1.12.2-recommended": "1.1.6",
-    "1.12.2-latest": "1.1.7-b2",
+    "1.12.2-latest": "1.1.7-b3",
     "1.14.4-recommended": "",
     "1.14.4-latest": "1.1.7-b2"
   },
   "1.12.2": {
+    "1.1.7-b3": "[M] Added right-click switch configuration with Redstone Dust, Ender Pearl or Switch Link Pearl. (can be opt'ed out in the config if needed). Tackles issue #9.",
     "1.1.7-b2": "[A] Entity detectors have now a configurable on-time (redstone stack config like pulse switches).\n[M] Pulse switch scheduling adapted to compensate for world time alterations (issue #9).",
     "1.1.7-b1": "[M] Locations/names of all models adapted and model permutations separated from Forge blockstate format for compliant 1.14 porting.\n[A] JEI integration skel added for extended config options.\n[M] Industrial bistable switch models/textures updated.",
     "1.1.6": "[R] Release build v1.1.6\n[M] Model display rotations/translations of all blocks for GUI, 1st/3rd person improved.",

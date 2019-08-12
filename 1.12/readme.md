@@ -11,6 +11,10 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    - v1.1.7-b3 [M] Added right-click switch configuration with Redstone Dust,
+                    Ender Pearl or Switch Link Pearl. (can be opt'ed out in the
+                    config if needed). Tackles issue #9.
+
     - v1.1.7-b2 [A] Entity detectors have now a configurable on-time (redstone stack
                     config like pulse switches).
                 [M] Pulse switch scheduling adapted to compensate for world time

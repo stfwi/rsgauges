@@ -445,6 +445,15 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
         ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((BlockSwitch) state.getBlock()));
       }
       return true;
+    } else if(
+      (!ModConfig.optouts.without_rightclick_item_switchconfig) &&
+      (  ((ck.item==Items.REDSTONE) && (((BlockSwitch)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0)
+      || (ck.item==Items.ENDER_PEARL)
+      || (ck.item==ModItems.SWITCH_LINK_PEARL)
+      )
+    ) {
+      onBlockClicked(world, pos, player);
+      return true;
     } else if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))==0) {
       return true;
     } else {
