@@ -1,15 +1,10 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:trapdoorswitch/trapdoorswitch3block"
-  },
+  "defaults": {"model": "rsgauges:trapdoorswitch/industrial/fallthroughsensor_industrial_model_s00"},
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": {"north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{}, "down":{} },
-    "powered": {
-      "false": {},
-      "true":  {"textures":{ "redstone": "rsgauges:blocks/indicator/indicator_fg_red_on_texture" } }
-    }
+    "powered": { "false":{}, "true":{"model":"rsgauges:trapdoorswitch/industrial/fallthroughsensor_industrial_model_s15"}}
   }
 }

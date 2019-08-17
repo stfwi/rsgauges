@@ -146,6 +146,16 @@ public class ModConfig
     })
     @Config.Name("Without switch linking")
     public boolean without_switch_linking = false;
+
+    @Config.Comment({
+      "Disables the possibility to right click switches with Redstone Dust, " +
+      "Ender Pearls or Switch Link pearls for configuration or linking. " +
+      "Can be useful if it is important to the players that no unforseen " +
+      "switch configuration happens when activating a switch was intended. " +
+      "Affects server side only. Can be changed during operation."
+    })
+    @Config.Name("Without rclick item config")
+    public boolean without_rightclick_item_switchconfig = false;
   }
 
   @Config.Comment({

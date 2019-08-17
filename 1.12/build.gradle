@@ -1,20 +1,18 @@
 // @file build.gradle
 // rsgauges gradle build relay (mc1.12.2)
-//
 buildscript {
   repositories {
     jcenter()
-    maven { url = "${forge_maven_repository}" }
+    maven { url = "http://files.minecraftforge.net/maven" }
   }
   dependencies {
-    classpath "${forge_gradle_classpath}"
+    classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
   }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'idea'
 sourceCompatibility = targetCompatibility = '1.8'
-compileJava { // Need this here so eclipse task generates correctly.
-  sourceCompatibility = targetCompatibility = '1.8'
-}
+compileJava { sourceCompatibility = targetCompatibility = '1.8' }
 
 //-----------------------------------------------------------------------------
 version = "${version_rsgauges}"
@@ -23,6 +21,11 @@ archivesBaseName = "rsgauges-${version_minecraft}"
 
 def signing = { ->
   def sp = new Properties()
+  sp.keystore_file = project.keystore_file
+  sp.keystore_alias = project.keystore_alias
+  sp.keystore_pass = project.keystore_pass
+  sp.keystore_keypass = project.keystore_keypass
+  sp.fingerprint_sha1 = project.fingerprint_sha1
   if(file("signing.properties").exists()) file("signing.properties").withInputStream { sp.load(it) }
   return sp
 }()
@@ -47,7 +50,13 @@ minecraft {
   replaceIn "ModRsGauges.java"
 }
 
+repositories {
+  maven { name = "Progwml6 maven"; url = "https://dvs1.progwml6.com/files/maven/" } // JEI files
+  maven { name = "ModMaven"; url = "modmaven.k-4u.nl" } // JEI files, fallback
+}
 dependencies {
+  deobfProvided "mezz.jei:jei_${version_minecraft}:${version_jei}:api"
+  runtime "mezz.jei:jei_${version_minecraft}:${version_jei}"
 }
 
 processResources {

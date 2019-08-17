@@ -1,16 +1,10 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:trapdoorswitch/trapdoorswitch_rustic2block_s00",
-    "textures": { "metal":  "rsgauges:blocks/common/old_iron" }
-  },
+  "defaults": { "model": "rsgauges:trapdoorswitch/rustic/highsensitive_trapdoor_rustic_model_s00" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": {"north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{}, "down":{} },
-    "powered": {
-      "false": {},
-      "true":  { "model": "rsgauges:trapdoorswitch/trapdoorswitch_rustic2block_s15" }
-    }
+    "powered": { "false": {}, "true":{ "model": "rsgauges:trapdoorswitch/rustic/highsensitive_trapdoor_rustic_model_s15" } }
   }
 }

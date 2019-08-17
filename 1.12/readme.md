@@ -9,7 +9,30 @@ Mod sources for Minecraft version 1.12.2.
 - Compiled mod distribution channel is curseforge: https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/.
 
 ----
-## Revision history
+## Version history
+
+                -------------------------------------------------------------------
+    - v1.1.7    [R] Release build v1.1.7. Release-to-release changes:
+                    * Entity detectors have configurable on-time.
+                    * Pulse time config and switch linking with right click.
+                    * Switch scheduling performance.
+                    * Model improvments and refractoring.
+                    * JEI integration.
+                -------------------------------------------------------------------
+
+    - v1.1.7-b3 [M] Added right-click switch configuration with Redstone Dust,
+                    Ender Pearl or Switch Link Pearl. (can be opt'ed out in the
+                    config if needed). Tackles issue #9.
+
+    - v1.1.7-b2 [A] Entity detectors have now a configurable on-time (redstone stack
+                    config like pulse switches).
+                [M] Pulse switch scheduling adapted to compensate for world time
+                    alterations (issue #9).
+
+    - v1.1.7-b1 [M] Locations/names of all models adapted and model permutations
+                    separated from Forge blockstate format for compliant 1.14 porting.
+                [A] JEI integration skel added for extended config options.
+                [M] Industrial bistable switch models/textures updated.
 
                 -------------------------------------------------------------------
     - v1.1.6    [R] Release build v1.1.6

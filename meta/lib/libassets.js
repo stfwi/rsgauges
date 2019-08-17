@@ -122,6 +122,66 @@
     }
   };
 
+  /**
+   * Replaces model paths in blockstate and model files. Uses text
+   * substitution, not JSON load->modify->save.
+   * The `form` and `to` must be full
+   */
+  me.replace_model_paths = function(assets_path, from, to, nowrite) {
+    var affected_files = {};
+    const wd = fs.cwd();
+    const reesc = function(re) {return re.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');};
+    try {
+      if(!fs.chdir(assets_path)) throw new Error("Failed to switch to assets directory '" + assets_path + "'");
+      fs.find("./blockstates", '*.json', function(path) {
+        const txt = fs.readfile(path);
+        if(txt===undefined) return;
+        var sre = '("model"[\\s]*:[\\s]*"' + constants.modid + ':';
+        sre += (txt.search(new RegExp(sre+'block/)')) >= 0) ? 'block/)' : ')'; // 1.13/14
+        const rtxt = txt.replace(new RegExp(sre+reesc(from), "g"), '$1'+to);
+        const tpath = path.replace(/[\\]/g,"/").replace(/^[\.][\/]/,"");
+        if(txt!=rtxt) affected_files[tpath] = (!!nowrite) || (!!fs.writefile(path, rtxt));
+      });
+      fs.find("./models", '*.json', function(path) {
+        const txt = fs.readfile(path);
+        if(txt===undefined) return;
+        var sre = '("(parent|submodel)"[\\s]*:[\\s]*"' + constants.modid + ':block/)';
+        const rtxt = txt.replace(new RegExp(sre+reesc(from), "g"), '$1'+to);
+        const tpath = path.replace(/[\\]/g,"/").replace(/^[\.][\/]/,"");
+        if(txt!=rtxt) affected_files[tpath] = (!!nowrite) || (!!fs.writefile(path, rtxt));
+      });
+      return affected_files;
+    } finally {
+      fs.chdir(wd);
+    }
+  };
+
+  /**
+   * File name text replacing.
+   */
+  me.rename_files = function(dir, ssearch, sreplace, nowrite) {
+    if(!fs.isdir(dir)) throw new Error("replace-in-filenames: Directory not existing: '"+dir+"'");
+    const affected_files = {};
+    const wd = fs.cwd();
+    try {
+      if(!fs.chdir(dir)) throw new Error("Failed to switch to directory '" + dir + "'");
+      const files = fs.readdir(".");
+      for(var i in files) {
+        const f0 = files[i];
+        const f1 = f0.replace(ssearch, sreplace);
+        if(f0 != f1) {
+          affected_files[f0] = f1;
+          if(!nowrite) {
+            fs.rename(f0, f1);
+          }
+        }
+      }
+      return affected_files;
+    } finally {
+      fs.chdir(wd);
+    }
+  }
+
   Object.freeze(me);
   return me;
 });

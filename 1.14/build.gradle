@@ -68,8 +68,8 @@ minecraft {
 
 dependencies {
   minecraft "net.minecraftforge:forge:${version_forge}"
-  compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}:api")
-  runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}")
+  compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
+  runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
 }
 
 jar {
@@ -87,7 +87,7 @@ jar {
 }
 
 def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) { type 'jar'; builtBy 'reobfJar'; }
+def reobfArtifact = artifacts.add('default', reobfFile) { type 'jar'; builtBy 'reobfJar' }
 
 publishing {
   publications { mavenJava(MavenPublication) { artifact reobfArtifact } }

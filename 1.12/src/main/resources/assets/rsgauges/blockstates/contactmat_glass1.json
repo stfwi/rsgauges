@@ -1,22 +1,10 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:contactmat/contactmat_glassxblock_thin",
-    "textures": {
-      "front": "rsgauges:blocks/contactswitch/contactmat_glass1_s00",
-      "side": "rsgauges:blocks/common/cleargrayglass"
-    }
-  },
+  "defaults": { "model": "rsgauges:contactmat/glass/contactmat_configurable_glass_model_s00" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": {"north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{}, "down":{} },
-    "powered": {
-      "false": {},
-      "true": { "textures": {
-        "front": "rsgauges:blocks/contactswitch/contactmat_glass1_s15",
-        "side": "rsgauges:blocks/sensitiveglass/clearwhiteglass40"
-      }}
-    }
+    "powered": {"false": {}, "true": { "model": "rsgauges:contactmat/glass/contactmat_configurable_glass_model_s15" }}
   }
 }

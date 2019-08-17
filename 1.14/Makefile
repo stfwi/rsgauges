@@ -61,8 +61,7 @@ init:
 
 sanatize:
 	@echo "[1.14] Running sanatising tasks ..."
-	@djs tasks.js trailing-whitespaces
-	@djs tasks.js tabs-to-spaces
+	@djs tasks.js sanatize
 	@djs tasks.js sync-languages
 	@djs tasks.js version-check
 	@djs tasks.js update-json
@@ -80,5 +79,4 @@ dist: sanatize dist-check clean-all mod
 
 assets:
 	@echo "[1.14] Running asset generators ..."
-	@djs tasks.js create-slab-assets
-	@djs tasks.js create-half-slab-assets
+	@djs tasks.js assets

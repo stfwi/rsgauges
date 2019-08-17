@@ -105,6 +105,24 @@
   }
 
   /**
+   * Returns an object containing the version data for MC, forge, the
+   * mod, and the combined mod version.
+   */
+  me.parsing.version_data = function() {
+    const properties = me.parsing.gradle_properties("gradle.properties");
+    const version_minecraft = properties[constants.gradle_property_version_minecraft()];
+    const version_forge = properties[constants.gradle_property_version_forge()];
+    const version_mod = properties[constants.gradle_property_modversion()];
+    const combined_version = version_minecraft + "-" + version_mod;
+    return {
+      minecraft: version_minecraft,
+      forge: version_forge,
+      mod: version_mod,
+      combined: combined_version
+    }
+  };
+
+  /**
    * Changes one tab to two spaces in files with the given extension
    * recursively found in the current working directory.
    * @returns {void}
@@ -113,8 +131,10 @@
     var file_list = (function() {
       var ls = [];
       const ext = extensions;
-      for(var i in ext) ls = ls.concat(fs.find("./src", '*.'+ext[i]));
-      for(var i in ls) ls[i] = ls[i].replace(/\\/g,"/");
+      if(fs.isdir("./src")) {
+        for(var i in ext) ls = ls.concat(fs.find("./src", '*.'+ext[i]));
+        for(var i in ls) ls[i] = ls[i].replace(/\\/g,"/");
+      }
       ls.sort();
       ls.push("readme.md");
       return ls;
@@ -142,8 +162,10 @@
     var file_list = (function() {
       var ls = [];
       const ext = extensions;
-      for(var i in ext) ls = ls.concat(fs.find("./src", '*.'+ext[i]));
-      for(var i in ls) ls[i] = ls[i].replace(/\\/g,"/");
+      if(fs.isdir("./src")) {
+        for(var i in ext) ls = ls.concat(fs.find("./src", '*.'+ext[i]));
+        for(var i in ls) ls[i] = ls[i].replace(/\\/g,"/");
+      }
       ls.sort();
       ls.push("readme.md");
       return ls;
@@ -202,14 +224,19 @@
       if(line.trim().indexOf(constants.gradle_property_modversion())!=0) return false;
       return line.replace(/^.*?=/,"").trim()
     }).trim();
+    const mcversion = fs.readfile("gradle.properties", function(line){
+      if(line.trim().indexOf("version_minecraft")!=0) return false;
+      return line.replace(/^.*?=/,"").trim()
+    }).trim();
     const git_remote = sys.shell("git remote -v").trim();
     const git_branch = sys.shell("git rev-parse --abbrev-ref HEAD").trim();
     const git_diff = sys.shell("git diff .").trim();
     var fails = [];
     if(modversion=="") fails.push("Could not determine '"+ constants.gradle_property_modversion() +"' from gradle properties.");
     if(!gittags.length) fails.push("Version not tagged.");
-    if(!gittags.filter(function(s){return s.indexOf(modversion.replace(/[-]/g,""))>=0}).length) fails.push("No tag version not found matching the gradle properties version.");
-    if(git_remote.replace(/[\s]/g,"").indexOf(constants.reference_repository() + "(push)") < 0) fails.push("Not the reference repository.");
+    const expected_commit_version = modversion.replace(/[-]/g,"") + "-mc" + mcversion;
+    if(!gittags.filter(function(s){return s.indexOf(expected_commit_version)>=0}).length) fails.push("No tag version on this commit matching the gradle properties version (should be v" + expected_commit_version + ").");
+    if(((!constants.options.without_ref_repository_check)) && (git_remote.replace(/[\s]/g,"").indexOf(constants.reference_repository() + "(push)") < 0)) fails.push("Not the reference repository.");
     if((git_branch != "develop") && (git_branch != "master")) {
       fails.push("No valid branch for dist. (branch:'"+git_branch+"')");
     } else if((git_branch == "develop") && (modversion.replace(/[^ab]/g,"")=="")) {
@@ -288,9 +315,9 @@
   };
 
   // Standard tasks
-  var stdtasks = {};
+  me.stdtasks = {};
 
-  stdtasks["dist-check"] = function() {
+  me.stdtasks["dist-check"] = function() {
     var fails = me.tasks.dist_check();
     if(fails.length == 0) return;
     for(var i in fails) fails[i] = "  - " + fails[i];
@@ -298,10 +325,11 @@
     alert(fails.join("\n")+"\n");
     exit(1);
   };
-  stdtasks["version-check"] = function(args) {
+  me.stdtasks["version-check"] = function(args) {
     var r = me.tasks.version_check(!args.join().search("--no-preversions")>=0);
     if(r.fails.length == 0) return;
-    for(var i in r.fails) r.fails[i] = "  - " + r.fails[i];
+    alert("Version check failed:");
+    for(var i in r.fails) alert("  - " + r.fails[i]);
     alert("Version data:");
     alert(" - version_mod       : '" + r.version_mod + "'");
     alert(" - combined_version  : '" + r.combined_version + "'");
@@ -309,33 +337,34 @@
     if(!!r.preversion_found) alert(" - PREVERSION FOUND  : '~" + r.version_mod + "'");
     exit(1);
   };
-  stdtasks["version-html"] = function() {
+  me.stdtasks["version-html"] = function() {
     if(!fs.isdir("dist")) throw new Error("'dist' directory does not exist.");
     const hist = me.parsing.readme_history_section("readme.md");
+    const version = me.parsing.version_data().combined;
+    const modid = constants.modid;
     const html = "<pre>\n" + (hist.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;")) + "\n</pre>";
-    fs.writefile("dist/revision-history.html", html);
+    fs.writefile("dist/" + modid + "-" + version + ".html", html);
   };
-  stdtasks["tabs-to-spaces"] = function() {
+  me.stdtasks["tabs-to-spaces"] = function() {
     me.sanatizing.tabs_to_spaces(['java','lang']);
   };
-  stdtasks["trailing-whitespaces"] = function() {
+  me.stdtasks["trailing-whitespaces"] = function() {
     me.sanatizing.remove_trailing_whitespaces(['java','json','lang']);
   };
-  stdtasks["sanatize"] = function() {
-    stdtasks["trailing-whitespaces"]();
-    stdtasks["tabs-to-spaces"]();
+  me.stdtasks["sanatize"] = function() {
+    me.stdtasks["trailing-whitespaces"]();
+    me.stdtasks["tabs-to-spaces"]();
   }
-  stdtasks["dist"] = function() {
-    stdtasks["version-html"]();
+  me.stdtasks["dist"] = function() {
+    me.stdtasks["version-html"]();
   };
-  stdtasks["update-json"] = function() {
+  me.stdtasks["update-json"] = function() {
     const version_minecraft = me.parsing.gradle_properties("gradle.properties").version_minecraft;
     const json = me.tasks.changelog_data(version_minecraft);
     fs.mkdir("./meta");
     fs.writefile("./meta/update.json", JSON.stringify(json, null, 2));
   };
-
-  stdtasks["dump-languages"] = function() {
+  me.stdtasks["dump-languages"] = function() {
     const lang_version = (me.parsing.gradle_properties("gradle.properties").version_minecraft.search("1.12.")==0) ? "1.12" : "1.13";
     const lang_extension = (lang_version == "1.12") ? ("lang") : ("json");
     const liblang = include("../meta/lib/liblang."+lang_version+".js")(constants);
@@ -348,7 +377,64 @@
     });
     print(JSON.stringify(lang_files,null,1));
   };
+  me.stdtasks["replace-model-paths"] = function(args) {
+    const from = args[0];
+    const to = args[1];
+    const simulate = args[2];
+    if(!from || !to) throw new Error("Usage: replace-model-paths <from> <to> <simulate=false>");
+    const libassets = include("../meta/lib/libassets.js")(constants);
+    const r = libassets.replace_model_paths(constants.local_assets_root(), from, to, !!simulate);
+    var nerr = 0;
+    var nok = 0;
+    for(var p in r) if(!r[p]) ++nerr; else ++nok;
+    if(Object.keys(r).length > 0) print('Replaced "'+from+'"->"'+to+'" in: ' + JSON.stringify(r,null,1));
+    print(""+nok+" replaced" + ((nerr==0) ? "." : (", "+ nerr+" failed.")));
+    return (nerr==0);
+  }
+  me.stdtasks["rename-files"] = function(args) {
+    const dir = args[0];
+    const ssearch = args[1];
+    const sreplace = args[2];
+    const simulate = args[3];
+    if(!dir || !ssearch || !sreplace) throw new Error("Usage: rename-files <dir> <search> <replace> <simulate=false>");
+    const libassets = include("../meta/lib/libassets.js")(constants);
+    const r = libassets.rename_files(dir, ssearch, sreplace, simulate);
+    var nerr = 0;
+    var nok = 0;
+    for(var p in r) if(!r[p]) ++nerr; else ++nok;
+    if(Object.keys(r).length > 0) print('Renamed "'+ssearch+'"->"'+sreplace+'" for: ' + JSON.stringify(r,null,1));
+    print(""+nok+" replaced" + ((nerr==0) ? "." : (", "+ nerr+" failed.")));
+    return (nerr==0);
+  }
+  me.stdtasks["rename-block-model"] = function(args) {
+    const libassets = include("../meta/lib/libassets.js")(constants);
+    var dir = constants.local_assets_root()+"/models/block";
+    const ssearch = args[0];
+    const sreplace = args[1];
+    const simulate = args[2];
+    var fsearch = ssearch;
+    var freplace = sreplace;
+    var nerr=0, nok=0;
+    if(!ssearch || !sreplace) throw new Error("Usage: rename-block-model <search> <replace> <simulate=false>");
+    if((ssearch.search(/(\\|\/)/) >= 0) || (sreplace.search(/(\\|\/)/) >= 0)) {
+      var d_ssearch = fs.dirname(ssearch);
+      var d_sreplace = fs.dirname(sreplace);
+      if(d_ssearch != d_sreplace) throw new Error("Only rename files, not move. The directories must be the same.");
+      dir += "/" + d_ssearch;
+      fsearch = fs.basename(ssearch);
+      freplace = fs.basename(sreplace);
+    }
+    const file_replaces = libassets.rename_files(dir, fsearch, freplace, simulate);
+    for(var p in file_replaces) if(!file_replaces[p]) ++nerr; else ++nok;
+    if(Object.keys(file_replaces).length > 0) print('Renamed "'+fsearch+'"->"'+freplace+'" for: ' + JSON.stringify(file_replaces,null,1));
 
+    const text_replaces = libassets.replace_model_paths(constants.local_assets_root(), ssearch, sreplace, simulate);
+    for(var p in text_replaces) if(!text_replaces[p]) ++nerr; else ++nok;
+    if(Object.keys(text_replaces).length > 0) print('Replaced "'+ssearch+'"->"'+sreplace+'" in: ' + JSON.stringify(text_replaces,null,1));
+
+    print(""+nok+" replaced" + ((nerr==0) ? "." : (", "+ nerr+" failed.")));
+    return (nerr==0);
+  }
 
   /**
    * Task main
@@ -358,8 +444,8 @@
     if(!fs.chdir(fs.dirname(fs.realpath(sys.script)))) throw new Error("Failed to switch to mod source directory.");
     if(!fs.isdir(rel_root_path+"/.git")) throw new Error("Missing git repository in parent directory of mod source.");
     if(!no_std_tasks) {
-      for(var key in stdtasks) {
-        if(tasks[key]===undefined) tasks[key] = stdtasks[key];
+      for(var key in me.stdtasks) {
+        if(tasks[key]===undefined) tasks[key] = me.stdtasks[key];
       }
     }
     const task_name = args[0];

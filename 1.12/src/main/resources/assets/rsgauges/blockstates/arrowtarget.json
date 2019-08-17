@@ -1,12 +1,6 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:pulseswitch/pulseswitch4block",
-    "textures": {
-      "front": "rsgauges:blocks/pulseswitch/pulseswitch4texture",
-      "side":  "rsgauges:blocks/common/darkgraymetal"
-    }
-  },
+  "defaults": {"model": "rsgauges:pulseswitch/misc/arrowtarget_model"},
   "variants": {
     "normal": [{}],
     "inventory": [{}],

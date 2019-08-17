@@ -1,28 +1,28 @@
 {
   "forge_marker": 1,
-  "defaults": { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s00" },
+  "defaults": { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s00" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": { "north": {"y":0}, "south": {"y":180}, "west": {"y":-90}, "east": {"y":90}, "up": {"x":-90}, "down": {"x":90} },
     "powered": {"false":{}, "true": {}},
     "power": {
-      "0":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s00" },
-      "1":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s01" },
-      "2":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s02" },
-      "3":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s03" },
-      "4":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s04" },
-      "5":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s05" },
-      "6":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s06" },
-      "7":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s07" },
-      "8":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s08" },
-      "9":  { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s09" },
-      "10": { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s10" },
-      "11": { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s11" },
-      "12": { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s12" },
-      "13": { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s13" },
-      "14": { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s14" },
-      "15": { "model": "rsgauges:dimmerswitch/dimmerswitch1block_s15" }
+      "0":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s00" },
+      "1":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s01" },
+      "2":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s02" },
+      "3":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s03" },
+      "4":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s04" },
+      "5":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s05" },
+      "6":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s06" },
+      "7":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s07" },
+      "8":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s08" },
+      "9":  { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s09" },
+      "10": { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s10" },
+      "11": { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s11" },
+      "12": { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s12" },
+      "13": { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s13" },
+      "14": { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s14" },
+      "15": { "model": "rsgauges:dimmerswitch/industrial/dimmer_industrial_model_s15" }
     }
   }
 }

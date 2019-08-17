@@ -1,13 +1,10 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:relayswitch/relay_pulseswitchrx2block",
-    "textures": { "led": "rsgauges:blocks/indicator/indicator_fg_green_off_texture" }
-  },
+  "defaults": { "model": "rsgauges:switchlink/industrial/switchlink_pulsereceiver_cased_industrial_model_s00" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": { "north": {"y":0}, "south": {"y":180}, "west": {"y":-90}, "east": {"y":90}, "up": {"x":-90}, "down": {"x":90} },
-    "powered": { "false":{}, "true":{ "textures": { "led": "rsgauges:blocks/indicator/indicator_fg_green_on_texture" } } }
+    "powered": { "false":{}, "true":{ "model": "rsgauges:switchlink/industrial/switchlink_pulsereceiver_cased_industrial_model_s15" } }
   }
 }

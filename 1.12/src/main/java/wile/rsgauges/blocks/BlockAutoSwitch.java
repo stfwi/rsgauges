@@ -60,10 +60,6 @@ public class BlockAutoSwitch extends BlockSwitch
   }
 
   @Override
-  public int tickRate(World world)
-  { return 200; } // no block based scheduling needed
-
-  @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
   {}
 
@@ -97,7 +93,7 @@ public class BlockAutoSwitch extends BlockSwitch
     protected final void updateSwitchState(IBlockState state, BlockAutoSwitch block, boolean active, int hold_time)
     {
       if(active) {
-        off_timer_reset(hold_time);
+        on_timer_reset(hold_time);
         if(!state.getValue(POWERED)) {
           if(this instanceof TileEntityIntervalTimerSwitch) ((TileEntityIntervalTimerSwitch)this).restart();
           world.setBlockState(pos, (state=state.withProperty(POWERED, true)), 1|2);
@@ -111,7 +107,7 @@ public class BlockAutoSwitch extends BlockSwitch
           }
         }
       } else if(state.getValue(POWERED)) {
-        if(off_timer_tick() <= 0) {
+        if((hold_time<=0) || (on_time_remaining() <= 0)) {
           world.setBlockState(pos, (state=state.withProperty(POWERED, false)));
           block.power_off_sound.play(world, pos);
           world.notifyNeighborsOfStateChange(pos, block, false);
@@ -138,7 +134,7 @@ public class BlockAutoSwitch extends BlockSwitch
     private int sensor_range_ = 5;
     private int filter_ = 0;
     private AxisAlignedBB area_ = null;
-    private int update_interval_ = 10;
+    private int update_interval_ = 8;
     private int update_timer_ = 0;
 
     public int filter()
@@ -227,7 +223,7 @@ public class BlockAutoSwitch extends BlockSwitch
     public void update()
     {
       if(ModConfig.zmisc.without_detector_switch_update) return;
-      if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
+      if((getWorld().isRemote) || (--update_timer_ > 0)) return;
       update_timer_ = update_interval_;
       IBlockState state = getWorld().getBlockState(getPos());
       if((state==null) || (!(state.getBlock() instanceof BlockAutoSwitch))) return;
@@ -257,29 +253,25 @@ public class BlockAutoSwitch extends BlockSwitch
 
       // measurement
       boolean active = false;
-      if(off_timer() > update_interval_) {
-        active = true; // no need to ray trace, it's anyway on at the next update.
-      } else {
-        @SuppressWarnings("unchecked")
-        List<Entity> hits = world.getEntitiesWithinAABB((Class<Entity>)filter_class(), area_);
-        if(hits.size() >= sensor_entity_count_threshold_) {
-          int num_seen = 0;
-          final Vec3d switch_position = new Vec3d((double)getPos().getX()+.5, (double)getPos().getY()+.5, (double)getPos().getZ()+.5);
-          for(Entity e:hits) {
-            if(
-                (world.rayTraceBlocks(new Vec3d(e.posX-0.2,e.posY+e.getEyeHeight(),e.posZ-0.2), switch_position, true, false, false) == null) ||
-                (world.rayTraceBlocks(new Vec3d(e.posX+0.2,e.posY+e.getEyeHeight(),e.posZ+0.2), switch_position, true, false, false) == null)
-            ) {
-              if(++num_seen >= sensor_entity_count_threshold_) {
-                active = true;
-                break;
-              }
+      @SuppressWarnings("unchecked")
+      List<Entity> hits = world.getEntitiesWithinAABB((Class<Entity>)filter_class(), area_);
+      if(hits.size() >= sensor_entity_count_threshold_) {
+        int num_seen = 0;
+        final Vec3d switch_position = new Vec3d((double)getPos().getX()+.5, (double)getPos().getY()+.5, (double)getPos().getZ()+.5);
+        for(Entity e:hits) {
+          if(
+              (world.rayTraceBlocks(new Vec3d(e.posX-0.2,e.posY+e.getEyeHeight(),e.posZ-0.2), switch_position, true, false, false) == null) ||
+              (world.rayTraceBlocks(new Vec3d(e.posX+0.2,e.posY+e.getEyeHeight(),e.posZ+0.2), switch_position, true, false, false) == null)
+          ) {
+            if(++num_seen >= sensor_entity_count_threshold_) {
+              active = true;
+              break;
             }
           }
         }
       }
       // state setting
-      updateSwitchState(state, block, active, 4);
+      updateSwitchState(state, block, active, configured_on_time());
     }
   }
 
@@ -511,7 +503,7 @@ public class BlockAutoSwitch extends BlockSwitch
         }
       }
       // state setting
-      updateSwitchState(state, block, active, 1);
+      updateSwitchState(state, block, active, configured_on_time());
     }
   }
 
@@ -531,6 +523,9 @@ public class BlockAutoSwitch extends BlockSwitch
     private int update_timer_ = 0;
     private int p_ = 0;
     private boolean s_ = false;
+
+    public TileEntityIntervalTimerSwitch()
+    { super(); p_set(15); t_on(20); t_off(20); ramp(0); }
 
     public void restart()
     { update_timer_=0; p_=0; s_=false; }

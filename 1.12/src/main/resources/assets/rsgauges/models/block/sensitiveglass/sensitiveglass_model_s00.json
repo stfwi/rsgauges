@@ -1,0 +1,6 @@
+{
+	"parent": "rsgauges:block/sensitiveglass/sensitiveglass_base_model",
+	"textures": {
+    "side": "rsgauges:blocks/sensitiveglass/sensitiveglass_bw_s00"
+	}
+}

@@ -152,7 +152,7 @@ public class BlockSensitiveGlass extends Block implements ModBlocks.Colors.Color
 
   @Override
   public int tickRate(World world)
-  { return 100; }
+  { return 4; }
 
   @Override
   public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)

@@ -1,6 +1,6 @@
 {
   "forge_marker": 1,
-  "defaults": { "model": "rsgauges:qubeblock" },
+  "defaults": { "model": "rsgauges:qubeblock_model" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],

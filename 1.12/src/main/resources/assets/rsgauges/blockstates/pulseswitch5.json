@@ -1,20 +1,9 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:pulseswitch/pulseswitch5block_s00",
-    "textures": {
-      "base": "rsgauges:blocks/common/darkmachinemetal",
-      "lever":  "rsgauges:blocks/common/graymetal",
-      "handle": "rsgauges:blocks/common/iestylewood"
-    }
-  },
+  "defaults": { "model": "rsgauges:pulseswitch/industrial/footswitch_retro_industrial_model_s00" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": { "north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{"x":-90}, "down":{"x":90} },
-    "powered": {
-      "false":  {},
-      "true":   { "model": "rsgauges:pulseswitch/pulseswitch5block_s15" }
-    }
-  }
+    "powered": {"false":{}, "true":{ "model": "rsgauges:pulseswitch/industrial/footswitch_retro_industrial_model_s15" }}}
 }

@@ -1,19 +1,10 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:indicator/indicator1block",
-    "textures": {
-      "lamp": "rsgauges:blocks/indicator/indicator_fg_red_on_texture",
-      "side":  "rsgauges:blocks/common/darkgraymetal"
-    }
-  },
+  "defaults": { "model": "rsgauges:indicator/industrial/led_red_model_s15" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": { "north": {"y":0}, "south": {"y":180}, "west": {"y":-90}, "east": {"y":90}, "up": {"x":-90}, "down": {"x":90} },
-    "power": {
-      "false": { "textures": { "lamp": "rsgauges:blocks/indicator/indicator_fg_red_off_texture" } },
-      "true": {}
-    }
+    "power": { "false": { "model": "rsgauges:indicator/industrial/led_red_model_s00" }, "true": {} }
   }
 }

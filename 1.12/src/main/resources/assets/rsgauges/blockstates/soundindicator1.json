@@ -1,16 +1,10 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "rsgauges:indicator/soundindicator1block",
-    "textures": {
-      "redmetal": "rsgauges:blocks/common/darkredmetal",
-      "metal": "rsgauges:blocks/common/darkgraymetal"
-    }
-  },
+  "defaults": { "model": "rsgauges:indicator/industrial/alarm_siren_model" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": { "north":{"y":0}, "south":{"y":180}, "west": {"y":-90}, "east": {"y":90}, "up": {"x":-90}, "down": {"x":90} },
-    "power": { "false": {}, "true": {} }
+    "power": { "false":{},"true":{} }
   }
 }
