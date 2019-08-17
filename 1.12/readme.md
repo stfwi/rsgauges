@@ -11,6 +11,15 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+                -------------------------------------------------------------------
+    - v1.1.7    [R] Release build v1.1.7. Release-to-release changes:
+                    * Entity detectors have configurable on-time.
+                    * Pulse time config and switch linking with right click.
+                    * Switch scheduling performance.
+                    * Model improvments and refractoring.
+                    * JEI integration.
+                -------------------------------------------------------------------
+
     - v1.1.7-b3 [M] Added right-click switch configuration with Redstone Dust,
                     Ender Pearl or Switch Link Pearl. (can be opt'ed out in the
                     config if needed). Tackles issue #9.
