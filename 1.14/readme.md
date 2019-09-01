@@ -18,6 +18,8 @@ Mod sources for Minecraft version 1.14.4.
                   [M] Industrial shock sensitive contact mat model changed.
                   [M] Industrial cased link receiver models changed.
                   [M] Industrial block detector model changed.
+                  [M] Industrial trapdoor switch models changed.
+                  [M] Industrial dimmer model changed.
 
     - v1.1.7-b2   [A] Entity detectors have configurable pulse time.
                   [M] Industrial bistable switch model changes ported
