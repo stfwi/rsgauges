@@ -10,6 +10,9 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+    - v1.1.8-b2   [U] Updated to Forge 1.14.4-28.0.81/20190719-1.14.3, recipe
+                      condition processing adapted accordingly.
+
     - v1.1.8-b1   [F] Fixed contact switch sound issue.
                   [A] Added right-click switch configuration with Redstone Dust,
                       Ender Pearl or Switch Link Pearl.
