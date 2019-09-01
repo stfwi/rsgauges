@@ -13,7 +13,7 @@ Main distribution channel for this mod is CurseForge:
   - All versions: https://minecraft.curseforge.com/projects/redstone-gauges-and-switches/files
 
 ----
-## Revision history
+## Version history
 
 Mod versions are tracked in the readme files for individual Minecraft versions, and
 of course in the commits of this repository. Beta and release versions that are

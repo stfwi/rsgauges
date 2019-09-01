@@ -11,6 +11,14 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    - v1.1.8-b1 [M] Industrial door contact mat model changed.
+                [M] Industrial sensitive contact mat model changed.
+                [M] Industrial shock sensitive contact mat model changed.
+                [M] Industrial cased link receiver models changed.
+                [M] Industrial block detector model changed.
+                [M] Industrial trapdoor switch models changed.
+                [M] Industrial dimmer model changed.
+
                 -------------------------------------------------------------------
     - v1.1.7    [R] Release build v1.1.7. Release-to-release changes:
                     * Entity detectors have configurable on-time.
