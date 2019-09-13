@@ -2,31 +2,31 @@
   "conditions": [
     {
       "type": "rsgauges:grc",
-      "result": "rsgauges:relay_pulseswitchtx1"
+      "result": "rsgauges:pulseswitch_oldfancy1"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "NRN",
+    "NNN",
     "NBN",
-    "NRN"
+    "NGN"
   ],
   "key": {
     "N": {
       "item": "minecraft:iron_nugget",
       "data": 0
     },
-    "R": {
-      "item": "minecraft:redstone",
+    "G": {
+      "item": "minecraft:gold_nugget",
       "data": 0
     },
     "B": {
-      "item": "minecraft:wooden_button",
+      "item": "#any_button",
       "data": 0
     }
   },
   "result": {
-    "item": "rsgauges:relay_pulseswitchtx1",
+    "item": "rsgauges:pulseswitch_oldfancy1",
     "data": 0
   }
 }

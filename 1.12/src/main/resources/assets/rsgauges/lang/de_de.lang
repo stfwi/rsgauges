@@ -471,6 +471,17 @@ tile.rsgauges.powerplant_red.help=§6Künstliche rote Pflanze, die Klatschmohn �
                                      ${rsgauges.switch.feature.linksource.help}
 
 #-----------------------------------------------------------------------------------------------------------
+# Knock switch names
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.industrial_knock_button.name=Knock Detector Pulse Switch (industrial)
+tile.rsgauges.industrial_knock_switch.name=Knock Detector Bistable Switch (industrial)
+#
+# Knock switch help
+#
+#tile.rsgauges.industrial_knock_button.help=§6Emits a redstone pulse when the adjacent block of its facing is clicked.§r ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+#tile.rsgauges.industrial_knock_switch.help=§6Switches on/off when the adjacent block of its facing is clicked.§r ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+
+#-----------------------------------------------------------------------------------------------------------
 # Sensitive glass block names
 #-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.sensitiveglass.name=Redstone-sensitiver Glasblock (leuchtend)

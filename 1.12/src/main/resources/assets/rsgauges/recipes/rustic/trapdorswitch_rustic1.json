@@ -21,7 +21,7 @@
       "data": 0
     },
     "P": {
-      "item": "minecraft:trapdoor",
+      "item": "#any_trapdoor",
       "data": 0
     }
   },

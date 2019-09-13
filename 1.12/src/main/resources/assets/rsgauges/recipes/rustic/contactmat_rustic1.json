@@ -2,31 +2,31 @@
   "conditions": [
     {
       "type": "rsgauges:grc",
-      "result": "rsgauges:pulseswitch_oldfancy1"
+      "result": "rsgauges:contactmat_rustic1"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "NNN",
-    "NBN",
-    "NGN"
+    "NPN",
+    "NRN"
   ],
   "key": {
     "N": {
       "item": "minecraft:iron_nugget",
       "data": 0
     },
-    "G": {
-      "item": "minecraft:gold_nugget",
+    "R": {
+      "item": "minecraft:stick",
       "data": 0
     },
-    "B": {
-      "item": "minecraft:wooden_button",
+    "P": {
+      "item": "#any_pressure_plate",
       "data": 0
     }
   },
   "result": {
-    "item": "rsgauges:pulseswitch_oldfancy1",
+    "item": "rsgauges:contactmat_rustic1",
     "data": 0
   }
 }

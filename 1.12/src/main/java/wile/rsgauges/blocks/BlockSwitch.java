@@ -94,6 +94,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   public static final long SWITCH_CONFIG_WALLMOUNT              = 0x0000010000000000l;
   public static final long SWITCH_CONFIG_LATERAL                = 0x0000020000000000l;
   public static final long SWITCH_CONFIG_LATERAL_WALLMOUNT      = SWITCH_CONFIG_WALLMOUNT|SWITCH_CONFIG_LATERAL;
+  public static final long SWITCH_CONFIG_OPPOSITE_PLACEMENT     = 0x0000040000000000l;
   public static final long SWITCH_CONFIG_FULLCUBIC_BLOCK        = 0x0000080000000000l;
   public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON    = 0x0000100000000000l;
   public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF   = 0x0000200000000000l;
@@ -163,6 +164,10 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   @Override
   public boolean isCube()
   { return ((config & (SWITCH_CONFIG_FULLCUBIC_BLOCK)) != 0); }
+
+  @Override
+  public boolean isOppositePlacement()
+  { return ((config & (SWITCH_CONFIG_OPPOSITE_PLACEMENT)) != 0); }
 
   @Override
   public boolean hasColorMultiplierRGBA()

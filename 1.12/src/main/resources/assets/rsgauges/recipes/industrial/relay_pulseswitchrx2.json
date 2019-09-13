@@ -2,31 +2,39 @@
   "conditions": [
     {
       "type": "rsgauges:grc",
-      "result": "rsgauges:contactmat1"
+      "result": "rsgauges:relay_pulseswitchrx2"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "NNN",
-    "NPN",
+    "NTN",
+    "IBI",
     "NRN"
   ],
   "key": {
+    "T": {
+      "item": "minecraft:redstone_torch",
+      "data": 0
+    },
     "N": {
       "item": "minecraft:iron_nugget",
+      "data": 0
+    },
+    "I": {
+      "item": "minecraft:iron_ingot",
       "data": 0
     },
     "R": {
       "item": "minecraft:redstone",
       "data": 0
     },
-    "P": {
-      "item": "minecraft:stone_pressure_plate",
+    "B": {
+      "item": "#any_button",
       "data": 0
     }
   },
   "result": {
-    "item": "rsgauges:contactmat1",
+    "item": "rsgauges:relay_pulseswitchrx2",
     "data": 0
   }
 }

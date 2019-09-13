@@ -11,7 +11,7 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
-    ~ v1.1.8-b2 [M] Industrial trapdoor (active) model position fixed.
+    - v1.1.8-b2 [M] Industrial trapdoor (active) model position fixed.
 
     - v1.1.8-b1 [M] Industrial door contact mat model changed.
                 [M] Industrial sensitive contact mat model changed.

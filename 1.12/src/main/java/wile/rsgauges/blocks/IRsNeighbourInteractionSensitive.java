@@ -16,6 +16,5 @@ import net.minecraft.world.World;
 
 public interface IRsNeighbourInteractionSensitive
 {
-  default boolean onNeighborBlockPlayerInteraction(World world, BlockPos pos, IBlockState state, BlockPos fromPos, EntityLivingBase entity, EnumHand hand, boolean isLeftClick)
-  { return false; }
+  boolean onNeighborBlockPlayerInteraction(World world, BlockPos pos, IBlockState state, BlockPos fromPos, EntityLivingBase entity, EnumHand hand, boolean isLeftClick);
 }

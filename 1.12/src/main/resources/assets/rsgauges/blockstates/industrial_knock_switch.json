@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  "defaults": { "model": "rsgauges:knockswitch/industrial/industrial_knock_switch_model_s00" },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": { "north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{"x":-90}, "down":{"x":90} },
+    "powered": { "false":{}, "true": { "model": "rsgauges:knockswitch/industrial/industrial_knock_switch_model_s15" } }
+  }
+}

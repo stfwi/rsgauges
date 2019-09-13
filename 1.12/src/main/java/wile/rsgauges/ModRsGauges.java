@@ -9,6 +9,7 @@
 package wile.rsgauges;
 
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import wile.rsgauges.items.*;
 import wile.rsgauges.detail.*;
 import wile.rsgauges.blocks.*;
@@ -123,17 +124,18 @@ public class ModRsGauges
     }
 
     @SubscribeEvent
-    public void playerInteract(PlayerInteractEvent event)
+    public static void playerInteract(PlayerInteractEvent event)
     {
-      final boolean is_rclick = (event instanceof LeftClickBlock);
-      final boolean is_lclick = (event instanceof RightClickBlock);
-      if((!is_rclick) && (!is_lclick)) return;
       final World world = event.getWorld();
+      if(world.isRemote) return;
+      final boolean is_rclick = (event instanceof LeftClickBlock) && (event.getHand()==EnumHand.MAIN_HAND);
+      final boolean is_lclick = (event instanceof RightClickBlock) && (event.getHand()==EnumHand.MAIN_HAND);
+      if((!is_rclick) && (!is_lclick)) return;
       final BlockPos fromPos = event.getPos();
       for(EnumFacing facing: EnumFacing.values()) {
         final BlockPos pos = fromPos.offset(facing);
         final IBlockState state = event.getWorld().getBlockState(pos);
-        if(!(state.getBlock() instanceof IRsNeighbourInteractionSensitive)) continue;
+        if(!((state.getBlock()) instanceof IRsNeighbourInteractionSensitive)) continue;
         if(((IRsNeighbourInteractionSensitive)state.getBlock()).onNeighborBlockPlayerInteraction(world, pos, state, fromPos, event.getEntityLiving(), event.getHand(), is_lclick)) {
           event.setCancellationResult(EnumActionResult.SUCCESS);
         }
