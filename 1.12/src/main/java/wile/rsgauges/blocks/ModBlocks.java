@@ -698,7 +698,7 @@ public class ModBlocks
 
     // Door contact mat
     new BlockContactSwitch("contactmat1",
-      new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.5d/16),(12.5d/16)), null,
+      new AxisAlignedBB((1d/16),(0.0d/16),(0d/16), (15d/16),(0.5d/16),(13d/16)), null,
       BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_DATA_WEAK|
       BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
       BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
@@ -1078,6 +1078,11 @@ public class ModBlocks
     ),
 
     // -----------------------------------------------------------------------------------------------------------------
+    // -- Seismic sensor surge switches
+    // -----------------------------------------------------------------------------------------------------------------
+
+
+    // -----------------------------------------------------------------------------------------------------------------
     // -- Manual dimmers
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -1123,7 +1128,36 @@ public class ModBlocks
       BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT
       , null, null,
       ModAuxiliaries.RsMaterials.MATERIAL_METALLIC
-    )
+    ),
+
+    // Bistable industrial knock surge detctor
+    new BlockKnockBistableSwitch("industrial_knock_switch",
+      new AxisAlignedBB(0.5/16,0.5/16,0.5/16, 15.5/16,15.5/16,15.5/16),
+      null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_FULLCUBIC_BLOCK|BlockSwitch.SWITCH_CONFIG_OPPOSITE_PLACEMENT|
+      BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_ALL,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.2f)
+    ),
+
+    // Pulse industrial knock surge detctor
+    new BlockKnockPulseSwitch("industrial_knock_button",
+      new AxisAlignedBB(0.5/16,0.5/16,0.5/16, 15.5/16,15.5/16,15.5/16),
+      null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_FULLCUBIC_BLOCK|BlockSwitch.SWITCH_CONFIG_OPPOSITE_PLACEMENT|
+      BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_ALL,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.2f)
+    ),
+
   };
 
   // ------------------------------------------------------------------------------------------------------------------>

@@ -1,0 +1,32 @@
+{
+  "conditions": [
+    {
+      "type": "rsgauges:grc",
+      "result": "rsgauges:relay_pulseswitchtx1"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NRN",
+    "NBN",
+    "NRN"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:iron_nugget",
+      "data": 0
+    },
+    "R": {
+      "item": "minecraft:redstone",
+      "data": 0
+    },
+    "B": {
+      "item": "#any_button",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "rsgauges:relay_pulseswitchtx1",
+    "data": 0
+  }
+}

@@ -224,19 +224,21 @@ public abstract class RsBlock extends Block
   @Override
   public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
   {
-    final IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
+    IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
     if(isWallMount() && (!isLateral())) {
-      return state.withProperty(FACING, facing); // e.g. pulse/bistable switches. Placed on the wall with the ui facing to the player.
+      state = state.withProperty(FACING, facing); // e.g. pulse/bistable switches. Placed on the wall with the ui facing to the player.
     } else if(isWallMount() && isLateral()) {
-      return state.withProperty(FACING, facing.getOpposite()); // e.g. trap door switch. Placed on the wall the player clicked, reverse orientation.
+      state = state.withProperty(FACING, facing.getOpposite()); // e.g. trap door switch. Placed on the wall the player clicked, reverse orientation.
     } else if((!isWallMount()) && isLateral()) {
-      return state.withProperty(FACING, placer.getHorizontalFacing()); // e.g. contact mats or full blocks, placed in the direction the player is looking.
+      state = state.withProperty(FACING, placer.getHorizontalFacing()); // e.g. contact mats or full blocks, placed in the direction the player is looking.
     } else {
       // other switches, placed so that the UI side is facing the player. That is: the front is looking towards the player.
       // (south if the player is looking north when placing).
       final Vec3d lv = placer.getLookVec();
-      return state.withProperty(FACING, EnumFacing.getFacingFromVector((float)lv.x, (float)lv.y, (float)lv.z));
+      state = state.withProperty(FACING, EnumFacing.getFacingFromVector((float)lv.x, (float)lv.y, (float)lv.z));
     }
+    if(isOppositePlacement()) state = state.withProperty(FACING, state.getValue(FACING).getOpposite());
+    return state;
   }
 
   @Override
@@ -299,6 +301,12 @@ public abstract class RsBlock extends Block
    * is destroyed. Also implies Block class overrides for cubes.
    */
   public boolean isCube()
+  { return false; }
+
+  /**
+   * Defines if the facing when placing shall be flipped.
+   */
+  public boolean isOppositePlacement()
   { return false; }
 
   /**

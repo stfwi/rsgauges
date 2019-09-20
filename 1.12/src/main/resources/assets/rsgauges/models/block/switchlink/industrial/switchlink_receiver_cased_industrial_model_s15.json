@@ -1,6 +1,6 @@
 {
 	"parent": "rsgauges:block/switchlink/industrial/switchlink_receiver_cased_industrial_model_s00",
 	"textures": {
-    "led": "rsgauges:blocks/indicator/indicator_fg_green_on_texture"
+    "side": "rsgauges:blocks/switchlink/switchlink_receiver_cased_industrial_texture_s15"
 	}
 }

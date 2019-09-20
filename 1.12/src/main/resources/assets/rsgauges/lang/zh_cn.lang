@@ -486,6 +486,17 @@ tile.rsgauges.powerplant_red.help=§6人造的红色化，看上去非常像虞�
                                      ${rsgauges.switch.feature.linksource.help}
 
 #-----------------------------------------------------------------------------------------------------------
+# Knock switch names
+#-----------------------------------------------------------------------------------------------------------
+tile.rsgauges.industrial_knock_button.name=敲击检测脉冲开关 (工业式)
+tile.rsgauges.industrial_knock_switch.name=敲击检测双稳态开关 (工业式)
+#
+# Knock switch help
+#
+tile.rsgauges.industrial_knock_button.help=§6当其面对的相邻方块被点击时，发出脉冲红石信号。§r ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+tile.rsgauges.industrial_knock_switch.help=§6当其面对的相邻方块被点击时，切换开/关状态。§r ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+
+#-----------------------------------------------------------------------------------------------------------
 # Sensitive glass block names
 #-----------------------------------------------------------------------------------------------------------
 tile.rsgauges.sensitiveglass.name=红石感应玻璃 (发光)

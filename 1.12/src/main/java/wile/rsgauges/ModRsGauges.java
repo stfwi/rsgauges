@@ -8,11 +8,18 @@
  */
 package wile.rsgauges;
 
-import wile.rsgauges.detail.ModConfig;
-import wile.rsgauges.detail.DataFixing;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.blocks.ModBlocks;
-import wile.rsgauges.items.ModItems;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import wile.rsgauges.items.*;
+import wile.rsgauges.detail.*;
+import wile.rsgauges.blocks.*;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -114,6 +121,25 @@ public class ModRsGauges
     {
       ModBlocks.initModels();
       ModItems.initModels();
+    }
+
+    @SubscribeEvent
+    public static void playerInteract(PlayerInteractEvent event)
+    {
+      final World world = event.getWorld();
+      if(world.isRemote) return;
+      final boolean is_rclick = (event instanceof LeftClickBlock) && (event.getHand()==EnumHand.MAIN_HAND);
+      final boolean is_lclick = (event instanceof RightClickBlock) && (event.getHand()==EnumHand.MAIN_HAND);
+      if((!is_rclick) && (!is_lclick)) return;
+      final BlockPos fromPos = event.getPos();
+      for(EnumFacing facing: EnumFacing.values()) {
+        final BlockPos pos = fromPos.offset(facing);
+        final IBlockState state = event.getWorld().getBlockState(pos);
+        if(!((state.getBlock()) instanceof IRsNeighbourInteractionSensitive)) continue;
+        if(((IRsNeighbourInteractionSensitive)state.getBlock()).onNeighborBlockPlayerInteraction(world, pos, state, fromPos, event.getEntityLiving(), event.getHand(), is_lclick)) {
+          event.setCancellationResult(EnumActionResult.SUCCESS);
+        }
+      }
     }
   }
 

@@ -1,5 +1,5 @@
 
-## Redstone Gauges and Switches (`rsgauges`)
+## Redstone Gauges and Switches
 
 A [Minecraft](https://minecraft.net) (Java Edition) mod based on [`Forge`](http://www.minecraftforge.net/). The Mod adds gauges, stylish buttons,
 levers, pressure plates, timers, and other devices to measure or "produce" redstone
@@ -13,7 +13,7 @@ Main distribution channel for this mod is CurseForge:
   - All versions: https://minecraft.curseforge.com/projects/redstone-gauges-and-switches/files
 
 ----
-## Revision history
+## Version history
 
 Mod versions are tracked in the readme files for individual Minecraft versions, and
 of course in the commits of this repository. Beta and release versions that are
@@ -27,7 +27,15 @@ commits.
 
 ----
 
-### Contents
+### Screenshots and recipes
+
+  - [Screenshots in the documentation section here](documentation/readme.md).
+
+  - [Recipes are described in this file](documentation/recipes.md) file.
+
+----
+
+### Content
 
 - **Gauges** are small devices, which can be attached to any solid block in the game,
   and they measure the redstone power that this blocks receives from blocks around
@@ -102,12 +110,6 @@ commits.
 
 ----
 
-### Recipes
-
-In the [recipes](documentation/recipes.md) file.
-
-----
-
 ### Gauge and indicator details
 
 Gauges measure differently as e.g. redstone lamps. They do not only react
@@ -146,13 +148,13 @@ levers, pressure plates, trap wires, ...), partially blocks with functionality
 that vanilla does not support. There are common features that switches of this
 mod provide, and special features for switch types and individual switches:
 
-  - **Output configuration**: All switches can be double-left-clicked empty handed
-    to select:
+  - **Output configuration**: Switches can be right-clicked with a redstone torch
+    (or double-left-clicked empty handed) to select:
       - output strength (weak or strong power)
       - output polarity (inverted/non-inverted)
       - output inhibitation (no output)
 
-  - **Pulse time configuration**: All switches that emit a pulse can be left-clicked
+  - **Pulse time configuration**: All switches that emit a pulse can be clicked
     with a stack of redstone dust to configure the pulse time. The pulse time is
     2 ticks per stack element, means `0.1s x stacksize` or `2ticks x stacksize`.
 
@@ -175,6 +177,7 @@ allows to "reset" a switch by simply re-attaching it.
     they are attached to. Additional to the redstone-dust pulse time config, the
     pulse time of manual pulse switches can be extended by activating them multiple
     times. The delays are in ticks: 25 (first click when off), 50, 100, 200, 400.
+    Left click a pulse switch to immediately deactivate it.
 
   - **Contact switches** are activated by colliding. Pressure plates and trip wires
     are vanilla versions of this type. In this mod, contact switches can be more than

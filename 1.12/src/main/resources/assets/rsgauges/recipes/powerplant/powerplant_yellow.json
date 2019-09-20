@@ -21,7 +21,7 @@
       "data": 0
     },
     "P": {
-      "item": "minecraft:wooden_pressure_plate",
+      "item": "#any_pressure_plate",
       "data": 0
     }
   },
