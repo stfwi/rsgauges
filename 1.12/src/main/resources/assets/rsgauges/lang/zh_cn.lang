@@ -493,8 +493,8 @@ tile.rsgauges.industrial_knock_switch.name=敲击检测双稳态开关 (工业�
 #
 # Knock switch help
 #
-#tile.rsgauges.industrial_knock_button.help=§6当其面对的相邻方块被点击时，发出脉冲红石信号。§r ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-#tile.rsgauges.industrial_knock_switch.help=§6当其面对的相邻方块被点击时，切换开/关状态。§r ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+tile.rsgauges.industrial_knock_button.help=§6当其面对的相邻方块被点击时，发出脉冲红石信号。§r ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+tile.rsgauges.industrial_knock_switch.help=§6当其面对的相邻方块被点击时，切换开/关状态。§r ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 
 #-----------------------------------------------------------------------------------------------------------
 # Sensitive glass block names

@@ -11,6 +11,13 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+                -------------------------------------------------------------------
+    - v1.1.8    [R] Release build v1.1.8. Release-to-release changes:
+                    * Industrial series model overhaul.
+                    * Language file updates.
+                -------------------------------------------------------------------
+                [M] Lang file zh_cn updated by scikirbypoke (PR#10).
+
     - v1.1.8-b2 [M] Industrial trapdoor (active) model position fixed.
 
     - v1.1.8-b1 [M] Industrial door contact mat model changed.
