@@ -11,6 +11,8 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    - v1.1.9-b1 [A] Knock switches (detect breaking/clicking adjacent blocks) released.
+
                 -------------------------------------------------------------------
     - v1.1.8    [R] Release build v1.1.8. Release-to-release changes:
                     * Industrial series model overhaul.
