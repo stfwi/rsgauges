@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.14.4": {
+    "1.1.8-b4": "[U] Updated to Forge 1.14.4-28.1.44/20190719-1.14.3.",
     "1.1.8-b3": "[U] Updated to Forge 1.14.4-28.1.10/20190719-1.14.3.\n[A] Knock switches (seismic adjacent block click detectors) added.",
     "1.1.8-b2": "[U] Updated to Forge 1.14.4-28.0.81/20190719-1.14.3, recipe condition processing adapted accordingly.",
     "1.1.8-b1": "[F] Fixed contact switch sound issue.\n[A] Added right-click switch configuration with Redstone Dust, Ender Pearl or Switch Link Pearl.\n[M] Industrial door contact mat model changed.\n[M] Industrial sensitive contact mat model changed.\n[M] Industrial shock sensitive contact mat model changed.\n[M] Industrial cased link receiver models changed.\n[M] Industrial block detector model changed.\n[M] Industrial trapdoor switch models changed.\n[M] Industrial dimmer model changed.",
@@ -10,6 +11,6 @@
   },
   "promos": {
     "1.14.4-recommended": "",
-    "1.14.4-latest": "1.1.8-b3"
+    "1.14.4-latest": "1.1.8-b4"
   }
 }

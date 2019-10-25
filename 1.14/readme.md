@@ -10,7 +10,9 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
-    ~ v1.1.8-b4   [U]
+    ~ v1.1.9-b1   [U] Updated to Forge 1.14.4-28.1.69/20190719-1.14.3.
+
+    - v1.1.8-b4   [U] Updated to Forge 1.14.4-28.1.44/20190719-1.14.3.
 
     - v1.1.8-b3   [U] Updated to Forge 1.14.4-28.1.10/20190719-1.14.3.
                   [A] Knock switches (seismic adjacent block click detectors) added.
