@@ -1,6 +1,8 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.14.4": {
+    "1.1.9-b2": "[F] Fixed switch link relay input bug (issue #14, thx wieselkatz!).\n[F] Fixed optional-recipe condition for know switches.",
+    "1.1.9-b1": "[U] Updated to Forge 1.14.4-28.1.69/20190719-1.14.3.",
     "1.1.8-b4": "[U] Updated to Forge 1.14.4-28.1.44/20190719-1.14.3.",
     "1.1.8-b3": "[U] Updated to Forge 1.14.4-28.1.10/20190719-1.14.3.\n[A] Knock switches (seismic adjacent block click detectors) added.",
     "1.1.8-b2": "[U] Updated to Forge 1.14.4-28.0.81/20190719-1.14.3, recipe condition processing adapted accordingly.",
@@ -11,6 +13,6 @@
   },
   "promos": {
     "1.14.4-recommended": "",
-    "1.14.4-latest": "1.1.8-b4"
+    "1.14.4-latest": "1.1.9-b2"
   }
 }
