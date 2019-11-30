@@ -2,15 +2,12 @@
 	"parent": "block/cube",
 	"ambientocclusion": false,
 	"textures": {
-    "front": "rsgauges:blocks/common/darkmachinemetal",
-    "parts": "rsgauges:blocks/common/darkroughmetal",
-    "side": "rsgauges:blocks/common/darkgraymetal",
-    "led": "rsgauges:blocks/indicator/indicator_fg_yellow_on_texture",
-    "ui": "rsgauges:blocks/automaticswitch/automaticswitch_uis",
-    "uibg": "rsgauges:blocks/automaticswitch/automaticswitch7_uibg",
-    "wires": "rsgauges:blocks/indicator/indicator_fg_red_off_texture",
-    "sensorsurface": "rsgauges:blocks/indicator/indicator_fg_green_off_texture",
-		"particle": "rsgauges:blocks/common/darkgraymetal"
+		"front": "rsgauges:blocks/common/darkmachinemetal",
+		"side": "rsgauges:blocks/common/darkgraymetal",
+		"particle": "rsgauges:blocks/common/darkgraymetal",
+		"led": "rsgauges:blocks/indicator/indicator_fg_yellow_on_texture",
+		"ui": "rsgauges:blocks/automaticswitch/automaticswitch_uis",
+		"uibg": "rsgauges:blocks/automaticswitch/automaticswitch7_uibg"
 	},
 	"elements": [
 		{

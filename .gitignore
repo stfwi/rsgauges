@@ -14,6 +14,7 @@
 *.log
 *.tmp
 *.xcf
+*.txt
 /*.txt
 /archive
 /assets-src

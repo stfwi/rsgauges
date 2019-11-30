@@ -10,6 +10,10 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+    - v1.1.10-b1  [F] Indicator-powered check modified to support accepting direct strong
+                      power from blocks which normally cannot provide power.
+                  [M] Made metallic switch textures slightly lighter.
+
     - v1.1.9-b2   [F] Fixed switch link relay input bug (issue #14, thx wieselkatz!).
                   [F] Fixed optional-recipe condition for know switches.
 

@@ -2,11 +2,12 @@
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "promos": {
     "1.12.2-recommended": "1.1.9",
-    "1.12.2-latest": "1.1.9",
+    "1.12.2-latest": "1.1.10-b1",
     "1.14.4-recommended": "",
-    "1.14.4-latest": "1.1.9-b2"
+    "1.14.4-latest": "1.1.10-b1"
   },
   "1.12.2": {
+    "1.1.10-b1": "[F] Compat fix: Indicator-powered check modified to support accepting direct strong power from blocks which normally cannot provide power.\n[M] Made metallic switch textures slightly lighter.",
     "1.1.9": "[R] Release build v1.1.9. Release-to-release changes: * Knock switches added.",
     "1.1.9-b1": "[A] Knock switches (detect breaking/clicking adjacent blocks) released.",
     "1.1.8": "[R] Release build v1.1.8. Release-to-release changes: * Industrial series model overhaul. * Language file updates.\n[M] Lang file zh_cn updated by scikirbypoke (PR#10).",
@@ -61,6 +62,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "1.14.4": {
+    "1.1.10-b1": "[F] Indicator-powered check modified to support accepting direct strong power from blocks which normally cannot provide power.\n[M] Made metallic switch textures slightly lighter.",
     "1.1.9-b2": "[F] Fixed switch link relay input bug (issue #14, thx wieselkatz!).\n[F] Fixed optional-recipe condition for know switches.",
     "1.1.9-b1": "[U] Updated to Forge 1.14.4-28.1.69/20190719-1.14.3.",
     "1.1.8-b4": "[U] Updated to Forge 1.14.4-28.1.44/20190719-1.14.3.",
