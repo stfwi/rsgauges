@@ -1,6 +1,5 @@
 {
-	"parent": "block/cube",
-	"ambientocclusion": false,
+	"parent": "block/block",
 	"textures": {
 		"metal":  "rsgauges:blocks/common/old_iron",
 		"particle": "rsgauges:blocks/common/old_iron",

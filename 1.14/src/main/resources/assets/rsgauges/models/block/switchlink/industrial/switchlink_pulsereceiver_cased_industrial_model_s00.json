@@ -1,0 +1,43 @@
+{
+	"parent": "block/block",
+	"textures": {
+    "side": "rsgauges:block/switchlink/switchlink_pulsereceiver_cased_industrial_texture_s00",
+    "particle": "rsgauges:block/switchlink/switchlink_pulsereceiver_cased_industrial_texture_s00"
+	},
+	"elements": [
+		{
+			"from": [0,0,0],
+			"to": [16,16,16],
+			"faces": {
+				"north": {"texture": "#side"},
+				"east": {"texture": "#side"},
+				"south": {"texture": "#side"},
+				"west": {"texture": "#side"},
+				"up": {"texture": "#side"},
+				"down": {"texture": "#side"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, -3, 0],
+			"translation": [0.25, -0.25, -2.25],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 44, 0],
+			"translation": [2.5, -0.75, 0],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"ground": {
+			"scale": [0.2, 0.2, 0.2]
+		},
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"fixed": {
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

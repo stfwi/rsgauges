@@ -1,6 +1,5 @@
 {
-	"parent": "block/cube",
-	"ambientocclusion": false,
+	"parent": "block/block",
 	"textures": {
 		"1": "rsgauges:blocks/common/old_gold",
 		"3": "rsgauges:blocks/common/old_wood",

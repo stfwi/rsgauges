@@ -1,6 +1,5 @@
 {
-	"parent": "block/cube",
-	"ambientocclusion": false,
+	"parent": "block/block",
 	"textures": {
     "base":  "rsgauges:blocks/bistableswitch/bistableswitch4texture_base",
     "lever": "rsgauges:blocks/bistableswitch/bistableswitch4texture_lever",

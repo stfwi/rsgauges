@@ -1,6 +1,5 @@
 {
-	"parent": "block/cube",
-	"ambientocclusion": false,
+	"parent": "block/block",
 	"textures": {
 		"b": "rsgauges:blocks/contactswitch/contactmat_industrial_bottom",
 		"particle": "rsgauges:blocks/contactswitch/contactmat_industrial_bottom",

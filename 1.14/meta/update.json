@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.14.4": {
+    "1.1.10-b2": "[M] Global parent definition in model files updated.\n[M] Language file updates.",
     "1.1.10-b1": "[F] Indicator-powered check modified to support accepting direct strong power from blocks which normally cannot provide power.\n[M] Made metallic switch textures slightly lighter.",
     "1.1.9-b2": "[F] Fixed switch link relay input bug (issue #14, thx wieselkatz!).\n[F] Fixed optional-recipe condition for know switches.",
     "1.1.9-b1": "[U] Updated to Forge 1.14.4-28.1.69/20190719-1.14.3.",
@@ -14,6 +15,6 @@
   },
   "promos": {
     "1.14.4-recommended": "",
-    "1.14.4-latest": "1.1.10-b1"
+    "1.14.4-latest": "1.1.10-b2"
   }
 }

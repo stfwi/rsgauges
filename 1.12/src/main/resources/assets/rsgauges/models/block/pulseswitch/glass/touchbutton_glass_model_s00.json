@@ -1,9 +1,10 @@
 {
-	"parent": "block/cube",
+	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
 		"handle": "rsgauges:blocks/sensitiveglass/sensitiveglass_stained_s15",
-		"offstate": "rsgauges:blocks/sensitiveglass/sensitiveglass_bw_s00"
+    "offstate": "rsgauges:blocks/sensitiveglass/sensitiveglass_bw_s00",
+    "particle": "rsgauges:blocks/sensitiveglass/sensitiveglass_stained_s15"
 	},
 	"elements": [
 		{

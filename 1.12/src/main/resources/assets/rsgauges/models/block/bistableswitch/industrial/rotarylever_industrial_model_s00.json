@@ -1,6 +1,5 @@
 {
-	"parent": "block/cube",
-	"ambientocclusion": false,
+	"parent": "block/block",
 	"textures": {
     "base": "rsgauges:blocks/common/graymetal",
     "side": "rsgauges:blocks/common/darkmachinemetal",

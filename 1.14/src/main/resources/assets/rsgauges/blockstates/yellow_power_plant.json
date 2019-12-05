@@ -1,0 +1,8 @@
+{
+  "forge_marker": 1,
+  "defaults": { "model": "rsgauges:block/powerplant/powerplant_yellow_model_s00" },
+  "variants": {
+    "facing": { "north":{}, "south":{}, "west":{}, "east": {}, "up":{}, "down":{} },
+    "powered": { "false":{}, "true":{ "model": "rsgauges:block/powerplant/powerplant_yellow_model_s15" } }
+  }
+}

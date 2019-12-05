@@ -1,0 +1,43 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"top": "rsgauges:block/contactswitch/contactmat_industrial_sensitive_texture_s00",
+		"particle": "rsgauges:block/contactswitch/contactmat_industrial_sensitive_texture_s00",
+		"bottom": "rsgauges:block/contactswitch/contactmat_industrial_bottom"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 0.5, 16],
+			"faces": {
+				"north": {"texture": "#top"},
+				"east": {"texture": "#top"},
+				"south": {"texture": "#top"},
+				"west": {"texture": "#top"},
+				"up": {"texture": "#top"},
+				"down": {"texture": "#bottom"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [57, 0, 0],
+			"translation": [0.25, 1, 1],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"ground": {
+			"translation": [0, 1.5, 0],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"gui": {
+			"rotation": [30, 45, 0],
+			"translation": [-0.25, -0.25, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"fixed": {
+			"rotation": [-90, 0, 0],
+			"translation": [0, 0, -4],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

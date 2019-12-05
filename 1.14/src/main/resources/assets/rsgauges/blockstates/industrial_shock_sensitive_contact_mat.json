@@ -1,0 +1,8 @@
+{
+  "forge_marker": 1,
+  "defaults": { "model": "rsgauges:block/contactmat/industrial/contactmat_shocksense_industrial_model_s00" },
+  "variants": {
+    "facing": {"north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{}, "down":{} },
+    "powered": { "false": {}, "true":  { "model": "rsgauges:block/contactmat/industrial/contactmat_shocksense_industrial_model_s15" } }
+  }
+}

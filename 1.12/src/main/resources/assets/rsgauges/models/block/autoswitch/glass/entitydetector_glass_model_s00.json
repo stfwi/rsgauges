@@ -1,6 +1,5 @@
 {
-	"parent": "block/cube",
-	"ambientocclusion": false,
+	"parent": "block/block",
 	"textures": {
 		"front": "rsgauges:blocks/automaticswitch/detectorswitch_glass1_front",
 		"side": "rsgauges:blocks/common/cleargrayglass",

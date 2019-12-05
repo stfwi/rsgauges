@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:glass_touch_switch",
+   "items": [
+    "rsgauges:glass_rotary_switch"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:glass_rotary_switch"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:glass_touch_switch"
+ }
+}

@@ -1,0 +1,28 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:oldfancy_bistableswitch1"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NNN",
+  "NLN",
+  "NGN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "G": {
+   "item": "minecraft:gold_nugget"
+  },
+  "L": {
+   "item": "minecraft:lever"
+  }
+ },
+ "result": {
+  "item": "rsgauges:oldfancy_bistableswitch1"
+ }
+}

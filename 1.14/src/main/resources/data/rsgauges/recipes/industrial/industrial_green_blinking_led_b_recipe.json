@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_green_blinking_led",
+   "items": [
+    "rsgauges:industrial_red_blinking_led"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_red_blinking_led"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_green_blinking_led"
+ }
+}

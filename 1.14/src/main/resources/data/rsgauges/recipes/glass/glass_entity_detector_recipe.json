@@ -1,0 +1,28 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:glass_entity_detector"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NNN",
+  "NEN",
+  "NGN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "G": {
+   "item": "minecraft:glass"
+  },
+  "E": {
+   "item": "minecraft:ender_eye"
+  }
+ },
+ "result": {
+  "item": "rsgauges:glass_entity_detector"
+ }
+}

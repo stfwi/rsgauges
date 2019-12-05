@@ -1,6 +1,5 @@
 {
-	"parent": "block/cube",
-	"ambientocclusion": false,
+	"parent": "block/block",
 	"textures": {
 		"2": "rsgauges:blocks/common/iestylewood",
 		"s": "rsgauges:blocks/dimmerswitch/industrial/dimmer_industrial_texture",
