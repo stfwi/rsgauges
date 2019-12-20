@@ -4,7 +4,7 @@
     "1.12.2-recommended": "1.1.9",
     "1.12.2-latest": "1.1.10-b2",
     "1.14.4-recommended": "",
-    "1.14.4-latest": "1.1.10-b2"
+    "1.14.4-latest": "1.1.10-b3"
   },
   "1.12.2": {
     "1.1.10-b2": "[M] Global parent definition in model files updated.\n[M] Language file updates.",
@@ -63,6 +63,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "1.14.4": {
+    "1.1.10-b3": "[M] Strong power output of levers and buttons also output weak power to all sides (like vanilla levers).\n[M] Touch config for automatic switches (small buttons on the devices) are not restricted anymore to using the empty hand.",
     "1.1.10-b2": "[M] Global parent definition in model files updated.\n[M] Language file updates.",
     "1.1.10-b1": "[F] Indicator-powered check modified to support accepting direct strong power from blocks which normally cannot provide power.\n[M] Made metallic switch textures slightly lighter.",
     "1.1.9-b2": "[F] Fixed switch link relay input bug (issue #14, thx wieselkatz!).\n[F] Fixed optional-recipe condition for know switches.",
