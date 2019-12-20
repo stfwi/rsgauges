@@ -11,7 +11,10 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
-    ~ v1.1.10-b3 [U]
+    - v1.1.10-b3 [M] Strong power output of levers and buttons also output weak power
+                      to all sides (like vanilla levers).
+                 [M] Touch config for automatic switches (small buttons on the devices)
+                      are not restricted anymore to using the empty hand.
 
     - v1.1.10-b2 [M] Global parent definition in model files updated.
                  [M] Language file updates.

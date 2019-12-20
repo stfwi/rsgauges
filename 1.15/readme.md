@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.15.1.
 ----
 ## Version history
 
+    ~ v1.1.11-b1  [A]
+
     - v1.1.10-b3  [A] Initial port.
 
 ----

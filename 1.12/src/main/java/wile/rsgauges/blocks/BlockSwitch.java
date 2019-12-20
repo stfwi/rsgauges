@@ -263,8 +263,9 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       return (te==null) ? 0 : te.power(state, strong);
     } else if(((config & SWITCH_CONFIG_SIDES_CONFIGURABLE)==0) ) {
       // from normal wall mounted switches
-      if((side != ((isLateral()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING))))) return 0;
+      boolean is_main_direction = (side == ((isLateral()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING))));
       final TileEntitySwitch te = getTe((World)world, pos);
+      if(!is_main_direction && (strong || te.weak())) return 0;
       return (te==null) ? 0 : te.power(state, strong);
     } else {
       // new code that will be applied for all later
@@ -1059,13 +1060,11 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       return ck;
     }
 
-    public static ClickInteraction get(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
-    { return get(world, pos, state, player, hand, facing, x, y, z,false); }
 
     /**
      *
      */
-    public static ClickInteraction get(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z, boolean prefer_touch_config)
+    public static ClickInteraction get(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
     {
       ClickInteraction ck = new ClickInteraction();
       if((world==null) || (pos==null)) return ck;
@@ -1091,7 +1090,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
         ck.wrenched = (("," + ModConfig.zmisc.accepted_wrenches + ",").contains("," + item.getItem().getRegistryName().getPath() + ","));
         if(ck.wrenched) return ck;
       }
-      if(((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0) && (prefer_touch_config || (item.getItem()==Items.AIR))) {
+      if(((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0)) {
         return touch(ck, world, pos, state, player, hand, facing, x,y,z);
       } else {
         return ck;

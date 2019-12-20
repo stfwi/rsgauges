@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.12.2": {
+    "1.1.10-b3": "[M] Strong power output of levers and buttons also output weak power to all sides (like vanilla levers).\n[M] Touch config for automatic switches (small buttons on the devices) are not restricted anymore to using the empty hand.",
     "1.1.10-b2": "[M] Global parent definition in model files updated.\n[M] Language file updates.",
     "1.1.10-b1": "[F] Compat fix: Indicator-powered check modified to support accepting direct strong power from blocks which normally cannot provide power.\n[M] Made metallic switch textures slightly lighter.",
     "1.1.9": "[R] Release build v1.1.9. Release-to-release changes: * Knock switches added.",
@@ -58,6 +59,6 @@
   },
   "promos": {
     "1.12.2-recommended": "1.1.9",
-    "1.12.2-latest": "1.1.10-b2"
+    "1.12.2-latest": "1.1.10-b3"
   }
 }
