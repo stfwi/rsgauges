@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_tube_gauge",
+   "items": [
+    "rsgauges:industrial_small_digital_gauge"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_small_digital_gauge"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_tube_gauge"
+ }
+}

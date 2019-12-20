@@ -1,0 +1,28 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_alarm_siren"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "result": {
+  "item": "rsgauges:industrial_alarm_siren"
+ },
+ "pattern": [
+  "NNN",
+  "NBN",
+  "NRN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "R": {
+   "item": "minecraft:redstone"
+  },
+  "B": {
+   "item": "minecraft:note_block"
+  }
+ }
+}

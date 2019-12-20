@@ -1,0 +1,28 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_switchlink_relay"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NRN",
+  "NLN",
+  "NRN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "R": {
+   "item": "minecraft:redstone"
+  },
+  "L": {
+   "item": "minecraft:lever"
+  }
+ },
+ "result": {
+  "item": "rsgauges:industrial_switchlink_relay"
+ }
+}

@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_double_pole_button",
+   "items": [
+    "rsgauges:industrial_foot_button"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_foot_button"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_double_pole_button"
+ }
+}

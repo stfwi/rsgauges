@@ -1,0 +1,31 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:arrow_target"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NAN",
+  "NBN",
+  "NRN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "A": {
+   "item": "minecraft:arrow"
+  },
+  "R": {
+   "item": "minecraft:redstone"
+  },
+  "B": {
+   "tag": "rsgauges:buttons"
+  }
+ },
+ "result": {
+  "item": "rsgauges:arrow_target"
+ }
+}

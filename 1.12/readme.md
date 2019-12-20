@@ -11,6 +11,8 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    ~ v1.1.10-b3 [U]
+
     - v1.1.10-b2 [M] Global parent definition in model files updated.
                  [M] Language file updates.
 

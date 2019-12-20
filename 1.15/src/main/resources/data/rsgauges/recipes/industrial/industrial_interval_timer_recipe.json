@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_interval_timer",
+   "items": [
+    "rsgauges:industrial_day_timer"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_day_timer"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_interval_timer"
+ }
+}

@@ -57,6 +57,7 @@ tasks["sync-main-repository"] = function() {
   sys.shell("rm -f .gitignore credits.md license Makefile readme.md tasks.js");
   cd_main("1.12"); sys.shell("rm -rf meta gradle src");
   cd_main("1.14"); sys.shell("rm -rf meta gradle src");
+  cd_main("1.15"); sys.shell("rm -rf meta gradle src");
   cd_dev();
   sys.shell("cp -f .gitignore credits.md license Makefile readme.md tasks.js \"" + main_repo_local + "/\"")
   sys.shell("cp -r documentation meta \"" + main_repo_local + "/\"")
@@ -69,6 +70,11 @@ tasks["sync-main-repository"] = function() {
     cd_dev("1.14");
     sys.shell("cp -f .gitignore build.gradle gradle.properties gradlew gradlew.bat Makefile readme.md tasks.js \"" + main_repo_local + "/1.14/\"")
     sys.shell("cp -r gradle meta src \"" + main_repo_local + "/1.14/\"")
+  }
+  {
+    cd_dev("1.15");
+    sys.shell("cp -f .gitignore build.gradle gradle.properties gradlew gradlew.bat Makefile readme.md tasks.js \"" + main_repo_local + "/1.15/\"")
+    sys.shell("cp -r gradle meta src \"" + main_repo_local + "/1.15/\"")
   }
   cd_main();
   print("Main repository changes:");

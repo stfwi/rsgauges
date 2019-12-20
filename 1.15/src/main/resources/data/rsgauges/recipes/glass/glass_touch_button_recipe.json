@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:glass_touch_button",
+   "items": [
+    "rsgauges:glass_small_button"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:glass_small_button"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:glass_touch_button"
+ }
+}

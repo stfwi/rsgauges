@@ -231,7 +231,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
     TileEntitySwitch te = getTe(world, pos);
     if((te==null) || world.isRemote) return true;
     te.click_config(null, false); // reset double click tracking
-    ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit, false);
+    ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit);
     if(ck.touch_configured) {
       if(te.activation_config(state, player, ck.x, ck.y)) {
         ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
@@ -503,9 +503,11 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
       return (te==null) ? 0 : te.power(state, strong);
     } else if(((config & SWITCH_CONFIG_SIDES_CONFIGURABLE)==0) ) {
       // from normal wall mounted switches
-      if((side != ((isLateral()) ? ((state.get(FACING)).getOpposite()) : (state.get(FACING))))) return 0;
+      boolean is_main_direction = (side == ((isLateral()) ? ((state.get(FACING)).getOpposite()) : (state.get(FACING))));
       final TileEntitySwitch te = getTe((World)world, pos);
-      return (te==null) ? 0 : te.power(state, strong);
+      if(te==null) return 0;
+      if(!is_main_direction && (strong || te.weak())) return 0;
+      return te.power(state, strong);
     } else {
       // new code that will be applied for all later
       final TileEntitySwitch te = getTe((World)world, pos);
@@ -1020,31 +1022,25 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
       return ck;
     }
 
-    public static ClickInteraction get(World world, BlockPos pos, @Nullable BlockState state, PlayerEntity player, @Nullable Hand hand, @Nullable Direction facing, float x, float y, float z)
-    {
-      return get(world, pos, state, player, hand, facing, x, y, z,false);
-    }
-
     // Block.onBlockActivated() wrapper.
-    public static ClickInteraction get(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, boolean prefer_touch_config)
+    public static ClickInteraction get(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
       float x = (float)(hit.getHitVec().getX() - Math.floor(hit.getHitVec().getX()));
       float y = (float)(hit.getHitVec().getY() - Math.floor(hit.getHitVec().getY()));
       float z = (float)(hit.getHitVec().getZ() - Math.floor(hit.getHitVec().getZ()));
-      return get(world, pos, state, player, hand, hit.getFace(), x,y,z, prefer_touch_config);
+      return get(world, pos, state, player, hand, hit.getFace(), x,y,z);
     }
 
     // Block.onBlockClicked() wrapper
     public static ClickInteraction get(BlockState state, World world, BlockPos pos, PlayerEntity player)
     {
-      return get(world, pos, state, player, null, null, 0, 0, 0, false);
+      return get(world, pos, state, player, null, null, 0, 0, 0);
     }
-
 
     /**
      *
      */
-    public static ClickInteraction get(World world, BlockPos pos, @Nullable BlockState state, PlayerEntity player, @Nullable Hand hand, @Nullable Direction facing, float x, float y, float z, boolean prefer_touch_config)
+    public static ClickInteraction get(World world, BlockPos pos, @Nullable BlockState state, PlayerEntity player, @Nullable Hand hand, @Nullable Direction facing, float x, float y, float z)
     {
       ClickInteraction ck = new ClickInteraction();
       if((world==null) || (pos==null)) return ck;
@@ -1071,7 +1067,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
         ck.wrenched = (("," + ModConfig.accepted_wrenches + ",").contains("," + item.getItem().getRegistryName().getPath() + ","));
         if(ck.wrenched) return ck;
       }
-      if(((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0) && (prefer_touch_config || (item.getItem()==Items.AIR))) {
+      if(((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0)) {
         return touch(ck, state, facing, x,y,z);
       } else {
         return ck;

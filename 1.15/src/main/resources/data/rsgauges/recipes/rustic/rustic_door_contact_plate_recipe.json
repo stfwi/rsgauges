@@ -1,0 +1,28 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:rustic_door_contact_plate"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NNN",
+  "NPN",
+  "NRN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "R": {
+   "item": "minecraft:stick"
+  },
+  "P": {
+   "tag": "rsgauges:pressure_plates"
+  }
+ },
+ "result": {
+  "item": "rsgauges:rustic_door_contact_plate"
+ }
+}

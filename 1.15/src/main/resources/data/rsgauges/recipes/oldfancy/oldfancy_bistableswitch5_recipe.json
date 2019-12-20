@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:oldfancy_bistableswitch5",
+   "items": [
+    "rsgauges:oldfancy_bistableswitch4"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:oldfancy_bistableswitch4"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:oldfancy_bistableswitch5"
+ }
+}

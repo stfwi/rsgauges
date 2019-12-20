@@ -1,0 +1,28 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:glass_button"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NNN",
+  "NLN",
+  "NGN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "G": {
+   "item": "minecraft:glass"
+  },
+  "L": {
+   "tag": "rsgauges:buttons"
+  }
+ },
+ "result": {
+  "item": "rsgauges:glass_button"
+ }
+}
