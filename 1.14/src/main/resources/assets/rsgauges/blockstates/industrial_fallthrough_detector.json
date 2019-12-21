@@ -1,8 +1,14 @@
-{
-  "forge_marker": 1,
-  "defaults": {"model": "rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s00"},
-  "variants": {
-    "facing": {"north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{}, "down":{} },
-    "powered": { "false":{}, "true":{"model": "rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s15"}}
-  }
-}
+{"variants":{
+ "facing=down,powered=false": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s00" },
+ "facing=down,powered=true": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s15" },
+ "facing=east,powered=false": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s00", "y":90 },
+ "facing=east,powered=true": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s15", "y":90 },
+ "facing=north,powered=false": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s00" },
+ "facing=north,powered=true": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s15" },
+ "facing=south,powered=false": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s00", "y":180 },
+ "facing=south,powered=true": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s15", "y":180 },
+ "facing=up,powered=false":  { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s00" },
+ "facing=up,powered=true":   { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s15" },
+ "facing=west,powered=false": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s00", "y":-90 },
+ "facing=west,powered=true": { "model":"rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s15", "y":-90 }
+}}

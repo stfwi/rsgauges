@@ -10,7 +10,7 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
-    ~ v1.1.11-b1  [A]
+    ~ v1.1.11-b1  [M] All Forge blockstates transformed to vanilla format.
 
     - v1.1.10-b3  [M] Strong power output of levers and buttons also output weak power
                       to all sides (like vanilla levers).
