@@ -11,6 +11,9 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    - v1.1.10-b4 [R] Removed obsolete JitModel bakery.
+                 [M] Obsolete hard-coded ambient occlusion setting removed.
+
     - v1.1.10-b3 [M] Strong power output of levers and buttons also output weak power
                       to all sides (like vanilla levers).
                  [M] Touch config for automatic switches (small buttons on the devices)
