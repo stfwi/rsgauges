@@ -1,12 +1,13 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "promos": {
-    "1.12.2-recommended": "1.1.7",
-    "1.12.2-latest": "1.1.8-b2",
+    "1.12.2-recommended": "1.1.8",
+    "1.12.2-latest": "1.1.8",
     "1.14.4-recommended": "",
     "1.14.4-latest": "1.1.8-b3"
   },
   "1.12.2": {
+    "1.1.8": "[R] Release build v1.1.8. Release-to-release changes: * Industrial series model overhaul. * Language file updates.\n[M] Lang file zh_cn updated by scikirbypoke (PR#10).",
     "1.1.8-b2": "[M] Industrial trapdoor (active) model position fixed.",
     "1.1.8-b1": "[M] Industrial door contact mat model changed.\n[M] Industrial sensitive contact mat model changed.\n[M] Industrial shock sensitive contact mat model changed.\n[M] Industrial cased link receiver models changed.\n[M] Industrial block detector model changed.\n[M] Industrial trapdoor switch models changed.\n[M] Industrial dimmer model changed.",
     "1.1.7": "[R] Release build v1.1.7. Release-to-release changes: * Entity detectors have configurable on-time. * Pulse time config and switch linking with right click. * Switch scheduling performance. * Model improvments and refractoring. * JEI integration.",
@@ -58,7 +59,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "1.14.4": {
-    "1.1.8-b3": "[U] Updated to Forge 1.14.4-28.0.105/20190719-1.14.3.\n[A] Knock switches (seismic adjacent block click detectors) added.",
+    "1.1.8-b3": "[U] Updated to Forge 1.14.4-28.1.10/20190719-1.14.3.\n[A] Knock switches (seismic adjacent block click detectors) added.",
     "1.1.8-b2": "[U] Updated to Forge 1.14.4-28.0.81/20190719-1.14.3, recipe condition processing adapted accordingly.",
     "1.1.8-b1": "[F] Fixed contact switch sound issue.\n[A] Added right-click switch configuration with Redstone Dust, Ender Pearl or Switch Link Pearl.\n[M] Industrial door contact mat model changed.\n[M] Industrial sensitive contact mat model changed.\n[M] Industrial shock sensitive contact mat model changed.\n[M] Industrial cased link receiver models changed.\n[M] Industrial block detector model changed.\n[M] Industrial trapdoor switch models changed.\n[M] Industrial dimmer model changed.",
     "1.1.7-b2": "[A] Entity detectors have configurable pulse time.\n[M] Industrial bistable switch model changes ported from 1.12.",

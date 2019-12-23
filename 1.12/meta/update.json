@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.12.2": {
+    "1.1.8": "[R] Release build v1.1.8. Release-to-release changes: * Industrial series model overhaul. * Language file updates.\n[M] Lang file zh_cn updated by scikirbypoke (PR#10).",
     "1.1.8-b2": "[M] Industrial trapdoor (active) model position fixed.",
     "1.1.8-b1": "[M] Industrial door contact mat model changed.\n[M] Industrial sensitive contact mat model changed.\n[M] Industrial shock sensitive contact mat model changed.\n[M] Industrial cased link receiver models changed.\n[M] Industrial block detector model changed.\n[M] Industrial trapdoor switch models changed.\n[M] Industrial dimmer model changed.",
     "1.1.7": "[R] Release build v1.1.7. Release-to-release changes: * Entity detectors have configurable on-time. * Pulse time config and switch linking with right click. * Switch scheduling performance. * Model improvments and refractoring. * JEI integration.",
@@ -52,7 +53,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "promos": {
-    "1.12.2-recommended": "1.1.7",
-    "1.12.2-latest": "1.1.8-b2"
+    "1.12.2-recommended": "1.1.8",
+    "1.12.2-latest": "1.1.8"
   }
 }
