@@ -11,6 +11,15 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+                 -------------------------------------------------------------------
+    - v1.1.10    [R] Release build v1.1.10. Release-to-release changes:
+                     * Switch output behaviour is by default like vanilla buttons/levers.
+                     * Switch touch config improved.
+                     * Compat fixes.
+                     * Lang updates.
+                     * Model/texture improvements.
+                 -------------------------------------------------------------------
+
     - v1.1.10-b4 [R] Removed obsolete JitModel bakery.
                  [M] Obsolete hard-coded ambient occlusion setting removed.
 
