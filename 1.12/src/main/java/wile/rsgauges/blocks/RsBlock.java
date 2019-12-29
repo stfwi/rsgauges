@@ -15,7 +15,6 @@ package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.JitModelBakery;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -82,15 +81,13 @@ public abstract class RsBlock extends Block
   public void initModel()
   {
     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-    JitModelBakery.JitBakedModel jitbakedmodel = getJitBakedModel();
-    if(jitbakedmodel != null) JitModelBakery.initModelRegistrations(this, jitbakedmodel);
   }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  @SuppressWarnings("deprecation")
-  public float getAmbientOcclusionLightValue(IBlockState state)
-  { return 1.0F; }
+  //@Override
+  //@SideOnly(Side.CLIENT)
+  //@SuppressWarnings("deprecation")
+  //public float getAmbientOcclusionLightValue(IBlockState state)
+  //{ return 1.0F; }
 
   @Override
   @SuppressWarnings("deprecation")
@@ -121,7 +118,7 @@ public abstract class RsBlock extends Block
   @Override
   @SideOnly(Side.CLIENT)
   public BlockRenderLayer getRenderLayer()
-  { return BlockRenderLayer.CUTOUT; }
+  { return BlockRenderLayer.CUTOUT_MIPPED; }
 
   @Override
   @SideOnly(Side.CLIENT)
@@ -344,13 +341,6 @@ public abstract class RsBlock extends Block
    */
   protected EnumFacing getAbsoluteFacing(IBlockState state, EnumFacing relativeSide)
   { return ((state==null) || (relativeSide==null)) ? EnumFacing.NORTH : fast_transform_lut[state.getValue(FACING).getIndex()][relativeSide.getIndex()]; }
-
-  /**
-   * Returns the JIT model bakery instance for custom rendering, or null
-   * if no custom rendering applies.
-   */
-  public JitModelBakery.JitBakedModel getJitBakedModel()
-  { return null; }
 
   /**
    * RsBlock handler before a block gets dropped as item in the world.

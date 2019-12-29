@@ -1,0 +1,28 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_entity_detector"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NNN",
+  "NSN",
+  "NRN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "R": {
+   "item": "minecraft:redstone"
+  },
+  "S": {
+   "item": "minecraft:ender_eye"
+  }
+ },
+ "result": {
+  "item": "rsgauges:industrial_entity_detector"
+ }
+}

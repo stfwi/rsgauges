@@ -1,0 +1,28 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:oldfancy_button"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NNN",
+  "NBN",
+  "NGN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "G": {
+   "item": "minecraft:gold_nugget"
+  },
+  "B": {
+   "tag": "rsgauges:buttons"
+  }
+ },
+ "result": {
+  "item": "rsgauges:oldfancy_button"
+ }
+}

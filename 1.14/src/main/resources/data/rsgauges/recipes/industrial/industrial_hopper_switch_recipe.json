@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_hopper_switch",
+   "items": [
+    "rsgauges:industrial_estop_switch"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_estop_switch"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_hopper_switch"
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_yellow_blinking_led",
+   "items": [
+    "rsgauges:industrial_yellow_led"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "result": {
+  "item": "rsgauges:industrial_yellow_blinking_led"
+ },
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_yellow_led"
+  },
+  {
+   "item": "minecraft:egg"
+  }
+ ]
+}

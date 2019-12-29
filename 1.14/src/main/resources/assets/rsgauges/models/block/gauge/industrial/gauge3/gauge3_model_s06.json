@@ -1,0 +1,4 @@
+{
+	"parent": "rsgauges:block/gauge/industrial/gauge3/gauge3_model_s00",
+  "textures": { "front": "rsgauges:block/gauge/flatgauge3texture_s06" }
+}

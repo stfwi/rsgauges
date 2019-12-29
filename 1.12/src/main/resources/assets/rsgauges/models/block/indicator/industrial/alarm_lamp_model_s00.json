@@ -1,9 +1,10 @@
 {
-	"parent": "block/cube",
+	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
     "lamp": "rsgauges:blocks/indicator/indicator_fg_red_off_texture",
-    "side":  "rsgauges:blocks/common/darkgraymetal"
+    "side":  "rsgauges:blocks/common/darkgraymetal",
+    "particle":  "rsgauges:blocks/common/darkgraymetal"
 	},
 	"elements": [
 		{

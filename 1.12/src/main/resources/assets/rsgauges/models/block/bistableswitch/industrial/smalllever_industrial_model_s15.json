@@ -1,6 +1,5 @@
 {
-  "parent": "block/cube",
-  "ambientocclusion": false,
+  "parent": "block/block",
   "textures": {
     "base":  "rsgauges:blocks/bistableswitch/bistableswitch2texture_base",
     "mount":  "rsgauges:blocks/bistableswitch/bistableswitch2texture_mount",

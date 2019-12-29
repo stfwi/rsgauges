@@ -273,15 +273,10 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
       if(world.isRemote) {
         trigger_timer_ = ModConfig.tweaks.gauge_update_interval * 2;
         IBlockState state = world.getBlockState(pos);
-        if((state!=null) && (state.getBlock() instanceof BlockGauge)) {
-          state = ((BlockGauge) state.getBlock()).getBlockStateWithPower(state, power());
-          if(last_state_ != state) {
-            last_state_ = state;
-            //world.setBlockState(pos, state, 4|16);
-            world.markBlockRangeForRenderUpdate(pos, pos);
-          }
-        } else {
-          last_state_ = null;
+        state = ((BlockGauge) state.getBlock()).getBlockStateWithPower(state, power());
+        if(last_state_ != state) {
+          last_state_ = state;
+          world.markBlockRangeForRenderUpdate(pos, pos);
         }
       } else {
         trigger_timer_ = ModConfig.tweaks.gauge_update_interval;
@@ -293,11 +288,11 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
           if(block.blink_interval() > 0) trigger_timer_ = 5;
           {
             final BlockPos neighbourPos = pos.offset((EnumFacing) state.getValue(BlockGauge.FACING), -1);
-            if(!world.isBlockLoaded(neighbourPos))
-              return; // Gauge is placed on a chunk boundary, don't forge loading of neighbour chunk.
             final IBlockState neighborState = world.getBlockState(neighbourPos);
             int p = 0;
-            if(neighborState != null) {
+            if((block instanceof BlockIndicator) && (world.isBlockPowered(getPos()))) {
+              p = 15; // fast path for directly powered inicators
+            } else if(neighborState != null) {
               if(neighborState.canProvidePower()) {
                 p = Math.max(
                   neighborState.getWeakPower(world, neighbourPos, state.getValue(FACING).getOpposite()),
@@ -333,7 +328,7 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
             }
           }
         } catch(Throwable e) {
-          trigger_timer_ = 100;
+          trigger_timer_ = 72000;
           ModRsGauges.logger.error("TE update() failed: " + e);
         }
       }

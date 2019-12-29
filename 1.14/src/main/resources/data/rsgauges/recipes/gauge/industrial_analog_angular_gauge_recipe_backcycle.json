@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_analog_angular_gauge",
+   "items": [
+    "rsgauges:industrial_analog_horizontal_gauge"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_analog_horizontal_gauge"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_analog_angular_gauge"
+ }
+}

@@ -1,0 +1,6 @@
+{
+	"parent": "rsgauges:block/switchlink/industrial/switchlink_receiver_cased_industrial_model_s00",
+	"textures": {
+    "side": "rsgauges:block/switchlink/switchlink_receiver_cased_industrial_texture_s15"
+	}
+}

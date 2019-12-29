@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_machine_switch",
+   "items": [
+    "rsgauges:industrial_small_lever"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_small_lever"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_machine_switch"
+ }
+}

@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "rsgauges:optional",
+      "result": "rsgauges:industrial_knock_switch"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NSO",
+    "NRN"
+  ],
+  "key": {
+    "O": {
+      "item": "minecraft:observer"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "item": "minecraft:lever"
+    }
+  },
+  "result": {
+    "item": "rsgauges:industrial_knock_switch"
+  }
+}

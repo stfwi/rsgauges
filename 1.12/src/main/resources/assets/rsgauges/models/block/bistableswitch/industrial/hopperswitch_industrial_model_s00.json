@@ -1,6 +1,5 @@
 {
-	"parent": "block/cube",
-	"ambientocclusion": false,
+	"parent": "block/block",
 	"textures": {
     "side":  "rsgauges:blocks/common/darkmachinemetal",
     "handle": "rsgauges:blocks/common/iestylewood",

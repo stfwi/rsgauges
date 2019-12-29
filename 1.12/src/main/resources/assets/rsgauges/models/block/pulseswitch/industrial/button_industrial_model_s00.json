@@ -1,6 +1,5 @@
 {
-	"parent": "block/cube",
-	"ambientocclusion": false,
+	"parent": "block/block",
 	"textures": {
     "front": "rsgauges:blocks/pulseswitch/pulseswitch1texture_s00",
     "handle": "rsgauges:blocks/pulseswitch/pulseswitch1texture_handle_s00",

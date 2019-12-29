@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:rustic_nail_button",
+   "items": [
+    "rsgauges:rustic_spring_reset_push_handle"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:rustic_spring_reset_push_handle"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:rustic_nail_button"
+ }
+}

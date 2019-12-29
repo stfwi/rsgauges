@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:saplings",
+    "#minecraft:leaves",
+    "#minecraft:logs",
+    "#minecraft:small_flowers",
+    "minecraft:carved_pumpkin"
+  ]
+}

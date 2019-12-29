@@ -54,7 +54,7 @@ public class BlockDimmerSwitch extends BlockSwitch
     TileEntitySwitch te = getTe(world, pos);
     if((te==null) || (state==null)) return true;
     te.click_config(null, false);
-    ClickInteraction ck = ClickInteraction.get(world, pos, state, player, hand, facing, hitX, hitY, hitZ, true);
+    ClickInteraction ck = ClickInteraction.get(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
     boolean was_powered = te.on_power()!=0;
     if(ck.touch_configured) {
       int p = (int)ck.y;

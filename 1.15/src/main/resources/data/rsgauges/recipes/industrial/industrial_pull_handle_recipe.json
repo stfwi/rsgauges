@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_pull_handle",
+   "items": [
+    "rsgauges:industrial_fenced_button"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_fenced_button"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_pull_handle"
+ }
+}

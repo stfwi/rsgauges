@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:glass_interval_timer",
+   "items": [
+    "rsgauges:glass_day_timer"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:glass_day_timer"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:glass_interval_timer"
+ }
+}

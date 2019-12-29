@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_foot_button",
+   "items": [
+    "rsgauges:industrial_pull_handle"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_pull_handle"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_foot_button"
+ }
+}

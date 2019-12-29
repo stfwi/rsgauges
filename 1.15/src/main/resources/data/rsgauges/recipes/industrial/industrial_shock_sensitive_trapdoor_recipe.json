@@ -1,0 +1,28 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_shock_sensitive_trapdoor"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NNN",
+  "NPN",
+  "NRN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "R": {
+   "item": "minecraft:redstone"
+  },
+  "P": {
+   "tag": "minecraft:trapdoors"
+  }
+ },
+ "result": {
+  "item": "rsgauges:industrial_shock_sensitive_trapdoor"
+ }
+}

@@ -1,5 +1,5 @@
 {
-	"parent": "block/cube",
+	"parent": "block/block",
 	"textures": {
 		"top": "rsgauges:blocks/trapdoorswitch/shocksensitive_trapdoor_industrial_texture_s00",
 		"particle": "rsgauges:blocks/trapdoorswitch/shocksensitive_trapdoor_industrial_texture_s00"
