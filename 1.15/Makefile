@@ -31,17 +31,17 @@ default: mod
 all: clean clean-all mod | install
 
 mod:
-	@echo "[1.14] Building mod using gradle ..."
+	@echo "[1.15] Building mod using gradle ..."
 	@$(GRADLE) build $(GRADLE_OPTS)
 
 clean:
-	@echo "[1.14] Cleaning ..."
+	@echo "[1.15] Cleaning ..."
 	@rm -rf mcmodsrepo
 	@rm -f build/libs/*
 	@$(GRADLE) clean
 
 clean-all:
-	@echo "[1.14] Cleaning using gradle ..."
+	@echo "[1.15] Cleaning using gradle ..."
 	@rm -rf mcmodsrepo
 	@rm -f dist/*
 	@rm -rf run/logs/
@@ -56,11 +56,11 @@ mrproper: clean-all
 	@rm -f .classpath
 
 init:
-	@echo "[1.14] Initialising eclipse workspace using gradle ..."
+	@echo "[1.15] Initialising eclipse workspace using gradle ..."
 	@$(GRADLE) eclipse
 
 sanatize:
-	@echo "[1.14] Running sanatising tasks ..."
+	@echo "[1.15] Running sanatising tasks ..."
 	@djs tasks.js sanatize
 	@djs tasks.js sync-languages
 	@djs tasks.js version-check
@@ -68,15 +68,15 @@ sanatize:
 	@git status -s .
 
 dist-check:
-	@echo "[1.14] Running dist checks ..."
+	@echo "[1.15] Running dist checks ..."
 	@djs tasks.js dist-check
 
 dist: sanatize dist-check clean-all init mod
-	@echo "[1.14] Distribution files ..."
+	@echo "[1.15] Distribution files ..."
 	@mkdir -p dist
 	@cp build/libs/$(MOD_JAR_PREFIX)* dist/
 	@djs tasks.js dist
 
 assets:
-	@echo "[1.14] Running asset generators ..."
+	@echo "[1.15] Running asset generators ..."
 	@djs tasks.js assets

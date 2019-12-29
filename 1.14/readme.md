@@ -10,7 +10,7 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
-    ~ v1.2.0-b1  [A] Added JEI integration.
+    - v1.2.0-b1  [A] Added JEI integration.
                  [M] All Forge blockstates transformed to vanilla format.
                  [M] Model "vanillafication" rework, part 2.
                  [D] Removed obsolete switches (registry not affected).

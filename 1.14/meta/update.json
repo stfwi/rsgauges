@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.14.4": {
+    "1.2.0-b1": "[A] Added JEI integration.\n[M] All Forge blockstates transformed to vanilla format.\n[M] Model \"vanillafication\" rework, part 2.\n[D] Removed obsolete switches (registry not affected).\n[M] Recipes simplified, recipe conditions unified.\n[M] Code updates for version compatibility.\n[A] All block are waterloggable (including Sensitive glass).",
     "1.1.10-b3": "[M] Strong power output of levers and buttons also output weak power to all sides (like vanilla levers).\n[M] Touch config for automatic switches (small buttons on the devices) are not restricted anymore to using the empty hand.",
     "1.1.10-b2": "[M] Global parent definition in model files updated.\n[M] Language file updates.",
     "1.1.10-b1": "[F] Indicator-powered check modified to support accepting direct strong power from blocks which normally cannot provide power.\n[M] Made metallic switch textures slightly lighter.",
@@ -16,6 +17,6 @@
   },
   "promos": {
     "1.14.4-recommended": "",
-    "1.14.4-latest": "1.1.10-b3"
+    "1.14.4-latest": "1.2.0-b1"
   }
 }

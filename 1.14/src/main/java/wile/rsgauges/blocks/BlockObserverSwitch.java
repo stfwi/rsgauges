@@ -75,12 +75,10 @@ public class BlockObserverSwitch extends BlockSwitch
     public final int debounce_max = 10;
     public final int range_max = 8;
     public final int threshold_max = range_max;
-
     private int debounce_ = 0;
     private int range_ = 0;
     private int threshold_ = 1;
     private int filter_index_ = 0;
-
     private int update_timer_ = 0;
     private int debounce_counter_ = 0;
 
