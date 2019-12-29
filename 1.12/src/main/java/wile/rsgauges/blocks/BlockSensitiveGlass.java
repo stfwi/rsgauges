@@ -10,6 +10,7 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModConfig;
 import net.minecraft.block.Block;
@@ -35,7 +36,8 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.List;
 
-public class BlockSensitiveGlass extends Block implements ModBlocks.Colors.ColorTintSupport
+
+public class BlockSensitiveGlass extends Block implements ModContent.Colors.ColorTintSupport
 {
   public static final PropertyBool POWERED = PropertyBool.create("powered");
 

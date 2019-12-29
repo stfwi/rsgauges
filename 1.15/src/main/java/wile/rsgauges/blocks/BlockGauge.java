@@ -116,7 +116,7 @@ public class BlockGauge extends RsDirectedBlock implements ModColors.ColorTintSu
 
   @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { builder.add(FACING, POWER); }
+  { super.fillStateContainer(builder); builder.add(POWER); }
 
   @Override
   public boolean hasTileEntity(BlockState state)

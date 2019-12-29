@@ -1,5 +1,5 @@
 #
-# Redstone Gauges and Switches language file
+# Gauges and Switches language file
 #
 # - Inventory hover tooltip help/descriptions (when CTRL-SHIFT are down).
 #   Texts are for items and blocks, and the key identical to the names, only
@@ -136,17 +136,9 @@ tile.rsgauges.bistableswitch7.help=${rsgauges.switch.feature.typebistable.help}$
 tile.rsgauges.bistableswitch8.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_oldfancy1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_oldfancy2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy4.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy5.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy6.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy7.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
-tile.rsgauges.bistableswitch_rustic4.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
-tile.rsgauges.bistableswitch_rustic5.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_rustic6.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic7.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_glass1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
 tile.rsgauges.bistableswitch_glass2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}

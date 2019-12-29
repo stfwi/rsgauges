@@ -11,10 +11,7 @@ package wile.rsgauges.detail;
 
 import wile.rsgauges.ModContent;
 import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.blocks.BlockGauge;
-import wile.rsgauges.blocks.BlockIndicator;
-import wile.rsgauges.blocks.BlockSensitiveGlass;
-import wile.rsgauges.blocks.BlockSwitch;
+import wile.rsgauges.blocks.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -357,6 +354,7 @@ public class ModConfig
     if(block == null) return true;
     if(COMMON == null) return false;
     try {
+      if((block instanceof RsBlock) && ((((RsBlock)block).config & RsBlock.RSBLOCK_OBSOLETE)==RsBlock.RSBLOCK_OBSOLETE)) return true;
       if(!with_experimental) {
         if(block instanceof ModAuxiliaries.IExperimentalFeature) return true;
         if(ModContent.getExperimentalBlocks().contains(block)) return true;

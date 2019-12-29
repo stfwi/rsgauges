@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:oldfancy_spring_reset_chain",
-   "items": [
+   "required": [
     "rsgauges:oldfancy_button"
    ]
   }

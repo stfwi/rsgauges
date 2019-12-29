@@ -1,20 +1,20 @@
 {
- "conditions": [
-  {
-   "type": "rsgauges:optional",
-   "result": "rsgauges:rustic_nail_lever",
-   "items": [
-    "rsgauges:rustic_bistable_slide"
-   ]
+  "conditions": [
+   {
+    "type": "rsgauges:optional",
+    "result": "rsgauges:rustic_nail_lever",
+    "required": [
+     "rsgauges:rustic_angular_lever"
+    ]
+   }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+   {
+    "item": "rsgauges:rustic_angular_lever"
+   }
+  ],
+  "result": {
+   "item": "rsgauges:rustic_nail_lever"
   }
- ],
- "type": "minecraft:crafting_shapeless",
- "ingredients": [
-  {
-   "item": "rsgauges:rustic_bistable_slide"
-  }
- ],
- "result": {
-  "item": "rsgauges:rustic_nail_lever"
- }
 }

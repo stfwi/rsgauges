@@ -7,10 +7,9 @@
  ],
  "type": "minecraft:crafting_shaped",
  "pattern": [
-  "NNN",
-  "NDN",
-  "NRN"
- ],
+  "NN",
+  "RD"
+],
  "key": {
   "N": {
    "item": "minecraft:iron_nugget"

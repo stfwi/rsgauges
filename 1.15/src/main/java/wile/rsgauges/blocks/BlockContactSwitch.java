@@ -29,6 +29,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.monster.*;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -129,7 +130,7 @@ public class BlockContactSwitch extends BlockSwitch
   // -------------------------------------------------------------------------------------------------------------------
 
   protected AxisAlignedBB detectionVolume(BlockPos pos)
-  { return new AxisAlignedBB(pos, pos.add(1,2,1)); }
+  { return new AxisAlignedBB(new Vec3d(pos), new Vec3d(pos).add(1,2,1)); }
 
   @Override
   public TileEntityContactSwitch getTe(IWorldReader world, BlockPos pos)

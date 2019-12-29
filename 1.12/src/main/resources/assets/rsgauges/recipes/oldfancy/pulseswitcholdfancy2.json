@@ -1,9 +1,9 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:pulseswitch_oldfancy2",
-      "items": [
+      "required": [
         "rsgauges:pulseswitch_oldfancy1"
       ]
     }

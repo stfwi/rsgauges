@@ -3,7 +3,8 @@
 	"ambientocclusion": false,
 	"textures": {
 		"handle": "rsgauges:block/sensitiveglass/sensitiveglass_stained_s15",
-		"offstate": "rsgauges:block/sensitiveglass/sensitiveglass_bw_s00"
+    "offstate": "rsgauges:block/sensitiveglass/sensitiveglass_bw_s00",
+    "particle": "rsgauges:block/common/cleargrayglass"
 	},
 	"elements": [
 		{

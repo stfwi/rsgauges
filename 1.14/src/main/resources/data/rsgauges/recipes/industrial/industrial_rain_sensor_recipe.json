@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_rain_sensor",
-   "items": [
+   "required": [
     "rsgauges:industrial_light_sensor"
    ]
   }

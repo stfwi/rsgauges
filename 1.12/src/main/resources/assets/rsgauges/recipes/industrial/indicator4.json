@@ -1,15 +1,14 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:indicator4"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "NNN",
-    "NLN",
-    "NRN"
+    "NN",
+    "RL"
   ],
   "key": {
     "N": {

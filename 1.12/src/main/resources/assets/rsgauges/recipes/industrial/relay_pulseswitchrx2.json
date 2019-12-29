@@ -1,23 +1,18 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:relay_pulseswitchrx2"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "NTN",
-    "IBI",
-    "NRN"
+    "IT",
+    "RB"
   ],
   "key": {
     "T": {
       "item": "minecraft:redstone_torch",
-      "data": 0
-    },
-    "N": {
-      "item": "minecraft:iron_nugget",
       "data": 0
     },
     "I": {

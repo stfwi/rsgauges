@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:glass_rotary_switch",
-   "items": [
+   "required": [
     "rsgauges:glass_touch_switch"
    ]
   }

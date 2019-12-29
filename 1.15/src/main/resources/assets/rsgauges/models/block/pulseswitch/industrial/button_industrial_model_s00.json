@@ -1,33 +1,33 @@
 {
 	"parent": "block/block",
 	"textures": {
-    "front": "rsgauges:block/pulseswitch/pulseswitch1texture_s00",
-    "handle": "rsgauges:block/pulseswitch/pulseswitch1texture_handle_s00",
-    "side":  "rsgauges:block/pulseswitch/pulseswitch1texture_side",
-		"particle": "rsgauges:block/common/darkgraymetal"
+		"particle": "rsgauges:block/common/industrial_base_6x6_light",
+		"f": "rsgauges:block/common/industrial_base_6x6_light",
+		"b": "rsgauges:block/common/led_switchgreen_off"
 	},
 	"elements": [
 		{
-			"from": [5, 5, 15],
+			"from": [5, 5, 14],
 			"to": [11, 11, 16],
 			"faces": {
-				"north": {"uv": [5, 5, 11, 11], "texture": "#front"},
-				"east": {"uv": [0, 5, 1, 11], "texture": "#side"},
-				"south": {"uv": [5, 5, 11, 11], "texture": "#side"},
-				"west": {"uv": [15, 5, 16, 11], "texture": "#side"},
-				"up": {"uv": [5, 15, 11, 16], "texture": "#side"},
-				"down": {"uv": [5, 0, 11, 1], "texture": "#side"}
+				"north": {"uv": [5, 5, 11, 11], "texture": "#f"},
+				"east": {"uv": [0, 5, 2, 11], "texture": "#f"},
+				"south": {"uv": [5, 5, 11, 11], "texture": "#f"},
+				"west": {"uv": [14, 5, 16, 11], "texture": "#f"},
+				"up": {"uv": [5, 14, 11, 16], "texture": "#f"},
+				"down": {"uv": [5, 0, 11, 2], "texture": "#f"}
 			}
 		},
 		{
-			"from": [7, 7, 14.4],
-			"to": [9, 9, 15],
+			"from": [6.5, 6.5, 12.9],
+			"to": [9.5, 9.5, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 7]},
 			"faces": {
-				"north": {"uv": [7, 7, 9, 9], "texture": "#handle"},
-				"east": {"uv": [1, 7, 1.6, 9], "texture": "#handle"},
-				"west": {"uv": [14.4, 7, 15, 9], "texture": "#handle"},
-				"up": {"uv": [7, 14.4, 9, 15], "texture": "#handle"},
-				"down": {"uv": [7, 1, 9, 1.6], "texture": "#handle"}
+				"north": {"uv": [0, 0, 16, 16], "texture": "#b"},
+				"east": {"uv": [1, 2, 10.6, 4], "texture": "#b"},
+				"west": {"uv": [7, 12, 15.6, 14], "texture": "#b"},
+				"up": {"uv": [0, 7, 13, 8.6], "texture": "#b"},
+				"down": {"uv": [5, 2, 13, 3.6], "texture": "#b"}
 			}
 		}
 	],
@@ -48,7 +48,7 @@
 		},
 		"gui": {
 			"rotation": [30, -135, 0],
-			"translation": [8.25, -3.5, 0],
+			"translation": [7, -3.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		},
 		"fixed": {

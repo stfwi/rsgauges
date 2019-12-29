@@ -1,5 +1,5 @@
 // @file build.gradle
-// Redstone Gauges and Switches mod gradle build relay (mc1.15.1)
+// Gauges and Switches mod gradle build relay (mc1.15.1)
 buildscript {
   repositories {
     maven { url = 'https://files.minecraftforge.net/maven' }

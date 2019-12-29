@@ -7,16 +7,12 @@
  ],
  "type": "minecraft:crafting_shaped",
  "pattern": [
-  "NTN",
-  "IBI",
-  "NRN"
- ],
+  "IT",
+  "RB"
+],
  "key": {
   "T": {
    "item": "minecraft:redstone_torch"
-  },
-  "N": {
-   "item": "minecraft:iron_nugget"
   },
   "I": {
    "item": "minecraft:iron_ingot"

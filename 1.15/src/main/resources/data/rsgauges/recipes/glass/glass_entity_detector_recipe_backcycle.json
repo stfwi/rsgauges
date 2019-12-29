@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:glass_entity_detector",
-   "items": [
+   "required": [
     "rsgauges:glass_linear_entity_detector"
    ]
   }

@@ -7,7 +7,7 @@ issueTrackerURL="https://github.com/stfwi/rsgauges/issues/"
 [[mods]]
 modId="rsgauges"
 version="${file.jarVersion}"
-displayName="Redstone Gauges and Switches"
+displayName="Gauges and Switches"
 description="Adds redstone metering gauges, levers, buttons, pressure plates, and all sorts of other sensors and detector switches to the game."
 authors="wilechaote"
 credits="The Forge smiths, the Modders of the World, Jannis."

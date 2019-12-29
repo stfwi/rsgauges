@@ -2,9 +2,9 @@
 	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
-    "redmetal": "rsgauges:blocks/common/darkredmetal",
-    "metal": "rsgauges:blocks/common/darkgraymetal",
-		"particle": "rsgauges:blocks/common/darkgraymetal"
+		"redmetal": "rsgauges:blocks/common/red_machine_metal",
+		"particle": "rsgauges:blocks/common/darkgraymetal",
+		"metal": "rsgauges:blocks/common/darkgraymetal"
 	},
 	"elements": [
 		{

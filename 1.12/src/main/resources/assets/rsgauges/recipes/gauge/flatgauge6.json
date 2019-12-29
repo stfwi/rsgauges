@@ -1,9 +1,9 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:flatgauge6",
-      "items": [
+      "required": [
         "rsgauges:flatgauge5"
       ]
     }

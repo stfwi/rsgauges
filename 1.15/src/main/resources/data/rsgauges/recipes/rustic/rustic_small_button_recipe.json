@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:rustic_small_button",
-   "items": [
+   "required": [
     "rsgauges:rustic_button"
    ]
   }

@@ -52,6 +52,8 @@ import java.util.List;
 
 public abstract class RsBlock extends Block
 {
+  public static final long RSBLOCK_CONFIG_OBSOLETE = 0x8000000000000000l;
+
   public static final PropertyDirection FACING = PropertyDirection.create("facing");
   protected final AxisAlignedBB unrotatedBB;
 
@@ -59,19 +61,22 @@ public abstract class RsBlock extends Block
   {
     super((material!=null) ? (material) : (ModAuxiliaries.RsMaterials.MATERIAL_METALLIC));
     unrotatedBB = (unrotatedBoundingBox!=null) ? (unrotatedBoundingBox) : (new AxisAlignedBB(0,0,0,1,1,1));
-    setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(ModRsGauges.MODID, registryName);
     setTranslationKey(ModRsGauges.MODID + "." + registryName);
-    setLightOpacity(0);
-    setLightLevel(0);
+    setLightOpacity(1);
+    //setLightLevel(0);
     setResistance(2.0f);
-    setTickRandomly(false);
     if(material != ModAuxiliaries.RsMaterials.MATERIAL_PLANT) {
       setHardness(0.3f);
     } else {
       setHardness(0.1f);
       setSoundType(SoundType.PLANT);
     }
+    setCreativeTab((
+        ((this instanceof BlockSwitch) && (((BlockSwitch)this).config&RSBLOCK_CONFIG_OBSOLETE)!=0) ||
+        ((this instanceof BlockGauge) && (((BlockGauge)this).config&RSBLOCK_CONFIG_OBSOLETE)!=0)
+      ) ? (null) : (ModRsGauges.CREATIVE_TAB_RSGAUGES)
+    );
   }
 
   public RsBlock(String registryName)

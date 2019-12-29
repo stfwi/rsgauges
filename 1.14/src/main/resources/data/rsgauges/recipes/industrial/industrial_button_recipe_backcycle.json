@@ -3,15 +3,15 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_button",
-   "items": [
-    "rsgauges:industrial_double_pole_button"
+   "required": [
+    "rsgauges:industrial_pull_handle"
    ]
   }
  ],
  "type": "minecraft:crafting_shapeless",
  "ingredients": [
   {
-   "item": "rsgauges:industrial_double_pole_button"
+   "item": "rsgauges:industrial_pull_handle"
   }
  ],
  "result": {

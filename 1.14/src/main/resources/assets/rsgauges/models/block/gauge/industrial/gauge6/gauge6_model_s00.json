@@ -4,10 +4,9 @@
 	"textures": {
     "scale":  "rsgauges:block/gauge/flatgauge6bg",
     "front": "rsgauges:block/common/redstonered",
-    "side":  "rsgauges:block/common/darkmachinemetal",
-    "bulk":  "rsgauges:block/common/lightmachinemetal",
+    "side":  "rsgauges:block/common/darkgraymetal",
     "glass":  "rsgauges:block/common/cleargrayglass",
-		"particle": "rsgauges:block/common/darkmachinemetal"
+		"particle": "rsgauges:block/common/darkgraymetal"
 	},
 	"elements": [
 		{

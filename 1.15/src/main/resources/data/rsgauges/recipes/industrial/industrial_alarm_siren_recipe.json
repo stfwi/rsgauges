@@ -10,9 +10,8 @@
   "item": "rsgauges:industrial_alarm_siren"
  },
  "pattern": [
-  "NNN",
-  "NBN",
-  "NRN"
+  "NN",
+  "RB"
  ],
  "key": {
   "N": {

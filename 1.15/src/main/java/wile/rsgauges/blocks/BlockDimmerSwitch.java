@@ -45,7 +45,7 @@ public class BlockDimmerSwitch extends BlockSwitch
 
   @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { builder.add(FACING, POWERED, POWER); }
+  { super.fillStateContainer(builder); builder.add(POWER); }
 
   @Override
   public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)

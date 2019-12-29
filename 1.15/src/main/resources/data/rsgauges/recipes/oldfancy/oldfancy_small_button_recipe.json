@@ -3,15 +3,15 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:oldfancy_small_button",
-   "items": [
-    "rsgauges:oldfancy_spring_reset_handle"
+   "required": [
+    "rsgauges:oldfancy_spring_reset_chain"
    ]
   }
  ],
  "type": "minecraft:crafting_shapeless",
  "ingredients": [
   {
-   "item": "rsgauges:oldfancy_spring_reset_handle"
+   "item": "rsgauges:oldfancy_spring_reset_chain"
   }
  ],
  "result": {

@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_fenced_button",
-   "items": [
+   "required": [
     "rsgauges:industrial_button"
    ]
   }

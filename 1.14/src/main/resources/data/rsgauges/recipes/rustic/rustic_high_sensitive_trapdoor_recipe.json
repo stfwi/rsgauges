@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:rustic_high_sensitive_trapdoor",
-   "items": [
+   "required": [
     "rsgauges:rustic_shock_sensitive_trapdoor"
    ]
   }

@@ -7,10 +7,9 @@
  ],
  "type": "minecraft:crafting_shaped",
  "pattern": [
-  "NTN",
-  "NLN",
-  "NRN"
- ],
+  "NT",
+  "RL"
+],
  "key": {
   "T": {
    "item": "minecraft:redstone_torch"

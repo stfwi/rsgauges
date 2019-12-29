@@ -1,9 +1,9 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:trapdoorswitch2",
-      "items": [
+      "required": [
         "rsgauges:trapdoorswitch1"
       ]
     }

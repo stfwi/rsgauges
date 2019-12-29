@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_estop_switch",
-   "items": [
+   "required": [
     "rsgauges:industrial_machine_switch"
    ]
   }

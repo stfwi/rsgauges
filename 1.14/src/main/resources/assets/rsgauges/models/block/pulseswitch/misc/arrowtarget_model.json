@@ -3,8 +3,8 @@
 	"ambientocclusion": false,
 	"textures": {
     "front": "rsgauges:block/pulseswitch/pulseswitch4texture",
-    "side":  "rsgauges:block/common/darkgraymetal",
-		"particle": "rsgauges:block/common/darkgraymetal"
+    "side":  "rsgauges:block/common/darksmoothmetal",
+		"particle": "rsgauges:block/common/darksmoothmetal"
 	},
 	"elements": [
 		{

@@ -9,10 +9,10 @@
  */
 package wile.rsgauges.blocks;
 
+import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.ModItems;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -49,7 +49,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 @SuppressWarnings("unused")
-public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSupport
+public class BlockSwitch extends RsBlock implements ModContent.Colors.ColorTintSupport
 {
   // -- Entity stored changable state data.
   public static final long SWITCH_DATA_POWERED_POWER_MASK       = 0x000000000000000fl;
@@ -455,7 +455,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       (!ModConfig.optouts.without_rightclick_item_switchconfig) &&
       (  ((ck.item==Items.REDSTONE) && (((BlockSwitch)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0)
       || (ck.item==Items.ENDER_PEARL)
-      || (ck.item==ModItems.SWITCH_LINK_PEARL)
+      || (ck.item==ModContent.SWITCH_LINK_PEARL)
       )
     ) {
       onBlockClicked(world, pos, player);
@@ -518,7 +518,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
         }
         return;
       }
-    } else if((ck.item==ModItems.SWITCH_LINK_PEARL) && (player.inventory!=null) && (item_held==ModItems.SWITCH_LINK_PEARL)) {
+    } else if((ck.item==ModContent.SWITCH_LINK_PEARL) && (player.inventory!=null) && (item_held==ModContent.SWITCH_LINK_PEARL)) {
       // Link config at source switch or assignemnt of target switch
       if(!ModConfig.optouts.without_switch_linking) {
         switch(te.assign_switchlink(world, pos, player.inventory.getCurrentItem())) {
@@ -1079,8 +1079,8 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       } else if(item.getItem() == Items.ENDER_PEARL) {
         ck.item = Items.ENDER_PEARL;
         ck.item_count = item.getCount();
-      } else if(item.getItem() == ModItems.SWITCH_LINK_PEARL) {
-        ck.item = ModItems.SWITCH_LINK_PEARL;
+      } else if(item.getItem() == ModContent.SWITCH_LINK_PEARL) {
+        ck.item = ModContent.SWITCH_LINK_PEARL;
         ck.item_count = item.getCount();
       } else if(DyeUtils.isDye(item)) {
         ck.item = Items.DYE;

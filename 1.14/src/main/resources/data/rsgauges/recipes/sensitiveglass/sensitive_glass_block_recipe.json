@@ -11,9 +11,8 @@
   "count": 8
  },
  "pattern": [
-  "NGN",
-  "SRS",
-  "NGN"
+  "NG",
+  "SR"
  ],
  "key": {
   "N": {

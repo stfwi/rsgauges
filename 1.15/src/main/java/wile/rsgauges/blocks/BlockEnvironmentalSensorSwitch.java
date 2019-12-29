@@ -109,16 +109,13 @@ public class BlockEnvironmentalSensorSwitch extends BlockAutoSwitch
     {
       if(state == null) return false;
       final BlockSwitch block = (BlockSwitch)state.getBlock();
-
-      // @TODO: Construction time list or lambla for field assignment.
-      final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
-      final int field = ((x>=2) && (x<=4)) ? (1) : (
-        ((x>=5) && (x<=7)) ? (2) : (
+      final int direction = (y >= 13) ? (1) : ((y <= 2) ? (-1) : (0));
+      final int field = ((x>=2) && (x<=3.95)) ? (1) : (
+        ((x>=4.25) && (x<=7)) ? (2) : (
           ((x>=8) && (x<=10)) ? (3) : (
             ((x>=11) && (x<=13)) ? (4) : (0)
           )));
       if((direction==0) || (field==0)) return false;
-
       if((block.config & SWITCH_CONFIG_SENSOR_LIGHT)!=0) {
         switch(field) {
           case 1: {

@@ -1,6 +1,6 @@
 
 
-## Redstone Gauges and Switches (MC1.12.2)
+## Gauges and Switches (MC1.12.2)
 
 Mod sources for Minecraft version 1.12.2.
 
@@ -11,6 +11,12 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    ~ v1.2.0-b1  [A] Added JEI integration.
+                 [M] Model "vanillafication" rework, part 2.
+                 [D] Removed obsolete switches (registry not affected).
+                 [M] Recipes simplified, recipe conditions unified.
+                 [M] Code updates for version compatibility.
+
                  -------------------------------------------------------------------
     - v1.1.10    [R] Release build v1.1.10. Release-to-release changes:
                      * Switch output behaviour is by default like vanilla buttons/levers.
@@ -20,7 +26,7 @@ Mod sources for Minecraft version 1.12.2.
                      * Model/texture improvements.
                  -------------------------------------------------------------------
 
-    - v1.1.10-b4 [R] Removed obsolete JitModel bakery.
+    - v1.1.10-b4 [D] Removed obsolete JitModel bakery.
                  [M] Obsolete hard-coded ambient occlusion setting removed.
 
     - v1.1.10-b3 [M] Strong power output of levers and buttons also output weak power

@@ -1,6 +1,6 @@
 {
 	"parent": "rsgauges:block/autoswitch/glass/intervaltimer_glass_model_s00",
 	"textures": {
-    "led": "rsgauges:block/sensitiveglass/clearwhiteglass60"
+    "led": "rsgauges:block/indicator/indicator_fg_green_on_texture"
 	}
 }

@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:glass_touch_button",
-   "items": [
+   "required": [
     "rsgauges:glass_small_button"
    ]
   }
