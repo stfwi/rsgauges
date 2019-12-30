@@ -52,7 +52,7 @@ public class BlockCategories
     });
 
     matchers_.put("liquid", (final World w, final BlockPos p) -> {
-      return w.getBlockState(p).getMaterial().isLiquid();
+      return (w.getBlockState(p).getMaterial().isLiquid()) || (!w.getFluidState(p).isEmpty());
     });
 
     matchers_.put("air", (final World w, final BlockPos p) -> {

@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:rustic_two_hinge_lever",
-   "items": [
+   "required": [
     "rsgauges:rustic_lever"
    ]
   }

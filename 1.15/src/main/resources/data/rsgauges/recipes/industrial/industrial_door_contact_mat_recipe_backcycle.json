@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_door_contact_mat",
-   "items": [
+   "required": [
     "rsgauges:industrial_shock_sensitive_contact_mat"
    ]
   }

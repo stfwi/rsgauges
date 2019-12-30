@@ -16,7 +16,7 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraftforge.oredict.DyeUtils;
+import wile.rsgauges.ModContent;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
@@ -38,12 +38,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.DyeUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 
 
-public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSupport
+public class BlockGauge extends RsBlock implements ModContent.Colors.ColorTintSupport
 {
   public static final long GAUGE_DATA_POWER_MASK            = 0x000000000000000fl;
   public static final int  GAUGE_DATA_POWER_SHIFT           = 0;

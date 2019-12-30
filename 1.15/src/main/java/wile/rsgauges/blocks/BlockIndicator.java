@@ -41,7 +41,7 @@ public class BlockIndicator extends BlockGauge
 
   @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { builder.add(FACING, POWERED); }
+  { builder.add(FACING, POWERED, WATERLOGGED); }
 
 
 //@todo: IMPLEMENT

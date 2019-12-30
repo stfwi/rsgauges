@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_red_led",
-   "items": [
+   "required": [
     "rsgauges:industrial_yellow_led"
    ]
   }

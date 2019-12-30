@@ -3,8 +3,8 @@
 	"ambientocclusion": false,
 	"textures": {
 		"front": "rsgauges:block/gauge/flatgauge3texture_s00",
-		"side": "rsgauges:block/common/darkmachinemetal",
-		"particle": "rsgauges:block/common/darkmachinemetal"
+		"side": "rsgauges:block/common/darkgraymetal",
+		"particle": "rsgauges:block/common/darkgraymetal"
 	},
 	"elements": [
 		{

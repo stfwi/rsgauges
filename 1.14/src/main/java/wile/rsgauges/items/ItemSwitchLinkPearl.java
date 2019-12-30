@@ -95,7 +95,7 @@ public class ItemSwitchLinkPearl extends RsItem
   @Override
   public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)
   {
-    if(!player.isSneaking()) {
+    if(world.isRemote() || (!player.isSneaking())) {
       return new ActionResult<>(ActionResultType.PASS, player.getHeldItem(hand));
     } else {
       usePearl(world, player);

@@ -1,20 +1,27 @@
 {
- "conditions": [
-  {
-   "type": "rsgauges:optional",
-   "result": "rsgauges:industrial_small_lever",
-   "items": [
-    "rsgauges:industrial_rotary_machine_switch"
-   ]
+  "conditions": [
+   {
+    "type": "rsgauges:optional",
+    "result": "rsgauges:industrial_small_lever"
+   }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+   "NN",
+   "RL"
+  ],
+  "key": {
+   "N": {
+    "item": "minecraft:iron_nugget"
+   },
+   "R": {
+    "item": "minecraft:redstone"
+   },
+   "L": {
+    "item": "minecraft:lever"
+   }
+  },
+  "result": {
+   "item": "rsgauges:industrial_small_lever"
   }
- ],
- "type": "minecraft:crafting_shapeless",
- "ingredients": [
-  {
-   "item": "rsgauges:industrial_rotary_machine_switch"
-  }
- ],
- "result": {
-  "item": "rsgauges:industrial_small_lever"
  }
-}

@@ -1,9 +1,9 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:timerswitch_glass1",
-      "items": [
+      "required": [
         "rsgauges:daytimeswitch_glass1"
       ]
     }

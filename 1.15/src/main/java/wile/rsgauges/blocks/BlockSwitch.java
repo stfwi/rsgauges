@@ -9,33 +9,31 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.world.*;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModColors;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.INBT;
+import net.minecraft.world.*;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Item;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.entity.Entity;
@@ -101,9 +99,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   public static final long SWITCH_CONFIG_TRANSLUCENT            = RSBLOCK_CONFIG_TRANSLUCENT;
   public static final long SWITCH_CONFIG_FAINT_LIGHTSOURCE      = 0x0002000000000000l;
   public static final long SWITCH_CONFIG_COLOR_TINT_SUPPORT     = RSBLOCK_CONFIG_COLOR_TINT_SUPPORT;
-  public static final long SWITCH_CONFIG_NOT_PISTON_MOUNTBALE   = 0x0008000000000000l;
   public static final long SWITCH_CONFIG_NOT_PASSABLE           = 0x0010000000000000l;
-  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE       = 0x0020000000000000l;
   public static final long SWITCH_CONFIG_SIDES_CONFIGURABLE     = 0x0040000000000000l;
   public static final long SWITCH_CONFIG_LINK_SOURCE_SUPPORT    = 0x0100000000000000l;
   public static final long SWITCH_CONFIG_LINK_TARGET_SUPPORT    = 0x0200000000000000l;
@@ -152,7 +148,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
 
   @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { builder.add(FACING, POWERED); }
+  { super.fillStateContainer(builder); builder.add(POWERED); }
 
   // @todo: check if this method is still needed or an old porting fragment
   @Override
@@ -189,17 +185,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
 
   @Override
   protected boolean isValidPositionOnSide(IWorldReader world, BlockPos pos, Direction side)
-  {
-    if((config & SWITCH_CONFIG_HOPPER_MOUNTBALE)==0) {
-      return super.isValidPositionOnSide(world, pos, side);
-    } else {
-      return super.isValidPositionOnSide(world, pos, side);
-      //      , (Block block)->{
-      //        if(((config & SWITCH_CONFIG_HOPPER_MOUNTBALE)!=0) && (block instanceof HopperBlock)) return true;
-      //        return true;
-      //      }, null);
-    }
-  }
+  { return super.isValidPositionOnSide(world, pos, side); }
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)

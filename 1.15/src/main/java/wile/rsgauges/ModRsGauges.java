@@ -56,7 +56,7 @@ import javax.annotation.Nullable;
 public class ModRsGauges
 {
   public static final String MODID = "rsgauges";
-  public static final String MODNAME = "Redstone Gauges and Switches";
+  public static final String MODNAME = "Gauges and Switches";
   public static final String MODVERSION = "@MOD_VERSION@";
   public static final String MODMCVERSION = "@MOD_MCVERSION@";
   public static final String MODFINGERPRINT = "@MOD_SIGNSHA1@";
@@ -216,7 +216,7 @@ public class ModRsGauges
   public static final ItemGroup ITEMGROUP = (new ItemGroup("tab" + MODID) {
     @OnlyIn(Dist.CLIENT)
     public ItemStack createIcon()
-    { return new ItemStack(ModContent.INDUSTRIAL_ANALOG_GAUGE); }
+    { return new ItemStack(ModContent.INDUSTRIAL_SMALL_LEVER); }
   });
 
 }

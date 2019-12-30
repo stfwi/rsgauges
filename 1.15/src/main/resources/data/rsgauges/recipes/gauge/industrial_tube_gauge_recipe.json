@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_tube_gauge",
-   "items": [
+   "required": [
     "rsgauges:industrial_small_digital_gauge"
    ]
   }

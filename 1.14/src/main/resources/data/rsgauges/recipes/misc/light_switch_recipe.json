@@ -1,0 +1,20 @@
+{
+  "conditions": [
+   {
+    "type": "rsgauges:optional",
+    "result": "rsgauges:light_switch",
+    "required": [
+     "rsgauges:arrow_target"
+    ]
+   }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+   {
+    "item": "rsgauges:arrow_target"
+   }
+  ],
+  "result": {
+   "item": "rsgauges:light_switch"
+  }
+ }

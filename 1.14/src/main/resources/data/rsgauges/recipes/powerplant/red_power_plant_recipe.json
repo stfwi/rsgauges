@@ -7,9 +7,8 @@
  ],
  "type": "minecraft:crafting_shaped",
  "pattern": [
-  "SSS",
-  "SPS",
-  "SFS"
+  "SS",
+  "FP"
  ],
  "key": {
   "S": {

@@ -7,9 +7,8 @@
  ],
  "type": "minecraft:crafting_shaped",
  "pattern": [
-  "NNN",
-  "NPN",
-  "NRN"
+  "NN",
+  "RP"
  ],
  "key": {
   "N": {

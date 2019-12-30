@@ -1,15 +1,14 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:relay_bistableswitchtx1"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "NRN",
-    "NLN",
-    "NRN"
+    "NR",
+    "RL"
   ],
   "key": {
     "N": {

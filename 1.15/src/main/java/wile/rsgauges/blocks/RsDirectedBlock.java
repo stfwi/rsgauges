@@ -65,7 +65,7 @@ public class RsDirectedBlock extends RsBlock
 
   @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { builder.add(FACING); }
+  { super.fillStateContainer(builder); builder.add(FACING); }
 
   @Override
   @Nullable
@@ -83,7 +83,7 @@ public class RsDirectedBlock extends RsBlock
       facing = context.getNearestLookingDirection();
     }
     if(isOpositePlacement()) facing = facing.getOpposite();
-    return getDefaultState().with(FACING, facing);
+    return super.getStateForPlacement(context).with(FACING, facing);
   }
 
   //  @Override

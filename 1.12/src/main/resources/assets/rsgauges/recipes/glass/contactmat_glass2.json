@@ -1,15 +1,14 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:contactmat_glass2"
     }
   ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "NNN",
-    "NPN",
-    "NGN"
+    "NN",
+    "GP"
   ],
   "key": {
     "N": {

@@ -102,9 +102,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   public static final long SWITCH_CONFIG_TRANSLUCENT            = RSBLOCK_CONFIG_TRANSLUCENT;
   public static final long SWITCH_CONFIG_FAINT_LIGHTSOURCE      = 0x0002000000000000l;
   public static final long SWITCH_CONFIG_COLOR_TINT_SUPPORT     = RSBLOCK_CONFIG_COLOR_TINT_SUPPORT;
-  public static final long SWITCH_CONFIG_NOT_PISTON_MOUNTBALE   = 0x0008000000000000l;
   public static final long SWITCH_CONFIG_NOT_PASSABLE           = 0x0010000000000000l;
-  public static final long SWITCH_CONFIG_HOPPER_MOUNTBALE       = 0x0020000000000000l;
   public static final long SWITCH_CONFIG_SIDES_CONFIGURABLE     = 0x0040000000000000l;
   public static final long SWITCH_CONFIG_LINK_SOURCE_SUPPORT    = 0x0100000000000000l;
   public static final long SWITCH_CONFIG_LINK_TARGET_SUPPORT    = 0x0200000000000000l;
@@ -153,7 +151,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
 
   @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { builder.add(FACING, POWERED); }
+  { super.fillStateContainer(builder); builder.add(POWERED); }
 
   @OnlyIn(Dist.CLIENT)
   @Override
@@ -190,17 +188,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
 
   @Override
   protected boolean isValidPositionOnSide(IWorldReader world, BlockPos pos, Direction side)
-  {
-    if((config & SWITCH_CONFIG_HOPPER_MOUNTBALE)==0) {
-      return super.isValidPositionOnSide(world, pos, side);
-    } else {
-      return super.isValidPositionOnSide(world, pos, side);
-      //      , (Block block)->{
-      //        if(((config & SWITCH_CONFIG_HOPPER_MOUNTBALE)!=0) && (block instanceof HopperBlock)) return true;
-      //        return true;
-      //      }, null);
-    }
-  }
+  { return super.isValidPositionOnSide(world, pos, side); }
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)

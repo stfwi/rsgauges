@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:rustic_contact_plate",
-   "items": [
+   "required": [
     "rsgauges:rustic_door_contact_plate"
    ]
   }

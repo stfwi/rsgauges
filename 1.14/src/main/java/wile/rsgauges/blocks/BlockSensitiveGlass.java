@@ -80,7 +80,7 @@ public class BlockSensitiveGlass extends RsBlock
 
   @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { builder.add(POWERED); }
+  { super.fillStateContainer(builder); builder.add(POWERED); }
 
   @Override
   public int tickRate(IWorldReader world)
@@ -101,7 +101,7 @@ public class BlockSensitiveGlass extends RsBlock
 
   @Override
   public BlockState getStateForPlacement(BlockItemUseContext context)
-  { return getDefaultState().with(POWERED, context.getWorld().isBlockPowered(context.getPos())); }
+  { return super.getStateForPlacement(context).with(POWERED, context.getWorld().isBlockPowered(context.getPos())); }
 
   @Override
   public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)

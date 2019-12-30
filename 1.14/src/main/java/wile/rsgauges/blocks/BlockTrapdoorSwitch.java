@@ -22,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import javax.annotation.Nullable;
 
 public class BlockTrapdoorSwitch extends BlockContactSwitch
@@ -37,11 +38,10 @@ public class BlockTrapdoorSwitch extends BlockContactSwitch
   @SuppressWarnings("deprecation")
   public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type)
   {
-    /// -> was public boolean isPassable(IWorldReader world, BlockPos pos)
     switch(type) {
-      case LAND:  return (!state.get(POWERED));
-      case AIR:   return (!state.get(POWERED));
-      default:    return true;
+      case LAND: return (state.get(POWERED));
+      case AIR:  return (state.get(POWERED));
+      default:   return true;
     }
   }
 
@@ -83,7 +83,13 @@ public class BlockTrapdoorSwitch extends BlockContactSwitch
 
   @Override
   protected AxisAlignedBB detectionVolume(BlockPos pos)
-  { return new AxisAlignedBB(pos.add(-1.2,0,-1.2), pos.add(1.2,2,1.2)); }
+  {
+    if((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==0) {
+      return new AxisAlignedBB(new Vec3d(pos).add(0,0,0), new Vec3d(pos).add(1,1,1));
+    } else {
+      return new AxisAlignedBB(new Vec3d(pos).add(-1.2,0,-1.2), new Vec3d(pos).add(1.2,2,1.2));
+    }
+  }
 
   @Override
   public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, final @Nullable PlayerEntity player)

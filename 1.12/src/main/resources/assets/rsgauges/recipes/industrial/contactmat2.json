@@ -1,9 +1,9 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:contactmat2",
-      "items": [
+      "required": [
         "rsgauges:contactmat1"
       ]
     }

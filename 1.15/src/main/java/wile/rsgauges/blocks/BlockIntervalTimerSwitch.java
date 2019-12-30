@@ -144,9 +144,9 @@ public class BlockIntervalTimerSwitch extends BlockAutoSwitch
     public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
     {
       if((state == null) || (!(state.getBlock() instanceof BlockSwitch))) return false;
-      final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
-      final int field = ((x>=2) && (x<=4)) ? (1) : (
-        ((x>=5) && (x<=7)) ? (2) : (
+      final int direction = (y >= 13) ? (1) : ((y <= 2) ? (-1) : (0));
+      final int field = ((x>=2) && (x<=3.95)) ? (1) : (
+        ((x>=4.25) && (x<=7)) ? (2) : (
           ((x>=8) && (x<=10)) ? (3) : (
             ((x>=11) && (x<=13)) ? (4) : (0)
           )));

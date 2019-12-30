@@ -1,46 +1,46 @@
 {
 	"parent": "block/block",
 	"textures": {
-    "base":  "rsgauges:blocks/bistableswitch/bistableswitch4texture_base",
-    "lever": "rsgauges:blocks/bistableswitch/bistableswitch4texture_lever",
-		"particle": "rsgauges:blocks/common/darkgraymetal"
+    "base": "rsgauges:blocks/bistableswitch/bistableswitch4texture",
+    "particle": "rsgauges:blocks/bistableswitch/bistableswitch4texture"
 	},
 	"elements": [
 		{
-			"from": [7, 6, 15.7],
+			"from": [7, 6, 15.5],
 			"to": [9, 10, 16],
 			"faces": {
-				"north": {"uv": [7, 6, 9, 10], "texture": "#base"},
+				"north": {"uv": [2, 2, 6, 10], "texture": "#base"},
 				"east": {"uv": [0, 6, 0.3, 10], "texture": "#base"},
-				"south": {"uv": [7, 6, 9, 10], "texture": "#base"},
+				"south": {"uv": [2, 2, 6, 10], "texture": "#base"},
 				"west": {"uv": [15.7, 6, 16, 10], "texture": "#base"},
-				"up": {"uv": [7, 15.7, 9, 16], "texture": "#base"},
+				"up": {"uv": [2, 9, 6, 10], "texture": "#base"},
 				"down": {"uv": [7, 0, 9, 0.3], "texture": "#base"}
 			}
 		},
 		{
-			"from": [7.4, 7.3, 15.5],
-			"to": [8.6, 8.7, 15.7],
+			"from": [7.48, 7.5, 15.25],
+			"to": [8.52, 8.5, 15.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.5, 8, 7.5]},
 			"faces": {
-				"north": {"uv": [7.4, 7.3, 8.6, 8.7], "texture": "#lever"},
-				"east": {"uv": [0.3, 7.3, 0.5, 8.7], "texture": "#lever"},
-				"south": {"uv": [7.4, 7.3, 8.6, 8.7], "texture": "#lever"},
-				"west": {"uv": [15.5, 7.3, 15.7, 8.7], "texture": "#lever"},
-				"up": {"uv": [7.4, 15.5, 8.6, 15.7], "texture": "#lever"},
-				"down": {"uv": [7.4, 0.3, 8.6, 0.5], "texture": "#lever"}
+				"north": {"uv": [9, 5, 11, 6.5], "texture": "#base"},
+				"east": {"uv": [9, 5, 10.25, 6.5], "texture": "#base"},
+				"south": {"uv": [7.5, 7.25, 8.5, 8.75], "texture": "#base"},
+				"west": {"uv": [11, 6, 11.25, 7.5], "texture": "#base"},
+				"up": {"uv": [9, 6, 11, 7.25], "texture": "#base"},
+				"down": {"uv": [8, 5, 10, 6.25], "texture": "#base"}
 			}
 		},
 		{
-			"from": [7.5, 7.8, 14.8],
-			"to": [8.5, 8.3, 15.6],
-			"rotation": {"angle": 45, "axis": "x", "origin": [8, 8, 15.7]},
+			"from": [7.5, 7.75, 14.55],
+			"to": [8.5, 8.25, 15.6],
+			"rotation": {"angle": 45, "axis": "x", "origin": [8, 8, 15.5]},
 			"faces": {
-				"north": {"uv": [7.5, 7.7, 8.5, 8.2], "texture": "#lever"},
-				"east": {"uv": [0.4, 7.7, 1.2, 8.2], "texture": "#lever"},
-				"south": {"uv": [7.5, 7.7, 8.5, 8.2], "texture": "#lever"},
-				"west": {"uv": [14.8, 7.7, 15.6, 8.2], "texture": "#lever"},
-				"up": {"uv": [7.5, 14.8, 8.5, 15.6], "texture": "#lever"},
-				"down": {"uv": [7.5, 0.4, 8.5, 1.2], "texture": "#lever"}
+				"north": {"uv": [9, 5, 11, 5.5], "texture": "#base"},
+				"east": {"uv": [9, 4, 10.05, 5.5], "texture": "#base"},
+				"south": {"uv": [7.5, 7.75, 8.5, 8.25], "texture": "#base"},
+				"west": {"uv": [9, 5, 11.05, 6], "texture": "#base"},
+				"up": {"uv": [10, 4, 11, 6.05], "texture": "#base"},
+				"down": {"uv": [9, 5, 11, 6.05], "texture": "#base"}
 			}
 		}
 	],

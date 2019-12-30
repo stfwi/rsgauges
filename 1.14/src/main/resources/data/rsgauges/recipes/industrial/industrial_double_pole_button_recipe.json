@@ -3,15 +3,15 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_double_pole_button",
-   "items": [
-    "rsgauges:industrial_foot_button"
+   "required": [
+    "rsgauges:industrial_fenced_button"
    ]
   }
  ],
  "type": "minecraft:crafting_shapeless",
  "ingredients": [
   {
-   "item": "rsgauges:industrial_foot_button"
+   "item": "rsgauges:industrial_fenced_button"
   }
  ],
  "result": {

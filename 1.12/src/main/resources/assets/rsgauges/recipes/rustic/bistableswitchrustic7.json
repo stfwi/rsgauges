@@ -1,17 +1,17 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:bistableswitch_rustic7",
-      "items": [
-        "rsgauges:bistableswitch_rustic6"
+      "required": [
+        "rsgauges:bistableswitch_rustic3"
       ]
     }
   ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "rsgauges:bistableswitch_rustic6"
+      "item": "rsgauges:bistableswitch_rustic3"
     }
   ],
   "result": {

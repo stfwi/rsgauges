@@ -3,15 +3,15 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_lever",
-   "items": [
-    "rsgauges:industrial_rotary_lever"
+   "required": [
+    "rsgauges:industrial_small_lever"
    ]
   }
  ],
  "type": "minecraft:crafting_shapeless",
  "ingredients": [
   {
-   "item": "rsgauges:industrial_rotary_lever"
+   "item": "rsgauges:industrial_small_lever"
   }
  ],
  "result": {

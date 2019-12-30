@@ -9,6 +9,8 @@
  */
 package wile.rsgauges.detail;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import wile.rsgauges.ModRsGauges;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -16,6 +18,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import wile.rsgauges.blocks.*;
+import wile.rsgauges.items.ItemSwitchLinkPearl;
 
 @Config(modid = ModRsGauges.MODID)
 @Config.LangKey("rsgauges.config.title")
@@ -322,6 +326,49 @@ public class ModConfig
     zmisc.accepted_wrenches = zmisc.accepted_wrenches.toLowerCase().replaceAll("[\\s]","").replaceAll(",,",",");
     zmisc.accepted_wrenches = ("," + zmisc.accepted_wrenches + ",").replaceAll(",air,",",redstone_torch,"); // @todo added for version transition, normally .replaceAll(",air,",",")
     zmisc.accepted_wrenches = zmisc.accepted_wrenches.replaceAll("[,]+$", "").replaceAll("^[,]+", "");
+  }
+
+  // Code unification
+  public static boolean isOptedOut(Block block)
+  { return !enabled(block); }
+
+  public static boolean isOptedOut(Item item)
+  { return !enabled(item); }
+
+  public static boolean isWithoutRecipes()
+  { return false; }
+
+
+  private static boolean enabled(Block block)
+  {
+    if(block instanceof BlockIndicator) {
+      BlockIndicator bl = ((BlockIndicator)block);
+      if((bl.config & RsBlock.RSBLOCK_CONFIG_OBSOLETE) != 0) return false;
+      if(ModConfig.optouts.without_indicators) return false;
+      if((ModConfig.optouts.without_blinking_indicators) && (bl.blink_interval() > 0)) return false;
+      if((ModConfig.optouts.without_sound_indicators) && ((bl.power_on_sound != null) || (bl.power_off_sound != null))) return false;
+    } if(block instanceof BlockGauge) {
+    BlockGauge bl = ((BlockGauge)block);
+    if((bl.config & RsBlock.RSBLOCK_CONFIG_OBSOLETE) != 0) return false;
+    if(ModConfig.optouts.without_gauges) return false;
+  } else if(block instanceof BlockSwitch) {
+    BlockSwitch bl = ((BlockSwitch)block);
+    if((bl.config & RsBlock.RSBLOCK_CONFIG_OBSOLETE) != 0) return false;
+    if((ModConfig.optouts.without_bistable_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_BISTABLE)!=0)) return false;
+    if((ModConfig.optouts.without_pulse_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_PULSE)!=0)) return false;
+    if((ModConfig.optouts.without_contact_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_CONTACT)!=0)) return false;
+    if((ModConfig.optouts.without_automatic_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_AUTOMATIC)!=0)) return false;
+    if((ModConfig.optouts.without_linkrelay_switches)  && ((bl.config & BlockSwitch.SWITCH_CONFIG_LINK_RELAY)!=0)) return false;
+  } else if(block instanceof BlockSensitiveGlass) {
+    if(ModConfig.optouts.without_decorative) return false;
+  }
+    return true;
+  }
+
+  private static boolean enabled(Item item)
+  {
+    if((ModConfig.optouts.without_switch_linking) && (item instanceof ItemSwitchLinkPearl)) return false;
+    return true;
   }
 
 }

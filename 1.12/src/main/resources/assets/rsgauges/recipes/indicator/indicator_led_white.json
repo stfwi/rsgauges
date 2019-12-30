@@ -1,9 +1,9 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:indicator_led_white",
-      "items": [
+      "required": [
         "rsgauges:indicator3"
       ]
     }

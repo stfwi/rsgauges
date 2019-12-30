@@ -1,11 +1,12 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.15.1": {
+    "1.2.0-b1": "[A] Added JEI integration.\n[M] Model \"vanillafication\" rework, part 2.\n[D] Removed obsolete switches (registry not affected).\n[M] Recipes simplified, recipe conditions unified.\n[M] Code updates for version compatibility.\n[A] All block are waterloggable (including Sensitive glass).",
     "1.1.10-b4": "[F] Removed tag reference to minecraft:dirts, which prevented any recipes from being craftable.",
     "1.1.10-b3": "[A] Initial port."
   },
   "promos": {
     "1.15.1-recommended": "",
-    "1.15.1-latest": "1.1.10-b4"
+    "1.15.1-latest": "1.2.0-b1"
   }
 }

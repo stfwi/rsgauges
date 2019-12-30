@@ -3,7 +3,7 @@
   {
    "type": "rsgauges:optional",
    "result": "rsgauges:industrial_entity_detector",
-   "items": [
+   "required": [
     "rsgauges:industrial_linear_entity_detector"
    ]
   }

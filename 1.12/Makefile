@@ -104,4 +104,4 @@ dist: sanatize dist-check dist-files
 
 port-languages:
 	@echo "[1.12] Porting language files to 1.13/1.14 ..."
-	@djs tasks.js port-languages
+	@djs tasks.js port-languages-from-112
