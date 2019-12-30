@@ -2,8 +2,11 @@
 ## Gauges and Switches
 
 A [Minecraft](https://minecraft.net) (Java Edition) mod based on [`Forge`](http://www.minecraftforge.net/). The Mod adds gauges, stylish buttons,
-levers, pressure plates, timers, and other devices to measure or "produce" redstone
-power to the game:
+levers, pressure plates, timers, and other devices to measure or "produce" redstone power to the game.
+
+![brief](documentation/rsgauges-brief.png)
+
+[Screenshots in documentation readme here](documentation/readme.md).
 
 ### Distribution file download
 

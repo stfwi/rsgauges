@@ -1,8 +1,11 @@
 
 ## Documentation resources
 
-This section contains images for the main readme page.
-
 ----
 
-![annotated-rsgauges-summary.png](annotated-rsgauges-summary.png)
+![rsgauges-industrial.png](rsgauges-industrial.png)
+![rsgauges-industrial-autoswitches.png](rsgauges-industrial-autoswitches.png)
+![rsgauges-rustic.png](rsgauges-rustic.png)
+![rsgauges-glass.png](rsgauges-glass.png)
+![rsgauges-old-fancy.png](rsgauges-old-fancy.png)
+![rsgauges-power-plants.png](rsgauges-power-plants.png)
