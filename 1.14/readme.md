@@ -1,5 +1,5 @@
 
-## Gauges and Switches (`rsgauges`) (MC1.14.4)
+## Gauges and Switches (MC1.14.4)
 
 Mod sources for Minecraft version 1.14.4.
 
@@ -10,7 +10,8 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
-    ~ v1.2.0-b2  [A]
+    ~ v1.2.0-b2  [F] Fixed JEI integration warning if nothing is opt'ed out (thx @SDUBZ).
+                 [A] Added GIT version logging.
 
     - v1.2.0-b1  [A] Added JEI integration.
                  [M] All Forge blockstates transformed to vanilla format.

@@ -19,7 +19,6 @@ version = "${version_rsgauges}"
 group = "wile.rsgauges"
 archivesBaseName = "rsgauges-${version_minecraft}"
 
-
 repositories {
   maven { name = "Progwml6 maven"; url = "https://dvs1.progwml6.com/files/maven/" } // JEI files
   maven { name = "ModMaven"; url = "modmaven.k-4u.nl" } // JEI files, fallback

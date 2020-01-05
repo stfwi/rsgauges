@@ -57,11 +57,6 @@ public class ModRsGauges
 {
   public static final String MODID = "rsgauges";
   public static final String MODNAME = "Gauges and Switches";
-  public static final String MODVERSION = "@MOD_VERSION@";
-  public static final String MODMCVERSION = "@MOD_MCVERSION@";
-  public static final String MODFINGERPRINT = "@MOD_SIGNSHA1@";
-  public static final String MODBUILDID = "@MOD_BUILDID@";
-
   public static final int VERSION_DATAFIXER = 0;
   private static final Logger LOGGER = LogManager.getLogger();
 
@@ -69,10 +64,10 @@ public class ModRsGauges
 
   public ModRsGauges()
   {
+    ModAuxiliaries.logGitVersion(MODNAME);
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST,false, PlayerInteractEvent.class, ForgeEvents::onPlayerInteract);
     ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_CONFIG_SPEC);
-    // It's simply not working properly, at least not at the time of implementing, so all in COMMON if it must be.
     //ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, ModConfig.SERVER_CONFIG_SPEC);
     //ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT_CONFIG_SPEC);
   }

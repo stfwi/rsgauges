@@ -1,5 +1,4 @@
 
-
 ## Gauges and Switches (MC1.12.2)
 
 Mod sources for Minecraft version 1.12.2.
@@ -11,7 +10,9 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
-    ~ v1.2.0-b1  [A] Added JEI integration.
+    - v1.2.0-b1  [!] Recipes, models and feature set changed. If you have a
+                     modpack with tweaked recipes, then do not update.
+                 [A] Added JEI integration.
                  [M] Model "vanillafication" rework, part 2.
                  [D] Removed obsolete switches (registry not affected).
                  [M] Recipes simplified, recipe conditions unified.

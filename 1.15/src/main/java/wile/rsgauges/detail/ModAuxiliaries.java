@@ -23,9 +23,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.glfw.GLFW;
 import javax.annotation.Nullable;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 
 public class ModAuxiliaries
 {
@@ -275,6 +281,33 @@ public class ModAuxiliaries
       }
     }
     return bb;
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // JAR resource related
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static String loadResourceText(String path)
+  {
+    try {
+      InputStream is = ModAuxiliaries.class.getResourceAsStream(path);
+      if(is==null) return "";
+      BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+      return br.lines().collect(Collectors.joining("\n"));
+    } catch(Throwable e) {
+      return "";
+    }
+  }
+
+  public static void logGitVersion(String mod_name)
+  {
+    try {
+      // Done during construction to have an exact version in case of a crash while registering.
+      String version = ModAuxiliaries.loadResourceText("/.gitversion").trim();
+      logInfo(mod_name+((version.isEmpty())?(" (dev build)"):(" GIT id #"+version)) + ".");
+    } catch(Throwable e) {
+      // (void)e; well, then not. Priority is not to get unneeded crashes because of version logging.
+    }
   }
 
   // -------------------------------------------------------------------------------------------------------------------
