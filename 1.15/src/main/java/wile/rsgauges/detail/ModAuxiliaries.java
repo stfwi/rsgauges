@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
@@ -35,6 +36,10 @@ import java.util.stream.Collectors;
 
 public class ModAuxiliaries
 {
+  public static final String MODID = ModRsGauges.MODID;
+  public static final Logger LOGGER = ModRsGauges.logger();
+  private static final ModRsGauges.ISidedProxy proxy = ModRsGauges.proxy;
+
   // -------------------------------------------------------------------------------------------------------------------
   // Sideness, system/environment, tagging interfaces
   // -------------------------------------------------------------------------------------------------------------------
@@ -42,7 +47,7 @@ public class ModAuxiliaries
   public interface IExperimentalFeature {}
 
   public static boolean isClientSide()
-  { return ModRsGauges.proxy.mc() != null; }
+  { return proxy.mc() != null; }
 
   public static final boolean isModLoaded(final String registry_name)
   { return ModList.get().isLoaded(registry_name); }
@@ -52,25 +57,25 @@ public class ModAuxiliaries
   // -------------------------------------------------------------------------------------------------------------------
 
   public static final void logInfo(final String msg)
-  { ModRsGauges.logger().info(msg); }
+  { LOGGER.info(msg); }
 
   public static final void logWarn(final String msg)
-  { ModRsGauges.logger().warn(msg); }
+  { LOGGER.warn(msg); }
 
   public static final void logError(final String msg)
-  { ModRsGauges.logger().error(msg); }
+  { LOGGER.error(msg); }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Localization, text formatting
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * Text localisation wrapper, implicitly prepends `ModRsGauges.MODID` to the
+   * Text localisation wrapper, implicitly prepends `MODID` to the
    * translation keys. Forces formatting argument, nullable if no special formatting shall be applied..
    */
   public static TranslationTextComponent localizable(String modtrkey, @Nullable TextFormatting color, Object... args)
   {
-    TranslationTextComponent tr = new TranslationTextComponent(ModRsGauges.MODID+"."+modtrkey, args);
+    TranslationTextComponent tr = new TranslationTextComponent(MODID+"."+modtrkey, args);
     if(color!=null) tr.getStyle().setColor(color);
     return tr;
   }
@@ -107,8 +112,8 @@ public class ModAuxiliaries
     public static boolean extendedTipCondition()
     {
       return (
-        InputMappings.isKeyDown(ModRsGauges.proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) ||
-        InputMappings.isKeyDown(ModRsGauges.proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_RIGHT_SHIFT)
+        InputMappings.isKeyDown(proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) ||
+        InputMappings.isKeyDown(proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_RIGHT_SHIFT)
       );
     }
 
@@ -116,8 +121,8 @@ public class ModAuxiliaries
     public static boolean helpCondition()
     {
       return extendedTipCondition() && (
-        InputMappings.isKeyDown(ModRsGauges.proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) ||
-        InputMappings.isKeyDown(ModRsGauges.proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_RIGHT_CONTROL)
+        InputMappings.isKeyDown(proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) ||
+        InputMappings.isKeyDown(proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_RIGHT_CONTROL)
       );
     }
 
@@ -148,8 +153,8 @@ public class ModAuxiliaries
         return true;
       } else if(addAdvancedTooltipHints) {
         String s = "";
-        if(tip_available) s += localize(ModRsGauges.MODID + ".tooltip.hint.extended") + (help_available ? " " : "");
-        if(help_available) s += localize(ModRsGauges.MODID + ".tooltip.hint.help");
+        if(tip_available) s += localize(MODID + ".tooltip.hint.extended") + (help_available ? " " : "");
+        if(help_available) s += localize(MODID + ".tooltip.hint.help");
         tooltip.add(new StringTextComponent(s));
       }
       return false;
@@ -303,7 +308,7 @@ public class ModAuxiliaries
   {
     try {
       // Done during construction to have an exact version in case of a crash while registering.
-      String version = ModAuxiliaries.loadResourceText("/.gitversion").trim();
+      String version = ModAuxiliaries.loadResourceText("/.gitversion-" + MODID).trim();
       logInfo(mod_name+((version.isEmpty())?(" (dev build)"):(" GIT id #"+version)) + ".");
     } catch(Throwable e) {
       // (void)e; well, then not. Priority is not to get unneeded crashes because of version logging.

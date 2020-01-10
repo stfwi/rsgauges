@@ -53,13 +53,13 @@ minecraft {
 
 dependencies {
   minecraft "net.minecraftforge:forge:${version_forge}"
-  //compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
-  //runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
+  compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
+  runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
 }
 
 processResources {
   outputs.upToDateWhen { false }
-  doLast { file("${sourceSets.main.output.resourcesDir}/.gitversion").text = 'git log "-1" "--format=%h"'.execute().in.text.trim() }
+  doLast { file("${sourceSets.main.output.resourcesDir}/.gitversion-rsgauges").text = 'git log "-1" "--format=%h"'.execute().in.text.trim() }
 }
 
 jar {
