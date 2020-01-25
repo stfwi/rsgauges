@@ -155,7 +155,7 @@ public class ModRsGauges
     { ModConfig.onLoad(event.getConfig()); }
 
     @SubscribeEvent
-    public static void onConfigChanged(net.minecraftforge.fml.config.ModConfig.ConfigReloading event)
+    public static void onConfigChanged(net.minecraftforge.fml.config.ModConfig.Reloading event)
     { ModConfig.onFileChange(event.getConfig()); }
 
     // Listener added in c'tor
