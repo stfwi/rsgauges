@@ -10,6 +10,10 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+                 -------------------------------------------------------------------
+    - v1.2.0     [R] Release build v1.2.0.
+                 -------------------------------------------------------------------
+
     - v1.2.0-b2  [M] Lang en_us: Sensitive Glass block names adapted (issue #15, thx Dimentive).
 
     - v1.2.0-b1  [!] Recipes, models and feature set changed. If you have a

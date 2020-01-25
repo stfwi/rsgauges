@@ -357,6 +357,6 @@
  "block.rsgauges.inverted_sensitiveglass.help": "§6Glass block that normally emits light like a redstone lamp, and switches off when it is powered by a redstone signal.§r",
  "block.rsgauges.qube": "The qube",
  "block.rsgauges.qube.help": "It's a developer block that is not supposed to be craftable or used in the game.",
- "item.rsgauges.switchlink_pearl": "Switch link pearl",
- "item.rsgauges.switchlink_pearl.help": "§6Created by left clicking a switch with an Ender pearl. Remote activates that (target) switch when used or plugged into another (source) switch, also by left clicking.§r\nChange link options by left clicking the target with the switch link pearl (cycles through link options). You can plug more than one pearl into a switch. Pearls will complain when they are overstressed or cannot find their target, you can hear that. If a switch is not suitable to be a source or target for linking, the pearl will also complain. Different switch types may differ in their reaction to link triggers (simply experiment a bit)."
+ "item.rsgauges.switchlink_pearl": "Switch Link Pearl",
+ "item.rsgauges.switchlink_pearl.help": "§6Created by left clicking a switch with an Ender pearl. Remote activates that (target) switch when used or plugged into another (source) switch, also by left clicking.§r\nChange link options by left clicking the target with the Switch Link Pearl (cycles through link options). You can plug more than one pearl into a switch. Pearls will complain when they are overstressed or cannot find their target, you can hear that. If a switch is not suitable to be a source or target for linking, the pearl will also complain. Different switch types may differ in their reaction to link triggers (simply experiment a bit)."
 }

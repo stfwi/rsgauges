@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.15.1.
 ----
 ## Version history
 
+    ~ v1.2.0-b3
+
     - v1.2.0-b2   [A] Added GIT version logging.
                   [M] Lang en_us: Sensitive Glass block names adapted (issue #15, thx Dimentive).
 

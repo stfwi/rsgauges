@@ -549,11 +549,11 @@ tile.rsgauges.qube.help=It's a developer block that is not supposed to be crafta
 #-----------------------------------------------------------------------------------------------------------
 # Items
 #-----------------------------------------------------------------------------------------------------------
-item.rsgauges.switchlink_pearl.name=Switch link pearl
+item.rsgauges.switchlink_pearl.name=Switch Link Pearl
 item.rsgauges.switchlink_pearl.help=§6Created by left clicking a switch with an Ender pearl. Remote activates that \
                                     (target) switch when used or plugged into another (source) switch, also by \
                                     left clicking.§r\n\
-                                    Change link options by left clicking the target with the switch link pearl (cycles \
+                                    Change link options by left clicking the target with the Switch Link Pearl (cycles \
                                     through link options). You can plug more than one pearl into a switch. \
                                     Pearls will complain when they are overstressed or cannot find their target, you can hear that. \
                                     If a switch is not suitable to be a source or target for linking, the pearl will also complain. \

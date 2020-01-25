@@ -1,12 +1,13 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "promos": {
-    "1.12.2-recommended": "1.1.10",
-    "1.12.2-latest": "1.2.0-b2",
-    "1.14.4-recommended": "",
-    "1.14.4-latest": "1.2.0-b2"
+    "1.12.2-recommended": "1.2.0",
+    "1.12.2-latest": "1.2.0",
+    "1.14.4-recommended": "1.2.0",
+    "1.14.4-latest": "1.2.0"
   },
   "1.12.2": {
+    "1.2.0": "[R] Release build v1.2.0.",
     "1.2.0-b2": "[M] Lang en_us: Sensitive Glass block names adapted (issue #15, thx Dimentive).",
     "1.2.0-b1": "[!] Recipes, models and feature set changed. If you have a modpack with tweaked recipes, then do not update.\n[A] Added JEI integration.\n[M] Model \"vanillafication\" rework, part 2.\n[D] Removed obsolete switches (registry not affected).\n[M] Recipes simplified, recipe conditions unified.\n[M] Code updates for version compatibility.",
     "1.1.10": "[R] Release build v1.1.10. Release-to-release changes: * Switch output behaviour is by default like vanilla buttons/levers. * Switch touch config improved. * Compat fixes. * Lang updates. * Model/texture improvements.",
@@ -68,6 +69,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "1.14.4": {
+    "1.2.0": "[R] Release build v1.2.0.",
     "1.2.0-b2": "[F] Fixed JEI integration warning if nothing is opt'ed out (thx @SDUBZ).\n[A] Added GIT version logging.\n[M] Lang en_us: Sensitive Glass block names adapted (issue #15, thx Dimentive).",
     "1.2.0-b1": "[A] Added JEI integration.\n[M] All Forge blockstates transformed to vanilla format.\n[M] Model \"vanillafication\" rework, part 2.\n[D] Removed obsolete switches (registry not affected).\n[M] Recipes simplified, recipe conditions unified.\n[M] Code updates for version compatibility.\n[A] All block are waterloggable (including Sensitive glass).",
     "1.1.10-b3": "[M] Strong power output of levers and buttons also output weak power to all sides (like vanilla levers).\n[M] Touch config for automatic switches (small buttons on the devices) are not restricted anymore to using the empty hand.",

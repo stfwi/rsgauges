@@ -10,6 +10,10 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+                 -------------------------------------------------------------------
+    - v1.2.0     [R] Release build v1.2.0.
+                 -------------------------------------------------------------------
+
     - v1.2.0-b2  [F] Fixed JEI integration warning if nothing is opt'ed out (thx @SDUBZ).
                  [A] Added GIT version logging.
                  [M] Lang en_us: Sensitive Glass block names adapted (issue #15, thx Dimentive).
