@@ -17,4 +17,8 @@ tasks["assets"] = function() {
   libtask114.stdtasks["assets"]();
 };
 
+tasks["lang-json-fixes"] = function() {
+  libtask114.stdtasks["lang-json-fixes"]();
+};
+
 libtask.run(tasks, sys.args);

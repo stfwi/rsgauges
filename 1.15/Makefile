@@ -62,6 +62,7 @@ init:
 sanatize:
 	@echo "[1.15] Running sanatising tasks ..."
 	@djs tasks.js sanatize
+	@djs tasks.js lang-json-fixes
 	@djs tasks.js sync-languages
 	@djs tasks.js version-check
 	@djs tasks.js update-json

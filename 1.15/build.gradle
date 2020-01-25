@@ -19,7 +19,6 @@ version = "${version_rsgauges}"
 group = "wile.rsgauges"
 archivesBaseName = "rsgauges-${version_minecraft}"
 
-
 repositories {
   maven { name = "Progwml6 maven"; url = "https://dvs1.progwml6.com/files/maven/" } // JEI files
   maven { name = "ModMaven"; url = "modmaven.k-4u.nl" } // JEI files, fallback
@@ -53,14 +52,14 @@ minecraft {
 }
 
 dependencies {
-  minecraft "net.minecraftforge:forge:${version_forge}"
+  minecraft "net.minecraftforge:forge:${version_forge_minecraft}"
   //compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
   //runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
 }
 
 processResources {
   outputs.upToDateWhen { false }
-  doLast { file("${sourceSets.main.output.resourcesDir}/.gitversion").text = 'git log "-1" "--format=%h"'.execute().in.text.trim() }
+  doLast { file("${sourceSets.main.output.resourcesDir}/.gitversion-rsgauges").text = 'git log "-1" "--format=%h"'.execute().in.text.trim() }
 }
 
 jar {

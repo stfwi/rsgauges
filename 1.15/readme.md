@@ -1,5 +1,5 @@
 
-## Gauges and Switches (`rsgauges`) (MC1.15.1)
+## Gauges and Switches (MC1.15.1)
 
 Mod sources for Minecraft version 1.15.1.
 
@@ -10,7 +10,10 @@ Mod sources for Minecraft version 1.15.1.
 ----
 ## Version history
 
-    ~ v1.2.0-b2   [U]
+    ~ v1.2.0-b3
+
+    - v1.2.0-b2   [A] Added GIT version logging.
+                  [M] Lang en_us: Sensitive Glass block names adapted (issue #15, thx Dimentive).
 
     - v1.2.0-b1   [A] Added JEI integration.
                   [M] Model "vanillafication" rework, part 2.

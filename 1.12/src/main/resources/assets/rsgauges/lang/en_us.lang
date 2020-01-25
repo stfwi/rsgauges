@@ -497,24 +497,24 @@ tile.rsgauges.industrial_knock_switch.help=§6Switches on/off when the adjacent 
 #-----------------------------------------------------------------------------------------------------------
 # Sensitive glass block names
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.sensitiveglass.name=Redstone sensitive glass block (light emitting)
-tile.rsgauges.sensitiveglass_white.name=Redstone sensitive glass block (white stained)
-tile.rsgauges.sensitiveglass_red.name=Redstone sensitive glass block (red stained)
-tile.rsgauges.sensitiveglass_green.name=Redstone sensitive glass block (green stained)
-tile.rsgauges.sensitiveglass_blue.name=Redstone sensitive glass block (blue stained)
-tile.rsgauges.sensitiveglass_yellow.name=Redstone sensitive glass block (yellow stained)
-tile.rsgauges.sensitiveglass_orange.name=Redstone sensitive glass block (orange stained)
-tile.rsgauges.sensitiveglass_magenta.name=Redstone sensitive glass block (magenta stained)
-tile.rsgauges.sensitiveglass_lightblue.name=Redstone sensitive glass block (light blue stained)
-tile.rsgauges.sensitiveglass_lime.name=Redstone sensitive glass block (lime stained)
-tile.rsgauges.sensitiveglass_pink.name=Redstone sensitive glass block (pink stained)
-tile.rsgauges.sensitiveglass_gray.name=Redstone sensitive glass block (gray stained)
-tile.rsgauges.sensitiveglass_lightgray.name=Redstone sensitive glass block (light gray stained)
-tile.rsgauges.sensitiveglass_cyan.name=Redstone sensitive glass block (cyan stained)
-tile.rsgauges.sensitiveglass_purple.name=Redstone sensitive glass block (purple stained)
-tile.rsgauges.sensitiveglass_brown.name=Redstone sensitive glass block (brown stained)
-tile.rsgauges.sensitiveglass_black.name=Redstone sensitive glass block (black stained)
-tile.rsgauges.sensitiveglass_inverted.name=Redstone sensitive glass block (inverted, light emitting)
+tile.rsgauges.sensitiveglass.name=Redstone-Sensitive Glass Block (Light Emitting)
+tile.rsgauges.sensitiveglass_white.name=Redstone-Sensitive Glass Block (White-Stained)
+tile.rsgauges.sensitiveglass_red.name=Redstone-Sensitive Glass Block (Red-Stained)
+tile.rsgauges.sensitiveglass_green.name=Redstone-Sensitive Glass Block (Green-Stained)
+tile.rsgauges.sensitiveglass_blue.name=Redstone-Sensitive Glass Block (Blue-Stained)
+tile.rsgauges.sensitiveglass_yellow.name=Redstone-Sensitive Glass Block (Yellow-Stained)
+tile.rsgauges.sensitiveglass_orange.name=Redstone-Sensitive Glass Block (Orange-Stained)
+tile.rsgauges.sensitiveglass_magenta.name=Redstone-Sensitive Glass Block (Magenta-Stained)
+tile.rsgauges.sensitiveglass_lightblue.name=Redstone-Sensitive Glass Block (Light-Blue-Stained)
+tile.rsgauges.sensitiveglass_lime.name=Redstone-Sensitive Glass Block (Lime-Stained)
+tile.rsgauges.sensitiveglass_pink.name=Redstone-Sensitive Glass Block (Pink-Stained)
+tile.rsgauges.sensitiveglass_gray.name=Redstone-Sensitive Glass Block (Gray-Stained)
+tile.rsgauges.sensitiveglass_lightgray.name=Redstone-Sensitive Glass Block (Light-Gray-Stained)
+tile.rsgauges.sensitiveglass_cyan.name=Redstone-Sensitive Glass Block (Cyan-Stained)
+tile.rsgauges.sensitiveglass_purple.name=Redstone-Sensitive Glass Block (Purple-Stained)
+tile.rsgauges.sensitiveglass_brown.name=Redstone-Sensitive Glass Block (Brown-Stained)
+tile.rsgauges.sensitiveglass_black.name=Redstone-Sensitive Glass Block (Black-Stained)
+tile.rsgauges.sensitiveglass_inverted.name=Redstone-Sensitive Glass Block (Inverted, Light Emitting)
 #
 # Sensitive glass block tooltip help
 #
@@ -549,11 +549,11 @@ tile.rsgauges.qube.help=It's a developer block that is not supposed to be crafta
 #-----------------------------------------------------------------------------------------------------------
 # Items
 #-----------------------------------------------------------------------------------------------------------
-item.rsgauges.switchlink_pearl.name=Switch link pearl
+item.rsgauges.switchlink_pearl.name=Switch Link Pearl
 item.rsgauges.switchlink_pearl.help=§6Created by left clicking a switch with an Ender pearl. Remote activates that \
                                     (target) switch when used or plugged into another (source) switch, also by \
                                     left clicking.§r\n\
-                                    Change link options by left clicking the target with the switch link pearl (cycles \
+                                    Change link options by left clicking the target with the Switch Link Pearl (cycles \
                                     through link options). You can plug more than one pearl into a switch. \
                                     Pearls will complain when they are overstressed or cannot find their target, you can hear that. \
                                     If a switch is not suitable to be a source or target for linking, the pearl will also complain. \
