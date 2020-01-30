@@ -280,13 +280,13 @@ public class BlockAutoSwitch extends BlockSwitch
    */
   public static class TileEntityEnvironmentalSensorSwitch extends TileEntityAutoSwitch implements ITickable
   {
-    private static final int debounce_max = 10;
-    private int update_interval_ = 10;
-    private double threshold0_on_  = 0;
-    private double threshold0_off_ = 0;
-    private int debounce_ = 0;
-    private int update_timer_ = 0;
-    private int debounce_counter_ = 0;
+    protected static final int debounce_max = 10;
+    protected int update_interval_ = 10;
+    protected double threshold0_on_  = 0;
+    protected double threshold0_off_ = 0;
+    protected int debounce_ = 0;
+    protected int update_timer_ = 0;
+    protected int debounce_counter_ = 0;
 
     public double threshold0_on()
     { return threshold0_on_; }

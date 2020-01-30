@@ -147,40 +147,6 @@ public class BlockEnvironmentalSensorSwitch extends BlockAutoSwitch
           }
           ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.lightsensor", TextFormatting.RESET, tr.toArray()));
         }
-              //      } else if((block.config & (SWITCH_CONFIG_TIMER_DAYTIME))!=0) {
-              //        final double time_scaling = 15.0d * 500.0d / 24000.0d; // 1/2h
-              //        switch(field) {
-              //          case 1: {
-              //            double v = threshold0_on()+(time_scaling*direction);
-              //            if(v < 0) v += 15.0; else if(v > 15) v = 0;
-              //            threshold0_on(v);
-              //            break;
-              //          }
-              //          case 2: {
-              //            double v = threshold0_off()+(time_scaling*direction);
-              //            if(v < 0) v += 15.0; else if(v > 15) v = 0;
-              //            threshold0_off(v);
-              //            break;
-              //          }
-              //          case 3: { debounce(debounce()+direction); break; }
-              //          case 4: { on_power(on_power() + direction); break; }
-              //        }
-              //        if(on_power() < 1) on_power(1);
-              //        {
-              //          // @TODO: day time localisation: how the hack that, transfer long timestamp with tagging and localise on client or system time class?
-              //          StringTextComponent separator = (new StringTextComponent(" | ")); separator.getStyle().setColor(TextFormatting.GRAY);
-              //          ArrayList<Object> tr = new ArrayList<>();
-              //          tr.add(ModAuxiliaries.localizable("switchconfig.daytimerclock.daytime_on", TextFormatting.BLUE, new Object[]{ModAuxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
-              //          tr.add(separator.deepCopy().appendSibling(ModAuxiliaries.localizable("switchconfig.daytimerclock.daytime_off", TextFormatting.YELLOW, new Object[]{ModAuxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
-              //          tr.add(separator.deepCopy().appendSibling(ModAuxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
-              //          if(debounce()>0) {
-              //            tr.add(separator.deepCopy().appendSibling(ModAuxiliaries.localizable("switchconfig.daytimerclock.random", TextFormatting.DARK_GREEN, new Object[]{debounce()}) ));
-              //          } else {
-              //            tr.add(new StringTextComponent(""));
-              //          }
-              //          tr.add(separator.deepCopy().appendSibling(ModAuxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
-              //          ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.daytimerclock", TextFormatting.RESET, tr.toArray()));
-              //        }
       } else if((block.config & (SWITCH_CONFIG_SENSOR_RAIN|SWITCH_CONFIG_SENSOR_LIGHTNING))!=0) {
         switch(field) {
           case 4: { on_power(on_power() + direction); break; }
