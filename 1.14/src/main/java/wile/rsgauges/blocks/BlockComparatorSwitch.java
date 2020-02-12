@@ -12,21 +12,22 @@ import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
-import net.minecraft.util.Direction;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
@@ -68,26 +69,44 @@ public class BlockComparatorSwitch extends BlockAutoSwitch
       // 2: Used inventory slots
       (world, pos, state, side) -> {
         final TileEntity te = world.getTileEntity(pos);
-        if(te==null) return -1;
-        final IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
-        if(handler == null) return -1;
-        final int size = handler.getSlots();
-        if(size == 0) return 0;
-        int n = 0;
-        for(int i=0; i<size; ++i) n += handler.getStackInSlot(i).isEmpty() ? 0 : 1;
-        return (int)Math.round(((double)n*15)/(double)size);
+        if(te==null) {
+          return -1;
+        } else if(te instanceof IInventory) {
+          IInventory inventory = (IInventory)te;
+          final int size = inventory.getSizeInventory();
+          int n = 0;
+          for(int i=0; i<size; ++i) n += inventory.getStackInSlot(i).isEmpty() ? 0 : 1;
+          return (int)Math.round(((double)n*15)/(double)size);
+        } else {
+          final IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
+          if(handler == null) return -1;
+          final int size = handler.getSlots();
+          if(size == 0) return 0;
+          int n = 0;
+          for(int i=0; i<size; ++i) n += handler.getStackInSlot(i).isEmpty() ? 0 : 1;
+          return (int)Math.round(((double)n*15)/(double)size);
+        }
       },
       // 1: Free inventory slots
       (world, pos, state, side) -> {
         final TileEntity te = world.getTileEntity(pos);
-        if(te==null) return -1;
-        final IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
-        if(handler == null) return -1;
-        final int size = handler.getSlots();
-        if(size == 0) return 0;
-        int n = 0;
-        for(int i=0; i<size; ++i) n += handler.getStackInSlot(i).isEmpty() ? 1 : 0;
-        return (int)Math.round(((double)n*15)/(double)size);
+        if(te==null) {
+          return -1;
+        } else if(te instanceof IInventory) {
+          IInventory inventory = (IInventory)te;
+          final int size = inventory.getSizeInventory();
+          int n = 0;
+          for(int i = 0; i < size; ++i) n += inventory.getStackInSlot(i).isEmpty() ? 1 : 0;
+          return (int)Math.round(((double)n*15)/(double)size);
+        } else {
+          final IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
+          if(handler == null) return -1;
+          final int size = handler.getSlots();
+          if(size == 0) return 0;
+          int n = 0;
+          for(int i=0; i<size; ++i) n += handler.getStackInSlot(i).isEmpty() ? 1 : 0;
+          return (int)Math.round(((double)n*15)/(double)size);
+        }
       }
     };
 

@@ -10,6 +10,11 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+                 -------------------------------------------------------------------
+    - v1.2.1     [R] Release build v1.2.1. Release-to-release changes:
+                     * Industrial Comparator Switch added.
+                 -------------------------------------------------------------------
+
     - v1.2.1-b1  [A] Added Industrial Comparator Switch.
 
                  -------------------------------------------------------------------
