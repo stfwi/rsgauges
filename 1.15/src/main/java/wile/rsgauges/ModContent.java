@@ -36,8 +36,6 @@ import javax.annotation.Nonnull;
 
 public class ModContent
 {
-  // @todo: generic static register() function.
-
   // -----------------------------------------------------------------------------------------------------------------
   // -- Internal constants, default block properties
   // -----------------------------------------------------------------------------------------------------------------
@@ -403,6 +401,17 @@ public class ModContent
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_lightning_sensor"));
+
+  // Comparator output level observing switch
+  public static final BlockComparatorSwitch INDUSTRIAL_COMPARATOR_SWITCH = (BlockComparatorSwitch)(new BlockComparatorSwitch(
+    BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+    BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+    BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    SWITCH_METALLIC_BLOCK_PROPERTIES,
+    ModAuxiliaries.getPixeledAABB(4,10,0, 12, 15, 1.5), null,
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+  )).setRegistryName(new ResourceLocation(MODID, "industrial_comparator_switch"));
 
   // Uni-directional block detector switch
   public static final BlockObserverSwitch INDUSTRIAL_BLOCK_DETECTOR = (BlockObserverSwitch)(new BlockObserverSwitch(
@@ -1165,6 +1174,7 @@ public class ModContent
     INDUSTRIAL_LIGHT_SENSOR,
     INDUSTRIAL_RAIN_SENSOR,
     INDUSTRIAL_LIGHTNING_SENSOR,
+    INDUSTRIAL_COMPARATOR_SWITCH,
     INDUSTRIAL_BLOCK_DETECTOR,
     INDUSTRIAL_SWITCHLINK_RECEIVER,
     INDUSTRIAL_SWITCHLINK_CASED_RECEIVER,
@@ -1295,6 +1305,11 @@ public class ModContent
     .build(null)
     .setRegistryName(ModRsGauges.MODID, "te_timer_switch");
 
+  public static final TileEntityType<?> TET_COMPARATOR_SWITCH = TileEntityType.Builder
+    .create(BlockComparatorSwitch.TileEntityComparatorSwitch::new, blocks_of_type(BlockComparatorSwitch.class))
+    .build(null)
+    .setRegistryName(ModRsGauges.MODID, "te_comparator_switch");
+
   public static final TileEntityType<?> TET_OBSERVER_SWITCH = TileEntityType.Builder
     .create(BlockObserverSwitch.TileEntityObserverSwitch::new, blocks_of_type(BlockObserverSwitch.class))
     .build(null)
@@ -1308,6 +1323,7 @@ public class ModContent
     TET_ENVSENSOR_SWITCH,
     TET_DAYTIMER_SWITCH,
     TET_TIMER_SWITCH,
+    TET_COMPARATOR_SWITCH,
     TET_OBSERVER_SWITCH
   };
 

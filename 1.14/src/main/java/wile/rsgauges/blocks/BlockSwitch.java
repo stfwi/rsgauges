@@ -550,8 +550,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   protected void onRsBlockDestroyed(BlockState state, World world, BlockPos pos, boolean isUpdateEvent)
   {
     final TileEntitySwitch te = getTe(world, pos);
-    if(te!=null) te.unlink_all(true);
-    te.nooutput(true);
+    if(te!=null) { te.unlink_all(true); te.nooutput(true); }
     if(isUpdateEvent) world.removeBlock(pos, false);
     notifyNeighbours(world, pos, state,  te, true);
   }
@@ -1055,7 +1054,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
         ck.wrenched = (("," + ModConfig.accepted_wrenches + ",").contains("," + item.getItem().getRegistryName().getPath() + ","));
         if(ck.wrenched) return ck;
       }
-      if(((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0)) {
+      if(((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0) && (ck.item != ModContent.SWITCH_LINK_PEARL) && (ck.item != Items.ENDER_PEARL)) {
         return touch(ck, state, facing, x,y,z);
       } else {
         return ck;

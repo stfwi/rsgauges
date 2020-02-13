@@ -288,6 +288,8 @@ tile.rsgauges.detectorswitch_glass1.name=Glas-Infrarot-Bewegungsmelder
 tile.rsgauges.detectorswitch_glass2.name=Glas-Laser-Lichtschranke
 tile.rsgauges.daytimeswitch_glass1.name=Glas-Zeitschaltuhr
 tile.rsgauges.timerswitch_glass1.name=Glas-Intervalzeitschalter
+tile.rsgauges.industrial_comparator_switch=Comparator-Schalter
+
 #
 # Auto switch tooltip help
 #
@@ -361,7 +363,11 @@ tile.rsgauges.timerswitch_glass1.help=§6Kleines Gerät, welches mit einstellbar
                                     Ausgang ist in Wandrichtung. Schaltet lautlos. \
                                     ${rsgauges.switch.feature.outputconfig.help} \
                                     Wenn der Timer kann Link-Target sein - dann wird zwischen Standby- und Run-Mode umgeschaltet.
-
+#tile.rsgauges.industrial_comparator_switch.help=§6A small device that that emits a redstone signal depending on the comparator output \
+                                    level or inventory statistics of the block it is attached to.§r\n\
+                                    The buttons on the front facing allow to configure the output signal strength, switch-on comparator \
+                                    value, switch-off comparator value, and operating mode ("comparator, free slots, used slots, ..."). \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
 
 #-----------------------------------------------------------------------------------------------------------
 # Block observing and inspection switches
@@ -603,6 +609,18 @@ rsgauges.switchconfig.lightsensor.threshold_on=Einschaltschwelle: %1$s%2$s
 rsgauges.switchconfig.lightsensor.threshold_off=Ausschaltschwelle: %1$s%2$s
 rsgauges.switchconfig.lightsensor.output_power=Power: %1$s
 rsgauges.switchconfig.lightsensor.debounce=Entprellen: %1$s %2$s
+
+
+#--------------------------------------------------
+# on: <int> off: <int> power: <int>  debounce:<int>
+#
+rsgauges.switchconfig.comparator_switch=%1$s%2$s%3$s%4$s
+rsgauges.switchconfig.comparator_switch.threshold_on=on-level: %1$s
+rsgauges.switchconfig.comparator_switch.threshold_off=off-level: %1$s
+rsgauges.switchconfig.comparator_switch.output_power=power: %1$s
+rsgauges.switchconfig.comparator_switch.mode0=Comparator-Modus
+rsgauges.switchconfig.comparator_switch.mode1=Belegte Inventar-Slots
+rsgauges.switchconfig.comparator_switch.mode2=Freie Inventar-Slots
 
 #--------------------------------------------------
 # on: <int>  off: <int>  power: <int>  random:<int>

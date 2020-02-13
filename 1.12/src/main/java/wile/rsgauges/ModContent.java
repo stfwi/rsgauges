@@ -809,6 +809,16 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
     ),
+    // Comparator output level observing switch
+    new BlockComparatorSwitch(
+      "industrial_comparator_switch",
+      ModAuxiliaries.getPixeledAABB(4,10,0, 12, 15, 1.5),
+      BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
+    ),
 
     // ------------------------------------------------------------------------------
 
@@ -1064,6 +1074,8 @@ public class ModContent
         GameRegistry.registerTileEntity(BlockObserverSwitch.TileEntityObserverSwitch.class, new ResourceLocation(ModRsGauges.MODID, "observerswitch_entity"));
         ++num_tile_entities;
       }
+      GameRegistry.registerTileEntity(BlockComparatorSwitch.TileEntityComparatorSwitch.class, new ResourceLocation(ModRsGauges.MODID, "comparatorswitch_entity"));
+      ++num_tile_entities;
     }
 
     // Register blocks
