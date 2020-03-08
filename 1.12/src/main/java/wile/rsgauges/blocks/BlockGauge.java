@@ -271,17 +271,17 @@ public class BlockGauge extends RsBlock implements ModContent.Colors.ColorTintSu
     public void update()
     {
       if(--trigger_timer_ > 0) return;
-      if(world.isRemote) {
-        trigger_timer_ = ModConfig.tweaks.gauge_update_interval * 2;
-        IBlockState state = world.getBlockState(pos);
-        state = ((BlockGauge) state.getBlock()).getBlockStateWithPower(state, power());
-        if(last_state_ != state) {
-          last_state_ = state;
-          world.markBlockRangeForRenderUpdate(pos, pos);
-        }
-      } else {
-        trigger_timer_ = ModConfig.tweaks.gauge_update_interval;
-        try {
+      try {
+        if(world.isRemote) {
+          trigger_timer_ = ModConfig.tweaks.gauge_update_interval * 2;
+          IBlockState state = world.getBlockState(pos);
+          state = ((BlockGauge) state.getBlock()).getBlockStateWithPower(state, power());
+          if(last_state_ != state) {
+            last_state_ = state;
+            world.markBlockRangeForRenderUpdate(pos, pos);
+          }
+        } else {
+          trigger_timer_ = ModConfig.tweaks.gauge_update_interval;
           IBlockState state = world.getBlockState(pos);
           final BlockGauge block = (BlockGauge) state.getBlock();
           final BlockPos pos = getPos();
@@ -328,10 +328,10 @@ public class BlockGauge extends RsBlock implements ModContent.Colors.ColorTintSu
               world.setBlockState(pos, block.getBlockStateWithPower(state, p), 4|16);
             }
           }
-        } catch(Throwable e) {
-          trigger_timer_ = 72000;
-          ModRsGauges.logger.error("TE update() failed: " + e);
         }
+      } catch(Throwable e) {
+        trigger_timer_ = 72000;
+        ModRsGauges.logger.error("TE update() failed: " + e);
       }
     }
   }
