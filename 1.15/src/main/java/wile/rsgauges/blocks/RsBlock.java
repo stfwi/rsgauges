@@ -199,25 +199,15 @@ public abstract class RsBlock extends Block implements ModColors.ColorTintSuppor
   public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player)
   {}
 
-  ///////////// --------------------------------------------------------------------------------------------------------
-  // 1.15 transition
+  @Override
+  @SuppressWarnings("deprecation")
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  { return ActionResultType.PASS; }
 
-  @Deprecated
-  public ActionResultType func_225533_a_(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_)
-  { return onBlockActivated(p_225533_1_,p_225533_2_,p_225533_3_,p_225533_4_,p_225533_5_,p_225533_6_) ? ActionResultType.SUCCESS : ActionResultType.PASS; }
-
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-  { return true; }
-
-  @Deprecated
-  public void func_225534_a_(BlockState p_225534_1_, ServerWorld p_225534_2_, BlockPos p_225534_3_, Random p_225534_4_)
-  { tick(p_225534_1_,p_225534_2_,p_225534_3_,p_225534_4_); }
-
-  public void tick(BlockState state, World world, BlockPos pos, Random rnd)
+  @Override
+  @SuppressWarnings("deprecation")
+  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rnd)
   {}
-
-  // 1.15 /transition
-  ///////////// --------------------------------------------------------------------------------------------------------
 
   @Override
   @SuppressWarnings("deprecation")

@@ -64,7 +64,7 @@ public class BlockTrapdoorSwitch extends BlockContactSwitch
   @Override
   public void onEntityWalk(World world, BlockPos pos, Entity entity)
   {
-    if(((config & SWITCH_CONFIG_HIGH_SENSITIVE)==0) || (world.isRemote) || (entity.func_225608_bj_()/*isSneaking()*/)) return;
+    if(((config & SWITCH_CONFIG_HIGH_SENSITIVE)==0) || (world.isRemote) || (entity.isShiftKeyDown())) return;
     onEntityCollided(world, pos, world.getBlockState(pos));
     final BlockPos[] neighbors = { pos.add(1,0,0), pos.add(-1,0,0), pos.add(0,0,1), pos.add(0,0,-1), pos.add(1,0,1), pos.add(-1,0,-1), pos.add(-1,0,1), pos.add(1,0,-1), };
     for(BlockPos p: neighbors) {

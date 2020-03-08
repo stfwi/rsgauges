@@ -8,11 +8,9 @@
  */
 package wile.rsgauges.detail;
 
-import net.minecraft.util.text.ITextComponent;
+import wile.rsgauges.ModRsGauges;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import wile.rsgauges.ModRsGauges;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkEvent;

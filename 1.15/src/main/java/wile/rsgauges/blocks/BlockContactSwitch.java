@@ -9,6 +9,7 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.world.server.ServerWorld;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
@@ -62,7 +63,7 @@ public class BlockContactSwitch extends BlockSwitch
   public void onEntityWalk(World world, BlockPos pos, Entity entity)
   {
     if(world.isRemote) return;
-    if(((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==(SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE)) && (!entity.func_225608_bj_()/*isSneaking()*/)) {
+    if(((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==(SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE)) && (!entity.isShiftKeyDown())) {
       onEntityCollided(world, pos, world.getBlockState(pos));
     }
   }
@@ -76,7 +77,7 @@ public class BlockContactSwitch extends BlockSwitch
   }
 
   @Override
-  public void tick(BlockState state, World world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
   { if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) || (!onEntityCollided(world, pos, state))) super.tick(state, world, pos, random); }
 
   protected boolean onEntityCollided(World world, BlockPos pos, BlockState state)

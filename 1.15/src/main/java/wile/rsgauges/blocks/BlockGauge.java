@@ -16,6 +16,7 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.util.ActionResultType;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.detail.ModColors;
@@ -87,8 +88,8 @@ public class BlockGauge extends RsDirectedBlock implements ModColors.ColorTintSu
   { world.getPendingBlockTicks().scheduleTick(pos, state.getBlock(), 1); }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-  { return false; }
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  { return ActionResultType.PASS; }
 
   @Override
   public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player)

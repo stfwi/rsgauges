@@ -1048,6 +1048,15 @@ public class ModContent
     ModAuxiliaries.getPixeledAABB(5,5,0,11,11,1), null
   )).setRegistryName(new ResourceLocation(MODID, "arrow_target"));
 
+  // Valve Wheel
+  public static final BlockBistableSwitch BISTABLE_VALVE_WHEEL_SWITCH = (BlockBistableSwitch)(new BlockBistableSwitch(
+    BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+    BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
+    BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    SWITCH_METALLIC_BLOCK_PROPERTIES,
+    ModAuxiliaries.getPixeledAABB(4,4,0,12,12,3.5), null
+  )).setRegistryName(new ResourceLocation(MODID, "valve_wheel_switch"));
+
   // -----------------------------------------------------------------------------------------------------------------
   // -- sensitive glass
   // -----------------------------------------------------------------------------------------------------------------
@@ -1261,6 +1270,7 @@ public class ModContent
     RED_POWER_PLANT,
     LIGHT_SWITCH,
     ARROW_TARGET_SWITCH,
+    BISTABLE_VALVE_WHEEL_SWITCH,
     // Senesitive Glass
     SENSITIVE_GLASS_BLOCK,
     WHITE_SENSITIVE_GLASS_BLOCK,

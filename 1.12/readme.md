@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    ~ v1.2.2-b1  [A] Added Valve Switch (idea and model by Jack M).
+
                  -------------------------------------------------------------------
     - v1.2.1     [R] Release build v1.2.1. Release-to-release changes:
                      * Industrial Comparator Switch added.

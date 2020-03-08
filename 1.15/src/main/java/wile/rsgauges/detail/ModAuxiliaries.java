@@ -112,8 +112,8 @@ public class ModAuxiliaries
     public static boolean extendedTipCondition()
     {
       return (
-        InputMappings.isKeyDown(proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) ||
-        InputMappings.isKeyDown(proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_RIGHT_SHIFT)
+        InputMappings.isKeyDown(proxy.mc().getMainWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) ||
+        InputMappings.isKeyDown(proxy.mc().getMainWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_SHIFT)
       );
     }
 
@@ -121,8 +121,8 @@ public class ModAuxiliaries
     public static boolean helpCondition()
     {
       return extendedTipCondition() && (
-        InputMappings.isKeyDown(proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) ||
-        InputMappings.isKeyDown(proxy.mc().func_228018_at_()/*getMainWindow()*/.getHandle(), GLFW.GLFW_KEY_RIGHT_CONTROL)
+        InputMappings.isKeyDown(proxy.mc().getMainWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) ||
+        InputMappings.isKeyDown(proxy.mc().getMainWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_CONTROL)
       );
     }
 

@@ -62,7 +62,7 @@ public class OverlayEventHandler extends AbstractGui
     if(deadline() < System.currentTimeMillis()) return;
     String txt = text();
     if(txt.isEmpty()) return;
-    final MainWindow win = mc.func_228018_at_()/*getMainWindow()*/;
+    final MainWindow win = mc.getMainWindow();
     final FontRenderer fr = mc.fontRenderer;
     final boolean was_unicode = fr.getBidiFlag();
     try {

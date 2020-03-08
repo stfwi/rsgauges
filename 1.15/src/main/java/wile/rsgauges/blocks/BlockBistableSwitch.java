@@ -9,6 +9,7 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.world.server.ServerWorld;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
@@ -38,8 +39,7 @@ public class BlockBistableSwitch extends BlockSwitch
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  @SuppressWarnings("deprecation")
-  public void tick(BlockState state, World world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
   {}
 
   @Override
