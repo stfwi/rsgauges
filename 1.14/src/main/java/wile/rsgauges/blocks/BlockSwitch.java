@@ -100,7 +100,6 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   public static final long SWITCH_CONFIG_SHOCK_SENSITIVE        = 0x0000400000000000l;
   public static final long SWITCH_CONFIG_HIGH_SENSITIVE         = 0x0000800000000000l;
   public static final long SWITCH_CONFIG_TRANSLUCENT            = RSBLOCK_CONFIG_TRANSLUCENT;
-  public static final long SWITCH_CONFIG_FAINT_LIGHTSOURCE      = 0x0002000000000000l;
   public static final long SWITCH_CONFIG_COLOR_TINT_SUPPORT     = RSBLOCK_CONFIG_COLOR_TINT_SUPPORT;
   public static final long SWITCH_CONFIG_NOT_PASSABLE           = 0x0010000000000000l;
   public static final long SWITCH_CONFIG_SIDES_CONFIGURABLE     = 0x0040000000000000l;
@@ -162,10 +161,6 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   @SuppressWarnings("deprecation")
   public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext)
   { return ((config & SWITCH_CONFIG_NOT_PASSABLE)==0) ? (VoxelShapes.empty()) : (getShape(state, world, pos, selectionContext)); }
-
-  @Override
-  public int getLightValue(BlockState state)
-  { return (((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) && (ModAuxiliaries.isClientSide())) ? 1 : 0; }
 
   @Override
   @SuppressWarnings("deprecation")

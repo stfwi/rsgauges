@@ -175,6 +175,8 @@
  "block.rsgauges.industrial_machine_switch.help": "${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}",
  "block.rsgauges.light_switch": "Lichtschalter",
  "block.rsgauges.light_switch.help": "${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}",
+ "block.rsgauges.elevator_button": "Fahrstuhl-Knopf",
+ "block.rsgauges.elevator_button.help": "${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}",
  "block.rsgauges.valve_wheel_switch": "Valve Switch",
  "block.rsgauges.valve_wheel_switch.help": "${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}",
  "block.rsgauges.industrial_estop_switch": "Notaus-Pilz",

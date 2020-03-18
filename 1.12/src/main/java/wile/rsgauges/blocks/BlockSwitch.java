@@ -359,7 +359,11 @@ public class BlockSwitch extends RsBlock implements ModContent.Colors.ColorTintS
   @Override
   @SuppressWarnings("deprecation")
   public int getLightValue(IBlockState state)
-  { return (((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) && (ModAuxiliaries.isClientSide())) ? 1 : 0; }
+  { return ((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) ? 4 : 0; }
+
+  @Override
+  public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
+  { return getLightValue(state); }
 
   @Override
   @SuppressWarnings("deprecation")

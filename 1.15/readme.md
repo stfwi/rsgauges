@@ -10,9 +10,9 @@ Mod sources for Minecraft version 1.15.1.
 ----
 ## Version history
 
-    ~ v1.2.2-b2  [M]
+    - v1.2.2-b2   [A] Added Elevator Button.
 
-    - v1.2.2-b1  [A] Added Valve Switch (idea and model by Jack M).
+    - v1.2.2-b1   [A] Added Valve Switch (idea and model by Jack M).
 
                   -------------------------------------------------------------------
     - v1.2.1      [R] Release build v1.2.1. Release-to-release changes:
