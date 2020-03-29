@@ -10,12 +10,10 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModContent;
-import wile.rsgauges.detail.ModColors;
-import wile.rsgauges.detail.ModConfig;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.detail.*;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.*;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.block.BlockState;
@@ -27,6 +25,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -97,7 +96,6 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   public static final long SWITCH_CONFIG_SHOCK_SENSITIVE        = 0x0000400000000000l;
   public static final long SWITCH_CONFIG_HIGH_SENSITIVE         = 0x0000800000000000l;
   public static final long SWITCH_CONFIG_TRANSLUCENT            = RSBLOCK_CONFIG_TRANSLUCENT;
-  public static final long SWITCH_CONFIG_FAINT_LIGHTSOURCE      = 0x0002000000000000l;
   public static final long SWITCH_CONFIG_COLOR_TINT_SUPPORT     = RSBLOCK_CONFIG_COLOR_TINT_SUPPORT;
   public static final long SWITCH_CONFIG_NOT_PASSABLE           = 0x0010000000000000l;
   public static final long SWITCH_CONFIG_SIDES_CONFIGURABLE     = 0x0040000000000000l;
@@ -161,10 +159,6 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   { return ((config & SWITCH_CONFIG_NOT_PASSABLE)==0) ? (VoxelShapes.empty()) : (getShape(state, world, pos, selectionContext)); }
 
   @Override
-  public int getLightValue(BlockState state)
-  { return (((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) && (ModAuxiliaries.isClientSide())) ? 1 : 0; }
-
-  @Override
   @SuppressWarnings("deprecation")
   public boolean canProvidePower(BlockState state)
   { return ((config & SWITCH_CONFIG_LINK_RELAY)==0); }
@@ -211,23 +205,25 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
   {
     TileEntitySwitch te = getTe(world, pos);
-    if((te==null) || world.isRemote) return true;
+    if(te==null) return ActionResultType.FAIL;
+    if(world.isRemote) return ActionResultType.SUCCESS;
+    DevUtils.blockActivateHook.hook(state, world, pos, player, hand, hit);
     te.click_config(null, false); // reset double click tracking
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit);
     if(ck.touch_configured) {
       if(te.activation_config(state, player, ck.x, ck.y)) {
         ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
       }
-      return true;
+      return ActionResultType.SUCCESS;
     } else if(ck.wrenched) {
       if(te.click_config(this, false)) {
         ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
         ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((BlockSwitch) state.getBlock()));
       }
-      return true;
+      return ActionResultType.SUCCESS;
     } else if(
       (!ModConfig.without_rightclick_item_switchconfig) &&
         (  ((ck.item==Items.REDSTONE) && (((BlockSwitch)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0)
@@ -236,11 +232,11 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
         )
     ) {
       onBlockClicked(state, world, pos, player);
-      return true;
+      return ActionResultType.SUCCESS;
     } else if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))==0) {
-      return true;
+      return ActionResultType.SUCCESS;
     } else {
-      return onSwitchActivated(world, pos, state, player, hit.getFace());
+      return onSwitchActivated(world, pos, state, player, hit.getFace()) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
     }
   }
 
@@ -250,6 +246,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
     if(world.isRemote) return;
     final TileEntitySwitch te = getTe(world, pos);
     if(te == null) return;
+    DevUtils.blockClickHook.hook(state, world, pos, player);
     final Item item_held = (player.inventory.getCurrentItem()!=null) ? (player.inventory.getCurrentItem().getItem()) : (Items.AIR);
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player);
     if(ck.wrenched) {
@@ -359,8 +356,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   { return base_tick_rate; }
 
   @Override
-  @SuppressWarnings("deprecation")
-  public void tick(BlockState state, World world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
   {
     if((world.isRemote) || (!state.get(POWERED))) return; // scheduler tick only allowed when currently active.
     final TileEntitySwitch te = getTe(world, pos);

@@ -928,6 +928,25 @@ public class ModContent
       BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       null, null
     ),
+    // Valve Wheel
+    new BlockSwitch("valve_wheel_switch",
+      ModAuxiliaries.getPixeledAABB(4,4,0,12,12,3.5), null,
+      BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      null, null
+    ),
+    // Elevator button
+    new BlockSwitch("elevator_button",
+      ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1), null,
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
+      BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE,
+      null, null
+    ),
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- sensitive glass

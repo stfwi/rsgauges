@@ -9,6 +9,8 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.util.ActionResultType;
+import net.minecraft.world.server.ServerWorld;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
@@ -40,7 +42,7 @@ public class BlockDimmerSwitch extends BlockSwitch
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public void tick(BlockState state, World world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
   {}
 
   @Override
@@ -48,11 +50,12 @@ public class BlockDimmerSwitch extends BlockSwitch
   { super.fillStateContainer(builder); builder.add(POWER); }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
   {
-    if(world.isRemote || (!(state.getBlock() instanceof BlockDimmerSwitch))) return true;
+    if((!(state.getBlock() instanceof BlockDimmerSwitch))) return ActionResultType.FAIL;
+    if(world.isRemote) return ActionResultType.SUCCESS;
     TileEntitySwitch te = getTe(world, pos);
-    if(te==null) return true;
+    if(te==null) return ActionResultType.FAIL;
     te.click_config(null, false);
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit);
     boolean was_powered = te.on_power()!=0;
@@ -80,12 +83,12 @@ public class BlockDimmerSwitch extends BlockSwitch
           }
         }
       }
-      return true;
+      return ActionResultType.SUCCESS;
     } else if(ck.wrenched) {
       if(te.click_config(this, false)) {
         ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((BlockSwitch) state.getBlock()));
       }
     }
-    return true;
+    return ActionResultType.SUCCESS;
   }
 }

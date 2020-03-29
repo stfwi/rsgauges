@@ -11,6 +11,8 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.util.ActionResultType;
+import net.minecraft.world.server.ServerWorld;
 import wile.rsgauges.detail.ModAuxiliaries;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.entity.player.PlayerEntity;
@@ -80,7 +82,7 @@ public class BlockSensitiveGlass extends RsBlock
   { return 4; }
 
   @Override
-  public void tick(BlockState state, World world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
   {
     if(world.isRemote) return;
     if(state.get(POWERED) && (!(world.isBlockPowered(pos)))) {
@@ -97,8 +99,8 @@ public class BlockSensitiveGlass extends RsBlock
   { return super.getStateForPlacement(context).with(POWERED, context.getWorld().isBlockPowered(context.getPos())); }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-  { return false; }
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  { return ActionResultType.PASS; }
 
   @Override
   protected void neighborUpdated(BlockState state, World world, BlockPos pos, BlockPos facingPos)

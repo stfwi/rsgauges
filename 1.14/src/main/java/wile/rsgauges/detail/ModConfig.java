@@ -495,7 +495,8 @@ public class ModConfig
       }
     }
     {
-      String exc = COMMON.pattern_includes.get().toLowerCase().replaceAll(ModRsGauges.MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      String exc = COMMON.pattern_excludes.get().toLowerCase().replaceAll(ModRsGauges.MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      if(COMMON.pattern_excludes.get() != exc) COMMON.pattern_excludes.set(exc);
       if(!exc.isEmpty()) ModRsGauges.logger().info("Pattern excludes: '" + exc + "'");
       String[] excl = exc.split(",");
       excludes_.clear();

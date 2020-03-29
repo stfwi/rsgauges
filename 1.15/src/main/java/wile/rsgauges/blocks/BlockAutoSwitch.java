@@ -9,6 +9,7 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.world.server.ServerWorld;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.block.Block;
@@ -36,7 +37,7 @@ public abstract class BlockAutoSwitch extends BlockSwitch
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public void tick(BlockState state, World world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
   {}
 
   // -------------------------------------------------------------------------------------------------------------------

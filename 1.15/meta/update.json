@@ -1,6 +1,9 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.15.2": {
+    "1.2.2": "[R] Release build v1.2.2. Release-to-release changes: * Valve Switch added. * Elevator Button added. * Minor fixes.",
+    "1.2.2-b2": "[A] Added Elevator Button.",
+    "1.2.2-b1": "[A] Added Valve Switch (idea and model by Jack M).",
     "1.2.1": "[R] Release build v1.2.1. Release-to-release changes: * Industrial Comparator Switch added.",
     "1.2.1-b1": "[A] Added Industrial Comparator Switch.",
     "1.2.0-b2": "[A] Added GIT version logging.\n[M] Lang en_us: Sensitive Glass block names adapted (issue #15, thx Dimentive).",
@@ -9,7 +12,7 @@
     "1.1.10-b3": "[A] Initial port."
   },
   "promos": {
-    "1.15.2-recommended": "1.2.1",
-    "1.15.2-latest": "1.2.1"
+    "1.15.2-recommended": "1.2.2",
+    "1.15.2-latest": "1.2.2"
   }
 }

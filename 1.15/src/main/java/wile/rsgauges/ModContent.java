@@ -58,30 +58,30 @@ public class ModContent
     .hardnessAndResistance(0.5f, 15f)
     .sound(SoundType.METAL)
     .harvestLevel(0)
-    .func_226896_b_() // notsolid?
+    .notSolid()
   );
   private static final Block.Properties GAUGE_GLASS_BLOCK_PROPERTIES = (Block.Properties
     .create(METAL_MATERIAL, MaterialColor.IRON)
     .hardnessAndResistance(0.5f, 15f)
     .sound(SoundType.METAL)
     .harvestLevel(0)
-    .func_226896_b_() // notsolid?
+    .notSolid()
   );
   private static final Block.Properties INDICATOR_METALLIC_BLOCK_PROPERTIES = (Block.Properties
     .create(GLASS_MATERIAL, MaterialColor.IRON)
     .hardnessAndResistance(0.5f, 15f)
     .sound(SoundType.METAL)
     .harvestLevel(0)
-    .lightValue(2)
-    .func_226896_b_() // notsolid?
+    .lightValue(3)
+    .notSolid()
   );
   private static final Block.Properties INDICATOR_GLASS_BLOCK_PROPERTIES = (Block.Properties
     .create(GLASS_MATERIAL, MaterialColor.IRON)
     .hardnessAndResistance(0.5f, 15f)
     .sound(SoundType.METAL)
     .harvestLevel(0)
-    .lightValue(2)
-    .func_226896_b_() // notsolid?
+    .lightValue(3)
+    .notSolid()
   );
   private static final Block.Properties ALARM_LAMP_BLOCK_PROPERTIES = (Block.Properties
     .create(GLASS_MATERIAL, MaterialColor.IRON)
@@ -89,7 +89,7 @@ public class ModContent
     .sound(SoundType.METAL)
     .harvestLevel(0)
     .lightValue(8)
-    .func_226896_b_() // notsolid?
+    .notSolid()
   );
   private static final Block.Properties SENSITIVE_GLASS_BLOCK_PROPERTIES = (Block.Properties
     .create(Material.REDSTONE_LIGHT, MaterialColor.IRON)
@@ -97,10 +97,18 @@ public class ModContent
     .sound(SoundType.METAL)
     .harvestLevel(0)
     .lightValue(15)
-    .func_226896_b_() // notsolid?
+    .notSolid()
   );
   private static final Block.Properties SWITCH_METALLIC_BLOCK_PROPERTIES = GAUGE_METALLIC_BLOCK_PROPERTIES;
   private static final Block.Properties SWITCH_GLASS_BLOCK_PROPERTIES = GAUGE_GLASS_BLOCK_PROPERTIES;
+
+  private static final Block.Properties SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES = (Block.Properties
+    .create(METAL_MATERIAL, MaterialColor.IRON)
+    .hardnessAndResistance(0.5f, 15f)
+    .sound(SoundType.METAL)
+    .harvestLevel(0)
+    .lightValue(5)
+  );
 
   // -----------------------------------------------------------------------------------------------------------------
   // -- industrual
@@ -811,9 +819,8 @@ public class ModContent
     BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
     BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
     BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-    BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
-    SWITCH_METALLIC_BLOCK_PROPERTIES,
+    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+    SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_rotary_switch"));
 
@@ -822,9 +829,8 @@ public class ModContent
     BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
     BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
     BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-    BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
-    SWITCH_METALLIC_BLOCK_PROPERTIES,
+    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+    SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_touch_switch"));
 
@@ -834,10 +840,9 @@ public class ModContent
     BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
     BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-    BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
     BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-    SWITCH_METALLIC_BLOCK_PROPERTIES,
+    SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_button"));
 
@@ -847,10 +852,9 @@ public class ModContent
     BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
     BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-    BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
     BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-    SWITCH_METALLIC_BLOCK_PROPERTIES,
+    SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_small_button"));
 
@@ -860,10 +864,9 @@ public class ModContent
     BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
     BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
-    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE|
-    BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+    BlockSwitch.SWITCH_CONFIG_TRANSLUCENT|BlockSwitch.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
     BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-    SWITCH_METALLIC_BLOCK_PROPERTIES,
+    SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_touch_button"));
 
@@ -1055,6 +1058,26 @@ public class ModContent
     ModAuxiliaries.getPixeledAABB(5,5,0,11,11,1), null
   )).setRegistryName(new ResourceLocation(MODID, "arrow_target"));
 
+  // Valve Wheel
+  public static final BlockBistableSwitch BISTABLE_VALVE_WHEEL_SWITCH = (BlockBistableSwitch)(new BlockBistableSwitch(
+    BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+    BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
+    BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    SWITCH_METALLIC_BLOCK_PROPERTIES,
+    ModAuxiliaries.getPixeledAABB(4,4,0,12,12,3.5), null
+  )).setRegistryName(new ResourceLocation(MODID, "valve_wheel_switch"));
+
+  // Elevator button
+  public static final BlockPulseSwitch ELEVATOR_BUTTON = (BlockPulseSwitch)(new BlockPulseSwitch(
+    BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
+      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+      BlockSwitch.SWITCH_CONFIG_PULSE_EXTENDABLE|BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+      BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|BlockSwitch.SWITCH_CONFIG_PROJECTILE_SENSE|
+      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
+    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1), null
+  )).setRegistryName(new ResourceLocation(MODID, "elevator_button"));
+
   // -----------------------------------------------------------------------------------------------------------------
   // -- sensitive glass
   // -----------------------------------------------------------------------------------------------------------------
@@ -1239,6 +1262,8 @@ public class ModContent
     RED_POWER_PLANT,
     LIGHT_SWITCH,
     ARROW_TARGET_SWITCH,
+    BISTABLE_VALVE_WHEEL_SWITCH,
+    ELEVATOR_BUTTON,
     // Senesitive Glass
     SENSITIVE_GLASS_BLOCK,
     WHITE_SENSITIVE_GLASS_BLOCK,
@@ -1399,13 +1424,13 @@ public class ModContent
       if(block instanceof RsBlock) {
         switch(((RsBlock)block).getRenderTypeHint()) {
           case CUTOUT:
-            RenderTypeLookup.setRenderLayer(block, RenderType.func_228643_e_()/*cutout*/);
+            RenderTypeLookup.setRenderLayer(block, RenderType.getCutout());
             break;
           case CUTOUT_MIPPED:
-            RenderTypeLookup.setRenderLayer(block, RenderType.func_228641_d_()/*cutout_mipped*/);
+            RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped());
             break;
           case TRANSLUCENT:
-            RenderTypeLookup.setRenderLayer(block, RenderType.func_228645_f_()/*transparent*/);
+            RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucent());
             break;
           case SOLID:
             break;

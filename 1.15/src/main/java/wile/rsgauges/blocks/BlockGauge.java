@@ -18,6 +18,7 @@ package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModContent;
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.detail.DevUtils;
 import wile.rsgauges.detail.ModColors;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
@@ -31,6 +32,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
@@ -87,13 +89,17 @@ public class BlockGauge extends RsDirectedBlock implements ModColors.ColorTintSu
   { world.getPendingBlockTicks().scheduleTick(pos, state.getBlock(), 1); }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-  { return false; }
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  {
+    if(!world.isRemote()) DevUtils.blockActivateHook.hook(state, world, pos, player, hand, hit);
+    return ActionResultType.SUCCESS;
+  }
 
   @Override
   public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player)
   {
     if(world.isRemote) return;
+    DevUtils.blockClickHook.hook(state, world, pos, player);
     final TileEntityGauge te = getTe(world, pos);
     final ItemStack item = player.getHeldItemMainhand();
     if((te==null) || (item==null)) return;
