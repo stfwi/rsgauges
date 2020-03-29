@@ -48,6 +48,7 @@ public class BlockSensitiveGlass extends RsBlock
 
   // Light reduction
   @OnlyIn(Dist.CLIENT)
+  @SuppressWarnings("deprecation")
   public float func_220080_a(BlockState state, IBlockReader world, BlockPos pos)
   { return 0.95f; }
 

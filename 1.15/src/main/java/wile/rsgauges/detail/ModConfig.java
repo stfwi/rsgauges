@@ -123,6 +123,7 @@ public class ModConfig
     public final ForgeConfigSpec.BooleanValue without_timer_switch_update;
     public final ForgeConfigSpec.IntValue max_switch_linking_distance;
     public final ForgeConfigSpec.ConfigValue<String> accepted_wrenches;
+    public final ForgeConfigSpec.BooleanValue without_ester_eggs;
     // Tweaks
     public final ForgeConfigSpec.BooleanValue without_gauge_weak_power_measurement;
     public final ForgeConfigSpec.IntValue gauge_update_interval;
@@ -284,6 +285,10 @@ public class ModConfig
                    "blocks of this mod. This applies when the display side of the block is " +
                    "right click (activated) with the item in the main hand.")
           .define("accepted_wrenches", "redstone_torch");
+        without_ester_eggs = builder
+          .translation(ModRsGauges.MODID + ".config.without_ester_eggs")
+          .comment("Disables Ester Eggs and other potential annoyances.")
+          .define("without_ester_eggs", false);
         builder.pop();
       }
       // --- TWEAKS -------------------------------------------------------------
@@ -339,7 +344,6 @@ public class ModConfig
           .translation(ModRsGauges.MODID + ".config.switch_status_overlay_y")
           .comment("Vertial position of the switch status overlay message.")
           .defineInRange("switch_status_overlay_y", 0.75, 0.1, 0.8);
-
         builder.pop();
       }
     }
@@ -448,7 +452,7 @@ public class ModConfig
   public static double switch_status_overlay_y = 0.75;
   public static String accepted_wrenches = "";
   public static boolean with_experimental = false;
-
+  public static boolean without_estereggs = false;
 
   public static final void apply()
   {
@@ -480,6 +484,7 @@ public class ModConfig
     switch_status_overlay_y = COMMON.switch_status_overlay_y.get();
     without_rightclick_item_switchconfig = COMMON.without_rightclick_item_switchconfig.get();
     with_experimental = COMMON.with_experimental.get();
+    without_estereggs = COMMON.without_ester_eggs.get();
     // Wrenches
     accepted_wrenches = accepted_wrenches.toLowerCase().replaceAll("[\\s]","").replaceAll(",,",",");
     accepted_wrenches = ("," + accepted_wrenches + ",").replaceAll(",air,",",redstone_torch,");
@@ -497,7 +502,8 @@ public class ModConfig
       }
     }
     {
-      String exc = COMMON.pattern_includes.get().toLowerCase().replaceAll(ModRsGauges.MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      String exc = COMMON.pattern_excludes.get().toLowerCase().replaceAll(ModRsGauges.MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      if(COMMON.pattern_excludes.get() != exc) COMMON.pattern_excludes.set(exc);
       if(!exc.isEmpty()) ModRsGauges.logger().info("Pattern excludes: '" + exc + "'");
       String[] excl = exc.split(",");
       excludes_.clear();

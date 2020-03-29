@@ -9,15 +9,11 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.util.ActionResultType;
-import net.minecraft.world.server.ServerWorld;
 import wile.rsgauges.ModContent;
-import wile.rsgauges.detail.ModColors;
-import wile.rsgauges.detail.ModConfig;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.detail.*;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.*;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.block.BlockState;
@@ -29,6 +25,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -213,6 +210,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
     TileEntitySwitch te = getTe(world, pos);
     if(te==null) return ActionResultType.FAIL;
     if(world.isRemote) return ActionResultType.SUCCESS;
+    DevUtils.blockActivateHook.hook(state, world, pos, player, hand, hit);
     te.click_config(null, false); // reset double click tracking
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit);
     if(ck.touch_configured) {
@@ -248,6 +246,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
     if(world.isRemote) return;
     final TileEntitySwitch te = getTe(world, pos);
     if(te == null) return;
+    DevUtils.blockClickHook.hook(state, world, pos, player);
     final Item item_held = (player.inventory.getCurrentItem()!=null) ? (player.inventory.getCurrentItem().getItem()) : (Items.AIR);
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player);
     if(ck.wrenched) {

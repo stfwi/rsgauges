@@ -10,6 +10,14 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+                 -------------------------------------------------------------------
+    - v1.2.2     [R] Release build v1.2.2. Release-to-release changes:
+                     * Valve Switch added.
+                     * Elevator Button added.
+                     * Minor fixes.
+                     * Backported text pattern based opt-outs.
+                 -------------------------------------------------------------------
+
     - v1.2.2-b2  [F] Fixed Gauge updatge client side CSE when a block was removed without
                      disposing the tile entity (issue #17, thx liskoSlayer63).
                  [A] Added Elevator Button (issue #18).
