@@ -122,8 +122,8 @@ tile.rsgauges.bistableswitch_rustic6.name=双稳态红石开关 (乡村式滑锁
 tile.rsgauges.bistableswitch_rustic7.name=双稳态红石开关 (乡村式钉子)
 tile.rsgauges.bistableswitch_glass1.name=双稳态红石开关 (星型玻璃开关)
 tile.rsgauges.bistableswitch_glass2.name=双稳态红石开关 (接触式玻璃开关)
-tile.rsgauges.valve_wheel_switch.name=Valve Switch
-tile.rsgauges.elevator_button.name=Elevator Button
+tile.rsgauges.valve_wheel_switch.name=双稳态红石开关（阀门开关）
+tile.rsgauges.elevator_button.name=双稳态红石开关（电梯按钮）
 #
 # Bistable switch tooltip help
 #
@@ -297,7 +297,7 @@ tile.rsgauges.detectorswitch_glass1.name=自动红石开关 (玻璃红外运动�
 tile.rsgauges.detectorswitch_glass2.name=自动红石开关 (玻璃线性激光探测器)
 tile.rsgauges.daytimeswitch_glass1.name=自动红石开关 (玻璃日间计时器)
 tile.rsgauges.timerswitch_glass1.name=自动红石开关 (玻璃间隔信号计时器)
-tile.rsgauges.industrial_comparator_switch=Industrial Comparator Switch
+tile.rsgauges.industrial_comparator_switch=自动红石开关（工业比较器开关）
 
 #
 # Auto switch tooltip help
@@ -376,10 +376,10 @@ tile.rsgauges.timerswitch_glass1.help=§6一种小型玻璃设备，能发出自
                                     信号会输出到设备放置的方块上。输出信号切换时不会发出声音。\
                                     ${rsgauges.switch.feature.outputconfig.help} \
                                     作为开关连接的目标时会将设备在两种模式间切换。
-#tile.rsgauges.industrial_comparator_switch.help=§6A small device that that emits a redstone signal depending on the comparator output \
-                                    level or inventory statistics of the block it is attached to.§r\n\
-                                    The buttons on the front facing allow to configure the output signal strength, switch-on comparator \
-                                    value, switch-off comparator value, and operating mode ("comparator, free slots, used slots, ..."). \
+#tile.rsgauges.industrial_comparator_switch.help=§6一种小型设备，能根据邻接方块的比较器\
+                                    输出等级或方块的库存统计输出红石信号。§r\n\
+                                    正面的按钮能配置输出信号强度、开关开启阈值、\
+                                    开关关闭阈值和操作模式（比较器、已用格数、未用格数……）。\
                                     ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
 
 #-----------------------------------------------------------------------------------------------------------
@@ -630,12 +630,12 @@ rsgauges.switchconfig.lightsensor.debounce=去抖动: %1$s %2$s
 # on: <int> off: <int> power: <int>  debounce:<int>
 #
 rsgauges.switchconfig.comparator_switch=%1$s%2$s%3$s%4$s
-rsgauges.switchconfig.comparator_switch.threshold_on=on-level: %1$s
-rsgauges.switchconfig.comparator_switch.threshold_off=off-level: %1$s
-rsgauges.switchconfig.comparator_switch.output_power=power: %1$s
-rsgauges.switchconfig.comparator_switch.mode0=comparator mode
-rsgauges.switchconfig.comparator_switch.mode1=used inventory slots
-rsgauges.switchconfig.comparator_switch.mode2=free inventory slots
+rsgauges.switchconfig.comparator_switch.threshold_on=开阈值：%1$s
+rsgauges.switchconfig.comparator_switch.threshold_off=关阈值：%1$s
+rsgauges.switchconfig.comparator_switch.output_power=输出强度：%1$s
+rsgauges.switchconfig.comparator_switch.mode0=比较器模式
+rsgauges.switchconfig.comparator_switch.mode1=已用库存格数
+rsgauges.switchconfig.comparator_switch.mode2=未用库存格数
 
 #--------------------------------------------------
 # on: <int>  off: <int>  power: <int>  random:<int>
