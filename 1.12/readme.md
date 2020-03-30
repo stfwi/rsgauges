@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    ~ v1.2.3-b1  [M] Lang file zh_cn updated (PR#19, scikirbypoke).
+
                  -------------------------------------------------------------------
     - v1.2.2     [R] Release build v1.2.2. Release-to-release changes:
                      * Valve Switch added.

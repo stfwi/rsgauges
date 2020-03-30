@@ -376,7 +376,7 @@ tile.rsgauges.timerswitch_glass1.help=§6一种小型玻璃设备，能发出自
                                     信号会输出到设备放置的方块上。输出信号切换时不会发出声音。\
                                     ${rsgauges.switch.feature.outputconfig.help} \
                                     作为开关连接的目标时会将设备在两种模式间切换。
-#tile.rsgauges.industrial_comparator_switch.help=§6一种小型设备，能根据邻接方块的比较器\
+tile.rsgauges.industrial_comparator_switch.help=§6一种小型设备，能根据邻接方块的比较器\
                                     输出等级或方块的库存统计输出红石信号。§r\n\
                                     正面的按钮能配置输出信号强度、开关开启阈值、\
                                     开关关闭阈值和操作模式（比较器、已用格数、未用格数……）。\
