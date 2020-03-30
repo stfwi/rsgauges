@@ -184,12 +184,12 @@ public class BlockAutoSwitch extends BlockSwitch
     public boolean activation_config(IBlockState state, @Nullable EntityPlayer player, double x, double y)
     {
       if(state == null) return false;
-      final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
-      final int field = ((x>=2) && (x<=4)) ? (1) : (
-              ((x>=5) && (x<=7)) ? (2) : (
-              ((x>=8) && (x<=10)) ? (3) : (
-              ((x>=11) && (x<=13)) ? (4) : (0)
-              )));
+      final int direction = (y >= 12) ? (1) : ((y <= 5) ? (-1) : (0));
+      final int field = ((x>=2) && (x<=3.95)) ? (1) : (
+        ((x>=4.25) && (x<=7)) ? (2) : (
+          ((x>=8) && (x<=10)) ? (3) : (
+            ((x>=11) && (x<=13)) ? (4) : (0)
+          )));
       if((direction==0) || (field==0)) return false;
       switch(field) {
         case 1: {
@@ -280,13 +280,13 @@ public class BlockAutoSwitch extends BlockSwitch
    */
   public static class TileEntityEnvironmentalSensorSwitch extends TileEntityAutoSwitch implements ITickable
   {
-    private static final int debounce_max = 10;
-    private int update_interval_ = 10;
-    private double threshold0_on_  = 0;
-    private double threshold0_off_ = 0;
-    private int debounce_ = 0;
-    private int update_timer_ = 0;
-    private int debounce_counter_ = 0;
+    protected static final int debounce_max = 10;
+    protected int update_interval_ = 10;
+    protected double threshold0_on_  = 0;
+    protected double threshold0_off_ = 0;
+    protected int debounce_ = 0;
+    protected int update_timer_ = 0;
+    protected int debounce_counter_ = 0;
 
     public double threshold0_on()
     { return threshold0_on_; }
@@ -331,9 +331,9 @@ public class BlockAutoSwitch extends BlockSwitch
       final BlockSwitch block = (BlockSwitch)state.getBlock();
 
       // @TODO: Construction time list or lambla for field assignment.
-      final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
-      final int field = ((x>=2) && (x<=4)) ? (1) : (
-              ((x>=5) && (x<=7)) ? (2) : (
+      final int direction = (y >= 13) ? (1) : ((y <= 2) ? (-1) : (0));
+      final int field = ((x>=2) && (x<=3.95)) ? (1) : (
+              ((x>=4.25) && (x<=7)) ? (2) : (
               ((x>=8) && (x<=10)) ? (3) : (
               ((x>=11) && (x<=13)) ? (4) : (0)
               )));
@@ -606,12 +606,12 @@ public class BlockAutoSwitch extends BlockSwitch
     public boolean activation_config(IBlockState state, @Nullable EntityPlayer player, double x, double y)
     {
       if(state == null) return false;
-      final int direction = ((y >= 11) && (y <= 14)) ? (1) : (((y >= 1) && (y <= 5)) ? (-1) : (0));
-      final int field = ((x>=2) && (x<=4)) ? (1) : (
-              ((x>=5) && (x<=7)) ? (2) : (
-              ((x>=8) && (x<=10)) ? (3) : (
-              ((x>=11) && (x<=13)) ? (4) : (0)
-              )));
+      final int direction = (y >= 13) ? (1) : ((y <= 2) ? (-1) : (0));
+      final int field = ((x>=2) && (x<=3.95)) ? (1) : (
+        ((x>=4.25) && (x<=7)) ? (2) : (
+          ((x>=8) && (x<=10)) ? (3) : (
+            ((x>=11) && (x<=13)) ? (4) : (0)
+          )));
       final boolean selected = ((direction!=0) && (field!=0));
       if(selected) {
         switch(field) {

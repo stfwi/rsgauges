@@ -1,5 +1,5 @@
 {
-	"parent": "block/cube",
+	"parent": "block/block",
 	"textures": {
 		"side": "rsgauges:blocks/knockswitch/industrial_knock_switch_texture_s00",
 		"particle": "rsgauges:blocks/knockswitch/industrial_knock_switch_texture_s00",

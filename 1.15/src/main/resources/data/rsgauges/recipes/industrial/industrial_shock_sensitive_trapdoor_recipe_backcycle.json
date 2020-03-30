@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_shock_sensitive_trapdoor",
+   "required": [
+    "rsgauges:industrial_fallthrough_detector"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_fallthrough_detector"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_shock_sensitive_trapdoor"
+ }
+}

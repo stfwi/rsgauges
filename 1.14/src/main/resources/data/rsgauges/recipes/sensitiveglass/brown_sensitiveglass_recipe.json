@@ -1,0 +1,31 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:brown_sensitiveglass"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "result": {
+  "item": "rsgauges:brown_sensitiveglass",
+  "count": 4
+ },
+ "pattern": [
+  "NG",
+  "DR"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "R": {
+   "item": "minecraft:redstone"
+  },
+  "G": {
+   "item": "minecraft:glass"
+  },
+  "D": {
+    "item": "minecraft:brown_dye"
+  }
+ }
+}

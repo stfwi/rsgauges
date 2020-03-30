@@ -1,0 +1,27 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:glass_contact_mat"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "NN",
+  "GP"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "G": {
+   "item": "minecraft:glass"
+  },
+  "P": {
+   "tag": "rsgauges:pressure_plates"
+  }
+ },
+ "result": {
+  "item": "rsgauges:glass_contact_mat"
+ }
+}

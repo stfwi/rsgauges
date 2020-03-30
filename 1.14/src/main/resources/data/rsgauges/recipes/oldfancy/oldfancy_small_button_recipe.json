@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:oldfancy_small_button",
+   "required": [
+    "rsgauges:oldfancy_spring_reset_chain"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:oldfancy_spring_reset_chain"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:oldfancy_small_button"
+ }
+}

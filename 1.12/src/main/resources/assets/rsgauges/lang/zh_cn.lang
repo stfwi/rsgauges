@@ -1,5 +1,5 @@
 #
-# Redstone Gauges and Switches language file
+# Gauges and Switches language file
 #
 # - Inventory hover tooltip help/descriptions (when CTRL-SHIFT are down).
 #   Texts are for items and blocks, and the key identical to the names, only
@@ -122,6 +122,8 @@ tile.rsgauges.bistableswitch_rustic6.name=双稳态红石开关 (乡村式滑锁
 tile.rsgauges.bistableswitch_rustic7.name=双稳态红石开关 (乡村式钉子)
 tile.rsgauges.bistableswitch_glass1.name=双稳态红石开关 (星型玻璃开关)
 tile.rsgauges.bistableswitch_glass2.name=双稳态红石开关 (接触式玻璃开关)
+tile.rsgauges.valve_wheel_switch.name=Valve Switch
+tile.rsgauges.elevator_button.name=Elevator Button
 #
 # Bistable switch tooltip help
 #
@@ -136,21 +138,14 @@ tile.rsgauges.bistableswitch7.help=${rsgauges.switch.feature.typebistable.help}$
 tile.rsgauges.bistableswitch8.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_oldfancy1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_oldfancy2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy4.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy5.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy6.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy7.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
-tile.rsgauges.bistableswitch_rustic4.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
-tile.rsgauges.bistableswitch_rustic5.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_rustic6.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic7.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_glass1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
 tile.rsgauges.bistableswitch_glass2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
-
+tile.rsgauges.valve_wheel_switch.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+tile.rsgauges.elevator_button.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 #-----------------------------------------------------------------------------------------------------------
 # Manual pulse switch names
 #-----------------------------------------------------------------------------------------------------------
@@ -302,6 +297,8 @@ tile.rsgauges.detectorswitch_glass1.name=自动红石开关 (玻璃红外运动�
 tile.rsgauges.detectorswitch_glass2.name=自动红石开关 (玻璃线性激光探测器)
 tile.rsgauges.daytimeswitch_glass1.name=自动红石开关 (玻璃日间计时器)
 tile.rsgauges.timerswitch_glass1.name=自动红石开关 (玻璃间隔信号计时器)
+tile.rsgauges.industrial_comparator_switch=Industrial Comparator Switch
+
 #
 # Auto switch tooltip help
 #
@@ -379,7 +376,11 @@ tile.rsgauges.timerswitch_glass1.help=§6一种小型玻璃设备，能发出自
                                     信号会输出到设备放置的方块上。输出信号切换时不会发出声音。\
                                     ${rsgauges.switch.feature.outputconfig.help} \
                                     作为开关连接的目标时会将设备在两种模式间切换。
-
+#tile.rsgauges.industrial_comparator_switch.help=§6A small device that that emits a redstone signal depending on the comparator output \
+                                    level or inventory statistics of the block it is attached to.§r\n\
+                                    The buttons on the front facing allow to configure the output signal strength, switch-on comparator \
+                                    value, switch-off comparator value, and operating mode ("comparator, free slots, used slots, ..."). \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
 
 #-----------------------------------------------------------------------------------------------------------
 # Block observing and inspection switches
@@ -623,6 +624,18 @@ rsgauges.switchconfig.lightsensor.threshold_on=开阈值: %1$s %2$s
 rsgauges.switchconfig.lightsensor.threshold_off=关阈值: %1$s %2$s
 rsgauges.switchconfig.lightsensor.output_power=信号强度: %1$s
 rsgauges.switchconfig.lightsensor.debounce=去抖动: %1$s %2$s
+
+
+#--------------------------------------------------
+# on: <int> off: <int> power: <int>  debounce:<int>
+#
+rsgauges.switchconfig.comparator_switch=%1$s%2$s%3$s%4$s
+rsgauges.switchconfig.comparator_switch.threshold_on=on-level: %1$s
+rsgauges.switchconfig.comparator_switch.threshold_off=off-level: %1$s
+rsgauges.switchconfig.comparator_switch.output_power=power: %1$s
+rsgauges.switchconfig.comparator_switch.mode0=comparator mode
+rsgauges.switchconfig.comparator_switch.mode1=used inventory slots
+rsgauges.switchconfig.comparator_switch.mode2=free inventory slots
 
 #--------------------------------------------------
 # on: <int>  off: <int>  power: <int>  random:<int>

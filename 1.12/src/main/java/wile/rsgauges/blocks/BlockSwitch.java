@@ -9,10 +9,10 @@
  */
 package wile.rsgauges.blocks;
 
+import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.ModItems;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -49,7 +49,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 @SuppressWarnings("unused")
-public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSupport
+public class BlockSwitch extends RsBlock implements ModContent.Colors.ColorTintSupport
 {
   // -- Entity stored changable state data.
   public static final long SWITCH_DATA_POWERED_POWER_MASK       = 0x000000000000000fl;
@@ -263,8 +263,9 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       return (te==null) ? 0 : te.power(state, strong);
     } else if(((config & SWITCH_CONFIG_SIDES_CONFIGURABLE)==0) ) {
       // from normal wall mounted switches
-      if((side != ((isLateral()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING))))) return 0;
+      boolean is_main_direction = (side == ((isLateral()) ? ((state.getValue(FACING)).getOpposite()) : (state.getValue(FACING))));
       final TileEntitySwitch te = getTe((World)world, pos);
+      if(!is_main_direction && (strong || te.weak())) return 0;
       return (te==null) ? 0 : te.power(state, strong);
     } else {
       // new code that will be applied for all later
@@ -358,7 +359,11 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
   @Override
   @SuppressWarnings("deprecation")
   public int getLightValue(IBlockState state)
-  { return (((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) && (ModAuxiliaries.isClientSide())) ? 1 : 0; }
+  { return ((config & SWITCH_CONFIG_FAINT_LIGHTSOURCE) != 0) ? 4 : 0; }
+
+  @Override
+  public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
+  { return getLightValue(state); }
 
   @Override
   @SuppressWarnings("deprecation")
@@ -454,7 +459,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       (!ModConfig.optouts.without_rightclick_item_switchconfig) &&
       (  ((ck.item==Items.REDSTONE) && (((BlockSwitch)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0)
       || (ck.item==Items.ENDER_PEARL)
-      || (ck.item==ModItems.SWITCH_LINK_PEARL)
+      || (ck.item==ModContent.SWITCH_LINK_PEARL)
       )
     ) {
       onBlockClicked(world, pos, player);
@@ -517,7 +522,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
         }
         return;
       }
-    } else if((ck.item==ModItems.SWITCH_LINK_PEARL) && (player.inventory!=null) && (item_held==ModItems.SWITCH_LINK_PEARL)) {
+    } else if((ck.item==ModContent.SWITCH_LINK_PEARL) && (player.inventory!=null) && (item_held==ModContent.SWITCH_LINK_PEARL)) {
       // Link config at source switch or assignemnt of target switch
       if(!ModConfig.optouts.without_switch_linking) {
         switch(te.assign_switchlink(world, pos, player.inventory.getCurrentItem())) {
@@ -1059,13 +1064,11 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       return ck;
     }
 
-    public static ClickInteraction get(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
-    { return get(world, pos, state, player, hand, facing, x, y, z,false); }
 
     /**
      *
      */
-    public static ClickInteraction get(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z, boolean prefer_touch_config)
+    public static ClickInteraction get(World world, BlockPos pos, @Nullable IBlockState state, EntityPlayer player, @Nullable EnumHand hand, @Nullable EnumFacing facing, float x, float y, float z)
     {
       ClickInteraction ck = new ClickInteraction();
       if((world==null) || (pos==null)) return ck;
@@ -1080,8 +1083,8 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
       } else if(item.getItem() == Items.ENDER_PEARL) {
         ck.item = Items.ENDER_PEARL;
         ck.item_count = item.getCount();
-      } else if(item.getItem() == ModItems.SWITCH_LINK_PEARL) {
-        ck.item = ModItems.SWITCH_LINK_PEARL;
+      } else if(item.getItem() == ModContent.SWITCH_LINK_PEARL) {
+        ck.item = ModContent.SWITCH_LINK_PEARL;
         ck.item_count = item.getCount();
       } else if(DyeUtils.isDye(item)) {
         ck.item = Items.DYE;
@@ -1091,7 +1094,7 @@ public class BlockSwitch extends RsBlock implements ModBlocks.Colors.ColorTintSu
         ck.wrenched = (("," + ModConfig.zmisc.accepted_wrenches + ",").contains("," + item.getItem().getRegistryName().getPath() + ","));
         if(ck.wrenched) return ck;
       }
-      if(((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0) && (prefer_touch_config || (item.getItem()==Items.AIR))) {
+      if(((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0)) {
         return touch(ck, world, pos, state, player, hand, facing, x,y,z);
       } else {
         return ck;

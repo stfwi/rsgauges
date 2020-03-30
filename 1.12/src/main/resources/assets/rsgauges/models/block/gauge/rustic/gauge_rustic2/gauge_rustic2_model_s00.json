@@ -1,10 +1,10 @@
 {
-	"parent": "block/cube",
+	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
 		"iron": "rsgauges:blocks/common/old_iron",
 		"particle": "rsgauges:blocks/common/old_iron",
-		"iron2": "rsgauges:blocks/common/darkgraymetal",
+		"iron2": "rsgauges:blocks/common/darksmoothmetal",
     "mark": "rsgauges:blocks/common/redstonered"
 	},
 	"elements": [

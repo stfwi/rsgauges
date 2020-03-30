@@ -1,5 +1,6 @@
 package wile.rsgauges.items;
 
+import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
@@ -142,14 +143,14 @@ public class ItemSwitchLinkPearl extends RsItem
     final IBlockState state = world.getBlockState(pos);
     if((state==null) || (!(state.getBlock() instanceof BlockSwitch))) return null;
     final int rl = ((((BlockSwitch)state.getBlock()).config & BlockSwitch.SWITCH_CONFIG_PULSE)!=0) ? SwitchLink.SWITCHLINK_RELAY_ACTIVATE : SwitchLink.SWITCHLINK_RELAY_STATE;
-    ItemStack stack = new ItemStack(ModItems.SWITCH_LINK_PEARL, player.inventory.getCurrentItem().getCount());
+    ItemStack stack = new ItemStack(ModContent.SWITCH_LINK_PEARL, player.inventory.getCurrentItem().getCount());
     stack.setTagCompound(SwitchLink.fromTargetPosition(world, pos).with_relay(rl).toNbt());
     return stack;
   }
 
   public static final ItemStack getCycledRelay(ItemStack stack, World world, BlockPos target_pos)
   {
-    if((world==null) || (stack==null) || (stack.getItem()!=ModItems.SWITCH_LINK_PEARL)) return stack;
+    if((world==null) || (stack==null) || (stack.getItem()!=ModContent.SWITCH_LINK_PEARL)) return stack;
     final SwitchLink current_link = SwitchLink.fromItemStack(stack);
     if(!target_pos.equals(current_link.target_position)) return stack;
     final IBlockState state = world.getBlockState(current_link.target_position);
@@ -209,7 +210,7 @@ public class ItemSwitchLinkPearl extends RsItem
     { return (nbt==null) ? (new SwitchLink()) : (new SwitchLink(BlockPos.fromLong(nbt.getLong("p")), nbt.getString("b"), nbt.getLong("t"))); }
 
     public static SwitchLink fromItemStack(ItemStack stack)
-    { return ((stack==null) || (stack.isEmpty()) || (stack.getItem()!=ModItems.SWITCH_LINK_PEARL)) ? (new SwitchLink()) : (fromNbt(stack.getTagCompound())); }
+    { return ((stack==null) || (stack.isEmpty()) || (stack.getItem()!=ModContent.SWITCH_LINK_PEARL)) ? (new SwitchLink()) : (fromNbt(stack.getTagCompound())); }
 
     public static SwitchLink fromTargetPosition(final World world, final BlockPos targetPos)
     {
@@ -224,7 +225,7 @@ public class ItemSwitchLinkPearl extends RsItem
     public static SwitchLink fromPlayerActiveItem(World world, EntityPlayer player)
     {
       if((player==null) || (world.isRemote) || (player.inventory==null) || (player.inventory.getCurrentItem()==null)) return new SwitchLink();
-      if(player.inventory.getCurrentItem().getItem()!=ModItems.SWITCH_LINK_PEARL) return null;
+      if(player.inventory.getCurrentItem().getItem()!=ModContent.SWITCH_LINK_PEARL) return null;
       return SwitchLink.fromNbt(player.inventory.getCurrentItem().getTagCompound());
     }
 
@@ -239,7 +240,7 @@ public class ItemSwitchLinkPearl extends RsItem
 
     public ItemStack toSwitchLinkPearl()
     {
-      ItemStack stack = new ItemStack(ModItems.SWITCH_LINK_PEARL);
+      ItemStack stack = new ItemStack(ModContent.SWITCH_LINK_PEARL);
       stack.setCount(1);
       stack.setTagCompound(toNbt());
       return stack;

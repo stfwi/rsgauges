@@ -1,13 +1,11 @@
 {
   "forge_marker": 1,
-  "defaults": { "model": "rsgauges:bistableswitch/oldfancy/bistableswitch_oldfancy5_model_s00"},
+  "defaults": { "model": "rsgauges:bistableswitch/oldfancy/bistableswitch_oldfancy1_model_s00" },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "facing": { "north":{"y":0}, "south":{"y":180}, "west":{"y":-90}, "east":{"y":90}, "up":{"x":-90}, "down":{"x":90} },
     "powered": {
-      "false": {},
-      "true":  { "model": "rsgauges:bistableswitch/oldfancy/bistableswitch_oldfancy5_model_s15" }
-    }
+      "false":{}, "true":{"model": "rsgauges:bistableswitch/oldfancy/bistableswitch_oldfancy1_model_s15"} }
   }
 }

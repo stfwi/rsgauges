@@ -1,5 +1,5 @@
 {
-	"parent": "block/cube",
+	"parent": "block/block",
 	"textures": {
 		"n": "rsgauges:blocks/qube/qube_b_texture",
 		"e": "rsgauges:blocks/qube/qube_r_texture",

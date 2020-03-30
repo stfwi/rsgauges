@@ -16,7 +16,7 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraftforge.oredict.DyeUtils;
+import wile.rsgauges.ModContent;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
@@ -38,12 +38,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.DyeUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 
 
-public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSupport
+public class BlockGauge extends RsBlock implements ModContent.Colors.ColorTintSupport
 {
   public static final long GAUGE_DATA_POWER_MASK            = 0x000000000000000fl;
   public static final int  GAUGE_DATA_POWER_SHIFT           = 0;
@@ -270,22 +271,17 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
     public void update()
     {
       if(--trigger_timer_ > 0) return;
-      if(world.isRemote) {
-        trigger_timer_ = ModConfig.tweaks.gauge_update_interval * 2;
-        IBlockState state = world.getBlockState(pos);
-        if((state!=null) && (state.getBlock() instanceof BlockGauge)) {
+      try {
+        if(world.isRemote) {
+          trigger_timer_ = ModConfig.tweaks.gauge_update_interval * 2;
+          IBlockState state = world.getBlockState(pos);
           state = ((BlockGauge) state.getBlock()).getBlockStateWithPower(state, power());
           if(last_state_ != state) {
             last_state_ = state;
-            //world.setBlockState(pos, state, 4|16);
             world.markBlockRangeForRenderUpdate(pos, pos);
           }
         } else {
-          last_state_ = null;
-        }
-      } else {
-        trigger_timer_ = ModConfig.tweaks.gauge_update_interval;
-        try {
+          trigger_timer_ = ModConfig.tweaks.gauge_update_interval;
           IBlockState state = world.getBlockState(pos);
           final BlockGauge block = (BlockGauge) state.getBlock();
           final BlockPos pos = getPos();
@@ -293,11 +289,11 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
           if(block.blink_interval() > 0) trigger_timer_ = 5;
           {
             final BlockPos neighbourPos = pos.offset((EnumFacing) state.getValue(BlockGauge.FACING), -1);
-            if(!world.isBlockLoaded(neighbourPos))
-              return; // Gauge is placed on a chunk boundary, don't forge loading of neighbour chunk.
             final IBlockState neighborState = world.getBlockState(neighbourPos);
             int p = 0;
-            if(neighborState != null) {
+            if((block instanceof BlockIndicator) && (world.isBlockPowered(getPos()))) {
+              p = 15; // fast path for directly powered inicators
+            } else if(neighborState != null) {
               if(neighborState.canProvidePower()) {
                 p = Math.max(
                   neighborState.getWeakPower(world, neighbourPos, state.getValue(FACING).getOpposite()),
@@ -332,10 +328,10 @@ public class BlockGauge extends RsBlock implements ModBlocks.Colors.ColorTintSup
               world.setBlockState(pos, block.getBlockStateWithPower(state, p), 4|16);
             }
           }
-        } catch(Throwable e) {
-          trigger_timer_ = 100;
-          ModRsGauges.logger.error("TE update() failed: " + e);
         }
+      } catch(Throwable e) {
+        trigger_timer_ = 72000;
+        ModRsGauges.logger.error("TE update() failed: " + e);
       }
     }
   }

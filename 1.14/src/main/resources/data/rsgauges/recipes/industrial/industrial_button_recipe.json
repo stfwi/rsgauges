@@ -1,0 +1,27 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_button"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+  "BN",
+  "RN"
+ ],
+ "key": {
+  "N": {
+   "item": "minecraft:iron_nugget"
+  },
+  "R": {
+   "item": "minecraft:redstone"
+  },
+  "B": {
+   "tag": "rsgauges:buttons"
+  }
+ },
+ "result": {
+  "item": "rsgauges:industrial_button"
+ }
+}

@@ -1,9 +1,9 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:indicator3blink1",
-      "items": [
+      "required": [
         "rsgauges:indicator2blink1"
       ]
     }

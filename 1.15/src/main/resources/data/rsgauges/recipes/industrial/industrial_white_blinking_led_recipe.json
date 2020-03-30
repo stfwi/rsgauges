@@ -1,0 +1,23 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_white_blinking_led",
+   "required": [
+    "rsgauges:industrial_white_led"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "result": {
+  "item": "rsgauges:industrial_white_blinking_led"
+ },
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_white_led"
+  },
+  {
+   "item": "minecraft:egg"
+  }
+ ]
+}

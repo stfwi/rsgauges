@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_entity_detector",
+   "required": [
+    "rsgauges:industrial_linear_entity_detector"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_linear_entity_detector"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_entity_detector"
+ }
+}

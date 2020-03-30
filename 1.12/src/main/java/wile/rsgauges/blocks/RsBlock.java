@@ -15,7 +15,6 @@ package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.JitModelBakery;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -53,6 +52,8 @@ import java.util.List;
 
 public abstract class RsBlock extends Block
 {
+  public static final long RSBLOCK_CONFIG_OBSOLETE = 0x8000000000000000l;
+
   public static final PropertyDirection FACING = PropertyDirection.create("facing");
   protected final AxisAlignedBB unrotatedBB;
 
@@ -60,19 +61,22 @@ public abstract class RsBlock extends Block
   {
     super((material!=null) ? (material) : (ModAuxiliaries.RsMaterials.MATERIAL_METALLIC));
     unrotatedBB = (unrotatedBoundingBox!=null) ? (unrotatedBoundingBox) : (new AxisAlignedBB(0,0,0,1,1,1));
-    setCreativeTab(ModRsGauges.CREATIVE_TAB_RSGAUGES);
     setRegistryName(ModRsGauges.MODID, registryName);
     setTranslationKey(ModRsGauges.MODID + "." + registryName);
-    setLightOpacity(0);
-    setLightLevel(0);
+    setLightOpacity(1);
+    //setLightLevel(0);
     setResistance(2.0f);
-    setTickRandomly(false);
     if(material != ModAuxiliaries.RsMaterials.MATERIAL_PLANT) {
       setHardness(0.3f);
     } else {
       setHardness(0.1f);
       setSoundType(SoundType.PLANT);
     }
+    setCreativeTab((
+        ((this instanceof BlockSwitch) && (((BlockSwitch)this).config&RSBLOCK_CONFIG_OBSOLETE)!=0) ||
+        ((this instanceof BlockGauge) && (((BlockGauge)this).config&RSBLOCK_CONFIG_OBSOLETE)!=0)
+      ) ? (null) : (ModRsGauges.CREATIVE_TAB_RSGAUGES)
+    );
   }
 
   public RsBlock(String registryName)
@@ -82,15 +86,13 @@ public abstract class RsBlock extends Block
   public void initModel()
   {
     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-    JitModelBakery.JitBakedModel jitbakedmodel = getJitBakedModel();
-    if(jitbakedmodel != null) JitModelBakery.initModelRegistrations(this, jitbakedmodel);
   }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  @SuppressWarnings("deprecation")
-  public float getAmbientOcclusionLightValue(IBlockState state)
-  { return 1.0F; }
+  //@Override
+  //@SideOnly(Side.CLIENT)
+  //@SuppressWarnings("deprecation")
+  //public float getAmbientOcclusionLightValue(IBlockState state)
+  //{ return 1.0F; }
 
   @Override
   @SuppressWarnings("deprecation")
@@ -121,7 +123,7 @@ public abstract class RsBlock extends Block
   @Override
   @SideOnly(Side.CLIENT)
   public BlockRenderLayer getRenderLayer()
-  { return BlockRenderLayer.CUTOUT; }
+  { return BlockRenderLayer.CUTOUT_MIPPED; }
 
   @Override
   @SideOnly(Side.CLIENT)
@@ -344,13 +346,6 @@ public abstract class RsBlock extends Block
    */
   protected EnumFacing getAbsoluteFacing(IBlockState state, EnumFacing relativeSide)
   { return ((state==null) || (relativeSide==null)) ? EnumFacing.NORTH : fast_transform_lut[state.getValue(FACING).getIndex()][relativeSide.getIndex()]; }
-
-  /**
-   * Returns the JIT model bakery instance for custom rendering, or null
-   * if no custom rendering applies.
-   */
-  public JitModelBakery.JitBakedModel getJitBakedModel()
-  { return null; }
 
   /**
    * RsBlock handler before a block gets dropped as item in the world.

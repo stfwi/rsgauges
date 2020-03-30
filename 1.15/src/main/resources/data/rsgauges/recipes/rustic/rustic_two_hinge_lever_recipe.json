@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:rustic_two_hinge_lever",
+   "required": [
+    "rsgauges:rustic_lever"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:rustic_lever"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:rustic_two_hinge_lever"
+ }
+}

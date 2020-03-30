@@ -8,15 +8,18 @@
  */
 package wile.rsgauges;
 
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import wile.rsgauges.items.*;
 import wile.rsgauges.detail.*;
 import wile.rsgauges.blocks.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
@@ -31,10 +34,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import org.apache.logging.log4j.Logger;
 import javax.annotation.Nonnull;
 
@@ -51,7 +50,7 @@ import javax.annotation.Nonnull;
 public class ModRsGauges
 {
   public static final String MODID = "rsgauges";
-  public static final String MODNAME = "Redstone Gauges and Switches";
+  public static final String MODNAME = "Gauges and Switches";
   public static final String MODVERSION = "@MOD_VERSION@";
   public static final String MODMCVERSION = "@MOD_MCVERSION@";
   public static final String MODFINGERPRINT = "@MOD_SIGNSHA1@";
@@ -104,24 +103,19 @@ public class ModRsGauges
   {
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event)
-    {
-      ModBlocks.registerBlocks(event);
-    }
+    { ModContent.registerBlocks(event); }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event)
     {
-      ModBlocks.registerItemBlocks(event);
-      ModItems.registerItems(event);
+      ModContent.registerItemBlocks(event);
+      ModContent.registerItems(event);
     }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event)
-    {
-      ModBlocks.initModels();
-      ModItems.initModels();
-    }
+    { ModContent.initModels(); }
 
     @SubscribeEvent
     public static void playerInteract(PlayerInteractEvent event)
@@ -143,11 +137,12 @@ public class ModRsGauges
     }
   }
 
-  public static final CreativeTabs CREATIVE_TAB_RSGAUGES = (new CreativeTabs("tabrsgauges") {
+  public static final CreativeTabs CREATIVE_TAB_RSGAUGES = (new CreativeTabs("tabrsgauges")
+  {
     @Override
     @SideOnly(Side.CLIENT)
     public @Nonnull ItemStack createIcon()
-    { return new ItemStack((ModBlocks.flatgauge1Block != null) ? (ModBlocks.flatgauge1Block) : (Blocks.LEVER)); }
+    { return new ItemStack((ModContent.ITEMGROUP_BLOCK != null) ? (ModContent.ITEMGROUP_BLOCK) : (Blocks.LEVER)); }
   });
 
 }

@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_door_contact_mat",
+   "required": [
+    "rsgauges:industrial_shock_sensitive_contact_mat"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_shock_sensitive_contact_mat"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_door_contact_mat"
+ }
+}

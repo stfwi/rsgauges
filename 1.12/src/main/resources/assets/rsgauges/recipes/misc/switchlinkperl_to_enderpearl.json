@@ -1,8 +1,8 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
-      "items": [
+      "type": "rsgauges:optional",
+      "required": [
         "rsgauges:switchlink_pearl"
       ]
     }

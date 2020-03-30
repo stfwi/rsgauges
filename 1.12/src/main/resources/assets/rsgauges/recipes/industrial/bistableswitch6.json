@@ -1,9 +1,9 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:bistableswitch6",
-      "items": [
+      "required": [
         "rsgauges:bistableswitch5"
       ]
     }

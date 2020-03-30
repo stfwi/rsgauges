@@ -1,10 +1,10 @@
 {
-	"parent": "block/cube",
+	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
 		"front": "rsgauges:blocks/gauge/flatgauge3texture_s00",
-		"side": "rsgauges:blocks/common/darkmachinemetal",
-		"particle": "rsgauges:blocks/common/darkmachinemetal"
+		"side": "rsgauges:blocks/common/darkgraymetal",
+		"particle": "rsgauges:blocks/common/darkgraymetal"
 	},
 	"elements": [
 		{

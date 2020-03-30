@@ -1,5 +1,5 @@
 #
-# Redstone Gauges and Switches language file
+# Gauges and Switches language file
 #
 # - Inventory hover tooltip help/descriptions (when CTRL-SHIFT are down).
 #   Texts are for items and blocks, and the key identical to the names, only
@@ -10,8 +10,8 @@
 #PARSE_ESCAPES
 #
 #-----------------------------------------------------------------------------------------------------------
-itemGroup.tabrsgauges=Redstone Gauges and Switches
-rsgauges.config.title=Redstone Gauges and Switches Config
+itemGroup.tabrsgauges=Gauges and Switches
+rsgauges.config.title=Gauges and Switches Config
 rsgauges.subtitle.soundindicator1=alarm siren
 rsgauges.tooltip.hint.extended=§6[§9SHIFT§r More info§6]§r
 rsgauges.tooltip.hint.help=§6[§9CTRL-SHIFT§r Help§6]§r
@@ -19,13 +19,13 @@ rsgauges.tooltip.hint.help=§6[§9CTRL-SHIFT§r Help§6]§r
 #-----------------------------------------------------------------------------------------------------------
 # Gauge names
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.flatgauge1.name=Redstone gauge (big analog voltmeter)
-tile.rsgauges.flatgauge2.name=Redstone gauge (big analog bar)
-tile.rsgauges.flatgauge3.name=Redstone gauge (small digital display)
-tile.rsgauges.flatgauge4.name=Redstone gauge (glass bar)
-tile.rsgauges.flatgauge5.name=Redstone gauge (glass tube)
-tile.rsgauges.flatgauge6.name=Redstone gauge (small analog voltmeter)
-tile.rsgauges.gauge_rustic2.name=Redstone gauge (rustic circular wall meter)
+tile.rsgauges.flatgauge1.name=Analog Voltmeter Redstone Gauge
+tile.rsgauges.flatgauge2.name=Analog Bar Redstone Gauge
+tile.rsgauges.flatgauge3.name=Small Digital Display Redstone Gauge
+tile.rsgauges.flatgauge4.name=Glass Bar Redstone Gauge
+tile.rsgauges.flatgauge5.name=Glass Tube Redstone Gauge
+tile.rsgauges.flatgauge6.name=Small Analog Voltmeter Redstone Gauge
+tile.rsgauges.gauge_rustic2.name=Rustic Circular Wall Meter Redstone gauge
 # tooltip help
 tile.rsgauges.flatgauge1.help=§6A display device that can be attached to a solid block to visualise the \
                               redstone power of that block.§r\n\
@@ -44,17 +44,17 @@ tile.rsgauges.gauge_rustic2.help=${tile.rsgauges.flatgauge1.help}
 #-----------------------------------------------------------------------------------------------------------
 # Binary state indicator names
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.indicator_led_white.name=Redstone indicator (small square white light)
-tile.rsgauges.indicator_led_white_blink.name=Redstone indicator (blinking small square white light)
-tile.rsgauges.indicator1.name=Redstone indicator (small square green light)
-tile.rsgauges.indicator2.name=Redstone indicator (small square yellow light)
-tile.rsgauges.indicator3.name=Redstone indicator (small square red light)
-tile.rsgauges.indicator4.name=Redstone indicator (red alarm lamp)
-tile.rsgauges.indicator1blink1.name=Redstone indicator (blinking small square green light)
-tile.rsgauges.indicator2blink1.name=Redstone indicator (blinking small square yellow light)
-tile.rsgauges.indicator3blink1.name=Redstone indicator (blinking small square red light)
-tile.rsgauges.soundindicator1.name=Redstone sound indicator (alarm siren)
-tile.rsgauges.indicator_rustic_flag.name=Redstone indicator (small rustic flag semaphore)
+tile.rsgauges.indicator_led_white.name=White LED Redstone Indicator
+tile.rsgauges.indicator_led_white_blink.name=White Blinking LED Redstone Indicator
+tile.rsgauges.indicator1.name=Green LED Redstone Indicator
+tile.rsgauges.indicator2.name=Yellow LED Redstone Indicator
+tile.rsgauges.indicator3.name=Red LED Redstone Indicator
+tile.rsgauges.indicator4.name=Alarm Lamp
+tile.rsgauges.indicator1blink1.name=Green Blinking LED Redstone Indicator
+tile.rsgauges.indicator2blink1.name=Yellow Blinking LED Redstone Indicator
+tile.rsgauges.indicator3blink1.name=Red LED Redstone Indicator
+tile.rsgauges.soundindicator1.name=Alarm Siren
+tile.rsgauges.indicator_rustic_flag.name=Rustic Redstone Semaphore
 
 # tooltip help
 tile.rsgauges.indicator_led_white.help=§6A small device that can be attached to a block to indicate \
@@ -87,45 +87,47 @@ tile.rsgauges.indicator_rustic_flag.help=§6A small metal case with a semaphore 
 rsgauges.switch.feature.pulseextend.help=Activate while already active to extend the pulse time.
 rsgauges.switch.feature.hoppermountable.help=Can be placed on hoppers.
 rsgauges.switch.feature.pulsetime.help=Left-click with a stack of redstone to set a fixed pulse time between 0.1s (1) and 6.4s (64).
-rsgauges.switch.feature.outputconfig.help=Double left-click empty handed to configure the output (cycles through the options that this switch supports).
+rsgauges.switch.feature.outputconfig.help=Click with a Redstone Torch to configure the output (cycles through the options that this switch supports).
 rsgauges.switch.feature.projectilesense.help=Can be activated with projectiles.
 rsgauges.switch.feature.colortinting.help=Left-click with any dye to color tint the switch.
-rsgauges.switch.feature.linktarget.help=Left-click with an Ender pearl to get a Switch Link Pearl linked to this switch.
-rsgauges.switch.feature.linksource.help=Left-click with a Switch Link Pearl to use this switch as link source.
+rsgauges.switch.feature.linktarget.help=Click with an Ender pearl to get a Switch Link Pearl linked to this switch.
+rsgauges.switch.feature.linksource.help=Click with a Switch Link Pearl to use this switch as link source.
 rsgauges.switch.feature.contactmat.offdelay.help=Left-click with a stack of redstone to set the hold-time between 0.1s (1) and 6.4s (64).
 rsgauges.switch.feature.contactmat.touch.help=Click on the touch config up/down buttons to set output power, entity filter, entity count, and sensitivity.
 
 #-----------------------------------------------------------------------------------------------------------
 # Manual bistable switch names
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.bistableswitch1.name=Bistable redstone switch (rotary machine switch)
-tile.rsgauges.bistableswitch2.name=Bistable redstone switch (Frankenstein lever)
-tile.rsgauges.bistableswitch3.name=Bistable redstone switch (machine switch)
-tile.rsgauges.bistableswitch4.name=Bistable redstone switch (small light flip switch)
-tile.rsgauges.bistableswitch5.name=Bistable redstone switch (ESTOP button)
-tile.rsgauges.bistableswitch6.name=Bistable redstone switch (hopper blocker switch)
-tile.rsgauges.bistableswitch7.name=Bistable redstone switch (mechanical rotary lever)
-tile.rsgauges.bistableswitch8.name=Bistable redstone switch (mechanical lever)
-tile.rsgauges.bistableswitch_oldfancy1.name=Bistable redstone switch (old fancy straight lever)
-tile.rsgauges.bistableswitch_oldfancy2.name=Bistable redstone switch (old fancy angular lever)
-tile.rsgauges.bistableswitch_oldfancy3.name=Bistable redstone switch (old fancy bent lever)
-tile.rsgauges.bistableswitch_oldfancy4.name=Bistable redstone switch (old fancy slide sphere connector)
-tile.rsgauges.bistableswitch_oldfancy5.name=Bistable redstone switch (old fancy rotary sphere connector)
-tile.rsgauges.bistableswitch_oldfancy6.name=Bistable redstone switch (old fancy rotary sphere connector 2)
-tile.rsgauges.bistableswitch_oldfancy7.name=Bistable redstone switch (old fancy manual contactor)
-tile.rsgauges.bistableswitch_rustic1.name=Bistable redstone switch (rustic lever)
-tile.rsgauges.bistableswitch_rustic2.name=Bistable redstone switch (rustic two-hinge lever)
-tile.rsgauges.bistableswitch_rustic3.name=Bistable redstone switch (rustic big angular lever)
-tile.rsgauges.bistableswitch_rustic4.name=Bistable redstone switch (rustic counter-weight balanced)
-tile.rsgauges.bistableswitch_rustic5.name=Bistable redstone switch (rustic rotary handle)
-tile.rsgauges.bistableswitch_rustic6.name=Bistable redstone switch (rustic latch slide)
-tile.rsgauges.bistableswitch_rustic7.name=Bistable redstone switch (rustic the-nail)
-tile.rsgauges.bistableswitch_glass1.name=Bistable redstone switch (star shaped glass switch)
-tile.rsgauges.bistableswitch_glass2.name=Bistable redstone switch (glass touch switch)
+tile.rsgauges.bistableswitch1.name=Rotary Machine Switch
+tile.rsgauges.bistableswitch2.name=Industrial Contact Lever
+tile.rsgauges.bistableswitch3.name=Two-Button Machine Switch
+tile.rsgauges.bistableswitch4.name=Small Light Switch
+tile.rsgauges.bistableswitch5.name=ESTOP Button
+tile.rsgauges.bistableswitch6.name=Hopper Blocker
+tile.rsgauges.bistableswitch7.name=Industrial Rotary Lever
+tile.rsgauges.bistableswitch8.name=Industrial Lever
+tile.rsgauges.bistableswitch_oldfancy1.name=Old Fancy Lever
+tile.rsgauges.bistableswitch_oldfancy2.name=Old Fancy Rotary Lever
+tile.rsgauges.bistableswitch_oldfancy3.name=Bistable Switch
+tile.rsgauges.bistableswitch_oldfancy4.name=Bistable Switch
+tile.rsgauges.bistableswitch_oldfancy5.name=Bistable Switch
+tile.rsgauges.bistableswitch_oldfancy6.name=Bistable Switch
+tile.rsgauges.bistableswitch_oldfancy7.name=Bistable Switch
+tile.rsgauges.bistableswitch_rustic1.name=Rustic Lever
+tile.rsgauges.bistableswitch_rustic2.name=Rustic Two-Hinge Lever
+tile.rsgauges.bistableswitch_rustic3.name=Rustic Rotary Lever
+tile.rsgauges.bistableswitch_rustic4.name=Bistable Switch
+tile.rsgauges.bistableswitch_rustic5.name=Bistable Switch
+tile.rsgauges.bistableswitch_rustic6.name=Bistable Switch
+tile.rsgauges.bistableswitch_rustic7.name=Rustic Nail Lever
+tile.rsgauges.bistableswitch_glass1.name=Bistable Glass Switch
+tile.rsgauges.bistableswitch_glass2.name=Bistable Glass Touch Switch
+tile.rsgauges.valve_wheel_switch.name=Valve Switch
+tile.rsgauges.elevator_button.name=Elevator Button
 #
 # Bistable switch tooltip help
 #
-rsgauges.switch.feature.typebistable.help=§6A switch that is manually flipped on or off like a lever.\n
+rsgauges.switch.feature.typebistable.help=§6A switch that is manually flipped on or off like a lever.\n§r
 tile.rsgauges.bistableswitch1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
@@ -136,49 +138,42 @@ tile.rsgauges.bistableswitch7.help=${rsgauges.switch.feature.typebistable.help}$
 tile.rsgauges.bistableswitch8.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_oldfancy1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_oldfancy2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy4.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy5.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy6.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_oldfancy7.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic3.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
-tile.rsgauges.bistableswitch_rustic4.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.hoppermountable.help}
-tile.rsgauges.bistableswitch_rustic5.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.bistableswitch_rustic6.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_rustic7.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.bistableswitch_glass1.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
 tile.rsgauges.bistableswitch_glass2.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}
-
+tile.rsgauges.valve_wheel_switch.help=${rsgauges.switch.feature.typebistable.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
+tile.rsgauges.elevator_button.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 #-----------------------------------------------------------------------------------------------------------
 # Manual pulse switch names
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.arrowtarget.name=Pulse redstone switch (arrow target)
-tile.rsgauges.pulseswitch1.name=Pulse redstone switch (square machine button)
-tile.rsgauges.pulseswitch2.name=Pulse redstone switch (fenced round machine button)
-tile.rsgauges.pulseswitch3.name=Pulse redstone switch (mechanical pull handle)
-tile.rsgauges.pulseswitch5.name=Pulse redstone switch (mechanical push button)
-tile.rsgauges.pulseswitch6.name=Pulse redstone switch (retro double pole)
-tile.rsgauges.pulseswitch_oldfancy1.name=Pulse redstone switch (old fancy button)
-tile.rsgauges.pulseswitch_oldfancy2.name=Pulse redstone switch (old fancy chain switch)
-tile.rsgauges.pulseswitch_oldfancy3.name=Pulse redstone switch (old fancy spring reset handle)
-tile.rsgauges.pulseswitch_oldfancy4.name=Pulse redstone switch (old fancy tiny button)
-tile.rsgauges.pulseswitch_rustic1.name=Pulse redstone switch (rustic push button)
-tile.rsgauges.pulseswitch_rustic2.name=Pulse redstone switch (rustic bolted button)
-tile.rsgauges.pulseswitch_rustic3.name=Pulse redstone switch (rustic chain)
-tile.rsgauges.pulseswitch_rustic4.name=Pulse redstone switch (rustic weight reset chain)
-tile.rsgauges.pulseswitch_rustic5.name=Pulse redstone switch (rustic pull handle)
-tile.rsgauges.pulseswitch_rustic6.name=Pulse redstone switch (rustic push handle)
-tile.rsgauges.pulseswitch_rustic7.name=Pulse redstone switch (rustic the-nail)
-tile.rsgauges.pulseswitch_glass1.name=Pulse redstone switch (star shaped glass button)
-tile.rsgauges.pulseswitch_glass2.name=Pulse redstone switch (small star shaped glass button)
-tile.rsgauges.pulseswitch_glass3.name=Pulse redstone switch (glass touch button)
+tile.rsgauges.arrowtarget.name=Arrow Target
+tile.rsgauges.pulseswitch1.name=Machine Button
+tile.rsgauges.pulseswitch2.name=Fenced Machine Button
+tile.rsgauges.pulseswitch3.name=Industrial Pull Handle Button
+tile.rsgauges.pulseswitch5.name=Industrial Foot Button
+tile.rsgauges.pulseswitch6.name=Industrial Button
+tile.rsgauges.pulseswitch_oldfancy1.name=Old Fancy Button
+tile.rsgauges.pulseswitch_oldfancy2.name=Old Fancy Chain Button
+tile.rsgauges.pulseswitch_oldfancy3.name=Pulse Switch
+tile.rsgauges.pulseswitch_oldfancy4.name=Small Old Fancy Button
+tile.rsgauges.pulseswitch_rustic1.name=Rustic Button
+tile.rsgauges.pulseswitch_rustic2.name=Rustic Small Button
+tile.rsgauges.pulseswitch_rustic3.name=Rustic Chain Button
+tile.rsgauges.pulseswitch_rustic4.name=Pulse switch
+tile.rsgauges.pulseswitch_rustic5.name=Pulse switch
+tile.rsgauges.pulseswitch_rustic6.name=Pulse switch
+tile.rsgauges.pulseswitch_rustic7.name=Rustic Nail Button
+tile.rsgauges.pulseswitch_glass1.name=Glass Button
+tile.rsgauges.pulseswitch_glass2.name=Small Glass Button
+tile.rsgauges.pulseswitch_glass3.name=Glass Touch Button
 #
 # Pulse switch tooltip help
 #
-rsgauges.switch.feature.typepulse.help=§6A switch that outputs a redstone signal for a short time, like a button.\n
-tile.rsgauges.arrowtarget.help=§6A target that emits a redstone pulse to the block it is attached to when it is hit with an arrow or activated by hand.\n\
+rsgauges.switch.feature.typepulse.help=§6A switch that outputs a redstone signal for a short time, like a button.\n§r
+tile.rsgauges.arrowtarget.help=§6A target that emits a redstone pulse to the block it is attached to when it is hit with an arrow or activated by hand.\n§r\
                                ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.pulseswitch1.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.projectilesense.help}
 tile.rsgauges.pulseswitch2.help=${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
@@ -203,14 +198,14 @@ tile.rsgauges.pulseswitch_glass3.help=${rsgauges.switch.feature.typepulse.help}$
 #-----------------------------------------------------------------------------------------------------------
 # Floor contact switch names
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.contactmat1.name=Contact redstone switch (door contact mat)
-tile.rsgauges.contactmat2.name=Contact redstone switch (sensitive square contact mat)
-tile.rsgauges.contactmat3.name=Contact redstone switch (shock sensor contact mat)
-tile.rsgauges.contactmat_rustic1.name=Contact redstone switch (rustic door floor plate)
-tile.rsgauges.contactmat_rustic2.name=Contact redstone switch (rustic pressure plate)
-tile.rsgauges.contactmat_rustic3.name=Contact redstone switch (rustic shock sensor plate)
-tile.rsgauges.contactmat_glass1.name=Contact redstone switch (touch configurable glass plate)
-tile.rsgauges.contactmat_glass2.name=Contact redstone switch (glass plate)
+tile.rsgauges.contactmat1.name=Industrial Door Contact Mat
+tile.rsgauges.contactmat2.name=Industrial Contact Mat
+tile.rsgauges.contactmat3.name=Industrial Shock Sensitive Contact Mat
+tile.rsgauges.contactmat_rustic1.name=Rustic Door Pressure Plate
+tile.rsgauges.contactmat_rustic2.name=Rustic Pressure Plate
+tile.rsgauges.contactmat_rustic3.name=Rustic Shock Sensitive Pressure Plate
+tile.rsgauges.contactmat_glass1.name=Configurable Glass Contact Plate
+tile.rsgauges.contactmat_glass2.name=Glass Contact Plate
 #
 # Floor contact switch tooltip help
 #
@@ -250,12 +245,12 @@ tile.rsgauges.contactmat_glass2.help=§6A glass floor plate that changes color a
 #-----------------------------------------------------------------------------------------------------------
 # Trapdoor switches
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.trapdoorswitch1.name=Trapdoor switch (industrial shock activated trapdoor)
-tile.rsgauges.trapdoorswitch2.name=Trapdoor switch (industrial high sensitive shock activated trapdoor)
-tile.rsgauges.trapdoorswitch3.name=Trapdoor switch (industrial item trapdoor)
-tile.rsgauges.trapdoorswitch_rustic1.name=Trapdoor switch (rustic shock activated trapdoor)
-tile.rsgauges.trapdoorswitch_rustic2.name=Trapdoor switch (rustic high sensitive shock activated trapdoor)
-tile.rsgauges.trapdoorswitch_rustic3.name=Trapdoor switch (rustic item trapdoor)
+tile.rsgauges.trapdoorswitch1.name=Industrial Shock Activated Trapdoor
+tile.rsgauges.trapdoorswitch2.name=Industrial Sensitive Shock Activated Trapdoor
+tile.rsgauges.trapdoorswitch3.name=Industrial Fall-Through Detection Frame
+tile.rsgauges.trapdoorswitch_rustic1.name=Rustic Shock Activated Trapdoor
+tile.rsgauges.trapdoorswitch_rustic2.name=Rustic Sensitive Shock Activated Trapdoor
+tile.rsgauges.trapdoorswitch_rustic3.name=Rustic Fall-Through Detector Trapdoor
 #
 # Trapdoor switch tooltip help
 #
@@ -291,17 +286,19 @@ tile.rsgauges.trapdoorswitch_rustic3.help=§6A metal trap door that swings open 
 #-----------------------------------------------------------------------------------------------------------
 # Auto switch names
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.automaticswitch1.name=Automatic redstone switch (infrared motion detector)
-tile.rsgauges.automaticswitch2.name=Automatic redstone switch (linear laser detector)
-tile.rsgauges.automaticswitch3.name=Automatic redstone switch (local light sensor)
-tile.rsgauges.automaticswitch4.name=Automatic redstone switch (day timer clock)
-tile.rsgauges.automaticswitch5.name=Automatic redstone switch (rain sensor switch)
-tile.rsgauges.automaticswitch6.name=Automatic redstone switch (lightning potential switch)
-tile.rsgauges.automaticswitch7.name=Automatic redstone switch (interval signal timer)
-tile.rsgauges.detectorswitch_glass1.name=Automatic redstone switch (glass infrared motion detector)
-tile.rsgauges.detectorswitch_glass2.name=Automatic redstone switch (glass laser detector)
-tile.rsgauges.daytimeswitch_glass1.name=Automatic redstone switch (glass day timer clock)
-tile.rsgauges.timerswitch_glass1.name=Automatic redstone switch (glass interval signal timer)
+tile.rsgauges.automaticswitch1.name=Industrial Infrared Entity Detector
+tile.rsgauges.automaticswitch2.name=Industrial Linear Laser Entity Detector
+tile.rsgauges.automaticswitch3.name=Industrial Local Light Sensor
+tile.rsgauges.automaticswitch4.name=Industrial Day Timer Clock
+tile.rsgauges.automaticswitch5.name=Industrial Rain Sensor
+tile.rsgauges.automaticswitch6.name=Industrial Thunderstorm Detector
+tile.rsgauges.automaticswitch7.name=Industrial Interval Signal Timer
+tile.rsgauges.detectorswitch_glass1.name=Glass Infrared Entity Detector
+tile.rsgauges.detectorswitch_glass2.name=Glass Linear Laser Entity Detector
+tile.rsgauges.daytimeswitch_glass1.name=Glass Day Timer Clock
+tile.rsgauges.timerswitch_glass1.name=Glass Interval Signal Timer
+tile.rsgauges.industrial_comparator_switch=Industrial Comparator Switch
+
 #
 # Auto switch tooltip help
 #
@@ -379,12 +376,16 @@ tile.rsgauges.timerswitch_glass1.help=§6A small device that emits a rectangular
                                     Output is to the block where the sensor is placed on. Does not emit switching sounds.\
                                     ${rsgauges.switch.feature.outputconfig.help} \
                                     As Switch Link target the timer toggles between run and standby mode.
-
+tile.rsgauges.industrial_comparator_switch.help=§6A small device that that emits a redstone signal depending on the comparator output \
+                                    level or inventory statistics of the block it is attached to.§r\n\
+                                    The buttons on the front facing allow to configure the output signal strength, switch-on comparator \
+                                    value, switch-off comparator value, and operating mode ("comparator, free slots, used slots, ..."). \
+                                    ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
 
 #-----------------------------------------------------------------------------------------------------------
 # Block observing and inspection switches
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.observerswitch1.name=Block detection switch (industrial series)
+tile.rsgauges.observerswitch1.name=Industrial Block Category Detector
 #
 # Observing switch tooltip help
 #
@@ -403,7 +404,7 @@ tile.rsgauges.observerswitch1.help=§6A switch emitting a redstone signal if one
 #-----------------------------------------------------------------------------------------------------------
 # Dimmer switches
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.dimmerswitch1.name=Dimmer switch (industrial series)
+tile.rsgauges.dimmerswitch1.name=Industrial Dimmer
 
 rsgauges.switchconfig.dimmerswitch.output_power=power: %1$s
 #
@@ -417,12 +418,12 @@ tile.rsgauges.dimmerswitch1.help=§6An industrial manual redstone power dimmer.�
 #-----------------------------------------------------------------------------------------------------------
 # Link relay switch names
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.relay_bistableswitchrx1.name=Switch link receiver (industrial)
-tile.rsgauges.relay_bistableswitchrx2.name=Cased switch link receiver (industrial)
-tile.rsgauges.relay_pulseswitchrx1.name=Switch link pulse receiver (industrial)
-tile.rsgauges.relay_pulseswitchrx2.name=Cased switch link pulse receiver (industrial)
-tile.rsgauges.relay_bistableswitchtx1.name=Switch link relay (industrial)
-tile.rsgauges.relay_pulseswitchtx1.name=Switch link pulse relay (industrial)
+tile.rsgauges.relay_bistableswitchrx1.name=Industrial Switch Link Receiver
+tile.rsgauges.relay_bistableswitchrx2.name=Industrial Cased Switch Link Receiver
+tile.rsgauges.relay_pulseswitchrx1.name=Industrial Pulse Switch Link Receiver
+tile.rsgauges.relay_pulseswitchrx2.name=Industrial Cased Pulse Switch Link Receiver
+tile.rsgauges.relay_bistableswitchtx1.name=Industrial Switch Link Sender
+tile.rsgauges.relay_pulseswitchtx1.name=Industrial Switch Link Pulse Sender
 #
 # Link relay switch help
 #
@@ -505,24 +506,24 @@ tile.rsgauges.industrial_knock_switch.help=§6Switches on/off when the adjacent 
 #-----------------------------------------------------------------------------------------------------------
 # Sensitive glass block names
 #-----------------------------------------------------------------------------------------------------------
-tile.rsgauges.sensitiveglass.name=Redstone sensitive glass block (light emitting)
-tile.rsgauges.sensitiveglass_white.name=Redstone sensitive glass block (white stained)
-tile.rsgauges.sensitiveglass_red.name=Redstone sensitive glass block (red stained)
-tile.rsgauges.sensitiveglass_green.name=Redstone sensitive glass block (green stained)
-tile.rsgauges.sensitiveglass_blue.name=Redstone sensitive glass block (blue stained)
-tile.rsgauges.sensitiveglass_yellow.name=Redstone sensitive glass block (yellow stained)
-tile.rsgauges.sensitiveglass_orange.name=Redstone sensitive glass block (orange stained)
-tile.rsgauges.sensitiveglass_magenta.name=Redstone sensitive glass block (magenta stained)
-tile.rsgauges.sensitiveglass_lightblue.name=Redstone sensitive glass block (light blue stained)
-tile.rsgauges.sensitiveglass_lime.name=Redstone sensitive glass block (lime stained)
-tile.rsgauges.sensitiveglass_pink.name=Redstone sensitive glass block (pink stained)
-tile.rsgauges.sensitiveglass_gray.name=Redstone sensitive glass block (gray stained)
-tile.rsgauges.sensitiveglass_lightgray.name=Redstone sensitive glass block (light gray stained)
-tile.rsgauges.sensitiveglass_cyan.name=Redstone sensitive glass block (cyan stained)
-tile.rsgauges.sensitiveglass_purple.name=Redstone sensitive glass block (purple stained)
-tile.rsgauges.sensitiveglass_brown.name=Redstone sensitive glass block (brown stained)
-tile.rsgauges.sensitiveglass_black.name=Redstone sensitive glass block (black stained)
-tile.rsgauges.sensitiveglass_inverted.name=Redstone sensitive glass block (inverted, light emitting)
+tile.rsgauges.sensitiveglass.name=Redstone-Sensitive Glass Block (Light Emitting)
+tile.rsgauges.sensitiveglass_white.name=Redstone-Sensitive Glass Block (White-Stained)
+tile.rsgauges.sensitiveglass_red.name=Redstone-Sensitive Glass Block (Red-Stained)
+tile.rsgauges.sensitiveglass_green.name=Redstone-Sensitive Glass Block (Green-Stained)
+tile.rsgauges.sensitiveglass_blue.name=Redstone-Sensitive Glass Block (Blue-Stained)
+tile.rsgauges.sensitiveglass_yellow.name=Redstone-Sensitive Glass Block (Yellow-Stained)
+tile.rsgauges.sensitiveglass_orange.name=Redstone-Sensitive Glass Block (Orange-Stained)
+tile.rsgauges.sensitiveglass_magenta.name=Redstone-Sensitive Glass Block (Magenta-Stained)
+tile.rsgauges.sensitiveglass_lightblue.name=Redstone-Sensitive Glass Block (Light-Blue-Stained)
+tile.rsgauges.sensitiveglass_lime.name=Redstone-Sensitive Glass Block (Lime-Stained)
+tile.rsgauges.sensitiveglass_pink.name=Redstone-Sensitive Glass Block (Pink-Stained)
+tile.rsgauges.sensitiveglass_gray.name=Redstone-Sensitive Glass Block (Gray-Stained)
+tile.rsgauges.sensitiveglass_lightgray.name=Redstone-Sensitive Glass Block (Light-Gray-Stained)
+tile.rsgauges.sensitiveglass_cyan.name=Redstone-Sensitive Glass Block (Cyan-Stained)
+tile.rsgauges.sensitiveglass_purple.name=Redstone-Sensitive Glass Block (Purple-Stained)
+tile.rsgauges.sensitiveglass_brown.name=Redstone-Sensitive Glass Block (Brown-Stained)
+tile.rsgauges.sensitiveglass_black.name=Redstone-Sensitive Glass Block (Black-Stained)
+tile.rsgauges.sensitiveglass_inverted.name=Redstone-Sensitive Glass Block (Inverted, Light Emitting)
 #
 # Sensitive glass block tooltip help
 #
@@ -557,11 +558,11 @@ tile.rsgauges.qube.help=It's a developer block that is not supposed to be crafta
 #-----------------------------------------------------------------------------------------------------------
 # Items
 #-----------------------------------------------------------------------------------------------------------
-item.rsgauges.switchlink_pearl.name=Switch link pearl
+item.rsgauges.switchlink_pearl.name=Switch Link Pearl
 item.rsgauges.switchlink_pearl.help=§6Created by left clicking a switch with an Ender pearl. Remote activates that \
                                     (target) switch when used or plugged into another (source) switch, also by \
                                     left clicking.§r\n\
-                                    Change link options by left clicking the target with the switch link pearl (cycles \
+                                    Change link options by left clicking the target with the Switch Link Pearl (cycles \
                                     through link options). You can plug more than one pearl into a switch. \
                                     Pearls will complain when they are overstressed or cannot find their target, you can hear that. \
                                     If a switch is not suitable to be a source or target for linking, the pearl will also complain. \
@@ -630,6 +631,18 @@ rsgauges.switchconfig.lightsensor.threshold_on=on: %1$s%2$s
 rsgauges.switchconfig.lightsensor.threshold_off=off: %1$s%2$s
 rsgauges.switchconfig.lightsensor.output_power=power: %1$s
 rsgauges.switchconfig.lightsensor.debounce=debounce: %1$s %2$s
+
+
+#--------------------------------------------------
+# on: <int> off: <int> power: <int>  debounce:<int>
+#
+rsgauges.switchconfig.comparator_switch=%1$s%2$s%3$s%4$s
+rsgauges.switchconfig.comparator_switch.threshold_on=on-level: %1$s
+rsgauges.switchconfig.comparator_switch.threshold_off=off-level: %1$s
+rsgauges.switchconfig.comparator_switch.output_power=power: %1$s
+rsgauges.switchconfig.comparator_switch.mode0=comparator mode
+rsgauges.switchconfig.comparator_switch.mode1=used inventory slots
+rsgauges.switchconfig.comparator_switch.mode2=free inventory slots
 
 #--------------------------------------------------
 # on: <int>  off: <int>  power: <int>  random:<int>

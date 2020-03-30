@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:rustic_shock_sensitive_plate",
+   "required": [
+    "rsgauges:rustic_contact_plate"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:rustic_contact_plate"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:rustic_shock_sensitive_plate"
+ }
+}

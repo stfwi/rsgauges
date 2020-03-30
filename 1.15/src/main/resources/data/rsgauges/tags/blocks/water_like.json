@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:water",
+    "#minecraft:ice",
+    "minecraft:wet_sponge"
+  ]
+}

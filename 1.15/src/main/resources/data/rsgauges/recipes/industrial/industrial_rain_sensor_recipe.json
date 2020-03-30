@@ -1,0 +1,20 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_rain_sensor",
+   "required": [
+    "rsgauges:industrial_light_sensor"
+   ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  {
+   "item": "rsgauges:industrial_light_sensor"
+  }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_rain_sensor"
+ }
+}

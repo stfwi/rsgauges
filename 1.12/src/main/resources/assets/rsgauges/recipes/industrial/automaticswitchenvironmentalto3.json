@@ -1,9 +1,9 @@
 {
   "conditions": [
     {
-      "type": "rsgauges:grc",
+      "type": "rsgauges:optional",
       "result": "rsgauges:automaticswitch3",
-      "items": [
+      "required": [
         "rsgauges:automaticswitch6"
       ]
     }

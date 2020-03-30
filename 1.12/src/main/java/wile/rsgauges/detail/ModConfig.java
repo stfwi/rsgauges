@@ -9,13 +9,20 @@
  */
 package wile.rsgauges.detail;
 
+import net.minecraft.item.ItemBlock;
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.blocks.*;
+import wile.rsgauges.items.*;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+
+import java.util.ArrayList;
 
 @Config(modid = ModRsGauges.MODID)
 @Config.LangKey("rsgauges.config.title")
@@ -156,6 +163,27 @@ public class ModConfig
     })
     @Config.Name("Without rclick item config")
     public boolean without_rightclick_item_switchconfig = false;
+
+    @Config.Comment({
+      "Opt-out any block by its registry name ('*' wildcard matching, "
+      + "comma separated list, whitespaces ignored. You must match the whole name, "
+      + "means maybe add '*' also at the begin and end. Example: '*wood*,*steel*' "
+      + "excludes everything that has 'wood' or 'steel' in the registry name. "
+      + "The matching result is also traced in the log file. "
+    })
+    @Config.Name("Pattern exclude")
+    public String pattern_excludes = "";
+
+    @Config.Comment({
+      "Prevent blocks from being opt'ed by registry name ('*' wildcard matching, "
+      + "comma separated list, whitespaces ignored. Evaluated before all other opt-out checks. "
+      + "You must match the whole name, means maybe add '*' also at the begin and end. Example: "
+      + "'*wood*,*steel*' includes everything that has 'wood' or 'steel' in the registry name."
+      + "The matching result is also traced in the log file."
+    })
+    @Config.Name("Pattern include")
+    public String pattern_includes = "";
+
   }
 
   @Config.Comment({
@@ -317,11 +345,93 @@ public class ModConfig
   public static final void onPostInit(FMLPostInitializationEvent event)
   { update(); }
 
+  private static final ArrayList<String> includes_ = new ArrayList<String>();
+  private static final ArrayList<String> excludes_ = new ArrayList<String>();
+
   private static final void update()
   {
     zmisc.accepted_wrenches = zmisc.accepted_wrenches.toLowerCase().replaceAll("[\\s]","").replaceAll(",,",",");
     zmisc.accepted_wrenches = ("," + zmisc.accepted_wrenches + ",").replaceAll(",air,",",redstone_torch,"); // @todo added for version transition, normally .replaceAll(",air,",",")
     zmisc.accepted_wrenches = zmisc.accepted_wrenches.replaceAll("[,]+$", "").replaceAll("^[,]+", "");
+    // patterns
+    {
+      String inc = optouts.pattern_includes.toLowerCase().replaceAll(ModRsGauges.MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      if(optouts.pattern_includes != inc) optouts.pattern_includes = inc;
+      if(!inc.isEmpty()) ModRsGauges.logger.info("Pattern includes: '" + inc + "'");
+      String[] incl = inc.split(",");
+      includes_.clear();
+      for(int i=0; i< incl.length; ++i) {
+        incl[i] = incl[i].replaceAll("[*]", ".*?");
+        if(!incl[i].isEmpty()) includes_.add(incl[i]);
+      }
+    }
+    {
+      String exc = optouts.pattern_excludes.toLowerCase().replaceAll(ModRsGauges.MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      if(!exc.isEmpty()) ModRsGauges.logger.info("Pattern excludes: '" + exc + "'");
+      String[] excl = exc.split(",");
+      excludes_.clear();
+      for(int i=0; i< excl.length; ++i) {
+        excl[i] = excl[i].replaceAll("[*]", ".*?");
+        if(!excl[i].isEmpty()) excludes_.add(excl[i]);
+      }
+    }
+  }
+
+  // Code unification
+  public static boolean isOptedOut(Block block)
+  { return !enabled(block); }
+
+  public static boolean isOptedOut(Item item)
+  { return (!enabled(item)) || ((item instanceof ItemBlock) && (!enabled(Block.getBlockFromItem(item)))); }
+
+  public static boolean isWithoutRecipes()
+  { return false; }
+
+  private static boolean enabled(Block block)
+  {
+    try {
+      final String rn = block.getRegistryName().getPath();
+      for(String e : includes_) {
+        if(rn.matches(e)) {
+          return true;
+        }
+      }
+      for(String e : excludes_) {
+        if(rn.matches(e)) {
+          return false;
+        }
+      }
+    } catch(Throwable e) {
+      ModRsGauges.logger.error("Exception while parsing exclude/include pattern: " + e.getMessage());
+    }
+    if(block instanceof BlockIndicator) {
+      BlockIndicator bl = ((BlockIndicator)block);
+      if((bl.config & RsBlock.RSBLOCK_CONFIG_OBSOLETE) != 0) return false;
+      if(ModConfig.optouts.without_indicators) return false;
+      if((ModConfig.optouts.without_blinking_indicators) && (bl.blink_interval() > 0)) return false;
+      if((ModConfig.optouts.without_sound_indicators) && ((bl.power_on_sound != null) || (bl.power_off_sound != null))) return false;
+    } if(block instanceof BlockGauge) {
+      BlockGauge bl = ((BlockGauge)block);
+      if((bl.config & RsBlock.RSBLOCK_CONFIG_OBSOLETE) != 0) return false;
+      if(ModConfig.optouts.without_gauges) return false;
+    } else if(block instanceof BlockSwitch) {
+      BlockSwitch bl = ((BlockSwitch)block);
+      if((bl.config & RsBlock.RSBLOCK_CONFIG_OBSOLETE) != 0) return false;
+      if((ModConfig.optouts.without_bistable_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_BISTABLE)!=0)) return false;
+      if((ModConfig.optouts.without_pulse_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_PULSE)!=0)) return false;
+      if((ModConfig.optouts.without_contact_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_CONTACT)!=0)) return false;
+      if((ModConfig.optouts.without_automatic_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_AUTOMATIC)!=0)) return false;
+      if((ModConfig.optouts.without_linkrelay_switches)  && ((bl.config & BlockSwitch.SWITCH_CONFIG_LINK_RELAY)!=0)) return false;
+    } else if(block instanceof BlockSensitiveGlass) {
+      if(ModConfig.optouts.without_decorative) return false;
+    }
+    return true;
+  }
+
+  private static boolean enabled(Item item)
+  {
+    if((ModConfig.optouts.without_switch_linking) && (item instanceof ItemSwitchLinkPearl)) return false;
+    return true;
   }
 
 }

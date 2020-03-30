@@ -1,0 +1,104 @@
+{
+  "parent": "block/block",
+  "ambientocclusion": false,
+	"textures": {
+    "particle": "rsgauges:block/common/cleargrayglass",
+		"handle": "rsgauges:block/sensitiveglass/sensitiveglass_stained_s15",
+		"offstate": "rsgauges:block/sensitiveglass/sensitiveglass_bw_s00"
+	},
+	"elements": [
+		{
+			"name": "cube",
+			"from": [6, 5.625, 15.5],
+			"to": [8.625, 10.375, 15.875],
+			"faces": {
+				"north": {"texture": "#handle", "tintindex": 0},
+				"east": {"texture": "#handle", "rotation": 180, "tintindex": 0},
+				"south": {"texture": "#handle", "tintindex": 0},
+				"west": {"texture": "#handle", "rotation": 180, "tintindex": 0},
+				"up": {"texture": "#handle", "rotation": 180, "tintindex": 0},
+				"down": {"texture": "#handle", "rotation": 180, "tintindex": 0}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [8.875, 5.625, 15.5],
+			"to": [10.375, 10.375, 15.875],
+			"faces": {
+				"north": {"texture": "#offstate"},
+				"east": {"texture": "#offstate", "rotation": 180},
+				"south": {"texture": "#offstate"},
+				"west": {"texture": "#offstate", "rotation": 180},
+				"up": {"texture": "#offstate", "rotation": 180},
+				"down": {"texture": "#offstate", "rotation": 180}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [5.625, 5.625, 15.5],
+			"to": [5.75, 10.375, 15.875],
+			"faces": {
+				"north": {"texture": "#offstate"},
+				"east": {"texture": "#offstate", "rotation": 180},
+				"south": {"texture": "#offstate"},
+				"west": {"texture": "#offstate", "rotation": 180},
+				"up": {"texture": "#offstate", "rotation": 180},
+				"down": {"texture": "#offstate", "rotation": 180}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [8.75, 5.5, 15.375],
+			"to": [10.5, 10.5, 16],
+			"faces": {
+				"north": {"texture": "#offstate"},
+				"east": {"texture": "#offstate", "rotation": 180},
+				"south": {"texture": "#offstate"},
+				"west": {"texture": "#offstate", "rotation": 180},
+				"up": {"texture": "#offstate", "rotation": 180},
+				"down": {"texture": "#offstate", "rotation": 180}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [5.875, 5.5, 15.375],
+			"to": [8.75, 10.5, 16],
+			"faces": {
+				"north": {"texture": "#handle", "tintindex": 0},
+				"east": {"texture": "#handle", "rotation": 180, "tintindex": 0},
+				"south": {"texture": "#handle", "tintindex": 0},
+				"west": {"texture": "#handle", "rotation": 180, "tintindex": 0},
+				"up": {"texture": "#handle", "rotation": 180, "tintindex": 0},
+				"down": {"texture": "#handle", "rotation": 180, "tintindex": 0}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [5.5, 5.5, 15.375],
+			"to": [5.875, 10.5, 16],
+			"faces": {
+				"north": {"texture": "#offstate"},
+				"east": {"texture": "#offstate", "rotation": 180},
+				"south": {"texture": "#offstate"},
+				"west": {"texture": "#offstate", "rotation": 180},
+				"up": {"texture": "#offstate", "rotation": 180},
+				"down": {"texture": "#offstate", "rotation": 180}
+			}
+		}
+	],
+	"display": {
+		"gui": {
+			"rotation": [0, 180, 0],
+			"translation": [0, 0.5, 0]
+		},
+		"fixed": {
+			"rotation": [0, 0, 0],
+			"translation": [0, 0, -11]
+		},
+		"ground": {
+			"rotation": [0, 0, 0],
+			"translation": [0, 0, -7],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

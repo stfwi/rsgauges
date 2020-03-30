@@ -1,5 +1,5 @@
 {
   "conditions": {
-    "grc": "wile.rsgauges.detail.RecipeCondModSpecific"
+    "optional": "wile.rsgauges.detail.RecipeCondModSpecific"
   }
 }

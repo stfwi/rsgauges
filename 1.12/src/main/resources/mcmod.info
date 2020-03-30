@@ -1,7 +1,7 @@
 [
     {
       "modid": "rsgauges",
-      "name": "Redstone Gauges and Switches",
+      "name": "Gauges and Switches",
       "description": "Adds redstone (metering) gauges, bistable switches (lever like), pulse switches (button like), contact switches (like pressure plates), and all sorts of other automatic switches to the game.",
       "version": "${version}",
       "mcversion": "${mcversion}",
