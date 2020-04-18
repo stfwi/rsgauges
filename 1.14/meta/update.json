@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.14.4": {
+    "1.2.3-b1": "[A] Added Door Sensor switch.\n[M] Lang file zh_cn updated (PR#19, scikirbypoke).",
     "1.2.2": "[R] Release build v1.2.2. Release-to-release changes: * Valve Switch added. * Elevator Button added. * Minor fixes.",
     "1.2.2-b2": "[A] Elevator Switch added.",
     "1.2.2-b1": "[A] Added Valve Switch (idea and model by Jack Mazz).",
@@ -24,6 +25,6 @@
   },
   "promos": {
     "1.14.4-recommended": "1.2.2",
-    "1.14.4-latest": "1.2.2"
+    "1.14.4-latest": "1.2.3-b1"
   }
 }

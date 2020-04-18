@@ -138,6 +138,8 @@
   "rsgauges.switchlinking.relayconfig.confval2": "在起始开关关闭时触发。",
   "rsgauges.switchlinking.relayconfig.confval3": "在起始开关状态改变时触发。",
   "rsgauges.switchlinking.relayconfig.confval4": "激活状态与起始开关的反相同步。",
+  "block.rsgauges.door_sensor_switch": "Door sensor",
+  "block.rsgauges.door_sensor_switch.help": "§6A player detector that is mounted on walls above doors.§r",
   "block.rsgauges.industrial_analog_angular_gauge": "红石测量仪 (大型模拟电压表)",
   "block.rsgauges.industrial_analog_angular_gauge.help": "§6一个显示设备，能显示所接 触的固体方块的红石充能等级。§r\n如果该方块是红石电源，测量器 会显示其输出，否则会间接测量 该方块从邻接方块收到的信号。 能显示信号的强弱。间接测量可 能会有延迟。",
   "block.rsgauges.industrial_vertical_bar_gauge": "红石测量仪 (大型模拟条)",

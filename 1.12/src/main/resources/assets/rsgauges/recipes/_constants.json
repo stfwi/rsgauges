@@ -18,5 +18,17 @@
       { "item": "minecraft:stone_pressure_plate" }
     ],
     "name": "any_pressure_plate"
+  },
+  {
+    "ingredient": [
+      { "item": "minecraft:acacia_door" },
+      { "item": "minecraft:birch_door" },
+      { "item": "minecraft:dark_oak_door" },
+      { "item": "minecraft:iron_door" },
+      { "item": "minecraft:jungle_door" },
+      { "item": "minecraft:spruce_door" },
+      { "item": "minecraft:wooden_door" }
+    ],
+    "name": "any_door"
   }
 ]

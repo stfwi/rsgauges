@@ -298,6 +298,7 @@ tile.rsgauges.detectorswitch_glass2.name=自动红石开关 (玻璃线性激光�
 tile.rsgauges.daytimeswitch_glass1.name=自动红石开关 (玻璃日间计时器)
 tile.rsgauges.timerswitch_glass1.name=自动红石开关 (玻璃间隔信号计时器)
 tile.rsgauges.industrial_comparator_switch=自动红石开关（工业比较器开关）
+tile.rsgauges.door_sensor_switch.name=Door sensor
 
 #
 # Auto switch tooltip help
@@ -381,6 +382,7 @@ tile.rsgauges.industrial_comparator_switch.help=§6一种小型设备，能根�
                                     正面的按钮能配置输出信号强度、开关开启阈值、\
                                     开关关闭阈值和操作模式（比较器、已用格数、未用格数……）。\
                                     ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+tile.rsgauges.door_sensor_switch.help=§6A player detector that is mounted on walls above doors.§r
 
 #-----------------------------------------------------------------------------------------------------------
 # Block observing and inspection switches

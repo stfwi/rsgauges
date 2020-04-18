@@ -947,6 +947,15 @@ public class ModContent
       BlockSwitch.SWITCH_CONFIG_FAINT_LIGHTSOURCE,
       null, null
     ),
+    // Door sensor
+    new BlockDoorSensorSwitch("door_sensor_switch",
+      ModAuxiliaries.getPixeledAABB(5,0,0, 11,1, 1.5), null,
+      BlockSwitch.SWITCH_CONFIG_SENSOR_DETECTOR|
+      BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+      BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+      new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.05f, 2.5f), null,
+      null
+    ),
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- sensitive glass
@@ -1079,6 +1088,8 @@ public class ModContent
       ++num_tile_entities;
       if((switch_config_bits_union_set & (BlockSwitch.SWITCH_CONFIG_SENSOR_DETECTOR)) != 0) {
         GameRegistry.registerTileEntity(BlockAutoSwitch.TileEntityDetectorSwitch.class, new ResourceLocation(ModRsGauges.MODID, "detectorswitch_entity"));
+        ++num_tile_entities;
+        GameRegistry.registerTileEntity(BlockDoorSensorSwitch.TileEntityDoorSensorSwitch.class, new ResourceLocation(ModRsGauges.MODID, "doorsensorswitch_entity"));
         ++num_tile_entities;
       }
       if((switch_config_bits_union_set & (BlockSwitch.SWITCH_CONFIG_SENSOR_ENVIRONMENTAL)) != 0) {
