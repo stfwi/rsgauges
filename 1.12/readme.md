@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    ~ v1.2.3-b2  [A]
+
     - v1.2.3-b1  [A] Back-ported Door Sensor switch.
                  [M] Lang file zh_cn updated (PR#19, scikirbypoke).
 
