@@ -10,6 +10,10 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+    - v1.2.3-b3  [M] Block Category Detector: Fixed forge tag lookup (issue #21, thx Nodlehs).
+                 [M] Comparator Switch recipe fixed (thx @itzbahb).
+                 [M] En lang files typo fixes (thx @itzbahb).
+
     - v1.2.3-b2  [F] Fixed switch link max distance config (issue #20, thx Rictu5).
 
     - v1.2.3-b1  [A] Added Door Sensor switch.

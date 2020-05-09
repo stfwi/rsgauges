@@ -10,7 +10,10 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
-    ~ v1.2.3-b2  [A]
+    - v1.2.3-b3  [M] En lang files typo fixes (thx @itzbahb).
+                 [F] Comparator Switch recipe fixed.
+
+    ~ v1.2.3-b2  [/] Version skipped in 1.12.2.
 
     - v1.2.3-b1  [A] Back-ported Door Sensor switch.
                  [M] Lang file zh_cn updated (PR#19, scikirbypoke).

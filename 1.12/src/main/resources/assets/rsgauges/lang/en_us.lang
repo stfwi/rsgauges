@@ -297,7 +297,7 @@ tile.rsgauges.detectorswitch_glass1.name=Glass Infrared Entity Detector
 tile.rsgauges.detectorswitch_glass2.name=Glass Linear Laser Entity Detector
 tile.rsgauges.daytimeswitch_glass1.name=Glass Day Timer Clock
 tile.rsgauges.timerswitch_glass1.name=Glass Interval Signal Timer
-tile.rsgauges.industrial_comparator_switch=Industrial Comparator Switch
+tile.rsgauges.industrial_comparator_switch.name=Industrial Comparator Switch
 tile.rsgauges.door_sensor_switch.name=Door sensor
 
 #
@@ -461,7 +461,7 @@ tile.rsgauges.relay_bistableswitchtx1.help=§6A small industrial switching devic
                                            when the redstone power of the block it is mounted on changes. \
                                            By double-left clicking empty handed you can change the input polarity (inverted means \
                                            active-low) and strength sensitivity (default weak, strong means that strong power is \
-                                           needed to triggger the links). \
+                                           needed to trigger the links). \
                                            Muffled, therefore very silent. Can also be manually activated like a lever for testing. \
                                            ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 tile.rsgauges.relay_pulseswitchtx1.help=§6A small industrial pulse switching device that is optimised to be used as a Switch Link relay \
@@ -471,7 +471,7 @@ tile.rsgauges.relay_pulseswitchtx1.help=§6A small industrial pulse switching de
                                            It activates for a short time when the redstone input changes from 0 to any higher value. \
                                            By double-left clicking empty handed you can change the input polarity (inverted means \
                                            active-low) and strength sensitivity (default weak, strong means that strong power is needed \
-                                           to triggger the links). \
+                                           to trigger the links). \
                                            Muffled, therefore very silent. Can also be manually activated like a pulse switch for testing. \
                                            ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}
 

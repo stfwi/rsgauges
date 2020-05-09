@@ -291,7 +291,7 @@ tile.rsgauges.detectorswitch_glass1.name=Glas-Infrarot-Bewegungsmelder
 tile.rsgauges.detectorswitch_glass2.name=Glas-Laser-Lichtschranke
 tile.rsgauges.daytimeswitch_glass1.name=Glas-Zeitschaltuhr
 tile.rsgauges.timerswitch_glass1.name=Glas-Intervalzeitschalter
-tile.rsgauges.industrial_comparator_switch=Comparator-Schalter
+tile.rsgauges.industrial_comparator_switch.name=Comparator-Schalter
 tile.rsgauges.door_sensor_switch.name=Door sensor
 
 #
