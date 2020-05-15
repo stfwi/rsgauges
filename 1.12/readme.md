@@ -10,6 +10,12 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+                 -------------------------------------------------------------------
+    - v1.2.3     [R] Release build v1.2.3. Release-to-release changes:
+                     * Door Sensor added.
+                     * Recipe fixes, lang files updated.
+                 -------------------------------------------------------------------
+
     - v1.2.3-b3  [M] En lang files typo fixes (thx @itzbahb).
                  [F] Comparator Switch recipe fixed.
 

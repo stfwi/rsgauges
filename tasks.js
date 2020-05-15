@@ -16,6 +16,7 @@ tasks["update-json"] = function() {
   var update_json_src = [];
   fs.find(root_dir + "/1.12/meta/", "update*.json", function(path){ update_json_src.push(JSON.parse(fs.readfile(path))); });
   fs.find(root_dir + "/1.14/meta/", "update*.json", function(path){ update_json_src.push(JSON.parse(fs.readfile(path))); });
+  fs.find(root_dir + "/1.15/meta/", "update*.json", function(path){ update_json_src.push(JSON.parse(fs.readfile(path))); });
   for(var i in update_json_src) {
     const version_update_json = update_json_src[i];
     for(var key in version_update_json) {
