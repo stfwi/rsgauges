@@ -238,7 +238,7 @@ public class ItemSwitchLinkPearl extends RsItem
     { return ((pos==null) || (!valid)) ? -1 : (int)Math.sqrt(target_position.distanceSq(pos)); }
 
     public boolean isTooFar(final BlockPos pos)
-    { return (((distance(pos) > ModConfig.max_switch_linking_distance) && (ModConfig.max_switch_linking_distance > 0))); }
+    { return (ModConfig.max_switch_linking_distance > 0) && (((distance(pos) > ModConfig.max_switch_linking_distance))); }
 
     @SuppressWarnings("deprecation")
     public RequestResult request(final int req, final World world, final BlockPos source_pos, final @Nullable PlayerEntity player)

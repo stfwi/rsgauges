@@ -11,6 +11,20 @@ Mod sources for Minecraft version 1.12.2.
 ## Version history
 
                  -------------------------------------------------------------------
+    - v1.2.3     [R] Release build v1.2.3. Release-to-release changes:
+                     * Door Sensor added.
+                     * Recipe fixes, lang files updated.
+                 -------------------------------------------------------------------
+
+    - v1.2.3-b3  [M] En lang files typo fixes (thx @itzbahb).
+                 [F] Comparator Switch recipe fixed.
+
+    ~ v1.2.3-b2  [/] Version skipped in 1.12.2.
+
+    - v1.2.3-b1  [A] Back-ported Door Sensor switch.
+                 [M] Lang file zh_cn updated (PR#19, scikirbypoke).
+
+                 -------------------------------------------------------------------
     - v1.2.2     [R] Release build v1.2.2. Release-to-release changes:
                      * Valve Switch added.
                      * Elevator Button added.

@@ -1,0 +1,6 @@
+{
+	"parent": "rsgauges:block/observerswitch/general/door_sensor_switch_model_s00",
+	"textures": {
+    "redstone": "rsgauges:blocks/indicator/indicator_fg_red_on_texture"
+	}
+}

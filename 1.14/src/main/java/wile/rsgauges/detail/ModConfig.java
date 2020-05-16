@@ -56,7 +56,12 @@ public class ModConfig
 
   public static void onFileChange(final net.minecraftforge.fml.config.ModConfig config)
   {
-    ModRsGauges.logger().info("Config file changed {}", config.getFileName());
+    try {
+      ModRsGauges.logger().info("Config file changed {}", config.getFileName());
+      apply();
+    } catch(Exception ex) {
+      ModRsGauges.logger().error("Failed to apply config file data {}", config.getFileName());
+    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -272,8 +277,9 @@ public class ModConfig
         max_switch_linking_distance = builder
           .translation(ModRsGauges.MODID + ".config.max_switch_linking_distance")
           .comment("Defines how far you or a link source switch can be away from " +
-                   "the target to activate it. The value 0 means 'no limitation'.")
-          .defineInRange("max_switch_linking_distance", 48, 4, 64);
+                   "the target to activate it. The value 0 means 'no limitation', " +
+                   " as long as the target chunk is loaded.")
+          .defineInRange("max_switch_linking_distance", 48, 0, 64);
         // @Config.Name("Accepted wrenches")
         accepted_wrenches = builder
           .translation(ModRsGauges.MODID + ".config.accepted_wrenches")

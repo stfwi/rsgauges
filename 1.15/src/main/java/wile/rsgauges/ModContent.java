@@ -1078,6 +1078,17 @@ public class ModContent
     ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1), null
   )).setRegistryName(new ResourceLocation(MODID, "elevator_button"));
 
+  // Door sensor
+  public static final BlockDoorSensorSwitch DOOR_SENSOR_SWITCH = (BlockDoorSensorSwitch)(new BlockDoorSensorSwitch(
+    BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_LATERAL_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
+    BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    SWITCH_METALLIC_BLOCK_PROPERTIES,
+    ModAuxiliaries.getPixeledAABB(5,0,0, 11,1, 1.5),
+    null,
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.05f, 2.5f),
+    null
+  )).setRegistryName(new ResourceLocation(MODID, "door_sensor_switch"));
+
   // -----------------------------------------------------------------------------------------------------------------
   // -- sensitive glass
   // -----------------------------------------------------------------------------------------------------------------
@@ -1264,6 +1275,7 @@ public class ModContent
     ARROW_TARGET_SWITCH,
     BISTABLE_VALVE_WHEEL_SWITCH,
     ELEVATOR_BUTTON,
+    DOOR_SENSOR_SWITCH,
     // Senesitive Glass
     SENSITIVE_GLASS_BLOCK,
     WHITE_SENSITIVE_GLASS_BLOCK,
@@ -1340,6 +1352,11 @@ public class ModContent
     .build(null)
     .setRegistryName(ModRsGauges.MODID, "te_observer_switch");
 
+  public static final TileEntityType<?> TET_DOORSENSOR_SWITCH = TileEntityType.Builder
+    .create(BlockDoorSensorSwitch.TileEntityDoorSensorSwitch::new, blocks_of_type(BlockDoorSensorSwitch.class))
+    .build(null)
+    .setRegistryName(ModRsGauges.MODID, "te_doorsensor_switch");
+
   private static final TileEntityType<?> tile_entity_types[] = {
     TET_GAUGE,
     TET_SWITCH,
@@ -1349,7 +1366,8 @@ public class ModContent
     TET_DAYTIMER_SWITCH,
     TET_TIMER_SWITCH,
     TET_COMPARATOR_SWITCH,
-    TET_OBSERVER_SWITCH
+    TET_OBSERVER_SWITCH,
+    TET_DOORSENSOR_SWITCH
   };
 
   //--------------------------------------------------------------------------------------------------------------------

@@ -291,7 +291,8 @@ tile.rsgauges.detectorswitch_glass1.name=Glas-Infrarot-Bewegungsmelder
 tile.rsgauges.detectorswitch_glass2.name=Glas-Laser-Lichtschranke
 tile.rsgauges.daytimeswitch_glass1.name=Glas-Zeitschaltuhr
 tile.rsgauges.timerswitch_glass1.name=Glas-Intervalzeitschalter
-tile.rsgauges.industrial_comparator_switch=Comparator-Schalter
+tile.rsgauges.industrial_comparator_switch.name=Comparator-Schalter
+tile.rsgauges.door_sensor_switch.name=Door sensor
 
 #
 # Auto switch tooltip help
@@ -371,6 +372,7 @@ tile.rsgauges.timerswitch_glass1.help=§6Kleines Gerät, welches mit einstellbar
                                     The buttons on the front facing allow to configure the output signal strength, switch-on comparator \
                                     value, switch-off comparator value, and operating mode ("comparator, free slots, used slots, ..."). \
                                     ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linksource.help}
+tile.rsgauges.door_sensor_switch.help=§6A player detector that is mounted on walls above doors.§r
 
 #-----------------------------------------------------------------------------------------------------------
 # Block observing and inspection switches
