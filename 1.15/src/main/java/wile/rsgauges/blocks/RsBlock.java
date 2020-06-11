@@ -13,12 +13,12 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.world.server.ServerWorld;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModColors;
-import wile.rsgauges.detail.ModConfig;
 import net.minecraft.world.*;
 import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.StateContainer;

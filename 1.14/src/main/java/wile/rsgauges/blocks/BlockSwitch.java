@@ -11,8 +11,8 @@ package wile.rsgauges.blocks;
 
 import net.minecraft.world.*;
 import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.ModColors;
-import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.ItemSwitchLinkPearl;

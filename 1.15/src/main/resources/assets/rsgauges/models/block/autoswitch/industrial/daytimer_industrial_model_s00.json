@@ -1,5 +1,6 @@
 {
-	"parent": "block/block",
+  "parent": "block/block",
+  "gui_light": "front",
 	"textures": {
 		"particle": "rsgauges:block/common/industrial_base_8x8",
 		"side": "rsgauges:block/common/industrial_base_8x8",
@@ -205,7 +206,7 @@
 		},
 		"gui": {
 			"rotation": [0, 180, 0],
-			"translation": [0.5, 0.5, 0],
+			"translation": [0.5, 0.5, -15],
 			"scale": [1.4, 1.4, 1.4]
 		},
 		"fixed": {

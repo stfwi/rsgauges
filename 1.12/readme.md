@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    - v1.2.4-b1  [F] Industrial Machine switch texture size fixed.
+
                  -------------------------------------------------------------------
     - v1.2.3     [R] Release build v1.2.3. Release-to-release changes:
                      * Door Sensor added.

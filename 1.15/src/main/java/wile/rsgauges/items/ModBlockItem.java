@@ -1,7 +1,7 @@
 package wile.rsgauges.items;
 
 import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.ModConfig;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import java.util.ArrayList;

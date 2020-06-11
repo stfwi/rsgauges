@@ -1,6 +1,7 @@
 {
 	"parent": "block/block",
-	"ambientocclusion": false,
+  "gui_light": "front",
+  "ambientocclusion": false,
 	"textures": {
 		"1": "rsgauges:block/indicator/indicator_fg_yellow_on_texture",
 		"particle": "rsgauges:block/common/industrial_base_8x8",
@@ -106,7 +107,7 @@
 		},
 		"gui": {
 			"rotation": [30, -140, 0],
-			"translation": [4.25, -2.25, 0]
+			"translation": [4.25, -2.25, -15]
 		},
 		"fixed": {
 			"translation": [0, 0, -7.75]

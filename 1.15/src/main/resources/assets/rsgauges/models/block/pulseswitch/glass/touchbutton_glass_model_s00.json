@@ -1,5 +1,6 @@
 {
 	"parent": "block/block",
+  "gui_light": "front",
 	"ambientocclusion": false,
 	"textures": {
 		"handle": "rsgauges:block/sensitiveglass/sensitiveglass_stained_s15",

@@ -7,22 +7,27 @@
  * Main class for module settings. Handles reading and
  * saving the config file.
  */
-package wile.rsgauges.detail;
+package wile.rsgauges;
 
-import wile.rsgauges.ModContent;
-import wile.rsgauges.ModRsGauges;
+import net.minecraft.nbt.CompoundNBT;
+import org.apache.logging.log4j.Logger;
+import wile.rsgauges.detail.*;
 import wile.rsgauges.blocks.*;
-import net.minecraft.item.BlockItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
+import wile.rsgauges.items.ItemSwitchLinkPearl;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 public class ModConfig
 {
+  private static final Logger LOGGER = ModRsGauges.logger();
+  private static final String MODID = ModRsGauges.MODID;
   public static final CommonConfig COMMON;
   public static final ServerConfig SERVER;
   public static final ClientConfig CLIENT;
@@ -47,20 +52,20 @@ public class ModConfig
   public static void onLoad(final net.minecraftforge.fml.config.ModConfig config)
   {
     try {
+      LOGGER.info("Loading config file {}", config.getFileName());
       apply();
-      ModRsGauges.logger().info("Loaded config file {}", config.getFileName());
     } catch(Exception ex) {
-      ModRsGauges.logger().error("Failed to apply config file data {}", config.getFileName());
+      LOGGER.error("Failed to apply config file data {}", config.getFileName());
     }
   }
 
   public static void onFileChange(final net.minecraftforge.fml.config.ModConfig config)
   {
     try {
-      ModRsGauges.logger().info("Config file changed {}", config.getFileName());
+      LOGGER.info("Config file changed {}", config.getFileName());
       apply();
     } catch(Exception ex) {
-      ModRsGauges.logger().error("Failed to apply config file data {}", config.getFileName());
+      LOGGER.error("Failed to apply config file data {}", config.getFileName());
     }
   }
 
@@ -81,11 +86,11 @@ public class ModConfig
 
   //--------------------------------------------------------------------------------------------------------------------
 
-  public static class ServerConfig
+  public static class CommonConfig
   {
-    ServerConfig(ForgeConfigSpec.Builder builder)
+    CommonConfig(ForgeConfigSpec.Builder builder)
     {
-      builder.comment("Settings not loaded on clients.")
+      builder.comment("!Server side config had to be moved to the 'serverconfig' directory of the game!")
         .push("server");
       builder.pop();
     }
@@ -93,7 +98,7 @@ public class ModConfig
 
   //--------------------------------------------------------------------------------------------------------------------
 
-  public static class CommonConfig
+  public static class ServerConfig
   {
     // Optout
     public final ForgeConfigSpec.ConfigValue<String> pattern_excludes;
@@ -107,6 +112,7 @@ public class ModConfig
     public final ForgeConfigSpec.BooleanValue without_contact_switches;
     public final ForgeConfigSpec.BooleanValue without_automatic_switches;
     public final ForgeConfigSpec.BooleanValue without_linkrelay_switches;
+    public final ForgeConfigSpec.BooleanValue without_analog_switches;
     public final ForgeConfigSpec.BooleanValue without_decorative;
     public final ForgeConfigSpec.BooleanValue without_pulsetime_config;
     public final ForgeConfigSpec.BooleanValue without_color_tinting;
@@ -132,7 +138,7 @@ public class ModConfig
     public final ForgeConfigSpec.IntValue autoswitch_linear_update_interval;
     public final ForgeConfigSpec.IntValue config_left_click_timeout;
 
-    CommonConfig(ForgeConfigSpec.Builder builder)
+    ServerConfig(ForgeConfigSpec.Builder builder)
     {
       builder.comment("Settings affecting the logical server side, but are also configurable in single player.")
         .push("server");
@@ -201,6 +207,11 @@ public class ModConfig
           .translation(ModRsGauges.MODID + ".config.without_linkrelay_switches")
           .comment("Completely disable all link relay switches.")
           .define("without_linkrelay_switches", false);
+        // @Config.Name("Without analog switches")
+        without_analog_switches = builder
+          .translation(ModRsGauges.MODID + ".config.without_analog_switches")
+          .comment("Completely disable all analog switches, such as dimmers.")
+          .define("without_analog_switches", false);
         // @Config.Name("Without decorative blocks")
         without_decorative = builder
           .translation(ModRsGauges.MODID + ".config.without_decorative")
@@ -353,76 +364,23 @@ public class ModConfig
   //--------------------------------------------------------------------------------------------------------------------
 
   public static final boolean isOptedOut(final @Nullable Block block)
-  { return isOptedOut(block, false); }
-
-  public static final boolean isOptedOut(final @Nullable Block block, boolean with_log_details)
-  {
-    if(block == null) return true;
-    if(COMMON == null) return false;
-    try {
-      if((block instanceof RsBlock) && ((((RsBlock)block).config & RsBlock.RSBLOCK_OBSOLETE)==RsBlock.RSBLOCK_OBSOLETE)) return true;
-      if(!with_experimental) {
-        if(block instanceof ModAuxiliaries.IExperimentalFeature) return true;
-        if(ModContent.getExperimentalBlocks().contains(block)) return true;
-      }
-      final String rn = block.getRegistryName().getPath();
-      // Hard IE dependent blocks
-         // not available yet -
-      // Force-include/exclude pattern matching
-      try {
-        for(String e:includes_) {
-          if(rn.matches(e)) {
-            if(with_log_details) ModRsGauges.logger().info("Optout force include: " + rn);
-            return false;
-          }
-        }
-        for(String e:excludes_) {
-          if(rn.matches(e)) {
-            if(with_log_details) ModRsGauges.logger().info("Optout force exclude: " + rn);
-            return true;
-          }
-        }
-        if(block instanceof BlockIndicator) {
-          BlockIndicator bl = ((BlockIndicator)block);
-          if(ModConfig.without_indicators) return true;
-          if((ModConfig.without_blinking_indicators) && ((bl.config & BlockGauge.GAUGE_DATA_BLINKING) > 0)) return true;
-          if((ModConfig.without_sound_indicators) && ((bl.power_on_sound != null) || (bl.power_off_sound != null))) return true;
-        } if(block instanceof BlockGauge) {
-          BlockGauge bl = ((BlockGauge)block);
-          if(ModConfig.without_gauges) return true;
-        } else if(block instanceof BlockSwitch) {
-          BlockSwitch bl = ((BlockSwitch)block);
-          if((ModConfig.without_bistable_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_BISTABLE)!=0)) return true;
-          if((ModConfig.without_pulse_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_PULSE)!=0)) return true;
-          if((ModConfig.without_contact_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_CONTACT)!=0)) return true;
-          if((ModConfig.without_automatic_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_AUTOMATIC)!=0)) return true;
-          if((ModConfig.without_linkrelay_switches)  && ((bl.config & BlockSwitch.SWITCH_CONFIG_LINK_RELAY)!=0)) return true;
-        } else if(block instanceof BlockSensitiveGlass) {
-          if(ModConfig.without_decorative) return true;
-        }
-      } catch(Throwable ex) {
-        ModRsGauges.logger().error("optout include pattern failed, disabling.");
-        includes_.clear();
-        excludes_.clear();
-      }
-    } catch(Exception ex) {
-      ModRsGauges.logger().error("Exception evaluating the optout config: '" + ex.getMessage() + "'");
-    }
-    return false;
-  }
+  { return isOptedOut(block.asItem()); }
 
   public static final boolean isOptedOut(final @Nullable Item item)
-  {
-    if(item == null) return true;
-    if((item instanceof BlockItem) && isOptedOut(((BlockItem)item).getBlock())) return true;
-    return false;
-  }
+  { return (item!=null) && optouts_.contains(item.getRegistryName().getPath()); }
+
+  public static boolean withExperimental()
+  { return with_experimental; }
 
   //--------------------------------------------------------------------------------------------------------------------
   // Cache
   //--------------------------------------------------------------------------------------------------------------------
-  private static final ArrayList<String> includes_ = new ArrayList<String>();
-  private static final ArrayList<String> excludes_ = new ArrayList<String>();
+
+  private static final CompoundNBT server_config_ = new CompoundNBT();
+  private static HashSet<String> optouts_ = new HashSet<>();
+
+  public static final CompoundNBT getServerConfig() // config that may be synchronized from server to client via net pkg.
+  { return server_config_; }
 
   public static boolean status_overlay_disabled = false;
   public static boolean without_switch_linking = false;
@@ -442,6 +400,7 @@ public class ModConfig
   public static boolean without_contact_switches = false;
   public static boolean without_automatic_switches = false;
   public static boolean without_linkrelay_switches = false;
+  public static boolean without_analog_switches = false;
   public static boolean without_decorative = false;
   public static boolean without_rightclick_item_switchconfig = false;
   public static int max_switch_linking_distance = 16;
@@ -453,46 +412,14 @@ public class ModConfig
   public static String accepted_wrenches = "";
   public static boolean with_experimental = false;
 
-
-  public static final void apply()
+  private static final void updateOptouts()
   {
-    status_overlay_disabled = COMMON.without_switch_status_overlay.get();
-    without_switch_linking = COMMON.without_switch_linking.get();
-    max_switch_linking_distance = COMMON.max_switch_linking_distance.get();
-    without_color_tinting = COMMON.without_color_tinting.get();
-    without_detector_switch_update = COMMON.without_detector_switch_update.get();
-    autoswitch_linear_update_interval = COMMON.autoswitch_linear_update_interval.get();
-    autoswitch_volumetric_update_interval = COMMON.autoswitch_volumetric_update_interval.get();
-    without_environmental_switch_update = COMMON.without_environmental_switch_update.get();
-    without_timer_switch_update = COMMON.without_timer_switch_update.get();
-    gauge_update_interval = COMMON.gauge_update_interval.get();
-    without_gauge_weak_power_measurement = COMMON.without_gauge_weak_power_measurement.get();
-    without_pulsetime_config = COMMON.without_pulsetime_config.get();
-    config_left_click_timeout= COMMON.config_left_click_timeout.get();
-    without_switch_nooutput = COMMON.without_switch_nooutput.get();
-    accepted_wrenches = COMMON.accepted_wrenches.get();
-    without_indicators = COMMON.without_indicators.get();
-    without_blinking_indicators = COMMON.without_blinking_indicators.get();
-    without_sound_indicators = COMMON.without_sound_indicators.get();
-    without_gauges = COMMON.without_gauges.get();
-    without_bistable_switches = COMMON.without_bistable_switches.get();
-    without_pulse_switches = COMMON.without_pulse_switches.get();
-    without_contact_switches = COMMON.without_contact_switches.get();
-    without_automatic_switches = COMMON.without_automatic_switches.get();
-    without_linkrelay_switches = COMMON.without_linkrelay_switches.get();
-    without_decorative = COMMON.without_decorative.get();
-    switch_status_overlay_y = COMMON.switch_status_overlay_y.get();
-    without_rightclick_item_switchconfig = COMMON.without_rightclick_item_switchconfig.get();
-    with_experimental = COMMON.with_experimental.get();
-    // Wrenches
-    accepted_wrenches = accepted_wrenches.toLowerCase().replaceAll("[\\s]","").replaceAll(",,",",");
-    accepted_wrenches = ("," + accepted_wrenches + ",").replaceAll(",air,",",redstone_torch,");
-    accepted_wrenches = accepted_wrenches.replaceAll("[,]+$", "").replaceAll("^[,]+", "");
-    // patterns
+    final ArrayList<String> includes_ = new ArrayList<String>();
+    final ArrayList<String> excludes_ = new ArrayList<String>();
     {
-      String inc = COMMON.pattern_includes.get().toLowerCase().replaceAll(ModRsGauges.MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
-      if(COMMON.pattern_includes.get() != inc) COMMON.pattern_includes.set(inc);
-      if(!inc.isEmpty()) ModRsGauges.logger().info("Pattern includes: '" + inc + "'");
+      String inc = SERVER.pattern_includes.get().toLowerCase().replaceAll(MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      if(SERVER.pattern_includes.get() != inc) SERVER.pattern_includes.set(inc);
+      if(!inc.isEmpty()) LOGGER.info("Config pattern includes: '" + inc + "'");
       String[] incl = inc.split(",");
       includes_.clear();
       for(int i=0; i< incl.length; ++i) {
@@ -501,9 +428,8 @@ public class ModConfig
       }
     }
     {
-      String exc = COMMON.pattern_excludes.get().toLowerCase().replaceAll(ModRsGauges.MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
-      if(COMMON.pattern_excludes.get() != exc) COMMON.pattern_excludes.set(exc);
-      if(!exc.isEmpty()) ModRsGauges.logger().info("Pattern excludes: '" + exc + "'");
+      String exc = SERVER.pattern_excludes.get().toLowerCase().replaceAll(MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      if(!exc.isEmpty()) LOGGER.info("Config pattern excludes: '" + exc + "'");
       String[] excl = exc.split(",");
       excludes_.clear();
       for(int i=0; i< excl.length; ++i) {
@@ -511,5 +437,128 @@ public class ModConfig
         if(!excl[i].isEmpty()) excludes_.add(excl[i]);
       }
     }
+    {
+      boolean with_log_details = false;
+      HashSet<String> optouts = new HashSet<>();
+      ModContent.getRegisteredItems().stream().filter((Item item) -> {
+        if(item == null) return true;
+        if(without_switch_linking && (item instanceof ItemSwitchLinkPearl)) return true;
+        return false;
+      }).forEach(
+        e -> optouts.add(e.getRegistryName().getPath())
+      );
+      ModContent.getRegisteredBlocks().stream().filter((Block block) -> {
+        if(block==null) return true;
+        if((block instanceof RsBlock) && ((((RsBlock)block).config & RsBlock.RSBLOCK_OBSOLETE)==RsBlock.RSBLOCK_OBSOLETE)) return true;
+        try {
+          if(!SERVER.with_experimental.get()) {
+            if(block instanceof ModAuxiliaries.IExperimentalFeature) return true;
+            if(ModContent.isExperimentalBlock(block)) return true;
+          }
+          final String rn = block.getRegistryName().getPath();
+          // Force-include/exclude pattern matching
+          try {
+            for(String e : includes_) {
+              if(rn.matches(e)) {
+                if(with_log_details) LOGGER.info("Optout force include: "+rn);
+                return false;
+              }
+            }
+            for(String e : excludes_) {
+              if(rn.matches(e)) {
+                if(with_log_details) LOGGER.info("Optout force exclude: "+rn);
+                return true;
+              }
+            }
+          } catch(Throwable ex) {
+            LOGGER.error("optout include pattern failed, disabling.");
+            includes_.clear();
+            excludes_.clear();
+          }
+          // Early non-opt out type based evaluation
+          if(block instanceof BlockIndicator) {
+            BlockIndicator bl = ((BlockIndicator)block);
+            if(without_indicators) return true;
+            if((without_blinking_indicators) && ((bl.config & BlockGauge.GAUGE_DATA_BLINKING) > 0)) return true;
+            if((without_sound_indicators) && ((bl.power_on_sound != null) || (bl.power_off_sound != null))) return true;
+          } if(block instanceof BlockGauge) {
+            BlockGauge bl = ((BlockGauge)block);
+            if(without_gauges) return true;
+          } else if(block instanceof BlockSwitch) {
+            BlockSwitch bl = ((BlockSwitch)block);
+            if((without_bistable_switches) && (((bl.config & BlockSwitch.SWITCH_CONFIG_BISTABLE)!=0) || (bl instanceof BlockBistableSwitch))) return true;
+            if((without_pulse_switches) && (((bl.config & BlockSwitch.SWITCH_CONFIG_PULSE)!=0) || (bl instanceof BlockPulseSwitch))) return true;
+            if((without_contact_switches) && ((bl.config & BlockSwitch.SWITCH_CONFIG_CONTACT)!=0)) return true;
+            if((without_analog_switches) && (bl instanceof BlockDimmerSwitch)) return true;
+            if((without_linkrelay_switches) && (((bl.config & BlockSwitch.SWITCH_CONFIG_LINK_RELAY)!=0) || (bl instanceof BlockLinkRelaySwitch))) return true;
+            if(without_automatic_switches) {
+              if((bl.config & BlockSwitch.SWITCH_CONFIG_AUTOMATIC)!=0) return true;
+              if(bl instanceof BlockKnockPulseSwitch) return true;
+              if(bl instanceof BlockKnockBistableSwitch) return true;
+              if(bl instanceof BlockComparatorSwitch) return true;
+              if(bl instanceof BlockDoorSensorSwitch) return true;
+            }
+            if(without_switch_linking) {
+              if(bl instanceof BlockLinkReceiverSwitch) return true;
+              if(bl instanceof BlockLinkRelaySwitch) return true;
+            }
+            if(without_decorative) {
+              if(bl==ModContent.ELEVATOR_BUTTON) return true;
+              if(bl==ModContent.ARROW_TARGET_SWITCH) return true;
+            }
+          } else if(block instanceof BlockSensitiveGlass) {
+            if(without_decorative) return true;
+          }
+        } catch(Exception ex) {
+          LOGGER.error("Exception evaluating the optout config: '"+ex.getMessage()+"'");
+        }
+        return false;
+      }).forEach(
+        e -> optouts.add(e.getRegistryName().getPath())
+      );
+      optouts_ = optouts;
+    }
+
+
+  }
+
+  public static final void apply()
+  {
+    if(SERVER == null) return;
+    status_overlay_disabled = SERVER.without_switch_status_overlay.get();
+    without_switch_linking = SERVER.without_switch_linking.get();
+    max_switch_linking_distance = SERVER.max_switch_linking_distance.get();
+    without_color_tinting = SERVER.without_color_tinting.get();
+    without_detector_switch_update = SERVER.without_detector_switch_update.get();
+    autoswitch_linear_update_interval = SERVER.autoswitch_linear_update_interval.get();
+    autoswitch_volumetric_update_interval = SERVER.autoswitch_volumetric_update_interval.get();
+    without_environmental_switch_update = SERVER.without_environmental_switch_update.get();
+    without_timer_switch_update = SERVER.without_timer_switch_update.get();
+    gauge_update_interval = SERVER.gauge_update_interval.get();
+    without_gauge_weak_power_measurement = SERVER.without_gauge_weak_power_measurement.get();
+    without_pulsetime_config = SERVER.without_pulsetime_config.get();
+    config_left_click_timeout= SERVER.config_left_click_timeout.get();
+    without_switch_nooutput = SERVER.without_switch_nooutput.get();
+    accepted_wrenches = SERVER.accepted_wrenches.get();
+    without_indicators = SERVER.without_indicators.get();
+    without_blinking_indicators = SERVER.without_blinking_indicators.get();
+    without_sound_indicators = SERVER.without_sound_indicators.get();
+    without_gauges = SERVER.without_gauges.get();
+    without_bistable_switches = SERVER.without_bistable_switches.get();
+    without_pulse_switches = SERVER.without_pulse_switches.get();
+    without_contact_switches = SERVER.without_contact_switches.get();
+    without_automatic_switches = SERVER.without_automatic_switches.get();
+    without_linkrelay_switches = SERVER.without_linkrelay_switches.get();
+    without_analog_switches = SERVER.without_analog_switches.get();
+    without_decorative = SERVER.without_decorative.get();
+    switch_status_overlay_y = SERVER.switch_status_overlay_y.get();
+    without_rightclick_item_switchconfig = SERVER.without_rightclick_item_switchconfig.get();
+    with_experimental = SERVER.with_experimental.get();
+    // Wrenches
+    accepted_wrenches = accepted_wrenches.toLowerCase().replaceAll("[\\s]","").replaceAll(",,",",");
+    accepted_wrenches = ("," + accepted_wrenches + ",").replaceAll(",air,",",redstone_torch,");
+    accepted_wrenches = accepted_wrenches.replaceAll("[,]+$", "").replaceAll("^[,]+", "");
+    // Opt-outs
+    updateOptouts();
   }
 }

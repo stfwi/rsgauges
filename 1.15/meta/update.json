@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.15.2": {
+    "1.2.4-b1": "[A] Gauges are also comparator output sensitive and can directly show e.g. how full chests are.\n[F] Industrial Machine Switch texture size fixed.\n[U] Forge/mappings updated.\n[M] JEI integration updated.\n[M] Models updated to circumvent too dark GUI representations.\n[M] Config handling updated.\n[!] Mod config moved from 'common' to 'server' config, in case of applied setting please double check.",
     "1.2.3": "[R] Release build v1.2.3. Release-to-release changes: * Door Sensor added. * Recipe fixes, lang files updated.",
     "1.2.3-b3": "[M] Block Category Detector: Fixed forge tag lookup (issue #21, thx Nodlehs).\n[M] Comparator Switch recipe fixed (thx @itzbahb).\n[M] En lang files typo fixes (thx @itzbahb).",
     "1.2.3-b2": "[F] Fixed switch link max distance config (issue #20, thx Rictu5).",
@@ -17,6 +18,6 @@
   },
   "promos": {
     "1.15.2-recommended": "1.2.3",
-    "1.15.2-latest": "1.2.3"
+    "1.15.2-latest": "1.2.4-b1"
   }
 }

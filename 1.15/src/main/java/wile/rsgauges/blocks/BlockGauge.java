@@ -16,11 +16,11 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModContent;
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.DevUtils;
 import wile.rsgauges.detail.ModColors;
-import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.IntegerProperty;
@@ -37,6 +37,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -123,6 +124,11 @@ public class BlockGauge extends RsDirectedBlock implements ModColors.ColorTintSu
   @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
   { super.fillStateContainer(builder); builder.add(POWER); }
+
+  @Override
+  @Nullable
+  public BlockState getStateForPlacement(BlockItemUseContext context)
+  { return super.getStateForPlacement(context).with(POWER, 0); }
 
   @Override
   public boolean hasTileEntity(BlockState state)
@@ -250,6 +256,8 @@ public class BlockGauge extends RsDirectedBlock implements ModColors.ColorTintSu
             p = 15;
           } else if(neighborState.canProvidePower()) {
             p = world.getRedstonePower(neighbourPos, state.get(FACING).getOpposite());
+          } else if(neighborState.hasComparatorInputOverride()) {
+            p = neighborState.getComparatorInputOverride(world, neighbourPos);
           } else {
             final boolean is_indicator = (block instanceof BlockIndicator);
             for(Direction nbf : Direction.values()) {

@@ -12,8 +12,10 @@
  */
 package wile.rsgauges;
 
+import net.minecraft.item.BlockItem;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.blocks.*;
+import wile.rsgauges.detail.ModAuxiliaries.IExperimentalFeature;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.items.*;
 import net.minecraft.block.Block;
@@ -1168,9 +1170,9 @@ public class ModContent
   // Testing CUBE
   public static final BlockSwitch TESTING_QUBE = (BlockSwitch)(new BlockSwitch(
     BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
-      BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
-      BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
-      BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
+    BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
+    BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     Block.Properties.create(Material.WOOL, MaterialColor.IRON).hardnessAndResistance(0.1f, 32000f).sound(SoundType.METAL),
     new AxisAlignedBB(0,0,0,1,1,1), null,
     null, null
@@ -1180,7 +1182,7 @@ public class ModContent
   // -- All blocks
   // -----------------------------------------------------------------------------------------------------------------
 
-  private static final ArrayList<Block> modBlocks = new ArrayList<Block>(Arrays.asList(
+  private static final ArrayList<Block> registeredBlocks = new ArrayList<Block>(Arrays.asList(
     // Industrial
     INDUSTRIAL_SMALL_LEVER,
     INDUSTRIAL_LEVER,
@@ -1293,10 +1295,7 @@ public class ModContent
     CYAN_SENSITIVE_GLASS_BLOCK,
     PURPLE_SENSITIVE_GLASS_BLOCK,
     BROWN_SENSITIVE_GLASS_BLOCK,
-    BLACK_SENSITIVE_GLASS_BLOCK
-  ));
-
-  private static ArrayList<Block> devBlocks = new ArrayList<Block>(Arrays.asList(
+    BLACK_SENSITIVE_GLASS_BLOCK,
     TESTING_QUBE
   ));
 
@@ -1305,7 +1304,7 @@ public class ModContent
   //--------------------------------------------------------------------------------------------------------------------
 
   private static Block[] blocks_of_type(Class<? extends Block> clazz)
-  { return modBlocks.stream().filter(clazz::isInstance).toArray(Block[]::new); }
+  { return registeredBlocks.stream().filter(clazz::isInstance).toArray(Block[]::new); }
 
   public static final TileEntityType<?> TET_GAUGE = TileEntityType.Builder
     .create(BlockGauge.TileEntityGauge::new, blocks_of_type(BlockGauge.class))
@@ -1381,26 +1380,13 @@ public class ModContent
     default_item_properties()
   ).setRegistryName(MODID, "switchlink_pearl"));
 
-
-  private static final Item modItems[] = {
-    SWITCH_LINK_PEARL,
-  };
+  private static final ArrayList<Item> registeredItems = new ArrayList<Item>(Arrays.asList(
+    SWITCH_LINK_PEARL
+  ));
 
   //--------------------------------------------------------------------------------------------------------------------
   // Initialisation events
   //--------------------------------------------------------------------------------------------------------------------
-
-  private static final ArrayList<Block> registeredBlocks;
-  private static final ArrayList<Item> registeredItems;
-
-  static {
-    registeredBlocks = new ArrayList<Block>();
-    registeredBlocks.addAll(modBlocks);
-    registeredBlocks.addAll(devBlocks);
-    registeredItems = new ArrayList<Item>();
-    registeredItems.addAll(Arrays.asList(modItems));
-    for(Block e:registeredBlocks) registeredItems.add(new ModBlockItem(e, (new ModBlockItem.Properties())).setRegistryName(e.getRegistryName()));
-  }
 
   @Nonnull
   public static List<Block> getRegisteredBlocks()
@@ -1410,9 +1396,8 @@ public class ModContent
   public static List<Item> getRegisteredItems()
   { return Collections.unmodifiableList(registeredItems); }
 
-  @Nonnull
-  public static List<Block> getExperimentalBlocks()
-  { return devBlocks; }
+  public static boolean isExperimentalBlock(Block block)
+  { return (block==TESTING_QUBE) || (block instanceof IExperimentalFeature); }
 
   public static final void registerBlocks(final RegistryEvent.Register<Block> event)
   {
@@ -1424,6 +1409,15 @@ public class ModContent
   {
     for(Item e:registeredItems) event.getRegistry().register(e);
     ModAuxiliaries.logInfo("Registered " + Integer.toString(registeredItems.size()) + " items.");
+  }
+
+  public static final void registerBlockItems(final RegistryEvent.Register<Item> event)
+  {
+    for(Block e:registeredBlocks) {
+      ResourceLocation rl = e.getRegistryName();
+      if(rl == null) continue;
+      event.getRegistry().register(new BlockItem(e, (new BlockItem.Properties().group(ModRsGauges.ITEMGROUP))).setRegistryName(rl));
+    }
   }
 
   public static final void registerTileEntities(final RegistryEvent.Register<TileEntityType<?>> event)

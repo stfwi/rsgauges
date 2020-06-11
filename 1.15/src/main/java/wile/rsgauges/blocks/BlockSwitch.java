@@ -10,6 +10,7 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.*;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.world.*;

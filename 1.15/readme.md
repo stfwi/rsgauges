@@ -10,6 +10,16 @@ Mod sources for Minecraft version 1.15.1.
 ----
 ## Version history
 
+    - v1.2.4-b1  [A] Gauges are also comparator output sensitive and can directly
+                     show e.g. how full chests are.
+                 [F] Industrial Machine Switch texture size fixed.
+                 [U] Forge/mappings updated.
+                 [M] JEI integration updated.
+                 [M] Models updated to circumvent too dark GUI representations.
+                 [M] Config handling updated.
+                 [!] Mod config moved from 'common' to 'server' config, in case
+                     of applied setting please double check.
+
                  -------------------------------------------------------------------
     - v1.2.3     [R] Release build v1.2.3. Release-to-release changes:
                      * Door Sensor added.

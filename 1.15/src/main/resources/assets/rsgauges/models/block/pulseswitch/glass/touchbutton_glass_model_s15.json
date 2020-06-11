@@ -1,5 +1,7 @@
 {
   "parent": "block/block",
+  "gui_light": "front",
+  "ambientocclusion": false,
 	"textures": {
     "particle": "rsgauges:block/common/cleargrayglass",
 		"handle": "rsgauges:block/sensitiveglass/sensitiveglass_stained_s15",

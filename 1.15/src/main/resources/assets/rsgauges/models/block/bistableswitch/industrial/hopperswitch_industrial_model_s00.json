@@ -1,5 +1,6 @@
 {
-	"parent": "block/block",
+  "parent": "block/block",
+  "gui_light": "front",
 	"textures": {
 		"particle": "rsgauges:block/common/old_iron",
 		"m": "rsgauges:block/common/old_iron",

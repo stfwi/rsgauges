@@ -1,6 +1,7 @@
 {
 	"parent": "block/block",
-	"ambientocclusion": false,
+  "gui_light": "front",
+  "ambientocclusion": false,
 	"textures": {
     "front": "rsgauges:block/pulseswitch/pulseswitch4texture",
     "side":  "rsgauges:block/common/darksmoothmetal",
@@ -397,7 +398,7 @@
 		},
 		"gui": {
 			"rotation": [30, -140, 0],
-			"translation": [5.25, -2.75, 0]
+			"translation": [5.25, -2.75, -15]
 		},
 		"fixed": {
 			"translation": [0, 0, -7.75]

@@ -1,22 +1,21 @@
 package wile.rsgauges.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.util.text.*;
-import net.minecraftforge.registries.ForgeRegistries;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.blocks.BlockSwitch;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -25,6 +24,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.List;
 

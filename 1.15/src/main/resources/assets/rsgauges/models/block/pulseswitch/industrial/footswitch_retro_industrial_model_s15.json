@@ -1,5 +1,7 @@
 {
 	"parent": "block/block",
+  "gui_light": "front",
+  "ambientocclusion": false,
 	"textures": {
 		"b": "rsgauges:block/common/industrial_base_6x6",
 		"particle": "rsgauges:block/common/darkgraymetal",
