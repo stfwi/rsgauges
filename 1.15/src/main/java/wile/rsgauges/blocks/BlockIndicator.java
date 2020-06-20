@@ -12,6 +12,7 @@ package wile.rsgauges.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import wile.rsgauges.detail.ModResources;
@@ -30,6 +31,11 @@ public class BlockIndicator extends BlockGauge
 
   public BlockIndicator(long config, Block.Properties properties, AxisAlignedBB unrotatedBB)
   { super(config, properties, unrotatedBB, null, null); }
+
+  @Override
+  @Nullable
+  public BlockState getStateForPlacement(BlockItemUseContext context)
+  { return super.getStateForPlacement(context).with(POWERED, context.getWorld().isBlockPowered(context.getPos())); }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Block overrides

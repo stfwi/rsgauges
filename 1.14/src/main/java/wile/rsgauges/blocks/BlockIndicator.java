@@ -12,6 +12,7 @@ package wile.rsgauges.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
@@ -52,6 +53,11 @@ public class BlockIndicator extends BlockGauge
   @Override
   public int getLightValue(BlockState state)
   { return 0; }
+
+  @Override
+  @Nullable
+  public BlockState getStateForPlacement(BlockItemUseContext context)
+  { return super.getStateForPlacement(context).with(POWERED, context.getWorld().isBlockPowered(context.getPos())); }
 
   // -------------------------------------------------------------------------------------------------------------------
 

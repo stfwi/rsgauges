@@ -10,6 +10,9 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+    - v1.2.4-b2  [F] Gauges explicitly tell adjacent blocks that they can connect Redstone.
+                 [F] Fixed Indicator/Siren placement crash (issue #24, thx Jamzs3).
+
     - v1.2.4-b1  [A] Gauges are also comparator output sensitive and can directly
                      show e.g. how full chests are.
                  [F] Industrial Machine Switch texture size fixed.

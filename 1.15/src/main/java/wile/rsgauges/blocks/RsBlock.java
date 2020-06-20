@@ -99,7 +99,7 @@ public abstract class RsBlock extends Block implements ModColors.ColorTintSuppor
   @Override
   @OnlyIn(Dist.CLIENT)
   public boolean addHitEffects(BlockState state, World worldObj, RayTraceResult target, net.minecraft.client.particle.ParticleManager manager)
-  { return true; } // no hit particles
+  { return true; }
 
   @OnlyIn(Dist.CLIENT)
   @SuppressWarnings("deprecation")
@@ -115,7 +115,6 @@ public abstract class RsBlock extends Block implements ModColors.ColorTintSuppor
   @SuppressWarnings("deprecation")
   public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext)
   { return getShape(state, world, pos, selectionContext); }
-  // was { return (!isCube()) ? (NULL_AABB) : (getBoundingBox(state, world, pos)); }
 
   @Override
   @SuppressWarnings("deprecation")
@@ -239,7 +238,7 @@ public abstract class RsBlock extends Block implements ModColors.ColorTintSuppor
    * block dropping actions are invoked.
    */
   protected void onRsBlockDestroyed(BlockState state, World world, BlockPos pos, boolean isUpdateEvent)
-  {} // @todo check if still needed in 1.14
+  {}
 
   /**
    * Checks if these blocks can be placed at a given position with a given facing. The client does not send a

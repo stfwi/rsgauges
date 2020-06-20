@@ -116,13 +116,20 @@ public class BlockGauge extends RsDirectedBlock implements ModColors.ColorTintSu
   { return true; }
 
   @Override
+  public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
+  { return ((state.getBlock() instanceof BlockGauge) && (side == state.get(FACING).getOpposite())); }
+
+  @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
   { super.fillStateContainer(builder); builder.add(POWER); }
 
   @Override
   @Nullable
   public BlockState getStateForPlacement(BlockItemUseContext context)
-  { return super.getStateForPlacement(context).with(POWER, 0); }
+  {
+    final BlockState state = super.getStateForPlacement(context);
+    return (getDefaultState().has(BlockGauge.POWER)) ? (state.with(BlockGauge.POWER, 0)) : (state);
+  }
 
   @Override
   public boolean hasTileEntity(BlockState state)
