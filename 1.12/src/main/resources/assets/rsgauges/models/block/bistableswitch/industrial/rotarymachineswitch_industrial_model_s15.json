@@ -11,7 +11,7 @@
 			"from": [5, 5, 14],
 			"to": [11, 11, 16],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#f"},
+				"north": {"uv": [2, 2, 14, 14], "texture": "#f"},
 				"east": {"uv": [0, 5, 1, 11], "texture": "#f"},
 				"south": {"uv": [5, 5, 11, 11], "texture": "#s"},
 				"west": {"uv": [15, 5, 16, 11], "texture": "#f"},

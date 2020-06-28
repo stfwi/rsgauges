@@ -86,11 +86,6 @@ public class RsDirectedBlock extends RsBlock
     return super.getStateForPlacement(context).with(FACING, facing);
   }
 
-  //  @Override
-  //  @SuppressWarnings("deprecation")
-  //  public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
-  //  { return true; } // Nope: that is already called for the AIR before placing a switch. return isValidPositionOnSide(world, pos, world.getBlockState(pos).get(FACING).getOpposite());
-
   @SuppressWarnings("unused")
   @Override
   public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos currentPos, BlockPos facingPos)

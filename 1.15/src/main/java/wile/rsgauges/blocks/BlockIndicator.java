@@ -12,12 +12,9 @@ package wile.rsgauges.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ILightReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import wile.rsgauges.detail.ModResources;
 import net.minecraft.util.math.AxisAlignedBB;
 import javax.annotation.Nullable;
@@ -35,6 +32,11 @@ public class BlockIndicator extends BlockGauge
   public BlockIndicator(long config, Block.Properties properties, AxisAlignedBB unrotatedBB)
   { super(config, properties, unrotatedBB, null, null); }
 
+  @Override
+  @Nullable
+  public BlockState getStateForPlacement(BlockItemUseContext context)
+  { return super.getStateForPlacement(context).with(POWERED, context.getWorld().isBlockPowered(context.getPos())); }
+
   // -------------------------------------------------------------------------------------------------------------------
   // Block overrides
   // -------------------------------------------------------------------------------------------------------------------
@@ -43,18 +45,8 @@ public class BlockIndicator extends BlockGauge
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
   { builder.add(FACING, POWERED, WATERLOGGED); }
 
-
-//@todo: IMPLEMENT
-//  @Override
-//  @OnlyIn(Dist.CLIENT)
-//  @SuppressWarnings("deprecation")
-//  public int getPackedLightmapCoords(BlockState state, ILightReader world, BlockPos pos)
-//  { return world.getCombinedLight(pos, state.get(POWERED) ? 3 : 0); }
-
   @Override
   public int getLightValue(BlockState state)
   { return 0; }
-
-  // -------------------------------------------------------------------------------------------------------------------
 
 }

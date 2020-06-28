@@ -9,8 +9,8 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.ITickableTileEntity;

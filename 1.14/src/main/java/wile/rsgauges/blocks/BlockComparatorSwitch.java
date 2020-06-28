@@ -9,8 +9,8 @@
 package wile.rsgauges.blocks;
 
 import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.detail.ModResources;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
@@ -44,6 +44,15 @@ public class BlockComparatorSwitch extends BlockAutoSwitch
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
+  protected void neighborUpdated(BlockState state, World world, BlockPos pos, BlockPos facingPos)
+  {
+    if(!isAffectedByNeigbour(state, world, pos, facingPos)) return;
+    final TileEntitySwitch te = getTe(world, pos);
+    if(!(te instanceof TileEntityComparatorSwitch)) return;
+    ((TileEntityComparatorSwitch)te).block_updated();
+  }
+
+  @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world)
   { return new TileEntityComparatorSwitch(ModContent.TET_COMPARATOR_SWITCH); }
 
@@ -66,7 +75,7 @@ public class BlockComparatorSwitch extends BlockAutoSwitch
       (world, pos, state, side) -> {
         return (!state.hasComparatorInputOverride()) ? (-1) : (state.getComparatorInputOverride(world, pos));
       },
-      // 2: Used inventory slots
+      // 1: Used inventory slots
       (world, pos, state, side) -> {
         final TileEntity te = world.getTileEntity(pos);
         if(te==null) {
@@ -87,7 +96,7 @@ public class BlockComparatorSwitch extends BlockAutoSwitch
           return (int)Math.round(((double)n*15)/(double)size);
         }
       },
-      // 1: Free inventory slots
+      // 2: Free inventory slots
       (world, pos, state, side) -> {
         final TileEntity te = world.getTileEntity(pos);
         if(te==null) {
@@ -107,6 +116,10 @@ public class BlockComparatorSwitch extends BlockAutoSwitch
           for(int i=0; i<size; ++i) n += handler.getStackInSlot(i).isEmpty() ? 1 : 0;
           return (int)Math.round(((double)n*15)/(double)size);
         }
+      },
+      // 3: Redstone signal
+      (world, pos, state, side) -> {
+        return world.getRedstonePower(pos, side);
       }
     };
 
@@ -115,6 +128,9 @@ public class BlockComparatorSwitch extends BlockAutoSwitch
 
     private void acquisition_mode(int mode)
     { debounce(MathHelper.clamp(mode, 0, acquisitions.length-1)); }
+
+    public void block_updated()
+    { if(update_timer_ > 1) update_timer_ = 1; }
 
     @Override
     public void reset(IWorldReader world)
@@ -178,6 +194,10 @@ public class BlockComparatorSwitch extends BlockAutoSwitch
     }
 
     @Override
+    public int power(BlockState state, boolean strong)
+    { return (acquisition_mode()==3) ? (0) : (super.power(state, strong)); }
+
+    @Override
     public void tick()
     {
       if(ModConfig.without_environmental_switch_update) return;
@@ -206,16 +226,11 @@ public class BlockComparatorSwitch extends BlockAutoSwitch
           if(value >= threshold0_on()) measurement = 1;
           if(value <= threshold0_off()) measurement = -1; // priority off
         }
-        if(debounce() <= 0) {
-          if(measurement!=0) active = (measurement>0);
-          debounce_counter_ = 0;
-        } else {
-          debounce_counter_ = debounce_counter_ + measurement;
-          if(debounce_counter_ <= 0) {
-            active = false; debounce_counter_ = 0;
-          } else if(debounce_counter_ >= debounce_) {
-            active = true; debounce_counter_ = debounce_;
-          }
+        debounce_counter_ = debounce_counter_ + measurement;
+        if(debounce_counter_ <= 0) {
+          active = false; debounce_counter_ = 0;
+        } else if(debounce_counter_ >= 2) {
+          active = true; debounce_counter_ = 2;
         }
       }
       // state setting

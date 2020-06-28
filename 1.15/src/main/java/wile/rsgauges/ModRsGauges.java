@@ -68,7 +68,7 @@ public class ModRsGauges
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST,false, PlayerInteractEvent.class, ForgeEvents::onPlayerInteract);
     ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_CONFIG_SPEC);
-    //ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, ModConfig.SERVER_CONFIG_SPEC);
+    ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, ModConfig.SERVER_CONFIG_SPEC);
     //ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT_CONFIG_SPEC);
   }
 
@@ -89,7 +89,7 @@ public class ModRsGauges
 
     @SubscribeEvent
     public static final void onItemRegistry(final RegistryEvent.Register<Item> event)
-    { ModContent.registerItems(event); }
+    { ModContent.registerItems(event); ModContent.registerBlockItems(event); }
 
     @SubscribeEvent
     public static final void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> event)
@@ -184,7 +184,8 @@ public class ModRsGauges
   // Sided proxy functionality
   // -------------------------------------------------------------------------------------------------------------------
 
-  public static final ISidedProxy proxy = DistExecutor.runForDist(()->ClientProxy::new, ()->ServerProxy::new);
+  public static final ISidedProxy proxy = DistExecutor.unsafeRunForDist(()->ClientProxy::new, ()->ServerProxy::new);
+
   public interface ISidedProxy
   {
     default @Nullable PlayerEntity getPlayerClientSide() { return null; }

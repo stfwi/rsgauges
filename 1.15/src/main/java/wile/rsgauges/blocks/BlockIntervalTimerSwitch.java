@@ -8,16 +8,16 @@
  */
 package wile.rsgauges.blocks;
 
+import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
+import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.detail.ModResources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import wile.rsgauges.ModContent;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModConfig;
-import wile.rsgauges.detail.ModResources;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
@@ -186,8 +186,7 @@ public class BlockIntervalTimerSwitch extends BlockAutoSwitch
     @Override
     public void tick()
     {
-      if(ModConfig.COMMON.without_timer_switch_update.get()) return;
-      if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
+      if((ModConfig.without_timer_switch_update) || (!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       int p = p_;
       if((t_on()<=0) || (t_off()<=0) || (p_set() <= 0)) {
         p_ = 0;

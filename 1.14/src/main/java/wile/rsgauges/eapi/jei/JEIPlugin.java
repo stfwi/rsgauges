@@ -9,15 +9,21 @@
 package wile.rsgauges.eapi.jei;
 
 import wile.rsgauges.ModRsGauges;
-import wile.rsgauges.detail.ModConfig;
 import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
-import java.util.ArrayList;
+import wile.rsgauges.blocks.RsBlock;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @mezz.jei.api.JeiPlugin
 public class JEIPlugin implements mezz.jei.api.IModPlugin
@@ -29,15 +35,21 @@ public class JEIPlugin implements mezz.jei.api.IModPlugin
   @Override
   public void onRuntimeAvailable(IJeiRuntime jeiRuntime)
   {
-    List<ItemStack> blacklisted = new ArrayList<>();
+    HashSet<Item> blacklisted = new HashSet<>();
     for(Block e: ModContent.getRegisteredBlocks()) {
-      if(ModConfig.isOptedOut(e)) {
-        blacklisted.add(new ItemStack(e.asItem()));
+      if(ModConfig.isOptedOut(e) && (e.asItem().getRegistryName().getPath()).equals((e.getRegistryName().getPath()))) {
+        blacklisted.add(e.asItem());
+      }
+    }
+    for(Item e: ModContent.getRegisteredItems()) {
+      if(ModConfig.isOptedOut(e) && (!(e instanceof BlockItem))) {
+        blacklisted.add(e);
       }
     }
     if(!blacklisted.isEmpty()) {
+      List<ItemStack> blacklist = blacklisted.stream().map(ItemStack::new).collect(Collectors.toList());
       try {
-        jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM, blacklisted);
+        jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM, blacklist);
       } catch(Exception e) {
         ModRsGauges.logger().warn("Exception in JEI opt-out processing: '" + e.getMessage() + "', skipping further JEI optout processing.");
       }

@@ -1,5 +1,6 @@
 {
-	"parent": "block/block",
+  "parent": "block/block",
+  "gui_light": "front",
 	"textures": {
 		"front": "rsgauges:block/automaticswitch/detectorswitch_glass1_front",
 		"side": "rsgauges:block/common/cleargrayglass",
@@ -117,7 +118,8 @@
 			"scale": [0.6, 0.6, 0.6]
 		},
 		"gui": {
-			"rotation": [0, 180, 0],
+      "rotation": [0, 180, 0],
+      "translation": [0, 0, -15],
 			"scale": [3, 3, 3]
 		},
 		"fixed": {

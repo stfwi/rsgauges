@@ -1,5 +1,6 @@
 {
-	"parent": "block/block",
+  "parent": "block/block",
+  "gui_light": "front",
 	"ambientocclusion": false,
 	"textures": {
 		"lamp": "rsgauges:block/indicator/indicator_fg_red_off_texture",

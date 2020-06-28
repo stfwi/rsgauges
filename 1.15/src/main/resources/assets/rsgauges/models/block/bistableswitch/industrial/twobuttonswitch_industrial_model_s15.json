@@ -1,5 +1,6 @@
 {
-	"parent": "block/block",
+  "parent": "block/block",
+  "gui_light": "front",
 	"textures": {
 		"f": "rsgauges:block/bistableswitch/bistableswitch3texture_front",
 		"b1": "rsgauges:block/indicator/indicator_fg_green_on_texture",
@@ -12,7 +13,7 @@
 			"from": [5, 5, 14],
 			"to": [11, 11, 16],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#f"},
+				"north": {"uv": [2, 2, 14, 14], "texture": "#f"},
 				"east": {"uv": [0, 5, 1, 11], "texture": "#b"},
 				"south": {"uv": [5, 5, 11, 11], "texture": "#b"},
 				"west": {"uv": [15, 5, 16, 11], "texture": "#b"},

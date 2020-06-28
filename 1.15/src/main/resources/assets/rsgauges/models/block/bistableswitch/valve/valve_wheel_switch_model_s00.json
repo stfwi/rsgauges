@@ -1,4 +1,6 @@
 {
+  "parent": "block/block",
+  "gui_light": "front",
 	"textures": {
 		"0": "rsgauges:block/common/red_machine_metal",
 		"1": "rsgauges:block/common/darkmachinemetal",

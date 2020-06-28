@@ -1,5 +1,6 @@
 {
-	"parent": "block/block",
+  "parent": "block/block",
+  "gui_light": "front",
 	"ambientocclusion": false,
 	"textures": {
 		"front": "rsgauges:block/automaticswitch/timerswitch_glass1_front",
@@ -85,7 +86,8 @@
 			"scale": [0.75, 0.75, 0.75]
 		},
 		"gui": {
-			"rotation": [0, 180, 0],
+      "rotation": [0, 180, 0],
+      "translation": [0, 0, -15],
 			"scale": [3, 3, 3]
 		},
 		"fixed": {

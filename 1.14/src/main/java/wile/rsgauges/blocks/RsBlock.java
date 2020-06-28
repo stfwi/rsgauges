@@ -14,9 +14,9 @@
 package wile.rsgauges.blocks;
 
 import net.minecraft.block.Blocks;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.ModAuxiliaries;
 import wile.rsgauges.detail.ModColors;
-import wile.rsgauges.detail.ModConfig;
 import net.minecraft.world.*;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.state.BooleanProperty;

@@ -22,7 +22,7 @@ archivesBaseName = "rsgauges-${version_minecraft}"
 
 repositories {
   maven { name = "Progwml6 maven"; url = "https://dvs1.progwml6.com/files/maven/" } // JEI files
-  maven { name = "ModMaven"; url = "modmaven.k-4u.nl" } // JEI files, fallback
+  maven { name = "ModMaven"; url = "https://modmaven.k-4u.nl" } // JEI files, fallback
 }
 
 minecraft {
@@ -31,7 +31,7 @@ minecraft {
   runs {
     client {
       workingDirectory project.file('run')
-      property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+      property 'forge.logging.markers', ''//SCAN,REGISTRIES,REGISTRYDUMP
       property 'forge.logging.console.level', 'debug'
       mods {
         rsgauges {
@@ -41,7 +41,7 @@ minecraft {
     }
     server {
       workingDirectory project.file('run')
-      property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+      property 'forge.logging.markers', ''//SCAN,REGISTRIES,REGISTRYDUMP
       property 'forge.logging.console.level', 'debug'
       mods {
         rsgauges {
@@ -54,8 +54,8 @@ minecraft {
 
 dependencies {
   minecraft "net.minecraftforge:forge:${version_forge_minecraft}"
-  //compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
-  //runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
+  compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
+  runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
 }
 
 processResources {

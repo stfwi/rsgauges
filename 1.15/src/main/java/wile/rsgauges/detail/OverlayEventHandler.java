@@ -11,6 +11,7 @@
 package wile.rsgauges.detail;
 
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.ModConfig;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.ITextComponent;

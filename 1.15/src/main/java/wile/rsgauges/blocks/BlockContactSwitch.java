@@ -63,7 +63,7 @@ public class BlockContactSwitch extends BlockSwitch
   public void onEntityWalk(World world, BlockPos pos, Entity entity)
   {
     if(world.isRemote) return;
-    if(((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==(SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE)) && (!entity.isShiftKeyDown())) {
+    if(((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==(SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE)) && (!entity.isSneaking())) {
       onEntityCollided(world, pos, world.getBlockState(pos));
     }
   }

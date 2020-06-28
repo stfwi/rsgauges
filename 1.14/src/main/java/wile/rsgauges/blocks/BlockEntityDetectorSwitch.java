@@ -23,7 +23,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModConfig;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.ModResources;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

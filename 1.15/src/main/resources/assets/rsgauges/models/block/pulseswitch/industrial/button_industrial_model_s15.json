@@ -1,5 +1,7 @@
 {
-	"parent": "block/block",
+  "parent": "block/block",
+  "gui_light": "front",
+  "ambientocclusion": false,
 	"textures": {
 		"f": "rsgauges:block/common/industrial_base_6x6_light",
     "b": "rsgauges:block/common/led_switchgreen_on",

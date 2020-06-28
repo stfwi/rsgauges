@@ -1,5 +1,6 @@
 {
-	"parent": "block/block",
+  "parent": "block/block",
+  "gui_light": "front",
 	"textures": {
     "base": "rsgauges:block/bistableswitch/bistableswitch4texture",
     "particle": "rsgauges:block/bistableswitch/bistableswitch4texture"

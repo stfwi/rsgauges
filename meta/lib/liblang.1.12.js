@@ -49,7 +49,7 @@
     for(var i in lines) {
       if(!lines[i].length) continue;
       const kv = lines[i].split("=", 2);
-      if(kv.length!=2) throw new Error("Invalid line in '"+file_path+"': '"+lines[i]+"'");
+      if(kv.length!=2) throw new Error("Invalid line " + i + " in '"+file_path+"': '"+lines[i]+"'");
       const key = kv[0].trim();
       const text = kv[1].trim();
       text = text.replace("\\\\n", "\n").replace("\\n", "\n");
@@ -67,8 +67,8 @@
         key = key.split(".", 2);
         const item = key[0];
         const prop = key[1];
-        if(data.items[item]===undefined) data.items[item] = {};
-        data.items[item][prop] = text;
+        if(data.items[item]===undefined) data.blocks[item] = {};
+        data.blocks[item][prop] = text;
       } else if(key.search(modid + ".config.title")==0) {
         data.config_title = text;
       } else if(key.search("itemGroup.tab" + modid)==0) {
@@ -197,7 +197,7 @@
     for(var name in output_data) output_data[name] = output_data[name].trim() + "\n";
 
     for(var name in output_data) {
-      fs.writefile("./src/main/resources/assets/" + constants.mod_registry_name()  + "/lang/" + name + ".lang", output_data[name]);
+      fs.writefile("./src/main/resources/assets/"+ constants.mod_registry_name() +"/lang/" + name + ".lang", output_data[name]);
     }
   };
 

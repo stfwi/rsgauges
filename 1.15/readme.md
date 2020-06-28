@@ -1,7 +1,7 @@
 
 ## Gauges and Switches (MC1.15.1)
 
-Mod sources for Minecraft version 1.15.1.
+Mod sources for Minecraft version 1.15.2.
 
 - Description, credits, and features: Please see the readme in the repository root.
 
@@ -9,6 +9,28 @@ Mod sources for Minecraft version 1.15.1.
 
 ----
 ## Version history
+
+                 -------------------------------------------------------------------
+    - v1.2.4     [R] Release build v1.2.4. Release-to-release changes:
+                     * Gauges are comparator output sensitive.
+                     * Comparator Switch mode "Redstone Signal Strength" added.
+                     * Config handling update.
+                     * Bug fixes.
+                 -------------------------------------------------------------------
+
+    - v1.2.4-b2  [!] Forge update, requires Forge 1.15.2-31.2.20.
+                 [F] Gauges explicitly tell adjacent blocks that they can connect Redstone.
+                 [F] Fixed Indicator/Siren placement crash (issue #24, thx Jamzs3).
+
+    - v1.2.4-b1  [A] Gauges are also comparator output sensitive and can directly
+                     show e.g. how full chests are.
+                 [F] Industrial Machine Switch texture size fixed.
+                 [U] Forge/mappings updated.
+                 [M] JEI integration updated.
+                 [M] Models updated to circumvent too dark GUI representations.
+                 [M] Config handling updated.
+                 [!] Mod config moved from 'common' to 'server' config, in case
+                     of applied setting please double check.
 
                  -------------------------------------------------------------------
     - v1.2.3     [R] Release build v1.2.3. Release-to-release changes:

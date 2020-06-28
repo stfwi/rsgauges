@@ -9,6 +9,7 @@
 package wile.rsgauges.detail;
 
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.ModConfig;
 import net.minecraft.util.text.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.client.util.InputMappings;
