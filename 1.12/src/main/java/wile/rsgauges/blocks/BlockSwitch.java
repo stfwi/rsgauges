@@ -418,7 +418,7 @@ public class BlockSwitch extends RsBlock implements ModContent.Colors.ColorTintS
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
   {
     final TileEntitySwitch te = getTe(world, pos);
-    if(te != null) te.reset();
+    if(te != null) te.reset(world);
     if(!super.onBlockPlacedByCheck(world, pos, state, placer, stack)) return;
     world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, false), 1|2);
     notifyNeighbours(world, pos, state,  te, true);
@@ -656,7 +656,7 @@ public class BlockSwitch extends RsBlock implements ModContent.Colors.ColorTintS
       scd_ = nbt.getInteger("scd");
       svd_ = nbt.getInteger("svd");
       if(!updatePacket) { // Server data load operation
-        if(scd_==0) reset(); // assumption that chunk data are broken
+        if((scd_==0) && (world!=null)) reset(); // assumption that chunk data are broken
         if(!nbt.hasKey("links")) {
           if(links_!=null) links_.clear();
         } else {
@@ -680,10 +680,6 @@ public class BlockSwitch extends RsBlock implements ModContent.Colors.ColorTintS
         }
       }
     }
-
-    @Override
-    protected void setWorldCreate(World world)
-    { reset(world); }
 
     public int svd()
     { return svd_; }
@@ -739,24 +735,29 @@ public class BlockSwitch extends RsBlock implements ModContent.Colors.ColorTintS
     public void enabled_sides(long mask)
     { scd_ = (scd_ & ~((int)SWITCH_DATA_SIDE_ENABLED_MASK)) | ((int)(mask & SWITCH_DATA_SIDE_ENABLED_MASK)); }
 
-
     public void reset()
-    { reset(getWorld()); }
+    { reset(null); }
 
     /**
      * Resets internal entity values to the defaults, the serialised config data (scd) are
      * set to the defaults of the block config accordingly.
      */
-    public void reset(IBlockAccess world)
+    public void reset(@Nullable IBlockAccess world)
     {
       pulse_off_deadline_ = 0;
       click_config_time_lastclicked_ = 0;
       svd_ = 0;
       try {
         // If the world is not yet available or the block not loaded let it run with the head into the wall and say 0.
-        final int current_scd = scd_;
-        scd_ = (int)((((BlockSwitch)(world.getBlockState(getPos()).getBlock())).config) & SWITCH_DATA_ENTITY_DEFAULTS_MASK);
-        if(current_scd != scd_) markDirty();
+        if(world instanceof World) {
+          final int current_scd = scd_;
+          scd_ = (int)((((BlockSwitch)(world.getBlockState(getPos()).getBlock())).config) & SWITCH_DATA_ENTITY_DEFAULTS_MASK);
+          if(current_scd != scd_) {
+            if(((World)world).isBlockLoaded(getPos())) markDirty();
+          }
+        } else {
+          scd_ = 15;
+        }
       } catch(Exception e) {
         scd_ = 15; // set the on-power to default 15, but no other settings.
       }

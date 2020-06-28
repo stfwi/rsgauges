@@ -1,7 +1,7 @@
 
 ## Gauges and Switches (MC1.15.1)
 
-Mod sources for Minecraft version 1.15.1.
+Mod sources for Minecraft version 1.15.2.
 
 - Description, credits, and features: Please see the readme in the repository root.
 
@@ -9,6 +9,14 @@ Mod sources for Minecraft version 1.15.1.
 
 ----
 ## Version history
+
+                 -------------------------------------------------------------------
+    - v1.2.4     [R] Release build v1.2.4. Release-to-release changes:
+                     * Gauges are comparator output sensitive.
+                     * Comparator Switch mode "Redstone Signal Strength" added.
+                     * Config handling update.
+                     * Bug fixes.
+                 -------------------------------------------------------------------
 
     - v1.2.4-b2  [!] Forge update, requires Forge 1.15.2-31.2.20.
                  [F] Gauges explicitly tell adjacent blocks that they can connect Redstone.

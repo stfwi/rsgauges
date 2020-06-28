@@ -271,6 +271,7 @@
   "rsgauges.switchconfig.comparator_switch.mode0": "Comparator-Modus",
   "rsgauges.switchconfig.comparator_switch.mode1": "Belegte Slots",
   "rsgauges.switchconfig.comparator_switch.mode2": "Freie Slots",
+  "rsgauges.switchconfig.comparator_switch.mode3": "redstone signal strength",
   "rsgauges.switchconfig.comparator_switch.output_power": "Power: %1$s",
   "rsgauges.switchconfig.comparator_switch.threshold_off": "Ausschaltschwelle: %1$s",
   "rsgauges.switchconfig.comparator_switch.threshold_on": "Einschaltschwelle: %1$s",

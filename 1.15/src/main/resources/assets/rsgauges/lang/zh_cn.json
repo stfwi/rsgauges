@@ -271,6 +271,7 @@
   "rsgauges.switchconfig.comparator_switch.mode0": "比较器模式",
   "rsgauges.switchconfig.comparator_switch.mode1": "已用库存格数",
   "rsgauges.switchconfig.comparator_switch.mode2": "未用库存格数",
+  "rsgauges.switchconfig.comparator_switch.mode3": "redstone signal strength",
   "rsgauges.switchconfig.comparator_switch.output_power": "输出强度：%1$s",
   "rsgauges.switchconfig.comparator_switch.threshold_off": "关阈值：%1$s",
   "rsgauges.switchconfig.comparator_switch.threshold_on": "开阈值：%1$s",

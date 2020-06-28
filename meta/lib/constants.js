@@ -10,7 +10,9 @@
   c.gradle_property_version_minecraft = function() { return "version_minecraft"; }
   c.gradle_property_version_forge = function() { return "version_forge"; }
   c.project_download_inet_page = function() { return "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/"; }
-  c.options = {}
+  c.options = {
+    without_ref_repository_check: true
+  };
   c.languages = {
     "en_us": { code:"en_us", name:"English", region:"United States" },
     "de_de": { code:"de_de", name:"German", region:"Germany" },

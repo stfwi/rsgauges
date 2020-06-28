@@ -10,6 +10,14 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+                 -------------------------------------------------------------------
+    - v1.2.4     [R] Release build v1.2.4. Release-to-release changes:
+                     * Gauges are comparator output sensitive.
+                     * Comparator Switch mode "Redstone Signal Strength" added.
+                     * Config handling update.
+                     * Bug fixes.
+                 -------------------------------------------------------------------
+
     - v1.2.4-b2  [F] Gauges explicitly tell adjacent blocks that they can connect Redstone.
                  [F] Fixed Indicator/Siren placement crash (issue #24, thx Jamzs3).
 

@@ -1,14 +1,15 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "promos": {
-    "1.12.2-recommended": "1.2.3",
-    "1.12.2-latest": "1.2.4-b1",
-    "1.14.4-recommended": "1.2.3",
-    "1.14.4-latest": "1.2.4-b2",
-    "1.15.2-recommended": "1.2.3",
-    "1.15.2-latest": "1.2.4-b2"
+    "1.12.2-recommended": "1.2.4",
+    "1.12.2-latest": "1.2.4",
+    "1.14.4-recommended": "1.2.4",
+    "1.14.4-latest": "1.2.4",
+    "1.15.2-recommended": "1.2.4",
+    "1.15.2-latest": "1.2.4"
   },
   "1.12.2": {
+    "1.2.4": "[R] Maintenance release build v1.2.4. Changes: * Compatibility fixes. * Texture fixes.\n[F] Fixed startup compatibility bug (issue #25, thx gotterdamerung).",
     "1.2.4-b1": "[F] Industrial Machine switch texture size fixed.",
     "1.2.3": "[R] Release build v1.2.3. Release-to-release changes: * Door Sensor added. * Recipe fixes, lang files updated.",
     "1.2.3-b3": "[M] En lang files typo fixes (thx @itzbahb).\n[F] Comparator Switch recipe fixed. ~ v1.2.3-b2  [/] Version skipped in 1.12.2.",
@@ -80,6 +81,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "1.14.4": {
+    "1.2.4": "[R] Release build v1.2.4. Release-to-release changes: * Gauges are comparator output sensitive. * Comparator Switch mode \"Redstone Signal Strength\" added. * Config handling update. * Bug fixes.",
     "1.2.4-b2": "[F] Gauges explicitly tell adjacent blocks that they can connect Redstone.\n[F] Fixed Indicator/Siren placement crash (issue #24, thx Jamzs3).",
     "1.2.4-b1": "[A] Gauges are also comparator output sensitive and can directly show e.g. how full chests are.\n[F] Industrial Machine Switch texture size fixed.\n[M] Config handling updated.\n[!] Mod config moved from 'common' to 'server' config, in case of applied setting please double check.",
     "1.2.3": "[R] Release build v1.2.3. Release-to-release changes: * Door Sensor added. * Recipe fixes, lang files updated.",
@@ -108,6 +110,7 @@
     "1.1.5-b1": "[A] Initial 1.12.2 to 1.14.4 port of all features except color tinting and Forge ore dictionary dependent blocks."
   },
   "1.15.2": {
+    "1.2.4": "[R] Release build v1.2.4. Release-to-release changes: * Gauges are comparator output sensitive. * Comparator Switch mode \"Redstone Signal Strength\" added. * Config handling update. * Bug fixes.",
     "1.2.4-b2": "[!] Forge update, requires Forge 1.15.2-31.2.20.\n[F] Gauges explicitly tell adjacent blocks that they can connect Redstone.\n[F] Fixed Indicator/Siren placement crash (issue #24, thx Jamzs3).",
     "1.2.4-b1": "[A] Gauges are also comparator output sensitive and can directly show e.g. how full chests are.\n[F] Industrial Machine Switch texture size fixed.\n[U] Forge/mappings updated.\n[M] JEI integration updated.\n[M] Models updated to circumvent too dark GUI representations.\n[M] Config handling updated.\n[!] Mod config moved from 'common' to 'server' config, in case of applied setting please double check.",
     "1.2.3": "[R] Release build v1.2.3. Release-to-release changes: * Door Sensor added. * Recipe fixes, lang files updated.",

@@ -10,7 +10,12 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
-    ~ v1.2.4-b2  [F]
+                 -------------------------------------------------------------------
+    - v1.2.4     [R] Maintenance release build v1.2.4. Changes:
+                     * Compatibility fixes.
+                     * Texture fixes.
+                 -------------------------------------------------------------------
+                 [F] Fixed startup compatibility bug (issue #25, thx gotterdamerung).
 
     - v1.2.4-b1  [F] Industrial Machine switch texture size fixed.
 

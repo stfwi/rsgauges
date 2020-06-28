@@ -189,7 +189,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
   public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
   {
     final TileEntitySwitch te = getTe(world, pos);
-    if(te != null) te.reset();
+    if(te != null) te.reset(world);
     if(!super.onBlockPlacedByCheck(world, pos, state, placer, stack)) return;
     world.setBlockState(pos, world.getBlockState(pos).with(POWERED, false), 1|2);
     notifyNeighbours(world, pos, state,  te, true);
@@ -678,7 +678,7 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
     { scd_ = (scd_ & ~((int)SWITCH_DATA_SIDE_ENABLED_MASK)) | ((int)(mask & SWITCH_DATA_SIDE_ENABLED_MASK)); }
 
     public void reset()
-    { reset(getWorld()); }
+    { reset(null); }
 
     /**
      * Resets internal entity values to the defaults, the serialised config data (scd) are
@@ -692,8 +692,12 @@ public class BlockSwitch extends RsDirectedBlock implements ModColors.ColorTintS
       try {
         // If the world is not yet available or the block not loaded let it run with the head into the wall and say 0.
         final int current_scd = scd_;
-        scd_ = (int)((((BlockSwitch)(world.getBlockState(getPos()).getBlock())).config) & SWITCH_DATA_ENTITY_DEFAULTS_MASK);
-        if(current_scd != scd_) markDirty();
+        if((world instanceof World) && (world.isAreaLoaded(getPos(), 1))) {
+          scd_ = (int)((((BlockSwitch)(world.getBlockState(getPos()).getBlock())).config) & SWITCH_DATA_ENTITY_DEFAULTS_MASK);
+          if(current_scd != scd_) markDirty();
+        } else {
+          scd_ = 15;
+        }
       } catch(Exception e) {
         scd_ = 15; // set the on-power to default 15, but no other settings.
       }
