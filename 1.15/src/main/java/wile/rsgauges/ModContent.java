@@ -256,7 +256,7 @@ public class ModContent
 
   // Door contact mat
   public static final BlockContactMat INDUSTRIAL_DOOR_CONTACT_MAT = (BlockContactMat)(new BlockContactMat(
-    BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_DATA_WEAK|
+    BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|
     BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
     BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -441,7 +441,7 @@ public class ModContent
   // Industrial bistable link relay receiver switch
   public static final BlockLinkReceiverSwitch INDUSTRIAL_SWITCHLINK_RECEIVER = (BlockLinkReceiverSwitch)(new BlockLinkReceiverSwitch(
     BlockSwitch.SWITCH_CONFIG_WALLMOUNT|BlockSwitch.SWITCH_CONFIG_BISTABLE|
-    BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
+    BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
     BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
@@ -452,7 +452,7 @@ public class ModContent
   // Industrial full block bistable link relay receiver switch
   public static final BlockLinkReceiverSwitch INDUSTRIAL_SWITCHLINK_CASED_RECEIVER = (BlockLinkReceiverSwitch)(new BlockLinkReceiverSwitch(
     BlockSwitch.RSBLOCK_CONFIG_FULLCUBE|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
-    BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_DATA_WEAK|
+    BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
     BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_ALL|
     BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
@@ -476,7 +476,7 @@ public class ModContent
   // Industrial full block pulse link relay receiver switch
   public static final BlockLinkReceiverSwitch INDUSTRIAL_SWITCHLINK_CASED_PULSE_RECEIVER = (BlockLinkReceiverSwitch)(new BlockLinkReceiverSwitch(
     BlockSwitch.RSBLOCK_CONFIG_FULLCUBE|BlockSwitch.SWITCH_CONFIG_NOT_PASSABLE|
-    BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_DATA_WEAK|
+    BlockSwitch.SWITCH_CONFIG_PULSE|BlockSwitch.SWITCH_CONFIG_WEAKABLE|
     BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_CONFIG_LCLICK_RESETTABLE|
     BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_DATA_SIDE_ENABLED_ALL|
     BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -721,7 +721,7 @@ public class ModContent
 
   // Rustic door contact mat
   public static final BlockContactMat RUSTIC_DOOR_CONTACT_PLATE = (BlockContactMat)(new BlockContactMat(
-    BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|BlockSwitch.SWITCH_DATA_WEAK|
+    BlockSwitch.SWITCH_CONFIG_CONTACT|BlockSwitch.SWITCH_CONFIG_LATERAL|
     BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
     BlockSwitch.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|BlockSwitch.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -1063,7 +1063,7 @@ public class ModContent
   // Valve Wheel
   public static final BlockBistableSwitch BISTABLE_VALVE_WHEEL_SWITCH = (BlockBistableSwitch)(new BlockBistableSwitch(
     BlockSwitch.SWITCH_CONFIG_BISTABLE|BlockSwitch.SWITCH_CONFIG_WALLMOUNT|
-    BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|BlockSwitch.SWITCH_DATA_WEAK|
+    BlockSwitch.SWITCH_CONFIG_WEAKABLE|BlockSwitch.SWITCH_CONFIG_INVERTABLE|
     BlockSwitch.SWITCH_CONFIG_LINK_TARGET_SUPPORT|BlockSwitch.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(4,4,0,12,12,3.5), null
@@ -1307,7 +1307,7 @@ public class ModContent
   { return registeredBlocks.stream().filter(clazz::isInstance).toArray(Block[]::new); }
 
   public static final TileEntityType<?> TET_GAUGE = TileEntityType.Builder
-    .create(BlockGauge.TileEntityGauge::new, blocks_of_type(BlockGauge.class))
+    .create(BlockGauge.TileEntityGauge::new, blocks_of_type(BlockAbstractGauge.class))
     .build(null)
     .setRegistryName(ModRsGauges.MODID, "te_gauge");
 

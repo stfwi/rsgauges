@@ -20,14 +20,17 @@ import net.minecraft.util.math.AxisAlignedBB;
 import javax.annotation.Nullable;
 
 
-public class BlockIndicator extends BlockGauge
+public class BlockIndicator extends BlockAbstractGauge
 {
   public static final BooleanProperty POWERED = BooleanProperty.create("power");
 
   // -------------------------------------------------------------------------------------------------------------------
 
   public BlockIndicator(long config, Block.Properties properties, AxisAlignedBB unrotatedBB, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { super(config, properties, unrotatedBB, powerOnSound, powerOffSound); }
+  {
+    super(config, properties, unrotatedBB, powerOnSound, powerOffSound);
+    setDefaultState(super.getDefaultState().with(POWERED, false));
+  }
 
   public BlockIndicator(long config, Block.Properties properties, AxisAlignedBB unrotatedBB)
   { super(config, properties, unrotatedBB, null, null); }
@@ -43,7 +46,7 @@ public class BlockIndicator extends BlockGauge
 
   @Override
   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { builder.add(FACING, POWERED, WATERLOGGED); }
+  { super.fillStateContainer(builder); builder.add(POWERED); }
 
   @Override
   public int getLightValue(BlockState state)

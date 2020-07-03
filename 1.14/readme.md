@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.14.4.
 ----
 ## Version history
 
+    ~ v1.2.5-b1  [M] Modified global switch power placement default setting to strong.
+
                  -------------------------------------------------------------------
     - v1.2.4     [R] Release build v1.2.4. Release-to-release changes:
                      * Gauges are comparator output sensitive.

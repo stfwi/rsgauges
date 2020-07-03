@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    ~ v1.2.5-b1  [F]
+
                  -------------------------------------------------------------------
     - v1.2.4     [R] Maintenance release build v1.2.4. Changes:
                      * Compatibility fixes.
