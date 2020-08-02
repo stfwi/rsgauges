@@ -1,8 +1,0 @@
-{
-	"parent": "rsgauges:block/contactmat/glass/contactmat_glassxblock_thin",
-	"textures": {
-    "front": "rsgauges:blocks/common/cleargrayglass",
-    "side": "rsgauges:blocks/common/cleargrayglass",
-    "particle": "rsgauges:blocks/common/cleargrayglass"
-  }
-}

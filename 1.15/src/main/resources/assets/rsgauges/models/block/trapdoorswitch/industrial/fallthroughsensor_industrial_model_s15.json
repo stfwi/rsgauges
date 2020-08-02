@@ -1,6 +1,0 @@
-{
-	"parent": "rsgauges:block/trapdoorswitch/industrial/fallthroughsensor_industrial_model_s00",
-	"textures": {
-    "redstone": "rsgauges:block/indicator/indicator_fg_red_on_texture"
-	}
-}

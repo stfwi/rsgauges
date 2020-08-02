@@ -1,6 +1,0 @@
-{
-	"parent": "rsgauges:block/switchlink/industrial/switchlink_pulsereceiver_industrial_model_s00",
-	"textures": {
-    "led": "rsgauges:block/indicator/indicator_fg_green_on_texture"
-	}
-}

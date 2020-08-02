@@ -1,6 +1,0 @@
-{
-	"parent": "rsgauges:block/knockswitch/industrial/industrial_knock_switch_model_s00",
-	"textures": {
-    "side": "rsgauges:block/knockswitch/industrial_knock_switch_texture_s15"
-	}
-}
