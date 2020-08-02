@@ -1,6 +1,0 @@
-{
-  "parent": "rsgauges:block/contactmat/industrial/contactmat_sensitive_industrial_model_s00",
-	"textures": {
-    "top": "rsgauges:block/contactswitch/contactmat_industrial_sensitive_texture_s15"
-	}
-}
