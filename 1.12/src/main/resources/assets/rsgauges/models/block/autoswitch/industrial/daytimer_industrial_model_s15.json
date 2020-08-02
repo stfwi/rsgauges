@@ -1,6 +1,0 @@
-{
-	"parent": "rsgauges:block/autoswitch/industrial/daytimer_industrial_model_s00",
-	"textures": {
-    "led": "rsgauges:blocks/indicator/indicator_fg_green_on_texture"
-	}
-}

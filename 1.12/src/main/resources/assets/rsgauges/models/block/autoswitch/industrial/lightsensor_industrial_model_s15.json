@@ -1,6 +1,0 @@
-{
-	"parent": "rsgauges:block/autoswitch/industrial/lightsensor_industrial_model_s00",
-	"textures": {
-    "led": "rsgauges:blocks/indicator/indicator_fg_red_on_texture"
-	}
-}

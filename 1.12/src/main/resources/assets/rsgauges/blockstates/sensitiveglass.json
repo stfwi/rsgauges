@@ -1,9 +1,0 @@
-{
-  "forge_marker": 1,
-  "defaults": { "model": "rsgauges:sensitiveglass/sensitiveglass_model_s00" },
-  "variants": {
-    "normal": [{}],
-    "inventory": [{}],
-    "powered": { "false":{}, "true": { "model": "rsgauges:sensitiveglass/sensitiveglass_model_s15" } }
-  }
-}

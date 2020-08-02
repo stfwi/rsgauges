@@ -1,6 +1,0 @@
-{
-	"parent": "rsgauges:block/indicator/industrial/led_white_model_s00",
-	"textures": {
-    "lamp": "rsgauges:block/indicator/indicator_fg_green_on_texture"
-	}
-}
