@@ -1,6 +1,0 @@
-{
-	"parent": "rsgauges:block/indicator/industrial/alarm_lamp_model_s00",
-	"textures": {
-    "lamp": "rsgauges:blocks/indicator/indicator_fg_red_blink_texture"
-	}
-}

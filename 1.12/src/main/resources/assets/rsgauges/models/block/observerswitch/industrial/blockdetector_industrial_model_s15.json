@@ -1,8 +1,0 @@
-{
-	"parent": "rsgauges:block/observerswitch/industrial/blockdetector_industrial_model_s00",
-	"textures": {
-    "back": "rsgauges:blocks/observerswitch/observerswitch_industrial_blockdetector_back_s15",
-		"front": "rsgauges:blocks/observerswitch/observerswitch_industrial_blockdetector_front_s15",
-		"side": "rsgauges:blocks/observerswitch/observerswitch_industrial_blockdetector_side_texture_s15"
-	}
-}
