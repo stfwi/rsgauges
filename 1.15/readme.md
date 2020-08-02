@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.15.2.
 ----
 ## Version history
 
+    ~ v1.2.5-b2  [F]
+
     - v1.2.5-b1  [M] Modified global switch power placement default setting to strong.
                  [F] Fixed gauge/indicator placement (issue #27, thx Bobcat64)
 

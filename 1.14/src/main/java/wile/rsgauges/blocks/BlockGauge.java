@@ -128,7 +128,7 @@ public class BlockGauge extends RsDirectedBlock implements ModColors.ColorTintSu
   public BlockState getStateForPlacement(BlockItemUseContext context)
   {
     final BlockState state = super.getStateForPlacement(context);
-    return (getDefaultState().has(BlockGauge.POWER)) ? (state.with(BlockGauge.POWER, 0)) : (state);
+    return (state.has(BlockGauge.POWER)) ? (state.with(BlockGauge.POWER, 0)) : (state);
   }
 
   @Override
