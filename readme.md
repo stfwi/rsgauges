@@ -25,10 +25,9 @@ into the `master` branch, while beta/alpha version tags link to `develop` branch
 commits.
 
   - [1.12](1.12/readme.md)
-
   - [1.14](1.14/readme.md)
-
   - [1.15](1.15/readme.md)
+  - [1.16](1.16/readme.md)
 
 ----
 
@@ -165,8 +164,6 @@ mod provide, and special features for switch types and individual switches:
 
   - **Projectile sensitivity**: Some switches can be activated with arrows or other
     projectiles, depending on the switch design.
-
-  - **Color tinting**: Some switches can be tinted by left-clicking with dye.
 
 The switches will remember their configutations and tinting until being broken. This
 allows to "reset" a switch by simply re-attaching it.
@@ -420,8 +417,6 @@ This allows some interesting setups, not only the binary counter with chain link
 Mods covering similar features:
 
 - [Automated Redstone (CD4017BE)](https://minecraft.curseforge.com/projects/automated-redstone) has redstone a display and an oscilloscope block.
-
-- [More Beautiful Buttons (Kreezxil/Serj4ever57203)](https://minecraft.curseforge.com/projects/more-beautiful-buttons) support a variety of differently colored buttons.
 
 - [MalisisSwitches (Ordinastie)](https://github.com/Ordinastie/MalisisSwitches) adds remote (wireless) switches to Minecraft.
 

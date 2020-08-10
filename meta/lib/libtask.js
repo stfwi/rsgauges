@@ -261,9 +261,7 @@
     const expected_commit_version = modversion.replace(/[-]/g,"") + "-mc" + mcversion;
     if(!gittags.filter(function(s){return s.indexOf(expected_commit_version)>=0}).length) fails.push("No tag version on this commit matching the gradle properties version (should be v" + expected_commit_version + ").");
     if(((!constants.options.without_ref_repository_check)) && (git_remote.replace(/[\s]/g,"").indexOf(constants.reference_repository() + "(push)") < 0)) fails.push("Not the reference repository.");
-    if(git_branch != "develop") {
-      fails.push("Not a valid branch for dist. (branch:'"+git_branch+"', must be 'develop')");
-    }
+    //if(git_branch != "develop") fails.push("Not a valid branch for dist. (branch:'"+git_branch+"', must be 'develop')");
     if(git_diff !== "") fails.push("Not everything committed to the GIT repository.");
     return fails;
   };
@@ -324,6 +322,7 @@
     var latest_beta = "";
     for(var ver in history) { latest_beta=ver; break; }
     for(var ver in history) if(ver.search(/(rc|b|a)/) < 0) { latest_release=ver; break; }
+    if(latest_release == "") latest_release = latest_beta;
     var update_json = {}
     update_json["homepage"] = constants.project_download_inet_page();
     update_json[mc_version] = history;
