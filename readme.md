@@ -1,5 +1,5 @@
 
-## Gauges and Switches (MC1.15.1)
+## Gauges and Switches (MC1.16.1)
 
 Mod sources for Minecraft version 1.16.1.
 
@@ -10,7 +10,10 @@ Mod sources for Minecraft version 1.16.1.
 ----
 ## Version history
 
-    ~ v1.2.4-b3  [F] Fixed Pressure Plates entity filter (issue #30, ty wieselkatze).
+    ~ v1.2.4-b4  [F]
+
+    - v1.2.4-b3  [F] Fixed Pressure Plates entity filter (issue #30, ty wieselkatze).
+                 [F] Fixed Siren Placement bug (issue #31, thx mowmaster).
 
     - v1.2.4-b2  [F] Door sensor look detection angle fixed.
                  [A] JEI integration added.

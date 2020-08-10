@@ -1,0 +1,6 @@
+{
+  "multipart": [
+    { "when": { "powered": "false" }, "apply": { "model": "rsgauges:block/sensitiveglass/sensitiveglass_model_s00" } },
+    { "when": { "powered": "true"  }, "apply": { "model": "rsgauges:block/sensitiveglass/sensitiveglass_model_s15" } }
+  ]
+}

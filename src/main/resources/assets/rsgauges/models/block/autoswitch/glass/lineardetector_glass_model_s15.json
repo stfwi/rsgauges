@@ -1,0 +1,6 @@
+{
+	"parent": "rsgauges:block/autoswitch/glass/lineardetector_glass_model_s00",
+	"textures": {
+    "led": "rsgauges:block/indicator/indicator_fg_red_on_texture"
+	}
+}

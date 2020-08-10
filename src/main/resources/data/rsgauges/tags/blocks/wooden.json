@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:logs",
+    "#minecraft:planks",
+    "#minecraft:wooden_buttons",
+    "#minecraft:wooden_doors",
+    "#minecraft:wooden_fences",
+    "#minecraft:wooden_slabs",
+    "#minecraft:wooden_pressure_plates",
+    "#minecraft:wooden_stairs",
+    "#minecraft:wooden_trapdoors",
+    "#minecraft:saplings",
+    "#minecraft:signs",
+    "#minecraft:beds",
+    "minecraft:dead_bush",
+    "minecraft:melon_stem",
+    "minecraft:pumpkin_stem",
+    "minecraft:ladder",
+    "minecraft:chest",
+    "minecraft:barrel",
+    "minecraft:bookshelf",
+    "minecraft:composter",
+    "minecraft:fletching_table",
+    "minecraft:lectern",
+    "minecraft:note_block",
+    "minecraft:scaffolding",
+    "minecraft:torch",
+    "minecraft:wall_torch"
+  ]
+}
