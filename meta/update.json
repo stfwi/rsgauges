@@ -1,10 +1,11 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.16.2": {
+    "1.2.4-b5": "[F] Mapping adaption to Forge 1.16.2-33.0.20.",
     "1.2.4-b4": "[U] Ported to 1.16.2."
   },
   "promos": {
-    "1.16.2-recommended": "1.2.4-b4",
-    "1.16.2-latest": "1.2.4-b4"
+    "1.16.2-recommended": "1.2.4-b5",
+    "1.16.2-latest": "1.2.4-b5"
   }
 }

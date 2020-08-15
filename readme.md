@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.16.1.
 ----
 ## Version history
 
+    - v1.2.4-b5  [F] Mapping adaption to Forge 1.16.2-33.0.20.
+
     - v1.2.4-b4  [U] Ported to 1.16.2.
 
 ----
