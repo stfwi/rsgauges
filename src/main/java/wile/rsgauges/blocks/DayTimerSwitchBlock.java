@@ -86,17 +86,17 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
       if(on_power() < 1) on_power(1);
       {
         // @TODO: day time localisation: how the hack that, transfer long timestamp with tagging and localise on client or system time class?
-        StringTextComponent separator = (new StringTextComponent(" | ")); separator.func_240701_a_(TextFormatting.GRAY);
+        StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
         tr.add(ModAuxiliaries.localizable("switchconfig.daytimerclock.daytime_on", TextFormatting.BLUE, new Object[]{ModAuxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.daytimerclock.daytime_off", TextFormatting.YELLOW, new Object[]{ModAuxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.daytimerclock.daytime_off", TextFormatting.YELLOW, new Object[]{ModAuxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
         if(debounce()>0) {
-          tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.daytimerclock.random", TextFormatting.DARK_GREEN, new Object[]{debounce()}) ));
+          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.daytimerclock.random", TextFormatting.DARK_GREEN, new Object[]{debounce()}) ));
         } else {
           tr.add(new StringTextComponent(""));
         }
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
         ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.daytimerclock", TextFormatting.RESET, tr.toArray()));
       }
       markDirty();

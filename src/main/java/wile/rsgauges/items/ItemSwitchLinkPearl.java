@@ -71,13 +71,13 @@ public class ItemSwitchLinkPearl extends RsItem
         "switchlinking.switchlink_pearl.tooltip.linkedblock",
         TextFormatting.GRAY,
         new Object[]{ (new TranslationTextComponent(targetBlock.getTranslationKey()))
-          .func_240701_a_(TextFormatting.YELLOW)
-          .func_240701_a_(TextFormatting.ITALIC)
+          .mergeStyle(TextFormatting.YELLOW)
+          .mergeStyle(TextFormatting.ITALIC)
         }
       ));
     }
     if(Minecraft.getInstance().player!=null) {
-      final int distance = link.distance(Minecraft.getInstance().player.func_233580_cy_());
+      final int distance = link.distance(Minecraft.getInstance().player.getPosition());
       if(distance >= 0) {
         tooltip.add(new StringTextComponent(ModAuxiliaries.localizable(
           "switchlinking.switchlink_pearl.tooltip.linkeddistance",
@@ -108,9 +108,9 @@ public class ItemSwitchLinkPearl extends RsItem
 
   public static final void usePearl(World world, PlayerEntity player)
   {
-    switch(SwitchLink.fromPlayerActiveItem(world, player).request(SwitchLink.SWITCHLINK_RELAY_ACTIVATE, world, player.func_233580_cy_(), player)) {
+    switch(SwitchLink.fromPlayerActiveItem(world, player).request(SwitchLink.SWITCHLINK_RELAY_ACTIVATE, world, player.getPosition(), player)) {
       case OK:
-        ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_SUCCESS.play(world, player.func_233580_cy_());
+        ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_SUCCESS.play(world, player.getPosition());
         return;
       case TOO_FAR:
       case BLOCK_UNLOADED:
@@ -124,7 +124,7 @@ public class ItemSwitchLinkPearl extends RsItem
       case REJECTED:
         break;
     }
-    ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, player.func_233580_cy_());
+    ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, player.getPosition());
   }
 
   public static final @Nullable ItemStack createFromEnderPearl(World world, BlockPos pos, PlayerEntity player)

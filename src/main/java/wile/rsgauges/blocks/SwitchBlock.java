@@ -808,29 +808,29 @@ public class SwitchBlock extends RsDirectedBlock
     public TranslationTextComponent configStatusTextComponentTranslation(SwitchBlock block)
     {
       StringTextComponent separator = (new StringTextComponent(" | "));
-      separator.func_240701_a_(TextFormatting.GRAY);
+      separator.mergeStyle(TextFormatting.GRAY);
       TranslationTextComponent status = ModAuxiliaries.localizable("switchconfig.options", TextFormatting.RESET);
       boolean statusset = false;
       if((on_power() < 15) || (off_power()>0)) {
         if((block == null) || ((block.config & (SWITCH_CONFIG_AUTOMATIC|SWITCH_CONFIG_LINK_RELAY))==0)) {
           // power only for non-auto-switches
           statusset = true;
-          status.func_230529_a_(ModAuxiliaries.localizable("switchconfig.options.output_power", TextFormatting.RED, new Object[]{on_power()}));
+          status.append(ModAuxiliaries.localizable("switchconfig.options.output_power", TextFormatting.RED, new Object[]{on_power()}));
         }
       }
       if(nooutput()) {
-        if(statusset) status.func_230529_a_(separator.func_230532_e_()); statusset = true;
-        status.func_230529_a_(ModAuxiliaries.localizable("switchconfig.options.no_output", TextFormatting.DARK_AQUA));
+        if(statusset) status.append(separator.deepCopy()); statusset = true;
+        status.append(ModAuxiliaries.localizable("switchconfig.options.no_output", TextFormatting.DARK_AQUA));
       } else if(!inverted()) {
-        if(statusset) status.func_230529_a_(separator.func_230532_e_()); statusset = true;
-        status.func_230529_a_(ModAuxiliaries.localizable("switchconfig.options." + (weak() ? "weak" : "strong"), TextFormatting.DARK_AQUA));
+        if(statusset) status.append(separator.deepCopy()); statusset = true;
+        status.append(ModAuxiliaries.localizable("switchconfig.options." + (weak() ? "weak" : "strong"), TextFormatting.DARK_AQUA));
       } else {
-        if(statusset) status.func_230529_a_(separator.func_230532_e_()); statusset = true;
-        status.func_230529_a_(ModAuxiliaries.localizable("switchconfig.options." + (weak() ? "weakinverted" : "stronginverted"), TextFormatting.DARK_AQUA));
+        if(statusset) status.append(separator.deepCopy()); statusset = true;
+        status.append(ModAuxiliaries.localizable("switchconfig.options." + (weak() ? "weakinverted" : "stronginverted"), TextFormatting.DARK_AQUA));
       }
       if(configured_on_time() > 0) {
-        if(statusset) status.func_230529_a_(separator.func_230532_e_());
-        status.func_230529_a_(ModAuxiliaries.localizable("switchconfig.options.pulsetime", TextFormatting.GOLD, new Object[]{
+        if(statusset) status.append(separator.deepCopy());
+        status.append(ModAuxiliaries.localizable("switchconfig.options.pulsetime", TextFormatting.GOLD, new Object[]{
           Double.toString( ((double)(configured_on_time()))/20 ),
           Integer.toString(configured_on_time())
         }));

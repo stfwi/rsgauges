@@ -86,9 +86,9 @@ public class BlockTrapdoorSwitch extends ContactSwitchBlock
   protected AxisAlignedBB detectionVolume(BlockPos pos)
   {
     if((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==0) {
-      return new AxisAlignedBB(Vector3d.func_237491_b_(pos).add(0,0,0), Vector3d.func_237491_b_(pos).add(1,1,1));
+      return new AxisAlignedBB(Vector3d.copy(pos).add(0,0,0), Vector3d.copy(pos).add(1,1,1));
     } else {
-      return new AxisAlignedBB(Vector3d.func_237491_b_(pos).add(-1.2,0,-1.2), Vector3d.func_237491_b_(pos).add(1.2,2,1.2));
+      return new AxisAlignedBB(Vector3d.copy(pos).add(-0.2,0,-0.2), Vector3d.copy(pos).add(1.2,2,1.2));
     }
   }
 

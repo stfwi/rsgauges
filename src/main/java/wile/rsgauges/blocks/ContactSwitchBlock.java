@@ -131,7 +131,7 @@ public class ContactSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   protected AxisAlignedBB detectionVolume(BlockPos pos)
-  { return new AxisAlignedBB(Vector3d.func_237491_b_(pos), Vector3d.func_237491_b_(pos).add(1,2,1)); }
+  { return new AxisAlignedBB(Vector3d.copy(pos), Vector3d.copy(pos).add(1,2,1)); }
 
   @Override
   public ContactSwitchTileEntity getTe(IWorldReader world, BlockPos pos)

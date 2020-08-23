@@ -136,12 +136,12 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
         {
           ArrayList<Object> tr = new ArrayList<>();
           final TranslationTextComponent trunit = ModAuxiliaries.localizable("switchconfig.lightsensor.lightunit", null);
-          StringTextComponent separator = (new StringTextComponent(" | ")); separator.func_240701_a_(TextFormatting.GRAY);
+          StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
           tr.add(ModAuxiliaries.localizable("switchconfig.lightsensor.threshold_on", TextFormatting.BLUE, new Object[]{(int)threshold0_on(), trunit}));
-          tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.lightsensor.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off(), trunit})));
-          tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.lightsensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
+          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.lightsensor.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off(), trunit})));
+          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.lightsensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
           if(debounce()>0) {
-            tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.DARK_GREEN, new Object[]{debounce()})));
+            tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.DARK_GREEN, new Object[]{debounce()})));
           } else {
             tr.add(new StringTextComponent(""));
           }

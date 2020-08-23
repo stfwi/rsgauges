@@ -246,10 +246,6 @@ public abstract class RsBlock extends Block implements ColorUtils.IColorTintSupp
   protected void onRsBlockDestroyed(BlockState state, World world, BlockPos pos, boolean isUpdateEvent)
   {}
 
-  ///// @todo: 1.16 MAPPINGS MISSING YET, OR CHANGED
-  public static Boolean ligttestfunc(BlockState state, IBlockReader world, BlockPos pos, EntityType<?> entity)
-  { return true; }
-
   // -------------------------------------------------------------------------------------------------------------------
   // Basic tile entity
   // -------------------------------------------------------------------------------------------------------------------
@@ -286,8 +282,8 @@ public abstract class RsBlock extends Block implements ColorUtils.IColorTintSupp
     { readNbt(nbt, false); }
 
     @Override
-    public void func_230337_a_(BlockState state, CompoundNBT nbt)
-    { super.func_230337_a_(state, nbt); read(nbt); }
+    public void read(BlockState state, CompoundNBT nbt)
+    { super.read(state, nbt); read(nbt); }
 
   }
 

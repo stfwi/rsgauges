@@ -74,7 +74,7 @@ public class ModContent
     .hardnessAndResistance(0.5f, 15f)
     .sound(SoundType.METAL)
     .harvestLevel(0)
-    .func_235838_a_((state)->3)
+    .setLightLevel((state)->3)
     .notSolid()
   );
   private static final Block.Properties INDICATOR_GLASS_BLOCK_PROPERTIES = (Block.Properties
@@ -82,7 +82,7 @@ public class ModContent
     .hardnessAndResistance(0.5f, 15f)
     .sound(SoundType.METAL)
     .harvestLevel(0)
-    .func_235838_a_((state)->3)
+    .setLightLevel((state)->3)
     .notSolid()
   );
   private static final Block.Properties ALARM_LAMP_BLOCK_PROPERTIES = (Block.Properties
@@ -91,8 +91,7 @@ public class ModContent
     .sound(SoundType.METAL)
     .harvestLevel(0)
     .notSolid()
-    .func_235838_a_((state)->state.get(IndicatorBlock.POWERED)?12:2)
-    .func_235827_a_(RsBlock::ligttestfunc)
+    .setLightLevel((state)->state.get(IndicatorBlock.POWERED)?12:2)
   );
   private static final Block.Properties COLORED_SENSITIVE_GLASS_BLOCK_PROPERTIES = (Block.Properties
     .create(Material.REDSTONE_LIGHT, MaterialColor.IRON)
@@ -107,10 +106,8 @@ public class ModContent
     .sound(SoundType.METAL)
     .harvestLevel(0)
     .notSolid()
-    .func_235827_a_(RsBlock::ligttestfunc)
-    .func_235838_a_((state)->state.get(SensitiveGlassBlock.POWERED)?15:0)
+    .setLightLevel((state)->state.get(SensitiveGlassBlock.POWERED)?15:0)
   );
-
 
   private static final Block.Properties SWITCH_METALLIC_BLOCK_PROPERTIES = GAUGE_METALLIC_BLOCK_PROPERTIES;
   private static final Block.Properties SWITCH_GLASS_BLOCK_PROPERTIES = GAUGE_GLASS_BLOCK_PROPERTIES;
@@ -120,7 +117,7 @@ public class ModContent
     .hardnessAndResistance(0.5f, 15f)
     .sound(SoundType.METAL)
     .harvestLevel(0)
-    .func_235838_a_((state)->5)
+    .setLightLevel((state)->5)
   );
 
   // -----------------------------------------------------------------------------------------------------------------

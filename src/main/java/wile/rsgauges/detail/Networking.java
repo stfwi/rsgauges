@@ -164,7 +164,7 @@ public class Networking
     { data_ = new TranslationTextComponent("[unset]"); }
 
     public OverlayTextMessage(final ITextComponent tct)
-    { data_ = (ITextComponent)tct.func_230532_e_(); }
+    { data_ = (ITextComponent)tct.deepCopy(); }
 
     public static OverlayTextMessage parse(final PacketBuffer buf)
     {

@@ -202,7 +202,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
             (
               world.rayTraceBlocks(
                 new RayTraceContext(
-                  new Vector3d(e.func_233580_cy_().getX()-0.2,e.func_233580_cy_().getY()+e.getEyeHeight(),e.func_233580_cy_().getZ()-0.2),
+                  new Vector3d(e.getPosition().getX()-0.2, e.getPosition().getY()+e.getEyeHeight(), e.getPosition().getZ()-0.2),
                   switch_position,
                   RayTraceContext.BlockMode.OUTLINE,
                   RayTraceContext.FluidMode.NONE,
@@ -214,7 +214,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
             (
               world.rayTraceBlocks(
                 new RayTraceContext(
-                  new Vector3d(e.func_233580_cy_().getX()+0.2,e.func_233580_cy_().getY()+e.getEyeHeight(),e.func_233580_cy_().getZ()+0.2),
+                  new Vector3d(e.getPosition().getX()+0.2, e.getPosition().getY()+e.getEyeHeight(), e.getPosition().getZ()+0.2),
                   switch_position,
                   RayTraceContext.BlockMode.OUTLINE,
                   RayTraceContext.FluidMode.NONE,

@@ -165,13 +165,13 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
         if(!selected) switch_state = !switch_state; // will be switched in turn.
         updateSwitchState(state, (AutoSwitchBlock) state.getBlock(), switch_state, 0);
         {
-          StringTextComponent separator = (new StringTextComponent(" | ")); separator.func_240701_a_(TextFormatting.GRAY);
+          StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
           ArrayList<Object> tr = new ArrayList<>();
           tr.add(ModAuxiliaries.localizable("switchconfig.intervaltimer.t_on", TextFormatting.BLUE, new Object[]{ModAuxiliaries.ticksToSecondsString(t_on())}));
-          tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.intervaltimer.t_off", TextFormatting.YELLOW, new Object[]{ModAuxiliaries.ticksToSecondsString(t_off())})));
-          tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.intervaltimer.output_power", TextFormatting.RED, new Object[]{p_set()})));
-          if(ramp()>0) tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.intervaltimer.ramp", TextFormatting.DARK_GREEN, new Object[]{ramp()})));
-          if(!switch_state) tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.intervaltimer.standby", TextFormatting.AQUA)));
+          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.intervaltimer.t_off", TextFormatting.YELLOW, new Object[]{ModAuxiliaries.ticksToSecondsString(t_off())})));
+          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.intervaltimer.output_power", TextFormatting.RED, new Object[]{p_set()})));
+          if(ramp()>0) tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.intervaltimer.ramp", TextFormatting.DARK_GREEN, new Object[]{ramp()})));
+          if(!switch_state) tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.intervaltimer.standby", TextFormatting.AQUA)));
           while(tr.size() < 5) tr.add(new StringTextComponent("")); // const lang file formatting arg count.
           ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.intervaltimer", TextFormatting.RESET, tr.toArray()));
         }

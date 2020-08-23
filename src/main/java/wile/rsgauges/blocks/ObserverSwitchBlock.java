@@ -177,16 +177,16 @@ public class ObserverSwitchBlock extends SwitchBlock
       if(on_power() < 1) on_power(1);
       {
         ArrayList<Object> tr = new ArrayList<>();
-        StringTextComponent separator = (new StringTextComponent(" | ")); separator.func_240701_a_(TextFormatting.GRAY);
+        StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
         tr.add(ModAuxiliaries.localizable("switchconfig.blocksensor.range", TextFormatting.BLUE, new Object[]{range()}));
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.blocksensor.threshold", TextFormatting.YELLOW, new Object[]{threshold()})));
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.blocksensor.threshold", TextFormatting.YELLOW, new Object[]{threshold()})));
         if(debounce()>0) {
-          tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.AQUA, new Object[]{debounce()})));
+          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.AQUA, new Object[]{debounce()})));
         } else {
           tr.add(new StringTextComponent(""));
         }
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.blocksensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.blocksensor.filter",
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.blocksensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.blocksensor.filter",
           TextFormatting.DARK_GREEN,
           new Object[]{new TranslationTextComponent("rsgauges.switchconfig.blocksensor.filter."+filter_name())})
         ));

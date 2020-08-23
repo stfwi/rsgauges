@@ -80,7 +80,7 @@ public class ModAuxiliaries
   public static TranslationTextComponent localizable(String modtrkey, @Nullable TextFormatting color, Object... args)
   {
     TranslationTextComponent tr = new TranslationTextComponent(MODID+"."+modtrkey, args);
-    if(color!=null) tr.func_240701_a_(color);
+    if(color!=null) tr.mergeStyle(color);
     return tr;
   }
 
@@ -88,7 +88,7 @@ public class ModAuxiliaries
   public static String localize(String translationKey, Object... args)
   {
     TranslationTextComponent tr = new TranslationTextComponent(translationKey, args);
-    tr.func_240701_a_(TextFormatting.RESET);
+    tr.mergeStyle(TextFormatting.RESET);
     final String ft = tr.getString();
     if(ft.contains("${")) {
       // Non-recursive, non-argument lang file entry cross referencing.

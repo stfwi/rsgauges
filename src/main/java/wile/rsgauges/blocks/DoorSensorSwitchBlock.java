@@ -68,13 +68,13 @@ public class DoorSensorSwitchBlock extends SwitchBlock
       final BlockState state = world.getBlockState(getPos());
       if((state==null) || (!(state.getBlock() instanceof DoorSensorSwitchBlock))) return;
       final DoorSensorSwitchBlock block = (DoorSensorSwitchBlock) state.getBlock();
-      final Vector3d door_vec = Vector3d.func_237491_b_(state.get(FACING).getDirectionVec());
+      final Vector3d door_vec = Vector3d.copy(state.get(FACING).getDirectionVec());
       final AxisAlignedBB volume = (new AxisAlignedBB(getPos().down())).grow(0.4).offset(door_vec.scale(-0.5));
       boolean active = false;
       @SuppressWarnings("unchecked")
       List<Entity> hits = world.getEntitiesWithinAABB(PlayerEntity.class, volume);
       if(hits.size() > 0) {
-        final Vector3d door_pos = Vector3d.func_237491_b_(getPos().offset(state.get(FACING)).down()).add(0.5,0.5,0.5);
+        final Vector3d door_pos = Vector3d.copy(getPos().offset(state.get(FACING)).down()).add(0.5,0.5,0.5);
         for(Entity e:hits) {
           if(Math.abs(e.getLookVec().getY()) > 0.7) continue; // early skip, looks too much up/down
           final Vector3d look_vec = new Vector3d(e.getLookVec().getX(), 0, e.getLookVec().getZ());

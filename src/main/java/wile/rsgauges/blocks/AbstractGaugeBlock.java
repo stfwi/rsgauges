@@ -130,7 +130,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock
   public BlockState getStateForPlacement(BlockItemUseContext context)
   {
     final BlockState state = super.getStateForPlacement(context);
-    return (state==null) ? (null) : ((state.func_235901_b_(GaugeBlock.POWER)) ? (state.with(GaugeBlock.POWER, 0)) : (state));
+    return (state==null) ? (null) : ((state.hasProperty(GaugeBlock.POWER)) ? (state.with(GaugeBlock.POWER, 0)) : (state));
   }
 
   @Override

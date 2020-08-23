@@ -181,13 +181,13 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
       }
       if(on_power() < 1) on_power(1);
       {
-        StringTextComponent separator = (new StringTextComponent(" | ")); separator.func_240701_a_(TextFormatting.GRAY);
+        StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
         tr.add(ModAuxiliaries.localizable("switchconfig.comparator_switch.threshold_on", TextFormatting.BLUE, new Object[]{(int)threshold0_on()}));
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.comparator_switch.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off()})));
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.comparator_switch.mode"+((int)acquisition_mode()), TextFormatting.DARK_GREEN, new Object[]{})));
-        tr.add(separator.func_230532_e_().func_230529_a_(ModAuxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.comparator_switch.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off()})));
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.comparator_switch.mode"+((int)acquisition_mode()), TextFormatting.DARK_GREEN, new Object[]{})));
+        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
         ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.comparator_switch", TextFormatting.RESET, tr.toArray()));
       }
       markDirty();
