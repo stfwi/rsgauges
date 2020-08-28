@@ -1,0 +1,14 @@
+{"variants":{
+ "facing=down,power=false": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s00", "x":90 },
+ "facing=down,power=true": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s15", "x":90 },
+ "facing=east,power=false": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s00", "y":90 },
+ "facing=east,power=true": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s15", "y":90 },
+ "facing=north,power=false": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s00" },
+ "facing=north,power=true": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s15" },
+ "facing=south,power=false": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s00", "y":180 },
+ "facing=south,power=true": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s15", "y":180 },
+ "facing=up,power=false":  { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s00", "x":-90 },
+ "facing=up,power=true":   { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s15", "x":-90 },
+ "facing=west,power=false": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s00", "y":-90 },
+ "facing=west,power=true": { "model":"rsgauges:block/indicator/industrial/led_red_blink_model_s15", "y":-90 }
+}}

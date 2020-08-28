@@ -1,0 +1,31 @@
+# @file mods.toml
+# @spec TOML v0.5.0 (https://github.com/toml-lang/toml)
+modLoader="javafml" # forge FML java
+loaderVersion="[33,)"
+issueTrackerURL="https://github.com/stfwi/rsgauges/issues/"
+license="MIT"
+
+[[mods]]
+modId="rsgauges"
+version="${file.jarVersion}"
+displayName="Gauges and Switches"
+description="Adds redstone metering gauges, levers, buttons, pressure plates, and all sorts of other sensors and detector switches to the game."
+authors="wilechaote"
+credits="The Forge smiths, Jannis."
+updateJSONURL="https://raw.githubusercontent.com/stfwi/rsgauges/1.16/meta/update.json"
+displayURL="https://github.com/stfwi/rsgauges/"
+logoFile="logo.png"
+
+[[dependencies.rsgauges]]
+  modId="forge"
+  mandatory=true
+  versionRange="[33.0.19,)"
+  ordering="NONE"
+  side="BOTH"
+
+[[dependencies.rsgauges]]
+  modId="minecraft"
+  mandatory=true
+  versionRange="[1.16.2]"
+  ordering="NONE"
+  side="BOTH"

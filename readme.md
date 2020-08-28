@@ -10,21 +10,11 @@ Mod sources for Minecraft version 1.16.1.
 ----
 ## Version history
 
-    ~ v1.2.4-b4  [F]
+    - v1.2.4-b6  [U] Updated Forge, adapted new mappings to 20200723-1.16.1.
+                 [F] Fixed Contact Switch detection range.
 
-    - v1.2.4-b3  [F] Fixed Pressure Plates entity filter (issue #30, ty wieselkatze).
-                 [F] Fixed Siren Placement bug (issue #31, thx mowmaster).
+    - v1.2.4-b5  [F] Mapping adaption to Forge 1.16.2-33.0.20.
 
-    - v1.2.4-b2  [F] Door sensor look detection angle fixed.
-                 [A] JEI integration added.
-                 [F] Fixed startup issue by updating to Forge 32.0.97 (issue #28, ty wieselkatze).
-
-    - v1.2.4-b1  [M] Coloring of Sensitive Glass ported.
-                 [F] Indicator power issue fixed.
-
-    - v1.2.4-a2  [A] Sensitive glass ported, overlay frame style ported.
-                 [M] Modified global switch power placement default setting to strong.
-
-    - v1.2.4-a1  [A] Initial port.
+    - v1.2.4-b4  [U] Ported to 1.16.2.
 
 ----
