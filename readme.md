@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.16.1.
 ----
 ## Version history
 
+    - v1.2.4-b7  [U] Updated Forge to 33.0.37 (breaking change).
+
     - v1.2.4-b6  [U] Updated Forge, adapted new mappings to 20200723-1.16.1.
                  [F] Fixed Contact Switch detection range.
 
