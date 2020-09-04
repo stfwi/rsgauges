@@ -1,7 +1,7 @@
 
-## Gauges and Switches (MC1.16.1)
+## Gauges and Switches (MC1.16.3)
 
-Mod sources for Minecraft version 1.16.1.
+Mod sources for Minecraft version 1.16.3.
 
 - Description, credits, and features: Please see the readme in the repository root.
 
@@ -10,13 +10,6 @@ Mod sources for Minecraft version 1.16.1.
 ----
 ## Version history
 
-    - v1.2.4-b7  [U] Updated Forge to 33.0.37 (breaking change).
-
-    - v1.2.4-b6  [U] Updated Forge, adapted new mappings to 20200723-1.16.1.
-                 [F] Fixed Contact Switch detection range.
-
-    - v1.2.4-b5  [F] Mapping adaption to Forge 1.16.2-33.0.20.
-
-    - v1.2.4-b4  [U] Ported to 1.16.2.
+    - v1.2.4-b8  [F] Ported to MC1.16.3.
 
 ----
