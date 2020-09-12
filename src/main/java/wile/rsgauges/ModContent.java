@@ -105,7 +105,7 @@ public class ModContent
     .hardnessAndResistance(0.35f, 15f)
     .sound(SoundType.METAL)
     .harvestLevel(0)
-    .notSolid()
+    .notSolid().setEmmisiveRendering((s,w,p)->true)
     .setLightLevel((state)->state.get(SensitiveGlassBlock.POWERED)?15:0)
   );
 
@@ -126,6 +126,7 @@ public class ModContent
 
   // Contact lever switch
   public static final BistableSwitchBlock INDUSTRIAL_SMALL_LEVER = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -136,6 +137,7 @@ public class ModContent
 
   // Mechanical lever
   public static final BistableSwitchBlock INDUSTRIAL_LEVER = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -146,6 +148,7 @@ public class ModContent
 
   // Mechanical rotary lever
   public static final BistableSwitchBlock INDUSTRIAL_ROTARY_LEVER = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -156,6 +159,7 @@ public class ModContent
 
   // Rotary machine switch
   public static final BistableSwitchBlock INDUSTRIAL_ROTARY_MACHINE_SWITCH = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -165,6 +169,7 @@ public class ModContent
 
   // Two-button machine switch
   public static final BistableSwitchBlock INDUSTRIAL_MACHINE_SWITCH = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -174,6 +179,7 @@ public class ModContent
 
   // ESTOP button
   public static final BistableSwitchBlock INDUSTRIAL_ESTOP_SWITCH = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
@@ -185,6 +191,7 @@ public class ModContent
 
   // Hopper blocking switch
   public static final BistableSwitchBlock INDUSTRIAL_HOPPER_BLOCKING_SWITCH = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
@@ -196,6 +203,7 @@ public class ModContent
 
   // Square machine pulse switch
   public static final PulseSwitchBlock INDUSTRIAL_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -207,6 +215,7 @@ public class ModContent
 
   // Fenced round machine pulse switch
   public static final PulseSwitchBlock INDUSTRIAL_FENCED_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
@@ -218,6 +227,7 @@ public class ModContent
 
   // Retro double pole switch
   public static final PulseSwitchBlock INDUSTRIAL_DOUBLE_POLE_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
@@ -230,6 +240,7 @@ public class ModContent
 
   // Mechanical spring reset push button
   public static final PulseSwitchBlock INDUSTRIAL_FOOT_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
@@ -241,6 +252,7 @@ public class ModContent
 
   // Mechanical spring reset pull handle
   public static final PulseSwitchBlock INDUSTRIAL_PULL_HANDLE = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|
@@ -253,6 +265,7 @@ public class ModContent
 
   // Manual dimmer
   public static final DimmerSwitchBlock INDUSTRIAL_DIMMER = (DimmerSwitchBlock)(new DimmerSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
@@ -264,6 +277,7 @@ public class ModContent
 
   // Door contact mat
   public static final ContactMatBlock INDUSTRIAL_DOOR_CONTACT_MAT = (ContactMatBlock)(new ContactMatBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
@@ -276,6 +290,7 @@ public class ModContent
 
   // Sensitive full size contact mat
   public static final ContactMatBlock INDUSTRIAL_CONTACT_MAT = (ContactMatBlock)(new ContactMatBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -287,6 +302,7 @@ public class ModContent
 
   // Industrial shock sensor contact mat
   public static final ContactMatBlock INDUSTRIAL_SHOCK_SENSITIVE_CONTACT_MAT = (ContactMatBlock)(new ContactMatBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -298,6 +314,7 @@ public class ModContent
 
   // Industrial trap door switch (shock vibration sensitive)
   public static final BlockTrapdoorSwitch INDUSTRIAL_SHOCK_SENSITIVE_TRAPDOOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
@@ -311,6 +328,7 @@ public class ModContent
 
   // Industrial trap door switch (high sensitive shock vibration sensitive)
   public static final BlockTrapdoorSwitch INDUSTRIAL_HIGH_SENSITIVE_TRAPDOOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
@@ -326,6 +344,7 @@ public class ModContent
 
   // Industrial trap door switch (item trap door)
   public static final BlockTrapdoorSwitch INDUSTRIAL_FALLTHROUGH_DETECTOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -338,6 +357,7 @@ public class ModContent
 
   // Day time switch
   public static final DayTimerSwitchBlock INDUSTRIAL_DAY_TIMER = (DayTimerSwitchBlock)(new DayTimerSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_TIMER_DAYTIME|
     SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
@@ -350,6 +370,7 @@ public class ModContent
 
   // Interval signal timer
   public static final IntervalTimerSwitchBlock INDUSTRIAL_INTERVAL_TIMER = (IntervalTimerSwitchBlock)(new IntervalTimerSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_TIMER_INTERVAL|
     SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
@@ -362,6 +383,7 @@ public class ModContent
 
   // Infrared motion_sensor
   public static final EntityDetectorSwitchBlock INDUSTRIAL_ENTITY_DETECTOR = (EntityDetectorSwitchBlock)(new EntityDetectorSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_SENSOR_VOLUME|
     SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
@@ -374,6 +396,7 @@ public class ModContent
 
   // Linear laser motion sensor
   public static final EntityDetectorSwitchBlock INDUSTRIAL_LINEAR_ENTITY_DETECTOR = (EntityDetectorSwitchBlock)(new EntityDetectorSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_SENSOR_LINEAR|
     SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
@@ -386,8 +409,7 @@ public class ModContent
 
   // Local light sensor
   public static final EnvironmentalSensorSwitchBlock INDUSTRIAL_LIGHT_SENSOR = (EnvironmentalSensorSwitchBlock)(new EnvironmentalSensorSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_SENSOR_LIGHT|
-    SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_SENSOR_LIGHT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
@@ -398,8 +420,7 @@ public class ModContent
 
   // Rain sensor switch
   public static final EnvironmentalSensorSwitchBlock INDUSTRIAL_RAIN_SENSOR = (EnvironmentalSensorSwitchBlock)(new EnvironmentalSensorSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_SENSOR_RAIN|
-    SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_SENSOR_RAIN|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
@@ -410,8 +431,7 @@ public class ModContent
 
   // Lightning sensor switch
   public static final EnvironmentalSensorSwitchBlock INDUSTRIAL_LIGHTNING_SENSOR = (EnvironmentalSensorSwitchBlock)(new EnvironmentalSensorSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_SENSOR_LIGHTNING|
-    SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_SENSOR_LIGHTNING|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
@@ -422,7 +442,7 @@ public class ModContent
 
   // Comparator output level observing switch
   public static final ComparatorSwitchBlock INDUSTRIAL_COMPARATOR_SWITCH = (ComparatorSwitchBlock)(new ComparatorSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
@@ -433,8 +453,8 @@ public class ModContent
 
   // Uni-directional block detector switch
   public static final ObserverSwitchBlock INDUSTRIAL_BLOCK_DETECTOR = (ObserverSwitchBlock)(new ObserverSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_SENSOR_BLOCKDETECT|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
-    SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_SENSOR_BLOCKDETECT|
+    SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
     SwitchBlock.SWITCH_DATA_SIDE_ENABLED_BOTTOM|SwitchBlock.SWITCH_DATA_SIDE_ENABLED_TOP|
@@ -448,7 +468,7 @@ public class ModContent
 
   // Industrial bistable link relay receiver switch
   public static final LinkReceiverSwitchBlock INDUSTRIAL_SWITCHLINK_RECEIVER = (LinkReceiverSwitchBlock)(new LinkReceiverSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_BISTABLE|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_BISTABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
@@ -471,7 +491,7 @@ public class ModContent
 
   // Industrial pulse link relay receiver switch
   public static final LinkReceiverSwitchBlock INDUSTRIAL_SWITCHLINK_PULSE_RECEIVER = (LinkReceiverSwitchBlock)(new LinkReceiverSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -496,7 +516,7 @@ public class ModContent
 
   // Industrial bistable link relay
   public static final LinkRelaySwitchBlock INDUSTRIAL_SWITCHLINK_RELAY = (LinkRelaySwitchBlock)(new LinkRelaySwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_LINK_RELAY|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_DATA_WEAK|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -508,7 +528,7 @@ public class ModContent
 
   // Industrial pulse link relay
   public static final LinkRelaySwitchBlock INDUSTRIAL_SWITCHLINK_PULSE_RELAY = (LinkRelaySwitchBlock)(new LinkRelaySwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_LINK_RELAY|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_DATA_WEAK|
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -534,7 +554,7 @@ public class ModContent
 
   // Pulse industrial knock surge detctor
   public static final PulseKnockSwitchBlock INDUSTRIAL_PULSE_KNOCK_SWITCH = (PulseKnockSwitchBlock)(new PulseKnockSwitchBlock(
-    SwitchBlock.RSBLOCK_CONFIG_OPOSITE_PLACEMENT|SwitchBlock.RSBLOCK_CONFIG_FULLCUBE|
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.RSBLOCK_CONFIG_OPOSITE_PLACEMENT|SwitchBlock.RSBLOCK_CONFIG_FULLCUBE|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -548,43 +568,43 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "industrial_knock_button"));
 
   public static final GaugeBlock INDUSTRIAL_ANALOG_GAUGE = (GaugeBlock)(new GaugeBlock(
-    GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(2,2,0, 14,14,1)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_analog_angular_gauge"));
 
   public static final GaugeBlock INDUSTRIAL_ANALOG_HORIZONTAL_GAUGE = (GaugeBlock)(new GaugeBlock(
-    GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(2,4,0, 14, 12, 1)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_analog_horizontal_gauge"));
 
   public static final GaugeBlock INDUSTRIAL_VERTICAL_BAR_GAUGE = (GaugeBlock)(new GaugeBlock(
-    GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(4,2,0, 12, 14, 1)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_vertical_bar_gauge"));
 
   public static final GaugeBlock INDUSTRIAL_SMALL_DIGITAL_GAUGE = (GaugeBlock)(new GaugeBlock(
-    GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(4,5,0, 12, 11, 1)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_small_digital_gauge"));
 
   public static final GaugeBlock INDUSTRIAL_TUBE_GAUGE = (GaugeBlock)(new GaugeBlock(
-    GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(7,4,0, 9, 12, 3)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_tube_gauge"));
 
   public static final IndicatorBlock INDUSTRIAL_ALARM_LAMP = (IndicatorBlock)(new IndicatorBlock(
-    GaugeBlock.GAUGE_DATA_BLINKING,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
     ALARM_LAMP_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 4)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_alarm_lamp"));
 
   public static final IndicatorBlock INDUSTRIAL_ALARM_SIREN = (IndicatorBlock)(new IndicatorBlock(
-    GaugeBlock.GAUGE_DATA_BLINKING,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(4,6.5,0, 11.5, 9.5, 4),
     new ModResources.BlockSoundEvent(ModResources.ALARM_SIREN_SOUND),
@@ -593,49 +613,49 @@ public class ModContent
 
   // square LED
   public static final IndicatorBlock INDUSTRIAL_GREEN_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    (13<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // green
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|(13<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // green
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_green_led"));
 
   public static final IndicatorBlock INDUSTRIAL_YELLOW_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    (5<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // yellow
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|(5<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // yellow
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_yellow_led"));
 
   public static final IndicatorBlock INDUSTRIAL_RED_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    (0<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // red
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|(0<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // red
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_red_led"));
 
   public static final IndicatorBlock INDUSTRIAL_WHITE_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT, // default white
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT, // default white
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_white_led"));
 
   public static final IndicatorBlock INDUSTRIAL_GREEN_BLINK_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    GaugeBlock.GAUGE_DATA_BLINKING|(13<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // green
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING|(13<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // green
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_green_blinking_led"));
 
   public static final IndicatorBlock INDUSTRIAL_YELLOW_BLINK_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    GaugeBlock.GAUGE_DATA_BLINKING|(5<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // yellow
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING|(5<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // yellow
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_yellow_blinking_led"));
 
   public static final IndicatorBlock INDUSTRIAL_RED_BLINK_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    GaugeBlock.GAUGE_DATA_BLINKING|(0<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // red
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING|(0<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // red
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_red_blinking_led"));
 
   public static final IndicatorBlock INDUSTRIAL_WHITE_BLINK_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT, // default white
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT, // default white
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_white_blinking_led"));
@@ -646,6 +666,7 @@ public class ModContent
 
   // Rustic lever 1
   public static final BistableSwitchBlock RUSTIC_LEVER = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -656,6 +677,7 @@ public class ModContent
 
   // Rustic lever 2 (bolted)
   public static final BistableSwitchBlock RUSTIC_TWO_HINGE_LEVER = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -666,6 +688,7 @@ public class ModContent
 
   // Rustic lever 3 (big angular)
   public static final BistableSwitchBlock RUSTIC_ANGULAR_LEVER = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -676,6 +699,7 @@ public class ModContent
 
   // Rustic lever 7 (The Nail)
   public static final BistableSwitchBlock RUSTIC_NAIL_LEVER = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -685,6 +709,7 @@ public class ModContent
 
   // Rustic button 1
   public static final PulseSwitchBlock RUSTIC_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -696,6 +721,7 @@ public class ModContent
 
   // Rustic button 2 (bolted)
   public static final PulseSwitchBlock RUSTIC_SMALL_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -707,6 +733,7 @@ public class ModContent
 
   // Rustic button 3 (pull chain)
   public static final PulseSwitchBlock RUSTIC_SPRING_RESET_CHAIN = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
@@ -718,6 +745,7 @@ public class ModContent
 
   // Rustic button 7 (pull nail)
   public static final PulseSwitchBlock RUSTIC_NAIL_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
@@ -729,6 +757,7 @@ public class ModContent
 
   // Rustic door contact mat
   public static final ContactMatBlock RUSTIC_DOOR_CONTACT_PLATE = (ContactMatBlock)(new ContactMatBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
@@ -742,6 +771,7 @@ public class ModContent
 
   // Rustic full-size contact plate
   public static final ContactMatBlock RUSTIC_CONTACT_PLATE = (ContactMatBlock)(new ContactMatBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -754,6 +784,7 @@ public class ModContent
 
   // Rustic shock sensor plate
   public static final ContactMatBlock RUSTIC_SHOCK_SENSITIVE_CONTACT_PLATE = (ContactMatBlock)(new ContactMatBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -766,6 +797,7 @@ public class ModContent
 
   // Rustic trap door switch (shock vibration sensitive)
   public static final BlockTrapdoorSwitch RUSTIC_SHOCK_SENSITIVE_TRAPDOOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
@@ -779,6 +811,7 @@ public class ModContent
 
   // Rustic trap door switch (high sensitive shock vibration sensitive)
   public static final BlockTrapdoorSwitch RUSTIC_HIGH_SENSITIVE_TRAPDOOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
@@ -794,6 +827,7 @@ public class ModContent
 
   // Rustic trap door switch (item trap door)
   public static final BlockTrapdoorSwitch RUSTIC_FALLTHROUGH_DETECTOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -806,13 +840,13 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "rustic_fallthrough_detector"));
 
   public static final GaugeBlock RUSTIC_CIRCULAR_GAUGE = (GaugeBlock)(new GaugeBlock(
-    0, // no color tint.
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT, // no color tint.
     GAUGE_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(2,2,0, 14,14,1)
   )).setRegistryName(new ResourceLocation(MODID, "rustic_circular_gauge"));
 
   public static final IndicatorBlock RUSTIC_SEMAPHORE_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    0,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(3,4,0, 13,11,1),
     null,
@@ -826,43 +860,46 @@ public class ModContent
 
   // Thin star shaped glass switch
   public static final BistableSwitchBlock GLASS_ROTARY_SWITCH = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_rotary_switch"));
 
   // Bistable glass touch switch
   public static final BistableSwitchBlock GLASS_TOUCH_SWITCH = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_touch_switch"));
 
   // Thin star shaped glass button
   public static final PulseSwitchBlock GLASS_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
     SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
-    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_button"));
 
   // Thin small star shaped glass button
   public static final PulseSwitchBlock GLASS_SMALL_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-    SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
-    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+    SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
@@ -870,11 +907,11 @@ public class ModContent
 
   // Glass touch button
   public static final PulseSwitchBlock GLASS_TOUCH_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-    SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
-    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+    SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
@@ -882,9 +919,10 @@ public class ModContent
 
   // Glass door plate
   public static final ContactMatBlock GLASS_DOOR_CONTACT_MAT = (ContactMatBlock)(new ContactMatBlock(
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-    SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+    SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(0,0,0, 16,0.25,16), null,
@@ -894,9 +932,10 @@ public class ModContent
 
   // Glass plate
   public static final ContactMatBlock GLASS_CONTACT_MAT = (ContactMatBlock)(new ContactMatBlock(
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-    SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+    SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(0,0,0, 16,0.25,16), null,
@@ -906,10 +945,10 @@ public class ModContent
 
   // Glass Day time switch
   public static final DayTimerSwitchBlock GLASS_DAY_TIMER = (DayTimerSwitchBlock)(new DayTimerSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_TIMER_DAYTIME|
-    SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+    SwitchBlock.SWITCH_CONFIG_TIMER_DAYTIME|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-    SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+    SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
@@ -919,11 +958,10 @@ public class ModContent
 
   // Glass interval signal timer
   public static final IntervalTimerSwitchBlock GLASS_INTERVAL_TIMER = (IntervalTimerSwitchBlock)(new IntervalTimerSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_TIMER_INTERVAL|
-    SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+    SwitchBlock.SWITCH_CONFIG_TIMER_INTERVAL|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-    SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
-    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
+    SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
@@ -932,10 +970,10 @@ public class ModContent
 
   // Glass infrared motion sensor
   public static final EntityDetectorSwitchBlock GLASS_ENTITY_DETECTOR = (EntityDetectorSwitchBlock)(new EntityDetectorSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_SENSOR_VOLUME|
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_SENSOR_VOLUME|
     SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-    SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+    SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
@@ -945,10 +983,10 @@ public class ModContent
 
   // Glass laser motion sensor
   public static final EntityDetectorSwitchBlock GLASS_LINEAR_ENTITY_DETECTOR = (EntityDetectorSwitchBlock)(new EntityDetectorSwitchBlock(
-    SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_SENSOR_LINEAR|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-    SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
+    SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
@@ -968,6 +1006,7 @@ public class ModContent
 
   // Old fancy gold decorated lever
   public static final BistableSwitchBlock OLDFANCY_BISTABLE_SWITCH1 = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -978,6 +1017,7 @@ public class ModContent
 
   // Old fancy angular lever
   public static final BistableSwitchBlock OLDFANCY_BISTABLE_SWITCH2 = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -988,6 +1028,7 @@ public class ModContent
 
   // Old fancy (golden decorated) button
   public static final PulseSwitchBlock OLDFANCY_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -999,6 +1040,7 @@ public class ModContent
 
   // Old fancy (golden decorated) chain pulse switch
   public static final PulseSwitchBlock OLDFANCY_SPRING_RESET_CHAIN = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -1011,6 +1053,7 @@ public class ModContent
 
   // Old fancy (golden decorated) tiny button
   public static final PulseSwitchBlock OLDFANCY_SMALL_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -1026,6 +1069,7 @@ public class ModContent
 
   // Yellow power plant
   public static final PowerPlantBlock YELLOW_POWER_PLANT = (PowerPlantBlock)(new PowerPlantBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -1038,6 +1082,7 @@ public class ModContent
 
   // Red power plant
   public static final PowerPlantBlock RED_POWER_PLANT = (PowerPlantBlock)(new PowerPlantBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -1050,6 +1095,7 @@ public class ModContent
 
   // Light flip switch
   public static final BistableSwitchBlock LIGHT_SWITCH = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -1059,6 +1105,7 @@ public class ModContent
 
   // Arrow target
   public static final PulseSwitchBlock ARROW_TARGET_SWITCH = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
@@ -1070,6 +1117,7 @@ public class ModContent
 
   // Valve Wheel
   public static final BistableSwitchBlock BISTABLE_VALVE_WHEEL_SWITCH = (BistableSwitchBlock)(new BistableSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -1079,17 +1127,19 @@ public class ModContent
 
   // Elevator button
   public static final PulseSwitchBlock ELEVATOR_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
-      SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-      SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-      SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
-      SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+    SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
+    SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
+    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
     ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1), null
   )).setRegistryName(new ResourceLocation(MODID, "elevator_button"));
 
   // Door sensor
   public static final DoorSensorSwitchBlock DOOR_SENSOR_SWITCH = (DoorSensorSwitchBlock)(new DoorSensorSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,

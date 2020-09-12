@@ -1,10 +1,11 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.16.3": {
-    "1.2.4-b8": "[F] Ported to MC1.16.3."
+    "1.2.4": "[U] Updated to Forge 1.16.3-34.1.0.\n[A] Indicators and Gauges are invertible (input from Vallen while Forgecraft'ing).\n[F] Ambient occlusion and GUI lightning fixes.",
+    "1.2.4-b8": "[U] Ported to MC1.16.3."
   },
   "promos": {
-    "1.16.3-recommended": "1.2.4-b8",
-    "1.16.3-latest": "1.2.4-b8"
+    "1.16.3-recommended": "1.2.4",
+    "1.16.3-latest": "1.2.4"
   }
 }

@@ -10,6 +10,10 @@ Mod sources for Minecraft version 1.16.3.
 ----
 ## Version history
 
-    - v1.2.4-b8  [F] Ported to MC1.16.3.
+    - v1.2.4     [U] Updated to Forge 1.16.3-34.1.0.
+                 [A] Indicators and Gauges are invertible (input from Vallen while Forgecraft'ing).
+                 [F] Ambient occlusion and GUI lightning fixes.
+
+    - v1.2.4-b8  [U] Ported to MC1.16.3.
 
 ----

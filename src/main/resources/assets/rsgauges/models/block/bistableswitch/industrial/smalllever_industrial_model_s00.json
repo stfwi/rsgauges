@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "gui_light": "front",
+  "gui_light": "side",
 	"textures": {
 		"l": "rsgauges:block/common/rough_iron",
 		"w": "rsgauges:block/common/iestylewood",

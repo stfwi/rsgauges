@@ -196,6 +196,8 @@
   "block.rsgauges.yellow_power_plant.help": "§6人造的黄色化，看上去非常像蒲公英。 当被实体触碰时会向上方方块和底部方块发出红石信号。 §r\n${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} ${rsgauges.switch.feature.linksource.help}",
   "item.rsgauges.switchlink_pearl": "开关连接珍珠",
   "item.rsgauges.switchlink_pearl.help": "§6可用末影珍珠左键一个开关来创建开关连接珍珠。该开关会作为连接的目标， 会在连接珍珠被使用或连接珍珠被插入的连接起始开关激活时激活。§r\n手持连接珍珠左键目标开关会循环切换连接选项。 可以在一个开关中插入多个连接珍珠。 连接珍珠会在过度紧张或找不到目标时抱怨，你可以听到这声音。 如果开关不适于作为起始或目标，珍珠也会抱怨。 不同种类的开关对于被连接触发时的反应也不同。",
+  "rsgauges.gaugeconfig.options.inverted": "反相",
+  "rsgauges.gaugeconfig.options.notinverted": "Not 反相",
   "rsgauges.subtitle.industrial_alarm_siren": "警报器",
   "rsgauges.switch.feature.colortinting.help": "可用任意染料左键来使开关染色。",
   "rsgauges.switch.feature.contactmat.offdelay.help": "手持一组红石左键来将信号维持时间固定在0.1秒(1)到6.4秒(64)之间。",

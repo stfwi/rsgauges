@@ -51,7 +51,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
     BlockState state = world.getBlockState(pos);
     if((state == null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return false;
     TileEntityAutoSwitch te = getTe(world, pos);
-    if((te==null) || (!te.check_link_request(link))) return false;
+    if((te==null) || (!te.verifySwitchLinkTarget(link))) return false;
     te.updateSwitchState(state, this, !state.get(POWERED), 0);
     return true;
   }
@@ -89,7 +89,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
           Block nb = world.getBlockState(np).getBlock();
           world.notifyNeighborsOfStateChange(np, nb);
           if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-            if(!activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+            if(!activateSwitchLinks(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }
@@ -103,7 +103,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
           Block nb = world.getBlockState(np).getBlock();
           world.notifyNeighborsOfStateChange(np, nb);
           if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-            if(!activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+            if(!activateSwitchLinks(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }

@@ -51,7 +51,7 @@ public class BistableSwitchBlock extends SwitchBlock
   public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final PlayerEntity player)
   {
     SwitchTileEntity te = getTe(world, pos);
-    if((te==null) || (!te.check_link_request(link))) return false;
+    if((te==null) || (!te.verifySwitchLinkTarget(link))) return false;
     return onSwitchActivated(world, pos, world.getBlockState(pos), player, null);
   }
 

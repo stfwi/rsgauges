@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "gui_light": "front",
+  "gui_light": "side",
 	"textures": {
 		"1": "rsgauges:block/common/old_gold",
 		"3": "rsgauges:block/common/old_wood",

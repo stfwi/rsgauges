@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "gui_light": "front",
+  "gui_light": "side",
 	"textures": {
 		"f": "rsgauges:block/bistableswitch/bistableswitch1texture",
 		"w": "rsgauges:block/common/red_machine_metal",

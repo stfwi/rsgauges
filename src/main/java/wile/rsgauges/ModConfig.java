@@ -10,13 +10,14 @@
 package wile.rsgauges;
 
 import net.minecraft.nbt.CompoundNBT;
-import org.apache.logging.log4j.Logger;
-import wile.rsgauges.detail.*;
-import wile.rsgauges.blocks.*;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.Logger;
+import wile.rsgauges.detail.*;
+import wile.rsgauges.blocks.*;
 import wile.rsgauges.items.ItemSwitchLinkPearl;
 
 import javax.annotation.Nullable;
@@ -557,4 +558,8 @@ public class ModConfig
     // Opt-outs
     updateOptouts();
   }
+
+  public static final boolean isWrench(final ItemStack stack)
+  { return (("," + accepted_wrenches + ",").contains("," + stack.getItem().getRegistryName().getPath() + ",")); }
+
 }

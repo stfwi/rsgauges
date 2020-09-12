@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "gui_light": "front",
+  "gui_light": "side",
 	"textures": {
 		"particle": "rsgauges:block/contactswitch/contactmat_industrial_bottom",
 		"b": "rsgauges:block/contactswitch/contactmat_industrial_bottom",

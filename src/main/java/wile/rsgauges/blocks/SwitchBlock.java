@@ -294,7 +294,7 @@ public class SwitchBlock extends RsDirectedBlock
     } else if((ck.item==ModContent.SWITCH_LINK_PEARL) && (player.inventory!=null) && (item_held==ModContent.SWITCH_LINK_PEARL)) {
       // Link config at source switch or assignemnt of target switch
       if(!ModConfig.without_switch_linking) {
-        switch(te.assign_switchlink(world, pos, player.inventory.getCurrentItem())) {
+        switch(te.assignSwitchLink(world, pos, player.inventory.getCurrentItem())) {
           case OK:
             // Link target was assigned to ths switch
             player.inventory.getCurrentItem().shrink(1);
@@ -362,7 +362,7 @@ public class SwitchBlock extends RsDirectedBlock
     power_off_sound.play(world, pos);
     if((config & SWITCH_CONFIG_LINK_RELAY)==0) notifyNeighbours(world, pos, state, te, false);
     if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-      if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+      if(!te.activateSwitchLinks(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
         ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
       }
     }
@@ -404,7 +404,7 @@ public class SwitchBlock extends RsDirectedBlock
   {
     if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))==0) return false; // this override only allows manual switches
     SwitchTileEntity te = getTe(world, pos);
-    if((te==null) || (!te.check_link_request(link))) return false;
+    if((te==null) || (!te.verifySwitchLinkTarget(link))) return false;
     return onSwitchActivated(world, pos, world.getBlockState(pos), player, null);
   }
 
@@ -524,11 +524,11 @@ public class SwitchBlock extends RsDirectedBlock
       if(!was_powered) {
         // Manual switches fire link requests when changing from unpowered to powered,
         // no matter if they are inverted or not.
-        if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+        if(!te.activateSwitchLinks(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       } else if((config & SWITCH_CONFIG_PULSE) == 0) {
-        if(!te.activate_links(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+        if(!te.activateSwitchLinks(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       }
@@ -540,7 +540,7 @@ public class SwitchBlock extends RsDirectedBlock
   protected void onRsBlockDestroyed(BlockState state, World world, BlockPos pos, boolean isUpdateEvent)
   {
     final SwitchTileEntity te = getTe(world, pos);
-    if(te!=null) te.unlink_all(true);
+    if(te!=null) te.unlinkAllSwitchLinks(true);
     te.nooutput(true);
     if(isUpdateEvent) world.removeBlock(pos, false);
     notifyNeighbours(world, pos, state,  te, true);
@@ -621,12 +621,6 @@ public class SwitchBlock extends RsDirectedBlock
     @Override
     public int color_tint()
     { return ((svd_ & ((int)SWITCH_DATA_SVD_COLOR_MASK)) >> SWITCH_DATA_SVD_COLOR_SHIFT); }
-
-    public int svd()
-    { return svd_; }
-
-    public int scd()
-    { return scd_; }
 
     public int configured_on_time()
     { return ((svd_ & SWITCH_DATA_SVD_ACTIVE_TIME_MASK) >> 0); }
@@ -838,8 +832,6 @@ public class SwitchBlock extends RsDirectedBlock
       return status;
     }
 
-    public boolean has_links()
-    { return (links_!=null) && (!links_.isEmpty()); }
 
     public static long linktime()
     { return System.currentTimeMillis(); } // not using ticks because there are scenarios where the world time is disabled.
@@ -850,7 +842,7 @@ public class SwitchBlock extends RsDirectedBlock
      * the called-side that no recursion or loop lock or other unwanted effects occur.
      * Returns boolean success.
      */
-    public boolean check_link_request(final ItemSwitchLinkPearl.SwitchLink link)
+    public boolean verifySwitchLinkTarget(final ItemSwitchLinkPearl.SwitchLink link)
     {
       final long t = linktime();
       if((world.isRemote) || (last_link_request_ == t)) return false; // not in the same tick, people could try to link A to B and B to A.
@@ -864,7 +856,7 @@ public class SwitchBlock extends RsDirectedBlock
      * Called when a link pearl shall be placed in a switch to make it a link source.
      */
     enum SwitchLinkAssignmentResult {OK, E_SELF_ASSIGN, E_ALREADY_LINKED, E_TOO_FAR, E_NOSOURCE, E_FAILED}
-    SwitchLinkAssignmentResult assign_switchlink(final World world, final BlockPos sourcepos, final ItemStack stack)
+    SwitchLinkAssignmentResult assignSwitchLink(final World world, final BlockPos sourcepos, final ItemStack stack)
     {
       if(stack==null) return SwitchLinkAssignmentResult.E_FAILED;
       final ItemSwitchLinkPearl.SwitchLink link = ItemSwitchLinkPearl.SwitchLink.fromItemStack(stack);
@@ -887,7 +879,7 @@ public class SwitchBlock extends RsDirectedBlock
      * Removes all links, returns a stack of link pearls placed in the switch,
      * optionally drops that stack in the world at the switch position.
      */
-    public ArrayList<ItemStack> unlink_all(boolean drop)
+    public ArrayList<ItemStack> unlinkAllSwitchLinks(boolean drop)
     {
       ArrayList<ItemStack> stacks = new ArrayList<>();
       if((world.isRemote) || (links_==null)) return stacks;
@@ -901,7 +893,7 @@ public class SwitchBlock extends RsDirectedBlock
      * Invokes the link targets of all pearls plugged into this switch, returns
      * true if all link requests succeeded.
      */
-    public boolean activate_links(final int req)
+    public boolean activateSwitchLinks(final int req)
     {
       if(ModConfig.without_switch_linking) return true;
       last_link_request_ = linktime();
@@ -1038,7 +1030,7 @@ public class SwitchBlock extends RsDirectedBlock
         ck.item = item.getItem();
         ck.dye = ColorUtils.getDyeColor(item).orElse(DyeColor.WHITE).getId();
       } else if(item.getItem() != Items.AIR) {
-        ck.wrenched = (("," + ModConfig.accepted_wrenches + ",").contains("," + item.getItem().getRegistryName().getPath() + ","));
+        ck.wrenched = ModConfig.isWrench(item);
         if(ck.wrenched) return ck;
       }
       if((facing!=null) && ((block.config & SWITCH_CONFIG_TOUCH_CONFIGURABLE)!=0) && (ck.item != ModContent.SWITCH_LINK_PEARL) && (ck.item != Items.ENDER_PEARL)) {

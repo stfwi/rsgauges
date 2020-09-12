@@ -100,7 +100,7 @@ public class BlockTrapdoorSwitch extends ContactSwitchBlock
     if((state == null) || (!(state.getBlock() instanceof BlockTrapdoorSwitch))) return false;
     if(state.get(POWERED)) return true; // already active
     ContactSwitchTileEntity te = getTe(world, pos);
-    if((te==null) || (!te.check_link_request(link))) return false;
+    if((te==null) || (!te.verifySwitchLinkTarget(link))) return false;
     world.setBlockState(pos, state.with(POWERED, true), 1|2|8|16);
     power_on_sound.play(world, pos);
     notifyNeighbours(world, pos, state, te, false);

@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "gui_light": "front",
+  "gui_light": "side",
 	"textures": {
 		"2": "rsgauges:block/common/iestylewood",
 		"particle": "rsgauges:block/dimmerswitch/industrial/dimmer_industrial_texture",

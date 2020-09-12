@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "gui_light": "front",
+  "gui_light": "side",
 	"textures": {
 		"f": "rsgauges:block/bistableswitch/bistableswitch3texture_front",
 		"b1": "rsgauges:block/indicator/indicator_fg_green_off_texture",
