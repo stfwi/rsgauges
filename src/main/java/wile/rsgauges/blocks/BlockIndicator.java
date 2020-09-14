@@ -38,7 +38,14 @@ public class BlockIndicator extends BlockAbstractGauge
   @Override
   @Nullable
   public BlockState getStateForPlacement(BlockItemUseContext context)
-  { return super.getStateForPlacement(context).with(POWERED, context.getWorld().isBlockPowered(context.getPos())); }
+  {
+    final BlockState state = super.getStateForPlacement(context);
+    if(state==null)
+    {
+      return null;
+    }
+    return state.with(POWERED, context.getWorld().isBlockPowered(context.getPos()));
+  }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Block overrides

@@ -56,7 +56,14 @@ public class BlockGauge extends BlockAbstractGauge implements ModColors.ColorTin
   @Override
   @Nullable
   public BlockState getStateForPlacement(BlockItemUseContext context)
-  { return super.getStateForPlacement(context).with(BlockGauge.POWER, 0); }
+  {
+    final BlockState state = super.getStateForPlacement(context);
+    if(state==null)
+    {
+      return null;
+    }
+    return state.with(BlockGauge.POWER, 0);
+  }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Tile entity
