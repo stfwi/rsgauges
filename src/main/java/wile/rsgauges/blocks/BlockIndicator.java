@@ -40,11 +40,7 @@ public class BlockIndicator extends BlockAbstractGauge
   public BlockState getStateForPlacement(BlockItemUseContext context)
   {
     final BlockState state = super.getStateForPlacement(context);
-    if(state==null)
-    {
-      return null;
-    }
-    return state.with(POWERED, context.getWorld().isBlockPowered(context.getPos()));
+    return (state==null) ? (null) : (state.with(POWERED, context.getWorld().isBlockPowered(context.getPos())));
   }
 
   // -------------------------------------------------------------------------------------------------------------------

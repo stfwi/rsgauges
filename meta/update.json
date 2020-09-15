@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.15.2": {
+    "1.2.5-b2": "[F] Added placement checks to circumvent crashes (PR#33 by IceDragon200).",
     "1.2.5-b1": "[M] Modified global switch power placement default setting to strong.\n[F] Fixed gauge/indicator placement (issue #27, thx Bobcat64)",
     "1.2.4": "[R] Release build v1.2.4. Release-to-release changes: * Gauges are comparator output sensitive. * Comparator Switch mode \"Redstone Signal Strength\" added. * Config handling update. * Bug fixes.",
     "1.2.4-b2": "[!] Forge update, requires Forge 1.15.2-31.2.20.\n[F] Gauges explicitly tell adjacent blocks that they can connect Redstone.\n[F] Fixed Indicator/Siren placement crash (issue #24, thx Jamzs3).",
@@ -21,6 +22,6 @@
   },
   "promos": {
     "1.15.2-recommended": "1.2.4",
-    "1.15.2-latest": "1.2.5-b1"
+    "1.15.2-latest": "1.2.5-b2"
   }
 }

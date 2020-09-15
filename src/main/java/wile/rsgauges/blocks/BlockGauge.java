@@ -58,11 +58,7 @@ public class BlockGauge extends BlockAbstractGauge implements ModColors.ColorTin
   public BlockState getStateForPlacement(BlockItemUseContext context)
   {
     final BlockState state = super.getStateForPlacement(context);
-    if(state==null)
-    {
-      return null;
-    }
-    return state.with(BlockGauge.POWER, 0);
+    return (state==null) ? (null) : (state.with(BlockGauge.POWER, 0));
   }
 
   // -------------------------------------------------------------------------------------------------------------------
