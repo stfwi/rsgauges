@@ -127,6 +127,10 @@ public abstract class BlockAbstractGauge extends RsDirectedBlock implements ModC
   public BlockState getStateForPlacement(BlockItemUseContext context)
   {
     final BlockState state = super.getStateForPlacement(context);
+    if(state==null)
+    {
+      return null;
+    }
     return (state.has(BlockGauge.POWER)) ? (state.with(BlockGauge.POWER, 0)) : (state);
   }
 
