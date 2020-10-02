@@ -8,10 +8,6 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModContent;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -23,6 +19,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.tileentity.TileEntity;
+import wile.rsgauges.libmc.detail.Overlay;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.detail.ModResources;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
@@ -167,13 +169,13 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
         {
           StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
           ArrayList<Object> tr = new ArrayList<>();
-          tr.add(ModAuxiliaries.localizable("switchconfig.intervaltimer.t_on", TextFormatting.BLUE, new Object[]{ModAuxiliaries.ticksToSecondsString(t_on())}));
-          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.intervaltimer.t_off", TextFormatting.YELLOW, new Object[]{ModAuxiliaries.ticksToSecondsString(t_off())})));
-          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.intervaltimer.output_power", TextFormatting.RED, new Object[]{p_set()})));
-          if(ramp()>0) tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.intervaltimer.ramp", TextFormatting.DARK_GREEN, new Object[]{ramp()})));
-          if(!switch_state) tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.intervaltimer.standby", TextFormatting.AQUA)));
+          tr.add(Auxiliaries.localizable("switchconfig.intervaltimer.t_on", TextFormatting.BLUE, new Object[]{Auxiliaries.ticksToSecondsString(t_on())}));
+          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.intervaltimer.t_off", TextFormatting.YELLOW, new Object[]{Auxiliaries.ticksToSecondsString(t_off())})));
+          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.intervaltimer.output_power", TextFormatting.RED, new Object[]{p_set()})));
+          if(ramp()>0) tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.intervaltimer.ramp", TextFormatting.DARK_GREEN, new Object[]{ramp()})));
+          if(!switch_state) tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.intervaltimer.standby", TextFormatting.AQUA)));
           while(tr.size() < 5) tr.add(new StringTextComponent("")); // const lang file formatting arg count.
-          ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.intervaltimer", TextFormatting.RESET, tr.toArray()));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.intervaltimer", TextFormatting.RESET, tr.toArray()));
         }
       }
       return selected; // false: Switches output on/off (blockstate) in caller

@@ -9,7 +9,6 @@
  */
 package wile.rsgauges.detail;
 
-import wile.rsgauges.ModRsGauges;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -17,6 +16,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
+import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.libmc.detail.SidedProxy;
 
 import java.util.LinkedList;
 
@@ -60,8 +61,8 @@ public class ModResources
     public float pitch() { return pitch_; }
 
     public void play(World world, BlockPos pos) {
-      if(ModAuxiliaries.isClientSide()) {
-        world.playSound(ModRsGauges.proxy.getPlayerClientSide(), pos, se_, SoundCategory.BLOCKS, volume_, pitch_);
+      if(SidedProxy.isClientSide()) {
+        world.playSound(SidedProxy.getPlayerClientSide(), pos, se_, SoundCategory.BLOCKS, volume_, pitch_);
       } else {
         world.playSound(null, pos, se_, SoundCategory.BLOCKS, volume_, pitch_);
       }

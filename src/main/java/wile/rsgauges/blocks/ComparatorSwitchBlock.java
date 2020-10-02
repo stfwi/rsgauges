@@ -8,11 +8,6 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModContent;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.blocks.EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
 import net.minecraft.util.Direction;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.IBlockReader;
@@ -29,6 +24,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.math.*;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import wile.rsgauges.libmc.detail.Overlay;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
+import wile.rsgauges.blocks.EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.detail.ModResources;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
@@ -183,12 +185,12 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
       {
         StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
-        tr.add(ModAuxiliaries.localizable("switchconfig.comparator_switch.threshold_on", TextFormatting.BLUE, new Object[]{(int)threshold0_on()}));
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.comparator_switch.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off()})));
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.comparator_switch.mode"+((int)acquisition_mode()), TextFormatting.DARK_GREEN, new Object[]{})));
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
-        ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.comparator_switch", TextFormatting.RESET, tr.toArray()));
+        tr.add(Auxiliaries.localizable("switchconfig.comparator_switch.threshold_on", TextFormatting.BLUE, new Object[]{(int)threshold0_on()}));
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.comparator_switch.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off()})));
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.comparator_switch.mode"+((int)acquisition_mode()), TextFormatting.DARK_GREEN, new Object[]{})));
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
+        Overlay.show(player, Auxiliaries.localizable("switchconfig.comparator_switch", TextFormatting.RESET, tr.toArray()));
       }
       markDirty();
       return true;

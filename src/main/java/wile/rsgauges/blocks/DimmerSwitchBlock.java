@@ -11,9 +11,6 @@ package wile.rsgauges.blocks;
 
 import net.minecraft.util.ActionResultType;
 import net.minecraft.world.server.ServerWorld;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,6 +22,11 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import wile.rsgauges.libmc.detail.Overlay;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.items.SwitchLinkPearlItem;
+
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -64,8 +66,8 @@ public class DimmerSwitchBlock extends SwitchBlock
       if(p != te.on_power()) {
         te.on_power(p);
         p = te.on_power();
-        ModAuxiliaries.playerStatusMessage(player,
-          ModAuxiliaries.localizable("switchconfig.dimmerswitch.output_power", TextFormatting.RED, new Object[]{p})
+        Overlay.show(player,
+          Auxiliaries.localizable("switchconfig.dimmerswitch.output_power", TextFormatting.RED, new Object[]{p})
         );
         final int state_p = state.get(POWER);
         if(state_p!=p) {
@@ -77,7 +79,7 @@ public class DimmerSwitchBlock extends SwitchBlock
         if(((was_powered) == (p==0)) && (((config & SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0)) ) {
           if(!was_powered) {
             // Fire link requests when changing from unpowered to powered.
-            if(!te.activateSwitchLinks(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+            if(!te.activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }
@@ -86,7 +88,7 @@ public class DimmerSwitchBlock extends SwitchBlock
       return ActionResultType.SUCCESS;
     } else if(ck.wrenched) {
       if(te.click_config(this, false)) {
-        ModAuxiliaries.playerStatusMessage(player, te.configStatusTextComponentTranslation((SwitchBlock) state.getBlock()));
+        Overlay.show(player, te.configStatusTextComponentTranslation((SwitchBlock) state.getBlock()));
       }
     }
     return ActionResultType.SUCCESS;

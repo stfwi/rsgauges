@@ -11,8 +11,6 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.pathfinding.PathType;
@@ -23,6 +21,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.items.SwitchLinkPearlItem;
 import javax.annotation.Nullable;
 
 public class BlockTrapdoorSwitch extends ContactSwitchBlock
@@ -93,7 +93,7 @@ public class BlockTrapdoorSwitch extends ContactSwitchBlock
   }
 
   @Override
-  public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, final @Nullable PlayerEntity player)
+  public boolean onLinkRequest(final SwitchLinkPearlItem.SwitchLink link, long req, final World world, final BlockPos pos, final @Nullable PlayerEntity player)
   {
     if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote)) return false;
     BlockState state = world.getBlockState(pos);

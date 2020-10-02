@@ -1,10 +1,9 @@
 package wile.rsgauges.items;
 
-import wile.rsgauges.ModContent;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.blocks.SwitchBlock;
+import net.minecraft.entity.Entity;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -25,12 +24,19 @@ import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.blocks.SwitchBlock;
+import wile.rsgauges.libmc.detail.Overlay;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemSwitchLinkPearl extends RsItem
+public class SwitchLinkPearlItem extends RsItem
 {
-  public ItemSwitchLinkPearl(Item.Properties properties)
+  public SwitchLinkPearlItem(Item.Properties properties)
   { super(properties); }
 
   @Override
@@ -63,11 +69,11 @@ public class ItemSwitchLinkPearl extends RsItem
   public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
   {
     final SwitchLink link = SwitchLink.fromItemStack(stack);
-    if(ModAuxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, (!link.valid))) return;
+    if(Auxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, (!link.valid))) return;
     if(!link.valid) return;
     final Block targetBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(link.block_name));
     if(targetBlock!=null) {
-      tooltip.add(ModAuxiliaries.localizable(
+      tooltip.add(Auxiliaries.localizable(
         "switchlinking.switchlink_pearl.tooltip.linkedblock",
         TextFormatting.GRAY,
         new Object[]{ (new TranslationTextComponent(targetBlock.getTranslationKey()))
@@ -79,16 +85,16 @@ public class ItemSwitchLinkPearl extends RsItem
     if(Minecraft.getInstance().player!=null) {
       final int distance = link.distance(Minecraft.getInstance().player.getPosition());
       if(distance >= 0) {
-        tooltip.add(new StringTextComponent(ModAuxiliaries.localizable(
+        tooltip.add(new StringTextComponent(Auxiliaries.localizable(
           "switchlinking.switchlink_pearl.tooltip.linkeddistance",
           TextFormatting.GRAY, new Object[]{distance}).getString() + (
             (((distance <= ModConfig.max_switch_linking_distance) || (ModConfig.max_switch_linking_distance<=0))) ? ("")
-            : (" " + ModAuxiliaries.localizable("switchlinking.switchlink_pearl.tooltip.toofaraway", TextFormatting.DARK_RED).getString())
+            : (" " + Auxiliaries.localizable("switchlinking.switchlink_pearl.tooltip.toofaraway", TextFormatting.DARK_RED).getString())
           )
         ));
       }
     }
-    tooltip.add(ModAuxiliaries.localizable(
+    tooltip.add(Auxiliaries.localizable(
       "switchlinking.relayconfig.confval" + Integer.toString(link.relay()),
       TextFormatting.ITALIC
     ));
@@ -106,6 +112,28 @@ public class ItemSwitchLinkPearl extends RsItem
     }
   }
 
+  @Override
+  public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected)
+  {
+    if((!selected) || (!entity.world.isRemote()) || (world.getRandom().nextDouble() > 0.3)) return;
+    final SwitchLink lnk = SwitchLink.fromItemStack(stack);
+    if((!lnk.valid) || (lnk.target_position.distanceSq(entity.getPosition()) > 900)) return;
+    Vector3d p = Vector3d.copy(lnk.target_position).add(
+      ((world.getRandom().nextDouble()-0.5)*0.2),
+      ((world.getRandom().nextDouble()-0.5)*0.2),
+      ((world.getRandom().nextDouble()-0.5)*0.2)
+    );
+    Vector3d v = new Vector3d(0, ((world.getRandom().nextDouble()-0.5)*0.001), 0);
+    BlockState state = world.getBlockState(lnk.target_position);
+    if((state==null) || (!(state.getBlock() instanceof SwitchBlock)) ) return;
+    p = p.add(state.getShape(world, lnk.target_position).getBoundingBox().getCenter());
+    if(state.get(SwitchBlock.POWERED)) {
+      world.addParticle((IParticleData)ParticleTypes.INSTANT_EFFECT, false, p.x, p.y, p.z, v.x, v.y, v.z);
+    } else {
+      world.addParticle((IParticleData)ParticleTypes.WITCH, false, p.x, p.y, p.z, v.x, v.y, v.z);
+    }
+  }
+
   public static final void usePearl(World world, PlayerEntity player)
   {
     switch(SwitchLink.fromPlayerActiveItem(world, player).request(SwitchLink.SWITCHLINK_RELAY_ACTIVATE, world, player.getPosition(), player)) {
@@ -114,10 +142,10 @@ public class ItemSwitchLinkPearl extends RsItem
         return;
       case TOO_FAR:
       case BLOCK_UNLOADED:
-        ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.switchlink_pearl.use.toofaraway", TextFormatting.DARK_RED));
+        Overlay.show(player, Auxiliaries.localizable("switchlinking.switchlink_pearl.use.toofaraway", TextFormatting.DARK_RED));
         break;
       case TARGET_GONE:
-        ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchlinking.switchlink_pearl.use.targetgone", TextFormatting.DARK_RED));
+        Overlay.show(player, Auxiliaries.localizable("switchlinking.switchlink_pearl.use.targetgone", TextFormatting.DARK_RED));
         break;
       case NOT_MATCHED: // Can't happen here
       case INVALID_LINKDATA:

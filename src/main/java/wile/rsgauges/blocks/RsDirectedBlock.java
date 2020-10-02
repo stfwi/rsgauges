@@ -228,7 +228,7 @@ public class RsDirectedBlock extends RsBlock
     } else if(isLateral() && (!isWallMount())) {
       if(side != Direction.UP) return false; // must be supported from the bottom.
       if(!Block.hasSolidSideOnTop(world, pos.down())) return false;
-      // if(material != ModAuxiliaries.RsMaterials.MATERIAL_PLANT) return true;
+      // if(material != Auxiliaries.RsMaterials.MATERIAL_PLANT) return true;
       return true;
     } else if(isWallMount()) {
       if(isLateral() && ((side == Direction.UP) || (side == Direction.DOWN))) return false; // lateral blocks only on walls.

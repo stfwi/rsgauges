@@ -14,10 +14,6 @@
 package wile.rsgauges.blocks;
 
 import net.minecraft.world.IWorld;
-import wile.rsgauges.ModContent;
-import wile.rsgauges.detail.BlockCategories;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -32,6 +28,12 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.detail.BlockCategories;
+import wile.rsgauges.libmc.detail.Overlay;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.detail.ModResources;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
@@ -178,19 +180,19 @@ public class ObserverSwitchBlock extends SwitchBlock
       {
         ArrayList<Object> tr = new ArrayList<>();
         StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
-        tr.add(ModAuxiliaries.localizable("switchconfig.blocksensor.range", TextFormatting.BLUE, new Object[]{range()}));
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.blocksensor.threshold", TextFormatting.YELLOW, new Object[]{threshold()})));
+        tr.add(Auxiliaries.localizable("switchconfig.blocksensor.range", TextFormatting.BLUE, new Object[]{range()}));
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.blocksensor.threshold", TextFormatting.YELLOW, new Object[]{threshold()})));
         if(debounce()>0) {
-          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.AQUA, new Object[]{debounce()})));
+          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.AQUA, new Object[]{debounce()})));
         } else {
           tr.add(new StringTextComponent(""));
         }
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.blocksensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.blocksensor.filter",
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.blocksensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.blocksensor.filter",
           TextFormatting.DARK_GREEN,
           new Object[]{new TranslationTextComponent("rsgauges.switchconfig.blocksensor.filter."+filter_name())})
         ));
-        ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.blocksensor", TextFormatting.RESET, tr.toArray()));
+        Overlay.show(player, Auxiliaries.localizable("switchconfig.blocksensor", TextFormatting.RESET, tr.toArray()));
       }
       update_timer_ = 0;
       markDirty();

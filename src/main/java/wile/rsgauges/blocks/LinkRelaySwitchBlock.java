@@ -8,13 +8,13 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.detail.ModResources;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.*;
+import wile.rsgauges.detail.ModResources;
 import javax.annotation.Nullable;
 
 public class LinkRelaySwitchBlock extends SwitchBlock

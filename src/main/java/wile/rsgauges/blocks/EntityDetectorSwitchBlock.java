@@ -9,10 +9,6 @@
 package wile.rsgauges.blocks;
 
 import net.minecraft.world.IWorldReader;
-import wile.rsgauges.ModContent;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -32,6 +28,12 @@ import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.tileentity.TileEntity;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.libmc.detail.Overlay;
+import wile.rsgauges.detail.ModResources;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -134,23 +136,23 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
         case 1: {
           sensor_range(sensor_range()+direction);
           area_ = null;
-          ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.detector.sensor_range", TextFormatting.BLUE, new Object[]{sensor_range()}));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.detector.sensor_range", TextFormatting.BLUE, new Object[]{sensor_range()}));
           break;
         }
         case 2: {
           sensor_entity_threshold(sensor_entity_threshold() + direction);
-          ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.detector.entity_threshold", TextFormatting.YELLOW, new Object[]{sensor_entity_threshold()}));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.detector.entity_threshold", TextFormatting.YELLOW, new Object[]{sensor_entity_threshold()}));
           break;
         }
         case 3: {
           filter(filter() + direction);
-          ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.detector.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.detector.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}));
           break;
         }
         case 4: {
           on_power(on_power() + direction);
           if(on_power() < 1) on_power(1);
-          ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.detector.output_power", TextFormatting.RED, new Object[]{on_power()}));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.detector.output_power", TextFormatting.RED, new Object[]{on_power()}));
           break;
         }
       }
@@ -186,7 +188,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
           range_bb = new AxisAlignedBB(0,0,0, 1,0,0);
         }
         Direction facing = state.get(FACING);
-        AxisAlignedBB bb = ModAuxiliaries.transform_forward(range_bb, facing).offset(getPos()).expand(1,1,1);
+        AxisAlignedBB bb = Auxiliaries.transform_forward(range_bb, facing).offset(getPos()).expand(1,1,1);
         area_ = new AxisAlignedBB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
       }
 

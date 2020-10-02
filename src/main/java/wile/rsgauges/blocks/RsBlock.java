@@ -13,9 +13,6 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ColorUtils;
 import net.minecraft.world.*;
 import net.minecraft.loot.LootContext;
 import net.minecraft.world.server.ServerWorld;
@@ -49,19 +46,21 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.libmc.detail.Networking;
+
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 
-public abstract class RsBlock extends Block implements ColorUtils.IColorTintSupport, IWaterLoggable
+public abstract class RsBlock extends Block implements IWaterLoggable
 {
   public static final long RSBLOCK_CONFIG_SOLID              = 0x0000000000000000l;
   public static final long RSBLOCK_CONFIG_CUTOUT             = 0x1000000000000000l;
   public static final long RSBLOCK_CONFIG_CUTOUT_MIPPED      = 0x2000000000000000l;
   public static final long RSBLOCK_CONFIG_TRANSLUCENT        = 0x3000000000000000l;
-  public static final long RSBLOCK_CONFIG_COLOR_TINT_SUPPORT = 0x0004000000000000l;   /// TODO: REMOVE FROM SWITCH/GAUGE CONF
   public static final long RSBLOCK_NOT_WATERLOGGABLE         = 0x0008000000000000l;
   public enum RenderTypeHint { SOLID,CUTOUT,CUTOUT_MIPPED,TRANSLUCENT }
 
@@ -73,7 +72,7 @@ public abstract class RsBlock extends Block implements ColorUtils.IColorTintSupp
   // -------------------------------------------------------------------------------------------------------------------
 
   public RsBlock(long config, Block.Properties properties)
-  { this(config, properties, ModAuxiliaries.getPixeledAABB(0, 0, 0, 16, 16,16 )); }
+  { this(config, properties, Auxiliaries.getPixeledAABB(0, 0, 0, 16, 16,16 )); }
 
   public RsBlock(long config, Block.Properties properties, final AxisAlignedBB aabb)
   { this(config, properties, VoxelShapes.create(aabb)); }
@@ -95,7 +94,7 @@ public abstract class RsBlock extends Block implements ColorUtils.IColorTintSupp
   @Override
   @OnlyIn(Dist.CLIENT)
   public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
-  { ModAuxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, true); }
+  { Auxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, true); }
 
   @Override
   @OnlyIn(Dist.CLIENT)
@@ -223,21 +222,6 @@ public abstract class RsBlock extends Block implements ColorUtils.IColorTintSupp
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  @Override
-  public boolean hasColorRGB()
-  { return (!ModConfig.without_color_tinting) && ((config & RSBLOCK_CONFIG_COLOR_TINT_SUPPORT)!=0); }
-
-  @Override
-  public int getColorRGB(@Nullable BlockState state, @Nullable IBlockDisplayReader world, @Nullable BlockPos pos)
-  {
-    if(!(world instanceof IWorldReader)) return 0xffffffff;
-    final TileEntity te = world.getTileEntity(pos);
-    if(!(te instanceof RsTileEntity)) return 0xffffffff;
-    return ColorUtils.DyeColorFilters.lightTintByIndex(((RsTileEntity)te).color_tint());
-  }
-
-  // -------------------------------------------------------------------------------------------------------------------
-
   /**
    * RsBlock handler before a block gets dropped as item in the world.
    * Allows actions in the tile entity to happen before the forge/MC
@@ -253,7 +237,7 @@ public abstract class RsBlock extends Block implements ColorUtils.IColorTintSupp
   /**
    * Main RsBlock derivate tile entity base
    */
-  public static abstract class RsTileEntity extends TileEntity
+  public static abstract class RsTileEntity extends TileEntity implements Networking.IPacketTileNotifyReceiver
   {
     private static final int NBT_ENTITY_TYPE = 1; // forge-doc: use 1, does not matter, only used by vanilla.
 
@@ -266,8 +250,16 @@ public abstract class RsBlock extends Block implements ColorUtils.IColorTintSupp
     public void readNbt(CompoundNBT nbt, boolean updatePacket)
     {}
 
-    public int color_tint()
-    { return 0xffffffff; }
+    protected void syncToClients()
+    {
+      if(world.isRemote) return;
+      CompoundNBT nbt = new CompoundNBT();
+      writeNbt(nbt, true);
+      Networking.PacketTileNotifyServerToClient.sendToAllPlayers((ServerWorld)getWorld(), getPos(), nbt);
+    }
+
+    public void onServerPacketReceived(CompoundNBT nbt)
+    { readNbt(nbt, true); }
 
     // --------------------------------------------------------------------------------------------------------
     // TileEntity

@@ -8,13 +8,13 @@
  */
 package wile.rsgauges.detail;
 
-import wile.rsgauges.ModRsGauges;
 import net.minecraft.world.World;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.IPlantable;
+import wile.rsgauges.ModRsGauges;
 
 import java.util.*;
 

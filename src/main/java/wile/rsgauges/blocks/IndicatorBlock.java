@@ -16,8 +16,8 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
-import wile.rsgauges.detail.ModResources;
 import net.minecraft.util.math.AxisAlignedBB;
+import wile.rsgauges.detail.ModResources;
 import javax.annotation.Nullable;
 
 

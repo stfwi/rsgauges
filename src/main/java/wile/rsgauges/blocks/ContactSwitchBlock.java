@@ -10,10 +10,6 @@
 package wile.rsgauges.blocks;
 
 import net.minecraft.world.server.ServerWorld;
-import wile.rsgauges.ModContent;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -35,6 +31,12 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.items.SwitchLinkPearlItem;
+import wile.rsgauges.libmc.detail.Overlay;
+
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
@@ -115,7 +117,7 @@ public class ContactSwitchBlock extends SwitchBlock
       power_on_sound.play(world, pos);
       notifyNeighbours(world, pos, state, te, false);
       if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-        if(!te.activateSwitchLinks(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+        if(!te.activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       }
@@ -230,32 +232,32 @@ public class ContactSwitchBlock extends SwitchBlock
       switch(field) {
         case 1: {
           high_sensitivity(direction > 0);
-          ModAuxiliaries.playerStatusMessage(player,
-            ModAuxiliaries.localizable("switchconfig.touchcontactmat.sensitivity", TextFormatting.BLUE, new Object[]{
-              ModAuxiliaries.localizable("switchconfig.touchcontactmat.sensitivity." + (high_sensitivity() ? "high":"normal"), null)
+          Overlay.show(player,
+            Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity", TextFormatting.BLUE, new Object[]{
+              Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity." + (high_sensitivity() ? "high":"normal"))
             })
           );
           break;
         }
         case 2: {
           entity_count_threshold(entity_count_threshold() + direction);
-          ModAuxiliaries.playerStatusMessage(player,
-            ModAuxiliaries.localizable("switchconfig.touchcontactmat.entity_threshold", TextFormatting.YELLOW, new Object[]{entity_count_threshold()})
+          Overlay.show(player,
+            Auxiliaries.localizable("switchconfig.touchcontactmat.entity_threshold", TextFormatting.YELLOW, new Object[]{entity_count_threshold()})
           );
           break;
         }
         case 3: {
           filter(filter() + direction);
-          ModAuxiliaries.playerStatusMessage(player,
-            ModAuxiliaries.localizable("switchconfig.touchcontactmat.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.touchcontactmat.entity_filter."+filter_class_names[filter_])})
+          Overlay.show(player,
+            Auxiliaries.localizable("switchconfig.touchcontactmat.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.touchcontactmat.entity_filter."+filter_class_names[filter_])})
           );
           break;
         }
         case 4: {
           on_power(on_power() + direction);
           if(on_power() < 1) on_power(1);
-          ModAuxiliaries.playerStatusMessage(player,
-            ModAuxiliaries.localizable("switchconfig.touchcontactmat.output_power", TextFormatting.RED, new Object[]{on_power()})
+          Overlay.show(player,
+            Auxiliaries.localizable("switchconfig.touchcontactmat.output_power", TextFormatting.RED, new Object[]{on_power()})
           );
           break;
         }

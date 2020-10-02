@@ -8,11 +8,6 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModContent;
-import wile.rsgauges.ModConfig;
-import wile.rsgauges.blocks.EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity;
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModResources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -23,6 +18,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.tileentity.TileEntity;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
+import wile.rsgauges.blocks.EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.libmc.detail.Overlay;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
@@ -88,16 +90,16 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
         // @TODO: day time localisation: how the hack that, transfer long timestamp with tagging and localise on client or system time class?
         StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
-        tr.add(ModAuxiliaries.localizable("switchconfig.daytimerclock.daytime_on", TextFormatting.BLUE, new Object[]{ModAuxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.daytimerclock.daytime_off", TextFormatting.YELLOW, new Object[]{ModAuxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_on", TextFormatting.BLUE, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_off", TextFormatting.YELLOW, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
         if(debounce()>0) {
-          tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.daytimerclock.random", TextFormatting.DARK_GREEN, new Object[]{debounce()}) ));
+          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.daytimerclock.random", TextFormatting.DARK_GREEN, new Object[]{debounce()}) ));
         } else {
           tr.add(new StringTextComponent(""));
         }
-        tr.add(separator.deepCopy().append(ModAuxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
-        ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.daytimerclock", TextFormatting.RESET, tr.toArray()));
+        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        Overlay.show(player, Auxiliaries.localizable("switchconfig.daytimerclock", TextFormatting.RESET, tr.toArray()));
       }
       markDirty();
       return true;

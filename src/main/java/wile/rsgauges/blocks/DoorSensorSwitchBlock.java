@@ -8,8 +8,6 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.ModContent;
-import wile.rsgauges.detail.ModResources;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.block.*;
@@ -21,6 +19,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.detail.ModResources;
 import javax.annotation.Nullable;
 import java.util.List;
 

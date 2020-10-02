@@ -11,8 +11,6 @@
  */
 package wile.rsgauges.blocks;
 
-import wile.rsgauges.detail.ColorUtils;
-import wile.rsgauges.detail.ModAuxiliaries;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,16 +27,16 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.IBlockDisplayReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.item.ItemStack;
+import wile.rsgauges.libmc.detail.ColorUtils;
+import wile.rsgauges.libmc.detail.Auxiliaries;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.Random;
 
-public class SensitiveGlassBlock extends RsBlock implements ColorUtils.IColorTintSupport
+public class SensitiveGlassBlock extends RsBlock
 {
   public static final BooleanProperty POWERED = BooleanProperty.create("powered");
   public static final ColorUtils.DyeColorProperty COLOR = ColorUtils.DyeColorProperty.create("color");
@@ -47,7 +45,7 @@ public class SensitiveGlassBlock extends RsBlock implements ColorUtils.IColorTin
 
   public SensitiveGlassBlock(Block.Properties properties)
   {
-    super(RSBLOCK_CONFIG_TRANSLUCENT, properties, ModAuxiliaries.getPixeledAABB(0, 0, 0, 16, 16,16 ));
+    super(RSBLOCK_CONFIG_TRANSLUCENT, properties, Auxiliaries.getPixeledAABB(0, 0, 0, 16, 16,16 ));
     setDefaultState(getDefaultState().with(POWERED, false).with(COLOR, DyeColor.WHITE));
   }
 
@@ -109,7 +107,7 @@ public class SensitiveGlassBlock extends RsBlock implements ColorUtils.IColorTin
   public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
   {
     final ItemStack stack = player.getHeldItem(hand);
-    Optional<DyeColor> dye = ColorUtils.getDyeColor(stack);
+    Optional<DyeColor> dye = ColorUtils.getColorFromDyeItem(stack);
     if(!dye.isPresent()) return ActionResultType.PASS;
     world.setBlockState(pos, state.with(COLOR, dye.get()), 1|2);
     return ActionResultType.SUCCESS;
@@ -129,11 +127,4 @@ public class SensitiveGlassBlock extends RsBlock implements ColorUtils.IColorTin
     }
   }
 
-  @Override
-  public boolean hasColorRGB()
-  { return true; }
-
-  @Override
-  public int getColorRGB(@Nullable BlockState state, @Nullable IBlockDisplayReader world, @Nullable BlockPos pos)
-  { return ((state==null) || (!(state.getBlock() instanceof SensitiveGlassBlock))) ? ColorUtils.DyeColorFilters.WHITE : state.get(COLOR).getColorValue(); }
 }

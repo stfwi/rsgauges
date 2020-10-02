@@ -41,9 +41,9 @@ import net.minecraft.world.World;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.ModConfig;
-import wile.rsgauges.detail.DevUtils;
-import wile.rsgauges.detail.ModAuxiliaries;
+import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.libmc.detail.Overlay;
 
 import javax.annotation.Nullable;
 
@@ -52,11 +52,8 @@ public class AbstractGaugeBlock extends RsDirectedBlock
 {
   public static final long GAUGE_DATA_POWER_MASK            = 0x000000000000000fl;
   public static final int  GAUGE_DATA_POWER_SHIFT           = 0;
-  public static final long GAUGE_DATA_COLOR_MASK            = 0x00000000000000f0l;
-  public static final int  GAUGE_DATA_COLOR_SHIFT           = 4;
   public static final long GAUGE_DATA_BLINKING              = 0x0000000000000100l;
   public static final long GAUGE_DATA_INVERTED              = 0x0000000000000200l;
-  public static final long GAUGE_CONFIG_COLOR_TINT_SUPPORT  = RSBLOCK_CONFIG_COLOR_TINT_SUPPORT;
 
   @Nullable public final ModResources.BlockSoundEvent power_on_sound;
   @Nullable public final ModResources.BlockSoundEvent power_off_sound;
@@ -94,31 +91,13 @@ public class AbstractGaugeBlock extends RsDirectedBlock
   public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
   {
     if(world.isRemote()) return ActionResultType.CONSUME;
-    DevUtils.blockActivateHook.hook(state, world, pos, player, hand, hit);
     if(ModConfig.isWrench(player.getHeldItem(hand))) {
       GaugeTileEntity te = getTe(world, pos);
       if(te==null) return ActionResultType.SUCCESS;
       te.inverted(!te.inverted());
-      ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("gaugeconfig.options."+(te.inverted()?"inverted":"notinverted"), TextFormatting.DARK_AQUA));
+      Overlay.show(player, Auxiliaries.localizable("gaugeconfig.options."+(te.inverted()?"inverted":"notinverted"), TextFormatting.DARK_AQUA));
     }
     return ActionResultType.SUCCESS;
-  }
-
-  @Override
-  public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player)
-  {
-    if(world.isRemote) return;
-    DevUtils.blockClickHook.hook(state, world, pos, player);
-    final GaugeTileEntity te = getTe(world, pos);
-    final ItemStack item = player.getHeldItemMainhand();
-    if((te==null) || (item==null)) return;
-    //    if((DyeUtils.isDye(item)) && ((config & GAUGE_CONFIG_COLOR_TINT_SUPPORT) != 0) && (!ModConfig.without_color_tinting)) {
-    //      int dye = DyeUtils.rawMetaFromStack(item);
-    //      te.color_tint((dye<0)?(0):((dye>15)?15:dye));
-    //      te.markDirty();
-    //      world.markAndNotifyBlock(pos, null, state, state, 1|2|4|16);
-    //      ModAuxiliaries.playerStatusMessage(player, ModAuxiliaries.localizable("switchconfig.tinting", null, new Object[]{ModAuxiliaries.localizable("switchconfig.tinting." + ModAuxiliaries.DyeColorFilters.nameByIndex[dye & 0xf], null)}));
-    //    }
   }
 
   @Override
@@ -197,15 +176,8 @@ public class AbstractGaugeBlock extends RsDirectedBlock
     public int power()
     { return (int)((scd_ & GAUGE_DATA_POWER_MASK) >> GAUGE_DATA_POWER_SHIFT); }
 
-    @Override
-    public int color_tint()
-    { return (int)((scd_ & GAUGE_DATA_COLOR_MASK) >> GAUGE_DATA_COLOR_SHIFT); }
-
     public void power(int p)
     { scd_ =  (scd_ & (~GAUGE_DATA_POWER_MASK)) | ((((p<=0)?(0):((p>15)?15:p)) << GAUGE_DATA_POWER_SHIFT) & GAUGE_DATA_POWER_MASK); }
-
-    public void color_tint(int p)
-    { scd_ =  (scd_ & (~GAUGE_DATA_COLOR_MASK)) | ((((p<=0)?(0):((p>15)?15:p)) << GAUGE_DATA_COLOR_SHIFT) & GAUGE_DATA_COLOR_MASK); }
 
     public boolean inverted()
     { return (scd_ & GAUGE_DATA_INVERTED) != 0; }

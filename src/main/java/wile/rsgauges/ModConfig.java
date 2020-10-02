@@ -16,9 +16,9 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Logger;
-import wile.rsgauges.detail.*;
 import wile.rsgauges.blocks.*;
-import wile.rsgauges.items.ItemSwitchLinkPearl;
+import wile.rsgauges.items.SwitchLinkPearlItem;
+import wile.rsgauges.libmc.detail.Auxiliaries;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -46,28 +46,6 @@ public class ModConfig
     final Pair<ClientConfig, ForgeConfigSpec> client_ = (new ForgeConfigSpec.Builder()).configure(ClientConfig::new);
     CLIENT_CONFIG_SPEC = client_.getRight();
     CLIENT = client_.getLeft();
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-
-  public static void onLoad(final net.minecraftforge.fml.config.ModConfig config)
-  {
-    try {
-      LOGGER.info("Loading config file {}", config.getFileName());
-      apply();
-    } catch(Exception ex) {
-      LOGGER.error("Failed to apply config file data {}", config.getFileName());
-    }
-  }
-
-  public static void onFileChange(final net.minecraftforge.fml.config.ModConfig config)
-  {
-    try {
-      LOGGER.info("Config file changed {}", config.getFileName());
-      apply();
-    } catch(Exception ex) {
-      LOGGER.error("Failed to apply config file data {}", config.getFileName());
-    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -116,7 +94,6 @@ public class ModConfig
     public final ForgeConfigSpec.BooleanValue without_analog_switches;
     public final ForgeConfigSpec.BooleanValue without_decorative;
     public final ForgeConfigSpec.BooleanValue without_pulsetime_config;
-    public final ForgeConfigSpec.BooleanValue without_color_tinting;
     public final ForgeConfigSpec.BooleanValue without_switch_nooutput;
     public final ForgeConfigSpec.BooleanValue without_switch_linking;
     public final ForgeConfigSpec.BooleanValue without_rightclick_item_switchconfig;
@@ -222,11 +199,6 @@ public class ModConfig
           .translation(ModRsGauges.MODID + ".config.without_pulsetime_config")
           .comment("Disable pulse time configuration of switches using redstone dust stack clicking.")
           .define("without_pulsetime_config", false);
-        // @Config.Name("Without color tinting")
-        without_color_tinting = builder
-          .translation(ModRsGauges.MODID + ".config.without_color_tinting")
-          .comment("Disable color tinting for switches and gauges.")
-          .define("without_color_tinting", false);
         //@Config.Name("Without switch 'no output' option")
         without_switch_nooutput = builder
           .translation(ModRsGauges.MODID + ".config.without_switch_nooutput")
@@ -384,7 +356,6 @@ public class ModConfig
 
   public static boolean status_overlay_disabled = false;
   public static boolean without_switch_linking = false;
-  public static boolean without_color_tinting = false;
   public static boolean without_detector_switch_update = false;
   public static boolean without_environmental_switch_update = false;
   public static boolean without_timer_switch_update = false;
@@ -442,7 +413,7 @@ public class ModConfig
       HashSet<String> optouts = new HashSet<>();
       ModContent.getRegisteredItems().stream().filter((Item item) -> {
         if(item == null) return true;
-        if(without_switch_linking && (item instanceof ItemSwitchLinkPearl)) return true;
+        if(without_switch_linking && (item instanceof SwitchLinkPearlItem)) return true;
         return false;
       }).forEach(
         e -> optouts.add(e.getRegistryName().getPath())
@@ -451,7 +422,7 @@ public class ModConfig
         if(block==null) return true;
         try {
           if(!SERVER.with_experimental.get()) {
-            if(block instanceof ModAuxiliaries.IExperimentalFeature) return true;
+            if(block instanceof Auxiliaries.IExperimentalFeature) return true;
             if(ModContent.isExperimentalBlock(block)) return true;
           }
           final String rn = block.getRegistryName().getPath();
@@ -525,7 +496,6 @@ public class ModConfig
     status_overlay_disabled = SERVER.without_switch_status_overlay.get();
     without_switch_linking = SERVER.without_switch_linking.get();
     max_switch_linking_distance = SERVER.max_switch_linking_distance.get();
-    without_color_tinting = SERVER.without_color_tinting.get();
     without_detector_switch_update = SERVER.without_detector_switch_update.get();
     autoswitch_linear_update_interval = SERVER.autoswitch_linear_update_interval.get();
     autoswitch_volumetric_update_interval = SERVER.autoswitch_volumetric_update_interval.get();

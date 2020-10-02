@@ -12,11 +12,6 @@
  */
 package wile.rsgauges;
 
-import wile.rsgauges.detail.ModAuxiliaries;
-import wile.rsgauges.detail.ModAuxiliaries.IExperimentalFeature;
-import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.blocks.*;
-import wile.rsgauges.items.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.block.SoundType;
@@ -32,6 +27,12 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraft.util.SoundEvents;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.libmc.detail.Auxiliaries.IExperimentalFeature;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.blocks.*;
+import wile.rsgauges.items.*;
+
 import java.util.*;
 import javax.annotation.Nonnull;
 
@@ -61,6 +62,7 @@ public class ModContent
     .sound(SoundType.METAL)
     .harvestLevel(0)
     .notSolid()
+    .setAllowsSpawn((s,w,p,e)->false)
   );
   private static final Block.Properties GAUGE_GLASS_BLOCK_PROPERTIES = (Block.Properties
     .create(METAL_MATERIAL, MaterialColor.IRON)
@@ -68,6 +70,7 @@ public class ModContent
     .sound(SoundType.METAL)
     .harvestLevel(0)
     .notSolid()
+    .setAllowsSpawn((s,w,p,e)->false)
   );
   private static final Block.Properties INDICATOR_METALLIC_BLOCK_PROPERTIES = (Block.Properties
     .create(GLASS_MATERIAL, MaterialColor.IRON)
@@ -76,6 +79,7 @@ public class ModContent
     .harvestLevel(0)
     .setLightLevel((state)->3)
     .notSolid()
+    .setAllowsSpawn((s,w,p,e)->false)
   );
   private static final Block.Properties INDICATOR_GLASS_BLOCK_PROPERTIES = (Block.Properties
     .create(GLASS_MATERIAL, MaterialColor.IRON)
@@ -84,6 +88,7 @@ public class ModContent
     .harvestLevel(0)
     .setLightLevel((state)->3)
     .notSolid()
+    .setAllowsSpawn((s,w,p,e)->false)
   );
   private static final Block.Properties ALARM_LAMP_BLOCK_PROPERTIES = (Block.Properties
     .create(GLASS_MATERIAL, MaterialColor.IRON)
@@ -92,6 +97,7 @@ public class ModContent
     .harvestLevel(0)
     .notSolid()
     .setLightLevel((state)->state.get(IndicatorBlock.POWERED)?12:2)
+    .setAllowsSpawn((s,w,p,e)->false)
   );
   private static final Block.Properties COLORED_SENSITIVE_GLASS_BLOCK_PROPERTIES = (Block.Properties
     .create(Material.REDSTONE_LIGHT, MaterialColor.IRON)
@@ -99,6 +105,7 @@ public class ModContent
     .sound(SoundType.METAL)
     .harvestLevel(0)
     .notSolid()
+    .setAllowsSpawn((s,w,p,e)->false)
   );
   private static final Block.Properties LIGHT_EMITTING_SENSITIVE_GLASS_BLOCK_PROPERTIES = (Block.Properties
     .create(Material.REDSTONE_LIGHT, MaterialColor.IRON)
@@ -107,6 +114,7 @@ public class ModContent
     .harvestLevel(0)
     .notSolid().setEmmisiveRendering((s,w,p)->true)
     .setLightLevel((state)->state.get(SensitiveGlassBlock.POWERED)?15:0)
+    .setAllowsSpawn((s,w,p,e)->false)
   );
 
   private static final Block.Properties SWITCH_METALLIC_BLOCK_PROPERTIES = GAUGE_METALLIC_BLOCK_PROPERTIES;
@@ -131,8 +139,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0,12,15,4),
-    ModAuxiliaries.getPixeledAABB(4,1,0,12,12,4)
+    Auxiliaries.getPixeledAABB(4,4,0,12,15,4),
+    Auxiliaries.getPixeledAABB(4,1,0,12,12,4)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_small_lever"));
 
   // Mechanical lever
@@ -142,8 +150,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,4,0,11,15,5),
-    ModAuxiliaries.getPixeledAABB(5,1,0,11,12,5)
+    Auxiliaries.getPixeledAABB(5,4,0,11,15,5),
+    Auxiliaries.getPixeledAABB(5,1,0,11,12,5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_lever"));
 
   // Mechanical rotary lever
@@ -153,8 +161,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(1,4,0,12,12,6),
-    ModAuxiliaries.getPixeledAABB(1,1,0,12,12,6)
+    Auxiliaries.getPixeledAABB(1,4,0,12,12,6),
+    Auxiliaries.getPixeledAABB(1,1,0,12,12,6)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_rotary_lever"));
 
   // Rotary machine switch
@@ -164,7 +172,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null
   )).setRegistryName(new ResourceLocation(MODID, "industrial_rotary_machine_switch"));
 
   // Two-button machine switch
@@ -174,7 +182,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null
   )).setRegistryName(new ResourceLocation(MODID, "industrial_machine_switch"));
 
   // ESTOP button
@@ -185,8 +193,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
     SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE_OFF,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,5,0, 11, 11, 2.5),
-    ModAuxiliaries.getPixeledAABB(5,5,0, 11, 11, 3.5)
+    Auxiliaries.getPixeledAABB(5,5,0, 11, 11, 2.5),
+    Auxiliaries.getPixeledAABB(5,5,0, 11, 11, 3.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_estop_switch"));
 
   // Hopper blocking switch
@@ -197,8 +205,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
     SwitchBlock.SWITCH_DATA_WEAK,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(3,10,0, 13, 12, 6.7),
-    ModAuxiliaries.getPixeledAABB(3,10,0, 13, 12, 3.7)
+    Auxiliaries.getPixeledAABB(3,10,0, 13, 12, 6.7),
+    Auxiliaries.getPixeledAABB(3,10,0, 13, 12, 3.7)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_hopper_switch"));
 
   // Square machine pulse switch
@@ -210,7 +218,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,5,0, 11, 11, 2), null
+    Auxiliaries.getPixeledAABB(5,5,0, 11, 11, 2), null
   )).setRegistryName(new ResourceLocation(MODID, "industrial_button"));
 
   // Fenced round machine pulse switch
@@ -222,7 +230,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,5,0, 11, 11, 2), null
+    Auxiliaries.getPixeledAABB(5,5,0, 11, 11, 2), null
   )).setRegistryName(new ResourceLocation(MODID, "industrial_fenced_button"));
 
   // Retro double pole switch
@@ -234,8 +242,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 3),
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 2)
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 3),
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 2)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_double_pole_button"));
 
   // Mechanical spring reset push button
@@ -247,7 +255,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,3,0, 11, 7, 4), null
+    Auxiliaries.getPixeledAABB(5,3,0, 11, 7, 4), null
   )).setRegistryName(new ResourceLocation(MODID, "industrial_foot_button"));
 
   // Mechanical spring reset pull handle
@@ -259,8 +267,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 2),
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 2)
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 2),
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 2)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_pull_handle"));
 
   // Manual dimmer
@@ -269,7 +277,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,1,0, 12, 15, 2),
+    Auxiliaries.getPixeledAABB(4,1,0, 12, 15, 2),
     null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
@@ -283,7 +291,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(1,0,0, 15, 1, 13), null,
+    Auxiliaries.getPixeledAABB(1,0,0, 15, 1, 13), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_door_contact_mat"));
@@ -295,7 +303,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16, 1, 16), null,
+    Auxiliaries.getPixeledAABB(0,0,0, 16, 1, 16), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_contact_mat"));
@@ -307,7 +315,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16, 1, 16), null,
+    Auxiliaries.getPixeledAABB(0,0,0, 16, 1, 16), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_shock_sensitive_contact_mat"));
@@ -320,8 +328,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,15.6,0, 16, 16, 16),
-    ModAuxiliaries.getPixeledAABB(0,2,0, 16, 1, 0.1),
+    Auxiliaries.getPixeledAABB(0,15.6,0, 16, 16, 16),
+    Auxiliaries.getPixeledAABB(0,2,0, 16, 1, 0.1),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 3.0f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_shock_sensitive_trapdoor"));
@@ -335,11 +343,11 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
     SwitchBlock.SWITCH_CONFIG_HIGH_SENSITIVE,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,15.6,0, 16, 16, 16),
-    ModAuxiliaries.getPixeledAABB(0,2,0, 16, 1, 0.1),
+    Auxiliaries.getPixeledAABB(0,15.6,0, 16, 16, 16),
+    Auxiliaries.getPixeledAABB(0,2,0, 16, 1, 0.1),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    // ModAuxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
+    // Auxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
   )).setRegistryName(new ResourceLocation(MODID, "industrial_high_sensitive_trapdoor"));
 
   // Industrial trap door switch (item trap door)
@@ -349,8 +357,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0.1,12.6,0.1, 15.9,13, 15.9),
-    ModAuxiliaries.getPixeledAABB(0.1,12.6,0.1, 15.9,13, 15.9),
+    Auxiliaries.getPixeledAABB(0.1,12.6,0.1, 15.9,13, 15.9),
+    Auxiliaries.getPixeledAABB(0.1,12.6,0.1, 15.9,13, 15.9),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.05f, 2.5f),
     null
   )).setRegistryName(new ResourceLocation(MODID, "industrial_fallthrough_detector"));
@@ -363,7 +371,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_day_timer"));
@@ -376,7 +384,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_interval_timer"));
@@ -389,7 +397,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 1), null,
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 1), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_entity_detector"));
@@ -402,7 +410,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 1), null,
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 1), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_linear_entity_detector"));
@@ -413,7 +421,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_light_sensor"));
@@ -424,7 +432,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_rain_sensor"));
@@ -435,7 +443,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_lightning_sensor"));
@@ -446,7 +454,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,10,0, 12, 15, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,10,0, 12, 15, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.1f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_comparator_switch"));
@@ -461,7 +469,7 @@ public class ModContent
     SwitchBlock.SWITCH_DATA_SIDE_ENABLED_FRONT|SwitchBlock.SWITCH_DATA_SIDE_ENABLED_LEFT|
     SwitchBlock.SWITCH_DATA_SIDE_ENABLED_RIGHT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0.5,0.5,0.5, 15.5, 15.5, 15.5), null,
+    Auxiliaries.getPixeledAABB(0.5,0.5,0.5, 15.5, 15.5, 15.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_block_detector"));
@@ -472,7 +480,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_receiver"));
@@ -484,7 +492,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_DATA_SIDE_ENABLED_ALL|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16, 16, 16), null,
+    Auxiliaries.getPixeledAABB(0,0,0, 16, 16, 16), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_cased_receiver"));
@@ -496,7 +504,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_pulse_receiver"));
@@ -509,7 +517,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_DATA_SIDE_ENABLED_ALL|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16, 16, 16), null,
+    Auxiliaries.getPixeledAABB(0,0,0, 16, 16, 16), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_cased_pulse_receiver"));
@@ -521,7 +529,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_DATA_WEAK|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_relay"));
@@ -534,7 +542,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_pulse_relay"));
@@ -547,7 +555,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
     SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|SwitchBlock.SWITCH_DATA_SIDE_ENABLED_ALL,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0.5,0.5,0.5, 15.5, 15.5, 15.5), null,
+    Auxiliaries.getPixeledAABB(0.5,0.5,0.5, 15.5, 15.5, 15.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_knock_switch"));
@@ -562,102 +570,102 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
     SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|SwitchBlock.SWITCH_DATA_SIDE_ENABLED_ALL,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0.5,0.5,0.5, 15.5, 15.5, 15.5), null,
+    Auxiliaries.getPixeledAABB(0.5,0.5,0.5, 15.5, 15.5, 15.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_knock_button"));
 
   public static final GaugeBlock INDUSTRIAL_ANALOG_GAUGE = (GaugeBlock)(new GaugeBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(2,2,0, 14,14,1)
+    Auxiliaries.getPixeledAABB(2,2,0, 14,14,1)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_analog_angular_gauge"));
 
   public static final GaugeBlock INDUSTRIAL_ANALOG_HORIZONTAL_GAUGE = (GaugeBlock)(new GaugeBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(2,4,0, 14, 12, 1)
+    Auxiliaries.getPixeledAABB(2,4,0, 14, 12, 1)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_analog_horizontal_gauge"));
 
   public static final GaugeBlock INDUSTRIAL_VERTICAL_BAR_GAUGE = (GaugeBlock)(new GaugeBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,2,0, 12, 14, 1)
+    Auxiliaries.getPixeledAABB(4,2,0, 12, 14, 1)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_vertical_bar_gauge"));
 
   public static final GaugeBlock INDUSTRIAL_SMALL_DIGITAL_GAUGE = (GaugeBlock)(new GaugeBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,5,0, 12, 11, 1)
+    Auxiliaries.getPixeledAABB(4,5,0, 12, 11, 1)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_small_digital_gauge"));
 
   public static final GaugeBlock INDUSTRIAL_TUBE_GAUGE = (GaugeBlock)(new GaugeBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(7,4,0, 9, 12, 3)
+    Auxiliaries.getPixeledAABB(7,4,0, 9, 12, 3)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_tube_gauge"));
 
   public static final IndicatorBlock INDUSTRIAL_ALARM_LAMP = (IndicatorBlock)(new IndicatorBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
     ALARM_LAMP_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 4)
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 4)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_alarm_lamp"));
 
   public static final IndicatorBlock INDUSTRIAL_ALARM_SIREN = (IndicatorBlock)(new IndicatorBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,6.5,0, 11.5, 9.5, 4),
+    Auxiliaries.getPixeledAABB(4,6.5,0, 11.5, 9.5, 4),
     new ModResources.BlockSoundEvent(ModResources.ALARM_SIREN_SOUND),
     null
   )).setRegistryName(new ResourceLocation(MODID, "industrial_alarm_siren"));
 
   // square LED
   public static final IndicatorBlock INDUSTRIAL_GREEN_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|(13<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // green
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_green_led"));
 
   public static final IndicatorBlock INDUSTRIAL_YELLOW_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|(5<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // yellow
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_yellow_led"));
 
   public static final IndicatorBlock INDUSTRIAL_RED_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|(0<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // red
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_red_led"));
 
   public static final IndicatorBlock INDUSTRIAL_WHITE_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT, // default white
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_white_led"));
 
   public static final IndicatorBlock INDUSTRIAL_GREEN_BLINK_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING|(13<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // green
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_green_blinking_led"));
 
   public static final IndicatorBlock INDUSTRIAL_YELLOW_BLINK_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING|(5<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // yellow
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_yellow_blinking_led"));
 
   public static final IndicatorBlock INDUSTRIAL_RED_BLINK_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING|(0<<GaugeBlock.GAUGE_DATA_COLOR_SHIFT), // red
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_red_blinking_led"));
 
   public static final IndicatorBlock INDUSTRIAL_WHITE_BLINK_LED_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT, // default white
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
+    Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_white_blinking_led"));
 
   // -----------------------------------------------------------------------------------------------------------------
@@ -671,8 +679,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,5,0, 10.3, 15, 4.5),
-    ModAuxiliaries.getPixeledAABB(6,2,0, 10.3, 11, 4.5)
+    Auxiliaries.getPixeledAABB(6,5,0, 10.3, 15, 4.5),
+    Auxiliaries.getPixeledAABB(6,2,0, 10.3, 11, 4.5)
   )).setRegistryName(new ResourceLocation(MODID, "rustic_lever"));
 
   // Rustic lever 2 (bolted)
@@ -682,8 +690,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(2,6,0, 14,13,4.5),
-    ModAuxiliaries.getPixeledAABB(2,4,0, 14,10,4.5)
+    Auxiliaries.getPixeledAABB(2,6,0, 14,13,4.5),
+    Auxiliaries.getPixeledAABB(2,4,0, 14,10,4.5)
   )).setRegistryName(new ResourceLocation(MODID, "rustic_two_hinge_lever"));
 
   // Rustic lever 3 (big angular)
@@ -693,8 +701,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,10,0, 14,15,4.5),
-    ModAuxiliaries.getPixeledAABB(6, 2,0, 14,15,4.5)
+    Auxiliaries.getPixeledAABB(0,10,0, 14,15,4.5),
+    Auxiliaries.getPixeledAABB(6, 2,0, 14,15,4.5)
   )).setRegistryName(new ResourceLocation(MODID, "rustic_angular_lever"));
 
   // Rustic lever 7 (The Nail)
@@ -704,7 +712,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,7,0, 9,10,3), null
+    Auxiliaries.getPixeledAABB(6,7,0, 9,10,3), null
   )).setRegistryName(new ResourceLocation(MODID, "rustic_nail_lever"));
 
   // Rustic button 1
@@ -716,7 +724,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,5,0,11,11,2.5), null
+    Auxiliaries.getPixeledAABB(5,5,0,11,11,2.5), null
   )).setRegistryName(new ResourceLocation(MODID, "rustic_button"));
 
   // Rustic button 2 (bolted)
@@ -728,7 +736,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0,10,10,2.5), null
+    Auxiliaries.getPixeledAABB(6,6,0,10,10,2.5), null
   )).setRegistryName(new ResourceLocation(MODID, "rustic_small_button"));
 
   // Rustic button 3 (pull chain)
@@ -740,7 +748,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,3.5,0,11,15,4), null
+    Auxiliaries.getPixeledAABB(5,3.5,0,11,15,4), null
   )).setRegistryName(new ResourceLocation(MODID, "rustic_spring_reset_chain"));
 
   // Rustic button 7 (pull nail)
@@ -752,7 +760,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,7,0, 9,10,3), null
+    Auxiliaries.getPixeledAABB(6,7,0, 9,10,3), null
   )).setRegistryName(new ResourceLocation(MODID, "rustic_nail_button"));
 
   // Rustic door contact mat
@@ -763,8 +771,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(1,0,0, 15,1,12),
-    ModAuxiliaries.getPixeledAABB(1,0,0, 15,0.5,12),
+    Auxiliaries.getPixeledAABB(1,0,0, 15,1,12),
+    Auxiliaries.getPixeledAABB(1,0,0, 15,0.5,12),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
   )).setRegistryName(new ResourceLocation(MODID, "rustic_door_contact_plate"));
@@ -776,8 +784,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16,1,16),
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16,0.5,16),
+    Auxiliaries.getPixeledAABB(0,0,0, 16,1,16),
+    Auxiliaries.getPixeledAABB(0,0,0, 16,0.5,16),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
   )).setRegistryName(new ResourceLocation(MODID, "rustic_contact_plate"));
@@ -789,8 +797,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16,1,16),
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16,0.5,16),
+    Auxiliaries.getPixeledAABB(0,0,0, 16,1,16),
+    Auxiliaries.getPixeledAABB(0,0,0, 16,0.5,16),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
   )).setRegistryName(new ResourceLocation(MODID, "rustic_shock_sensitive_plate"));
@@ -803,8 +811,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_SHOCK_SENSITIVE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,15.6,0, 16,16,16),
-    ModAuxiliaries.getPixeledAABB(0, 2.0,0, 16,16, 0.1),
+    Auxiliaries.getPixeledAABB(0,15.6,0, 16,16,16),
+    Auxiliaries.getPixeledAABB(0, 2.0,0, 16,16, 0.1),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
   )).setRegistryName(new ResourceLocation(MODID, "rustic_shock_sensitive_trapdoor"));
@@ -818,11 +826,11 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_HIGH_SENSITIVE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,15.6,0, 16,16,16),
-    ModAuxiliaries.getPixeledAABB(0, 2.0,0, 16,16, 0.1),
+    Auxiliaries.getPixeledAABB(0,15.6,0, 16,16,16),
+    Auxiliaries.getPixeledAABB(0, 2.0,0, 16,16, 0.1),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    //ModAuxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
+    //Auxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
   )).setRegistryName(new ResourceLocation(MODID, "rustic_high_sensitive_trapdoor"));
 
   // Rustic trap door switch (item trap door)
@@ -832,23 +840,23 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,12.6,0, 16,13,16),
-    ModAuxiliaries.getPixeledAABB(0,12.6,0, 16,13,16),
+    Auxiliaries.getPixeledAABB(0,12.6,0, 16,13,16),
+    Auxiliaries.getPixeledAABB(0,12.6,0, 16,13,16),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
     null // new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    //ModAuxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
+    //Auxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
   )).setRegistryName(new ResourceLocation(MODID, "rustic_fallthrough_detector"));
 
   public static final GaugeBlock RUSTIC_CIRCULAR_GAUGE = (GaugeBlock)(new GaugeBlock(
-    SwitchBlock.RSBLOCK_CONFIG_CUTOUT, // no color tint.
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     GAUGE_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(2,2,0, 14,14,1)
+    Auxiliaries.getPixeledAABB(2,2,0, 14,14,1)
   )).setRegistryName(new ResourceLocation(MODID, "rustic_circular_gauge"));
 
   public static final IndicatorBlock RUSTIC_SEMAPHORE_INDICATOR = (IndicatorBlock)(new IndicatorBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(3,4,0, 13,11,1),
+    Auxiliaries.getPixeledAABB(3,4,0, 13,11,1),
     null,
     null
   )).setRegistryName(new ResourceLocation(MODID, "rustic_semaphore"));
@@ -863,10 +871,9 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-    SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
+    Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_rotary_switch"));
 
   // Bistable glass touch switch
@@ -874,10 +881,9 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
-    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT|
-    SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT,
+    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
+    Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_touch_switch"));
 
   // Thin star shaped glass button
@@ -887,10 +893,10 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
-    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+    SwitchBlock.SWITCH_CONFIG_TRANSLUCENT|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
+    Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_button"));
 
   // Thin small star shaped glass button
@@ -899,10 +905,10 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-    SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+    SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
+    Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_small_button"));
 
   // Glass touch button
@@ -911,10 +917,10 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE_EXTENDABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-    SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|
+    SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
+    Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
   )).setRegistryName(new ResourceLocation(MODID, "glass_touch_button"));
 
   // Glass door plate
@@ -923,9 +929,9 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-    SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16,0.25,16), null,
+    Auxiliaries.getPixeledAABB(0,0,0, 16,0.25,16), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "glass_door_contact_mat"));
@@ -936,9 +942,9 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
-    SwitchBlock.SWITCH_CONFIG_COLOR_TINT_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(0,0,0, 16,0.25,16), null,
+    Auxiliaries.getPixeledAABB(0,0,0, 16,0.25,16), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "glass_contact_mat"));
@@ -951,7 +957,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
+    Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "glass_day_timer"));
@@ -963,7 +969,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
+    Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "glass_interval_timer"));
@@ -976,7 +982,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
+    Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "glass_entity_detector"));
@@ -989,15 +995,15 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
+    Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.3f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.0f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "glass_linear_entity_detector"));
 
   public static final GaugeBlock GLASS_VERTICAL_BAR_GAUGE = (GaugeBlock)(new GaugeBlock(
-    GaugeBlock.GAUGE_CONFIG_COLOR_TINT_SUPPORT,
+    RsBlock.RSBLOCK_CONFIG_CUTOUT,
     GAUGE_GLASS_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(7,3.7,0, 10,12,0.4)
+    Auxiliaries.getPixeledAABB(7,3.7,0, 10,12,0.4)
   )).setRegistryName(new ResourceLocation(MODID, "glass_vertical_bar_gauge"));
 
   // -----------------------------------------------------------------------------------------------------------------
@@ -1011,8 +1017,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6.5,0, 10.3,13.5,4.5),
-    ModAuxiliaries.getPixeledAABB(6,3.5,0, 10.3,10.0,4.5)
+    Auxiliaries.getPixeledAABB(6,6.5,0, 10.3,13.5,4.5),
+    Auxiliaries.getPixeledAABB(6,3.5,0, 10.3,10.0,4.5)
   )).setRegistryName(new ResourceLocation(MODID, "oldfancy_bistableswitch1"));
 
   // Old fancy angular lever
@@ -1022,8 +1028,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(2.5,6.0,0, 9.7,10,4.5),
-    ModAuxiliaries.getPixeledAABB(4.5,3.5,0, 9.2,10,4.5)
+    Auxiliaries.getPixeledAABB(2.5,6.0,0, 9.7,10,4.5),
+    Auxiliaries.getPixeledAABB(4.5,3.5,0, 9.2,10,4.5)
   )).setRegistryName(new ResourceLocation(MODID, "oldfancy_bistableswitch2"));
 
   // Old fancy (golden decorated) button
@@ -1035,7 +1041,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6,6,0,10,10,1.5), null
+    Auxiliaries.getPixeledAABB(6,6,0,10,10,1.5), null
   )).setRegistryName(new ResourceLocation(MODID, "oldfancy_button"));
 
   // Old fancy (golden decorated) chain pulse switch
@@ -1047,8 +1053,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(6.5,4.8,0,9.5,13,4),
-    ModAuxiliaries.getPixeledAABB(6.5,3.8,0,9.5,12,4)
+    Auxiliaries.getPixeledAABB(6.5,4.8,0,9.5,13,4),
+    Auxiliaries.getPixeledAABB(6.5,3.8,0,9.5,12,4)
   )).setRegistryName(new ResourceLocation(MODID, "oldfancy_spring_reset_chain"));
 
   // Old fancy (golden decorated) tiny button
@@ -1060,7 +1066,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(7,7,0,9,9,1.5), null
+    Auxiliaries.getPixeledAABB(7,7,0,9,9,1.5), null
   )).setRegistryName(new ResourceLocation(MODID, "oldfancy_small_button"));
 
   // -----------------------------------------------------------------------------------------------------------------
@@ -1074,10 +1080,10 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,0,5, 11,9,11), null,
+    Auxiliaries.getPixeledAABB(5,0,5, 11,9,11), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.09f, 3.6f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.04f, 3.0f)
-    // ModAuxiliaries.RsMaterials.MATERIAL_PLANT
+    // Auxiliaries.RsMaterials.MATERIAL_PLANT
   )).setRegistryName(new ResourceLocation(MODID, "yellow_power_plant"));
 
   // Red power plant
@@ -1087,10 +1093,10 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,0,5, 11,9,11), null,
+    Auxiliaries.getPixeledAABB(5,0,5, 11,9,11), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.09f, 3.6f),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_GRASS_BREAK, 0.04f, 3.0f)
-    // ModAuxiliaries.RsMaterials.MATERIAL_PLANT
+    // Auxiliaries.RsMaterials.MATERIAL_PLANT
   )).setRegistryName(new ResourceLocation(MODID, "red_power_plant"));
 
   // Light flip switch
@@ -1100,7 +1106,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(7,6,0,9,10,1.5), null
+    Auxiliaries.getPixeledAABB(7,6,0,9,10,1.5), null
   )).setRegistryName(new ResourceLocation(MODID, "light_switch"));
 
   // Arrow target
@@ -1112,7 +1118,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,5,0,11,11,1), null
+    Auxiliaries.getPixeledAABB(5,5,0,11,11,1), null
   )).setRegistryName(new ResourceLocation(MODID, "arrow_target"));
 
   // Valve Wheel
@@ -1122,7 +1128,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0,12,12,3.5), null
+    Auxiliaries.getPixeledAABB(4,4,0,12,12,3.5), null
   )).setRegistryName(new ResourceLocation(MODID, "valve_wheel_switch"));
 
   // Elevator button
@@ -1134,7 +1140,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PROJECTILE_SENSE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_FAINT_LIGHT_EMITTING_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(4,4,0, 12, 12, 1), null
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1), null
   )).setRegistryName(new ResourceLocation(MODID, "elevator_button"));
 
   // Door sensor
@@ -1143,7 +1149,7 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
-    ModAuxiliaries.getPixeledAABB(5,0,0, 11,1, 1.5),
+    Auxiliaries.getPixeledAABB(5,0,0, 11,1, 1.5),
     null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.05f, 2.5f),
     null
@@ -1359,7 +1365,7 @@ public class ModContent
   private static Item.Properties default_item_properties()
   { return (new Item.Properties()).group(ModRsGauges.ITEMGROUP); }
 
-  public static final ItemSwitchLinkPearl SWITCH_LINK_PEARL = (ItemSwitchLinkPearl)(new ItemSwitchLinkPearl(
+  public static final SwitchLinkPearlItem SWITCH_LINK_PEARL = (SwitchLinkPearlItem)(new SwitchLinkPearlItem(
     default_item_properties()
   ).setRegistryName(MODID, "switchlink_pearl"));
 
@@ -1385,13 +1391,13 @@ public class ModContent
   public static final void registerBlocks(final RegistryEvent.Register<Block> event)
   {
     for(Block e:registeredBlocks) event.getRegistry().register(e);
-    ModAuxiliaries.logInfo("Registered " + Integer.toString(registeredBlocks.size()) + " blocks.");
+    Auxiliaries.logInfo("Registered " + Integer.toString(registeredBlocks.size()) + " blocks.");
   }
 
   public static final void registerItems(final RegistryEvent.Register<Item> event)
   {
     for(Item e:registeredItems) event.getRegistry().register(e);
-    ModAuxiliaries.logInfo("Registered " + Integer.toString(registeredItems.size()) + " items.");
+    Auxiliaries.logInfo("Registered " + Integer.toString(registeredItems.size()) + " items.");
   }
 
   public static final void registerBlockItems(final RegistryEvent.Register<Item> event)
@@ -1406,7 +1412,7 @@ public class ModContent
   public static final void registerTileEntities(final RegistryEvent.Register<TileEntityType<?>> event)
   {
     for(final TileEntityType<?> e:tile_entity_types) event.getRegistry().register(e);
-    ModAuxiliaries.logInfo("Registered " + Integer.toString(tile_entity_types.length) + " tile entities.");
+    Auxiliaries.logInfo("Registered " + Integer.toString(tile_entity_types.length) + " tile entities.");
   }
 
   public static final void processRegisteredContent()

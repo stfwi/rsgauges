@@ -10,9 +10,6 @@
 package wile.rsgauges.blocks;
 
 import net.minecraft.world.server.ServerWorld;
-import wile.rsgauges.blocks.IntervalTimerSwitchBlock.IntervalTimerSwitchTileEntity;
-import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.ItemSwitchLinkPearl;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +18,9 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.tileentity.TileEntity;
+import wile.rsgauges.blocks.IntervalTimerSwitchBlock.IntervalTimerSwitchTileEntity;
+import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.items.SwitchLinkPearlItem;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -44,7 +44,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public boolean onLinkRequest(final ItemSwitchLinkPearl.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final PlayerEntity player)
+  public boolean onLinkRequest(final SwitchLinkPearlItem.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final PlayerEntity player)
   {
     if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote)) return false;
     if((config & (SWITCH_CONFIG_TIMER_INTERVAL))==0) return false; // only interval timer can be a link target
@@ -89,7 +89,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
           Block nb = world.getBlockState(np).getBlock();
           world.notifyNeighborsOfStateChange(np, nb);
           if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-            if(!activateSwitchLinks(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+            if(!activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }
@@ -103,7 +103,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
           Block nb = world.getBlockState(np).getBlock();
           world.notifyNeighborsOfStateChange(np, nb);
           if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-            if(!activateSwitchLinks(ItemSwitchLinkPearl.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+            if(!activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }
