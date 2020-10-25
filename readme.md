@@ -10,7 +10,9 @@ Mod sources for Minecraft version 1.16.3.
 ----
 ## Version history
 
-    - v1.2.5-b1  [A] Linked switches are marked with particles when holding the Switch Link Peal.
+    - v1.2.5     [R] Release build 1.2.5.
+
+    - v1.2.5-b1  [A] Linked switches are marked with particles when holding the Switch Link Pearl.
                  [U] Partial internal code refurbishments.
 
     - v1.2.4     [U] Updated to Forge 1.16.3-34.1.0.
