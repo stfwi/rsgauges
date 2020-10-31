@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "rsgauges:optional",
+      "result": "rsgauges:bistableswitch4",
+      "required": [
+        "rsgauges:arrowtarget"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "rsgauges:arrowtarget"
+    }
+  ],
+  "result": {
+    "item": "rsgauges:bistableswitch4",
+    "data": 0
+  }
+}

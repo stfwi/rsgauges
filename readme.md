@@ -10,7 +10,12 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
-    ~ v1.2.5-b1  [F]
+                 -------------------------------------------------------------------
+    - v1.2.5     [R] Maintenance release:
+                    * Minor model and recipe fixes.
+                 -------------------------------------------------------------------
+                 [F] Fixed red LED Indicator model (issue #35, thx ExDomino).
+                 [F] Fixed Light Switch recipe.
 
                  -------------------------------------------------------------------
     - v1.2.4     [R] Maintenance release build v1.2.4. Changes:
