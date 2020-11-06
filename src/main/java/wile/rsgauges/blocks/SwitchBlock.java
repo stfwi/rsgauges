@@ -192,7 +192,7 @@ public class SwitchBlock extends RsDirectedBlock
   @SuppressWarnings("deprecation")
   public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
   {
-    if(world.isRemote || ((config & SWITCH_CONFIG_PROJECTILE_SENSE)==0) || (!(entity instanceof ProjectileEntity))) return;
+    if(world.isRemote() || ((config & SWITCH_CONFIG_PROJECTILE_SENSE)==0) || (!(entity instanceof ProjectileEntity))) return;
     if(state.get(POWERED)) {
       if((config & SWITCH_CONFIG_PROJECTILE_SENSE_OFF)==0) return;
     } else {
@@ -206,11 +206,11 @@ public class SwitchBlock extends RsDirectedBlock
   {
     SwitchTileEntity te = getTe(world, pos);
     if(te==null) return ActionResultType.FAIL;
-    if(world.isRemote) return ActionResultType.SUCCESS;
+    if(world.isRemote()) return ActionResultType.SUCCESS;
     te.click_config(null, false); // reset double click tracking
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit);
     if(ck.touch_configured) {
-      if(te.activation_config(state, player, ck.x, ck.y)) {
+      if(te.touch_config(state, player, ck.x, ck.y)) {
         ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
       }
       return ActionResultType.SUCCESS;
@@ -239,7 +239,7 @@ public class SwitchBlock extends RsDirectedBlock
   @Override
   public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player)
   {
-    if(world.isRemote) return;
+    if(world.isRemote()) return;
     final SwitchTileEntity te = getTe(world, pos);
     if(te == null) return;
     final Item item_held = (player.inventory.getCurrentItem()!=null) ? (player.inventory.getCurrentItem().getItem()) : (Items.AIR);
@@ -341,7 +341,7 @@ public class SwitchBlock extends RsDirectedBlock
   @Override
   public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
   {
-    if((world.isRemote) || (!state.get(POWERED))) return; // scheduler tick only allowed when currently active.
+    if((world.isRemote()) || (!state.get(POWERED))) return; // scheduler tick only allowed when currently active.
     final SwitchTileEntity te = getTe(world, pos);
     if((te!=null) && (te.on_time_remaining() > 0)) { te.reschedule_block_tick(); return; }
     world.setBlockState(pos, (state=state.with(POWERED, false)), 1|2|8|16);
@@ -487,7 +487,7 @@ public class SwitchBlock extends RsDirectedBlock
    */
   protected boolean onSwitchActivated(World world, BlockPos pos, BlockState state, @Nullable PlayerEntity player, @Nullable Direction facing)
   {
-    if(world.isRemote) return true;
+    if(world.isRemote()) return true;
     final SwitchTileEntity te = getTe(world, pos);
     if(te == null) return true;
     boolean was_powered = state.get(POWERED);
@@ -547,6 +547,7 @@ public class SwitchBlock extends RsDirectedBlock
     protected int svd_ = 0; // serialised value data
     protected long click_config_time_lastclicked_ = 0; // tracking of double left clicks (needed for configurable timing)
     protected long click_config_last_cycled_ = 0;      // used to omit cycling the first config click (only show current config)
+    protected long touch_config_time_lastclicked_ = 0;
     protected long last_link_request_ = 0; // used to lock multiple link request to this entity in the same tick
     protected ArrayList<SwitchLinkPearlItem.SwitchLink> links_ = null; // plugged link pearls
 
@@ -557,7 +558,7 @@ public class SwitchBlock extends RsDirectedBlock
     { super(ModContent.TET_SWITCH); }
 
     @Override
-    public void writeNbt(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundNBT nbt, boolean updatePacket)
     {
       nbt.putInt("scd", scd_);
       nbt.putInt("svd", svd_);
@@ -572,7 +573,7 @@ public class SwitchBlock extends RsDirectedBlock
     }
 
     @Override
-    public void readNbt(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundNBT nbt, boolean updatePacket)
     {
       int previous_scd = scd_;
       int previous_svd = svd_;
@@ -702,13 +703,21 @@ public class SwitchBlock extends RsDirectedBlock
       on_timer_reset(t);
     }
 
+    public boolean touch_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
+    {
+      final long t = world.getGameTime();
+      final boolean show_only = Math.abs(t-touch_config_time_lastclicked_) > 40;
+      touch_config_time_lastclicked_ = t;
+      return activation_config(state, player, x, y, show_only);
+    }
+
     /**
      * Configuration via block right clicking, x and z are normalised
      * coords of the xy position clicked on the main facing, values
      * 0 to 16. Shall return true if the block has to be updated and
      * re-rendered.
      */
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
+    protected boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
     { return false; }
 
     /**
@@ -815,7 +824,7 @@ public class SwitchBlock extends RsDirectedBlock
     public boolean verifySwitchLinkTarget(final SwitchLinkPearlItem.SwitchLink link)
     {
       final long t = linktime();
-      if((world.isRemote) || (last_link_request_ == t)) return false; // not in the same tick, people could try to link A to B and B to A.
+      if((world.isRemote()) || (last_link_request_ == t)) return false; // not in the same tick, people could try to link A to B and B to A.
       last_link_request_ = t;
       final BlockState state = world.getBlockState(pos);
       if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return false;
@@ -852,7 +861,7 @@ public class SwitchBlock extends RsDirectedBlock
     public ArrayList<ItemStack> unlinkAllSwitchLinks(boolean drop)
     {
       ArrayList<ItemStack> stacks = new ArrayList<>();
-      if((world.isRemote) || (links_==null)) return stacks;
+      if((world.isRemote()) || (links_==null)) return stacks;
       for(SwitchLinkPearlItem.SwitchLink e:links_) stacks.add(e.toSwitchLinkPearl());
       links_.clear();
       if(drop) { for(ItemStack e:stacks) world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), e)); }

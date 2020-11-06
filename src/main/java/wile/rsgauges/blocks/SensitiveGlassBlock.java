@@ -86,7 +86,7 @@ public class SensitiveGlassBlock extends RsBlock
   @Override
   public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
   {
-    if(world.isRemote) return;
+    if(world.isRemote()) return;
     if(state.get(POWERED) && (!(world.isBlockPowered(pos)))) {
       world.setBlockState(pos, state.with(POWERED, false), 1|2|8|16);
     }
@@ -116,7 +116,7 @@ public class SensitiveGlassBlock extends RsBlock
   @Override
   public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
   {
-    if(world.isRemote) return;
+    if(world.isRemote()) return;
     final boolean was_powered = state.get(POWERED);
     final boolean powered = world.isBlockPowered(pos);
     if(was_powered == powered) return;

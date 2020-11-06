@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "gui_light": "side",
+  "gui_light": "front",
 	"textures": {
 		"3": "rsgauges:block/common/darkroughmetal",
 		"particle": "rsgauges:block/common/darkroughmetal",

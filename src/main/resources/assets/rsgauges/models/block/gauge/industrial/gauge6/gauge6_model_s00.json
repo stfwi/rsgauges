@@ -1,6 +1,6 @@
 {
 	"parent": "block/block",
-	"gui_light": "side",
+	"gui_light": "front",
 	"textures": {
     "scale":  "rsgauges:block/gauge/flatgauge6bg",
     "front": "rsgauges:block/common/redstonered",

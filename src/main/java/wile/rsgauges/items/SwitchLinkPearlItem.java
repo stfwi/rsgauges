@@ -243,7 +243,7 @@ public class SwitchLinkPearlItem extends RsItem
 
     public static SwitchLink fromPlayerActiveItem(World world, PlayerEntity player)
     {
-      if((player==null) || (world.isRemote) || (player.inventory==null) || (player.inventory.getCurrentItem()==null)) return new SwitchLink();
+      if((player==null) || (world.isRemote()) || (player.inventory==null) || (player.inventory.getCurrentItem()==null)) return new SwitchLink();
       if(player.inventory.getCurrentItem().getItem()!=ModContent.SWITCH_LINK_PEARL) return null;
       return SwitchLink.fromNbt(player.inventory.getCurrentItem().getTag());
     }

@@ -26,7 +26,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import wile.rsgauges.libmc.detail.Overlay;
 import wile.rsgauges.ModContent;
-import wile.rsgauges.ModConfig;
 import wile.rsgauges.blocks.EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
@@ -146,7 +145,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
     }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
+    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final SwitchBlock block = (SwitchBlock)state.getBlock();
@@ -157,31 +156,34 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
             ((x>=11) && (x<=13)) ? (4) : (0)
           )));
       if((direction==0) || (field==0)) return false;
-      switch(field) {
-        case 1: {
-          double v = threshold0_on()+(direction);
-          if(v < 1) v = 1; else if(v > 15) v = 15;
-          threshold0_on(v);
-          if(threshold0_on() < threshold0_off()) threshold0_off(threshold0_on());
-          break;
+      if(!show_only) {
+        switch(field) {
+          case 1: {
+            double v = threshold0_on()+(direction);
+            if(v < 1) v = 1; else if(v > 15) v = 15;
+            threshold0_on(v);
+            if(threshold0_on() < threshold0_off()) threshold0_off(threshold0_on());
+            break;
+          }
+          case 2: {
+            double v = threshold0_off()+(direction);
+            if(v < 0) v = 0; else if(v > 14) v = 14;
+            threshold0_off(v);
+            if(threshold0_off() > threshold0_on()) threshold0_on(threshold0_off());
+            break;
+          }
+          case 3: {
+            acquisition_mode(acquisition_mode() + direction);
+            break;
+          }
+          case 4: {
+            on_power(on_power() + direction);
+            break;
+          }
         }
-        case 2: {
-          double v = threshold0_off()+(direction);
-          if(v < 0) v = 0; else if(v > 14) v = 14;
-          threshold0_off(v);
-          if(threshold0_off() > threshold0_on()) threshold0_on(threshold0_off());
-          break;
-        }
-        case 3: {
-          acquisition_mode(acquisition_mode() + direction);
-          break;
-        }
-        case 4: {
-          on_power(on_power() + direction);
-          break;
-        }
+        if(on_power() < 1) on_power(1);
+        markDirty();
       }
-      if(on_power() < 1) on_power(1);
       {
         StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
@@ -192,7 +194,6 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
         tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
         Overlay.show(player, Auxiliaries.localizable("switchconfig.comparator_switch", TextFormatting.RESET, tr.toArray()));
       }
-      markDirty();
       return true;
     }
 
@@ -203,8 +204,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
     @Override
     public void tick()
     {
-      if(ModConfig.without_environmental_switch_update) return;
-      if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
+      if((!hasWorld()) || (getWorld().isRemote()) || (--update_timer_ > 0)) return;
       if(update_interval_ < 4) update_interval_ = 4;
       update_timer_ = update_interval_ + (int)(Math.random()*2); // sensor timing noise using rnd
       BlockState state = getBlockState();

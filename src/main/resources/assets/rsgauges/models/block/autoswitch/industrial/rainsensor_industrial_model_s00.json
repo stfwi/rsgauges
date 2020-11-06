@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "gui_light": "side",
+  "gui_light": "front",
 	"textures": {
 		"4": "rsgauges:block/indicator/indicator_fg_green_off_texture",
 		"particle": "rsgauges:block/common/industrial_base_8x8",

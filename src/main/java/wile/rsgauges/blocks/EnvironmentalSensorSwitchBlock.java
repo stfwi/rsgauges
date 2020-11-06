@@ -23,7 +23,6 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.tileentity.TileEntity;
 import wile.rsgauges.ModContent;
-import wile.rsgauges.ModConfig;
 import wile.rsgauges.libmc.detail.Overlay;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
@@ -89,52 +88,51 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
     { debounce_ = (v<0) ? (0) : ((v>debounce_max) ? (debounce_max) : (v)); }
 
     @Override
-    public void writeNbt(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundNBT nbt, boolean updatePacket)
     {
-      super.writeNbt(nbt, updatePacket);
+      super.write(nbt, updatePacket);
       nbt.putDouble("threshold0_on", threshold0_on());
       nbt.putDouble("threshold0_off", threshold0_off());
       nbt.putInt("debounce", debounce());
     }
 
     @Override
-    public void readNbt(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundNBT nbt, boolean updatePacket)
     {
-      super.readNbt(nbt, updatePacket);
+      super.read(nbt, updatePacket);
       threshold0_on(nbt.getDouble("threshold0_on"));
       threshold0_off(nbt.getDouble("threshold0_off"));
       debounce(nbt.getInt("debounce"));
     }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
+    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final SwitchBlock block = (SwitchBlock)state.getBlock();
       final int direction = (y >= 13) ? (1) : ((y <= 2) ? (-1) : (0));
-      final int field = ((x>=2) && (x<=3.95)) ? (1) : (
-        ((x>=4.25) && (x<=7)) ? (2) : (
-          ((x>=8) && (x<=10)) ? (3) : (
-            ((x>=11) && (x<=13)) ? (4) : (0)
-          )));
+      final int field = ((x>=2) && (x<=3.95)) ? (1) : ( ((x>=4.25) && (x<=7)) ? (2) : ( ((x>=8) && (x<=10)) ? (3) : ( ((x>=11) && (x<=13)) ? (4) : (0) )));
       if((direction==0) || (field==0)) return false;
       if((block.config & SWITCH_CONFIG_SENSOR_LIGHT)!=0) {
-        switch(field) {
-          case 1: {
-            threshold0_on(threshold0_on()+direction);
-            if(threshold0_off() > threshold0_on()) threshold0_off(threshold0_on());
-            break;
+        if(!show_only) {
+          switch(field) {
+            case 1: {
+              threshold0_on(threshold0_on()+direction);
+              if(threshold0_off() > threshold0_on()) threshold0_off(threshold0_on());
+              break;
+            }
+            case 2: {
+              threshold0_off(threshold0_off()+direction);
+              if(threshold0_on() < threshold0_off()) threshold0_on(threshold0_off());
+              break;
+            }
+            case 3: { debounce(debounce()+direction); break; }
+            case 4: { on_power(on_power() + direction); break; }
           }
-          case 2: {
-            threshold0_off(threshold0_off()+direction);
-            if(threshold0_on() < threshold0_off()) threshold0_on(threshold0_off());
-            break;
-          }
-          case 3: { debounce(debounce()+direction); break; }
-          case 4: { on_power(on_power() + direction); break; }
+          if(threshold0_on() < 1) threshold0_on(1);
+          if(on_power() < 1) on_power(1);
+          markDirty();
         }
-        if(threshold0_on() < 1) threshold0_on(1);
-        if(on_power() < 1) on_power(1);
         {
           ArrayList<Object> tr = new ArrayList<>();
           final TranslationTextComponent trunit = Auxiliaries.localizable("switchconfig.lightsensor.lightunit");
@@ -150,26 +148,25 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
           Overlay.show(player, Auxiliaries.localizable("switchconfig.lightsensor", TextFormatting.RESET, tr.toArray()));
         }
       } else if((block.config & (SWITCH_CONFIG_SENSOR_RAIN|SWITCH_CONFIG_SENSOR_LIGHTNING))!=0) {
-        switch(field) {
-          case 4: { on_power(on_power() + direction); break; }
-        }
-        if(on_power() < 1) on_power(1);
-        {
-          if((block.config & SWITCH_CONFIG_SENSOR_RAIN)!=0) {
-            Overlay.show(player, Auxiliaries.localizable("switchconfig.rainsensor.output_power", TextFormatting.RED, new Object[]{on_power()}));
-          } else {
-            Overlay.show(player, Auxiliaries.localizable("switchconfig.thundersensor.output_power", TextFormatting.RED, new Object[]{on_power()}));
+        if(!show_only) {
+          switch(field) {
+            case 4: { on_power(on_power() + direction); break; }
           }
+          if(on_power() < 1) on_power(1);
+          markDirty();
+        }
+        if((block.config & SWITCH_CONFIG_SENSOR_RAIN)!=0) {
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.rainsensor.output_power", TextFormatting.RED, new Object[]{on_power()}));
+        } else {
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.thundersensor.output_power", TextFormatting.RED, new Object[]{on_power()}));
         }
       }
-      markDirty();
       return true;
     }
 
     @Override
     public void tick()
     {
-      if(ModConfig.without_environmental_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       if(update_interval_ < 10) update_interval_ = 10;
       update_timer_ = update_interval_ + (int)(Math.random()*5); // sensor timing noise using rnd

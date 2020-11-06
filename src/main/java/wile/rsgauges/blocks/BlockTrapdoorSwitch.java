@@ -50,7 +50,7 @@ public class BlockTrapdoorSwitch extends ContactSwitchBlock
   public void onFallenUpon(World world, BlockPos pos, Entity entity, float distance)
   {
     if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0)) {
-      if(world.isRemote) return;
+      if(world.isRemote()) return;
       onEntityCollided(world, pos, world.getBlockState(pos));
       final BlockPos[] neighbors = { pos.add(1,0,0), pos.add(-1,0,0), pos.add(0,0,1), pos.add(0,0,-1), pos.add(1,0,1), pos.add(-1,0,-1), pos.add(-1,0,1), pos.add(1,0,-1), };
       for(BlockPos p: neighbors) {
@@ -64,7 +64,7 @@ public class BlockTrapdoorSwitch extends ContactSwitchBlock
   @Override
   public void onEntityWalk(World world, BlockPos pos, Entity entity)
   {
-    if(((config & SWITCH_CONFIG_HIGH_SENSITIVE)==0) || (world.isRemote) || (entity.isSneaking())) return;
+    if(((config & SWITCH_CONFIG_HIGH_SENSITIVE)==0) || (world.isRemote()) || (entity.isSneaking())) return;
     onEntityCollided(world, pos, world.getBlockState(pos));
     final BlockPos[] neighbors = { pos.add(1,0,0), pos.add(-1,0,0), pos.add(0,0,1), pos.add(0,0,-1), pos.add(1,0,1), pos.add(-1,0,-1), pos.add(-1,0,1), pos.add(1,0,-1), };
     for(BlockPos p: neighbors) {
@@ -95,7 +95,7 @@ public class BlockTrapdoorSwitch extends ContactSwitchBlock
   @Override
   public boolean onLinkRequest(final SwitchLinkPearlItem.SwitchLink link, long req, final World world, final BlockPos pos, final @Nullable PlayerEntity player)
   {
-    if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote)) return false;
+    if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote())) return false;
     BlockState state = world.getBlockState(pos);
     if((state == null) || (!(state.getBlock() instanceof BlockTrapdoorSwitch))) return false;
     if(state.get(POWERED)) return true; // already active

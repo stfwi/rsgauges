@@ -19,7 +19,6 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.tileentity.TileEntity;
 import wile.rsgauges.ModContent;
-import wile.rsgauges.ModConfig;
 import wile.rsgauges.blocks.EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.libmc.detail.Auxiliaries;
@@ -57,37 +56,35 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
     { super(ModContent.TET_DAYTIMER_SWITCH); }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
+    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final SwitchBlock block = (SwitchBlock)state.getBlock();
       final int direction = (y >= 13) ? (1) : ((y <= 2) ? (-1) : (0));
-      final int field = ((x>=2) && (x<=3.95)) ? (1) : (
-        ((x>=4.25) && (x<=7)) ? (2) : (
-          ((x>=8) && (x<=10)) ? (3) : (
-            ((x>=11) && (x<=13)) ? (4) : (0)
-          )));
+      final int field = ((x>=2) && (x<=3.95)) ? (1) : ( ((x>=4.25) && (x<=7)) ? (2) : ( ((x>=8) && (x<=10)) ? (3) : ( ((x>=11) && (x<=13)) ? (4) : (0) )));
       if((direction==0) || (field==0)) return false;
-      final double time_scaling = 15.0d * 500.0d / 24000.0d; // 1/2h
-      switch(field) {
-        case 1: {
-          double v = threshold0_on()+(time_scaling*direction);
-          if(v < 0) v += 15.0; else if(v > 15) v = 0;
-          threshold0_on(v);
-          break;
+      if(!show_only) {
+        final double time_scaling = 15.0d * 500.0d / 24000.0d; // 1/2h
+        switch(field) {
+          case 1: {
+            double v = threshold0_on()+(time_scaling*direction);
+            if(v < 0) v += 15.0; else if(v > 15) v = 0;
+            threshold0_on(v);
+            break;
+          }
+          case 2: {
+            double v = threshold0_off()+(time_scaling*direction);
+            if(v < 0) v += 15.0; else if(v > 15) v = 0;
+            threshold0_off(v);
+            break;
+          }
+          case 3: { debounce(debounce()+direction); break; }
+          case 4: { on_power(on_power() + direction); break; }
         }
-        case 2: {
-          double v = threshold0_off()+(time_scaling*direction);
-          if(v < 0) v += 15.0; else if(v > 15) v = 0;
-          threshold0_off(v);
-          break;
-        }
-        case 3: { debounce(debounce()+direction); break; }
-        case 4: { on_power(on_power() + direction); break; }
+        if(on_power() < 1) on_power(1);
+        markDirty();
       }
-      if(on_power() < 1) on_power(1);
       {
-        // @TODO: day time localisation: how the hack that, transfer long timestamp with tagging and localise on client or system time class?
         StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
         tr.add(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_on", TextFormatting.BLUE, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
@@ -101,14 +98,12 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
         tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
         Overlay.show(player, Auxiliaries.localizable("switchconfig.daytimerclock", TextFormatting.RESET, tr.toArray()));
       }
-      markDirty();
       return true;
     }
 
     @Override
     public void tick()
     {
-      if(ModConfig.without_environmental_switch_update) return;
       if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
       if(update_interval_ < 10) update_interval_ = 10;
       update_timer_ = update_interval_ + (int)(Math.random()*5); // sensor timing noise using rnd

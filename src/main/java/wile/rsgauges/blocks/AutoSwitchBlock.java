@@ -46,7 +46,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
   @Override
   public boolean onLinkRequest(final SwitchLinkPearlItem.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final PlayerEntity player)
   {
-    if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote)) return false;
+    if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote())) return false;
     if((config & (SWITCH_CONFIG_TIMER_INTERVAL))==0) return false; // only interval timer can be a link target
     BlockState state = world.getBlockState(pos);
     if((state == null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return false;

@@ -39,7 +39,7 @@ public class PlayerBlockInteraction
   public static void onPlayerInteract(PlayerInteractEvent event)
   {
     final World world = event.getWorld();
-    if(world.isRemote) return;
+    if(world.isRemote()) return;
     final boolean is_rclick = (event instanceof RightClickBlock) && (event.getHand()==Hand.MAIN_HAND);
     final boolean is_lclick = (event instanceof LeftClickBlock) && (event.getHand()==Hand.MAIN_HAND) && (event.getFace()!=Direction.DOWN); // last one temporary workaround for double trigger on mouse release
     if((!is_rclick) && (!is_lclick)) return;

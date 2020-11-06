@@ -17,12 +17,14 @@
 package wile.rsgauges.blocks;
 
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.entity.player.PlayerEntity;
@@ -54,6 +56,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock
   public static final int  GAUGE_DATA_POWER_SHIFT           = 0;
   public static final long GAUGE_DATA_BLINKING              = 0x0000000000000100l;
   public static final long GAUGE_DATA_INVERTED              = 0x0000000000000200l;
+  public static final long GAUGE_DATA_COMPARATOR_MODE       = 0x0000000000000800l;
 
   @Nullable public final ModResources.BlockSoundEvent power_on_sound;
   @Nullable public final ModResources.BlockSoundEvent power_off_sound;
@@ -77,8 +80,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock
   @Override
   public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
   {
-    if(!isAffectedByNeigbour(state, world, pos, fromPos)) return;
-    if(world.isRemote) return;
+    if((world.isRemote()) || (!isAffectedByNeigbour(state, world, pos, fromPos))) return;
     final GaugeTileEntity te = getTe(world, pos);
     if(te == null) te.reset_timer();
   }
@@ -94,8 +96,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock
     if(ModConfig.isWrench(player.getHeldItem(hand))) {
       GaugeTileEntity te = getTe(world, pos);
       if(te==null) return ActionResultType.SUCCESS;
-      te.inverted(!te.inverted());
-      Overlay.show(player, Auxiliaries.localizable("gaugeconfig.options."+(te.inverted()?"inverted":"notinverted"), TextFormatting.DARK_AQUA));
+      te.on_wrench(state, world, pos, player, player.getHeldItem(hand));
     }
     return ActionResultType.SUCCESS;
   }
@@ -166,6 +167,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock
     private boolean alternation_state_ = false; // client, mainly sound indicators
     private long trigger_timer_ = 0;
     private long scd_ = 0;
+    private long last_wrench_click_ = 0;
 
     public GaugeTileEntity(TileEntityType<?> te_type)
     { super(te_type); }
@@ -184,6 +186,12 @@ public class AbstractGaugeBlock extends RsDirectedBlock
 
     public void inverted(boolean i)
     { scd_ =  (scd_ & (~GAUGE_DATA_INVERTED)) | (i ? GAUGE_DATA_INVERTED : 0); }
+
+    public boolean comparator_mode()
+    { return (scd_ & GAUGE_DATA_COMPARATOR_MODE) != 0; }
+
+    public void comparator_mode(boolean i)
+    { scd_ =  (scd_ & (~GAUGE_DATA_COMPARATOR_MODE)) | (i ? GAUGE_DATA_COMPARATOR_MODE : 0); }
 
     public void reset_timer()
     { trigger_timer_= 0; }
@@ -207,12 +215,29 @@ public class AbstractGaugeBlock extends RsDirectedBlock
       }
     }
 
+    public void on_wrench(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack wrench)
+    {
+      long t = world.getGameTime();
+      if(Math.abs(t-last_wrench_click_) < 40) {
+        switch((inverted()?1:0)|(comparator_mode()?2:0)) {
+          case  0: inverted( true); comparator_mode(false); break;
+          case  1: inverted(false); comparator_mode( true); break;
+          case  2: inverted( true); comparator_mode( true); break;
+          default: inverted(false); comparator_mode(false); break;
+        }
+      }
+      last_wrench_click_ = t;
+      final TranslationTextComponent tr = Auxiliaries.localizable("gaugeconfig.options."+(inverted()?"inverted":"notinverted"), TextFormatting.DARK_AQUA);
+      if(comparator_mode()) tr.append(new StringTextComponent(" | ")).append(Auxiliaries.localizable("gaugeconfig.options.comparator", TextFormatting.DARK_AQUA));
+      Overlay.show(player, tr);
+    }
+
     @Override
-    public void writeNbt(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundNBT nbt, boolean updatePacket)
     { nbt.putLong("scd", scd_); }
 
     @Override
-    public void readNbt(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundNBT nbt, boolean updatePacket)
     { scd_= nbt.getLong("scd"); }
 
     @Override
@@ -224,7 +249,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock
       try {
         BlockState state = getBlockState();
         final AbstractGaugeBlock block = (AbstractGaugeBlock) state.getBlock();
-        if(world.isRemote) {
+        if(world.isRemote()) {
           if(((block.config & GAUGE_DATA_BLINKING) != 0) && (block instanceof IndicatorBlock)) {
             if(state.get(IndicatorBlock.POWERED)) {
               if((block.power_off_sound != null) || (block.power_on_sound != null)) {
@@ -245,20 +270,28 @@ public class AbstractGaugeBlock extends RsDirectedBlock
           if(!world.isBlockLoaded(neighbourPos)) return;
           final BlockState neighborState = world.getBlockState(neighbourPos);
           int p = 0;
-          if((block instanceof IndicatorBlock) && (world.isBlockPowered(getPos()))) {
-            p = 15;
-          } else if(neighborState.canProvidePower()) {
-            p = world.getRedstonePower(neighbourPos, state.get(FACING).getOpposite());
-          } else if(neighborState.hasComparatorInputOverride()) {
-            p = neighborState.getComparatorInputOverride(world, neighbourPos);
+          if(comparator_mode()) {
+            // Explicit comparator-only mode
+            if(neighborState.hasComparatorInputOverride()) {
+              p = neighborState.getComparatorInputOverride(world, neighbourPos);
+            }
           } else {
-            final boolean is_indicator = (block instanceof IndicatorBlock);
-            for(Direction nbf : Direction.values()) {
-              if((p >= 15) || (is_indicator && (p>0))) break;
-              final BlockPos nbp = neighbourPos.offset(nbf);
-              if(!world.isBlockLoaded(nbp)) continue;
-              final BlockState nbs = world.getBlockState(nbp);
-              p = Math.max(p, world.getRedstonePower(nbp, nbf));
+            // Direct or indirect redstonr mode, automatic comparator mode if applicable
+            if((block instanceof IndicatorBlock) && (world.isBlockPowered(getPos()))) {
+              p = 15;
+            } else if(neighborState.canProvidePower()) {
+              p = world.getRedstonePower(neighbourPos, state.get(FACING).getOpposite());
+            } else if(neighborState.hasComparatorInputOverride()) {
+              p = neighborState.getComparatorInputOverride(world, neighbourPos);
+            } else {
+              final boolean is_indicator = (block instanceof IndicatorBlock);
+              for(Direction nbf : Direction.values()) {
+                if((p >= 15) || (is_indicator && (p>0))) break;
+                final BlockPos nbp = neighbourPos.offset(nbf);
+                if(!world.isBlockLoaded(nbp)) continue;
+                final BlockState nbs = world.getBlockState(nbp);
+                p = Math.max(p, world.getRedstonePower(nbp, nbf));
+              }
             }
           }
           if(inverted()) p = MathHelper.clamp(15-p, 0, 15);

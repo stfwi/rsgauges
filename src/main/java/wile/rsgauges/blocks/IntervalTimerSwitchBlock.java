@@ -21,7 +21,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.tileentity.TileEntity;
 import wile.rsgauges.libmc.detail.Overlay;
 import wile.rsgauges.ModContent;
-import wile.rsgauges.ModConfig;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
 
@@ -99,9 +98,9 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
     { ramp_ = (v<0) ? (0) : ((v>ramp_max) ? (ramp_max) : (v)); }
 
     @Override
-    public void writeNbt(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundNBT nbt, boolean updatePacket)
     {
-      super.writeNbt(nbt, updatePacket);
+      super.write(nbt, updatePacket);
       nbt.putInt("pset", p_set());
       nbt.putInt("toff", t_off());
       nbt.putInt("ton", t_on());
@@ -109,9 +108,9 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
     }
 
     @Override
-    public void readNbt(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundNBT nbt, boolean updatePacket)
     {
-      super.readNbt(nbt, updatePacket);
+      super.read(nbt, updatePacket);
       p_set(nbt.getInt("pset"));
       t_off(nbt.getInt("toff"));
       t_on(nbt.getInt("ton"));
@@ -143,7 +142,7 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
     }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
+    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
     {
       if((state == null) || (!(state.getBlock() instanceof SwitchBlock))) return false;
       final int direction = (y >= 13) ? (1) : ((y <= 2) ? (-1) : (0));
@@ -153,7 +152,7 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
             ((x>=11) && (x<=13)) ? (4) : (0)
           )));
       final boolean selected = ((direction!=0) && (field!=0));
-      if(selected) {
+      if(selected && (!show_only)) {
         switch(field) {
           case 1: t_on( (direction > 0) ? next_higher_interval_setting(t_on()) : next_lower_interval_setting(t_on()) ); break;
           case 2: t_off( (direction > 0) ? next_higher_interval_setting(t_off()) : next_lower_interval_setting(t_off()) ); break;
@@ -188,7 +187,7 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
     @Override
     public void tick()
     {
-      if((ModConfig.without_timer_switch_update) || (!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
+      if((!hasWorld()) || (getWorld().isRemote()) || (--update_timer_ > 0)) return;
       int p = p_;
       if((t_on()<=0) || (t_off()<=0) || (p_set() <= 0)) {
         p_ = 0;

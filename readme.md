@@ -10,6 +10,9 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    - v1.2.6-b2  [A] Gauges can be explicitly set to Comparator-Input mode (click with a Redstone Torch).
+                 [A] Auto switch buttons only display the current configurations on first click.
+
     - v1.2.6-b1  [U] Ported to 1.16.4.
 
     - v1.2.5     [R] Release build 1.2.5.

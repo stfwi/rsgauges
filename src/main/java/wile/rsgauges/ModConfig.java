@@ -104,9 +104,6 @@ public class ModConfig
     public final ForgeConfigSpec.BooleanValue with_experimental;
     public final ForgeConfigSpec.BooleanValue without_recipes;
     public final ForgeConfigSpec.BooleanValue without_switch_status_overlay;
-    public final ForgeConfigSpec.BooleanValue without_detector_switch_update;
-    public final ForgeConfigSpec.BooleanValue without_environmental_switch_update;
-    public final ForgeConfigSpec.BooleanValue without_timer_switch_update;
     public final ForgeConfigSpec.IntValue max_switch_linking_distance;
     public final ForgeConfigSpec.ConfigValue<String> accepted_wrenches;
     // Tweaks
@@ -238,24 +235,6 @@ public class ModConfig
           .translation(ModRsGauges.MODID + ".config.without_switch_status_overlay")
           .comment("Disable the status overlay for switches and use chat messages instead.")
           .define("without_switch_status_overlay", false);
-        // @Config.Name("Without detector switch update")
-        without_detector_switch_update = builder
-          .translation(ModRsGauges.MODID + ".config.without_detector_switch_update")
-          .comment("Disable tile entity update() for detector switches" +
-                   "(for performance testing only, don't do this at home).")
-          .define("without_detector_switch_update", false);
-        // @Config.Name("Without environmental switch update")
-        without_environmental_switch_update = builder
-          .translation(ModRsGauges.MODID + ".config.without_environmental_switch_update")
-          .comment("Disable tile entity update() for environmental sensor switches.",
-                   "(for performance testing only, don't do this at home)")
-          .define("without_environmental_switch_update", false);
-        // @Config.Name("Without timer switch update")
-        without_timer_switch_update = builder
-          .translation(ModRsGauges.MODID + ".config.without_timer_switch_update")
-          .comment("Disable tile entity update() for time based switches." +
-                   "(for performance testing only, don't do this at home)")
-          .define("without_timer_switch_update", false);
         // @Config.Name("Max switch linking distance")
         max_switch_linking_distance = builder
           .translation(ModRsGauges.MODID + ".config.max_switch_linking_distance")
@@ -356,9 +335,6 @@ public class ModConfig
 
   public static boolean status_overlay_disabled = false;
   public static boolean without_switch_linking = false;
-  public static boolean without_detector_switch_update = false;
-  public static boolean without_environmental_switch_update = false;
-  public static boolean without_timer_switch_update = false;
   public static boolean without_gauge_weak_power_measurement = false;
   public static boolean without_pulsetime_config = false;
   public static boolean without_switch_nooutput = false;
@@ -496,11 +472,8 @@ public class ModConfig
     status_overlay_disabled = SERVER.without_switch_status_overlay.get();
     without_switch_linking = SERVER.without_switch_linking.get();
     max_switch_linking_distance = SERVER.max_switch_linking_distance.get();
-    without_detector_switch_update = SERVER.without_detector_switch_update.get();
     autoswitch_linear_update_interval = SERVER.autoswitch_linear_update_interval.get();
     autoswitch_volumetric_update_interval = SERVER.autoswitch_volumetric_update_interval.get();
-    without_environmental_switch_update = SERVER.without_environmental_switch_update.get();
-    without_timer_switch_update = SERVER.without_timer_switch_update.get();
     gauge_update_interval = SERVER.gauge_update_interval.get();
     without_gauge_weak_power_measurement = SERVER.without_gauge_weak_power_measurement.get();
     without_pulsetime_config = SERVER.without_pulsetime_config.get();

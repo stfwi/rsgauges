@@ -9,6 +9,8 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -64,7 +66,7 @@ public class ContactSwitchBlock extends SwitchBlock
   @Override
   public void onEntityWalk(World world, BlockPos pos, Entity entity)
   {
-    if(world.isRemote) return;
+    if(world.isRemote()) return;
     if(((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==(SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE)) && (!entity.isSneaking())) {
       onEntityCollided(world, pos, world.getBlockState(pos));
     }
@@ -73,7 +75,7 @@ public class ContactSwitchBlock extends SwitchBlock
   @Override
   public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
   {
-    if(world.isRemote) return;
+    if(world.isRemote()) return;
     if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) && (entity.fallDistance < 0.2)) return;
     onEntityCollided(world, pos, state);
   }
@@ -84,29 +86,25 @@ public class ContactSwitchBlock extends SwitchBlock
 
   protected boolean onEntityCollided(World world, BlockPos pos, BlockState state)
   {
-    if(world.isRemote) return false;
+    if(world.isRemote()) return false;
     ContactSwitchTileEntity te = getTe(world, pos);
     if(te == null) return false;
     boolean active = false;
     final boolean powered = state.get(POWERED);
-    //if(powered && (te.on_time_remaining() > 3) && ((world.getGameTime() & 0x3)!=0)) {
-    //  active = true; // anyway on at the next update.
-    //} else {
-      @SuppressWarnings("unchecked")
-      List<Entity> hits = world.getEntitiesWithinAABB((Class<Entity>)te.filter_class(), detectionVolume(pos));
-      if(hits.size() >= te.entity_count_threshold()) {
-        if(te.high_sensitivity()) {
-          active = true;
-        } else {
-          for(Entity e:hits) {
-            if(!e.doesEntityNotTriggerPressurePlate()) {
-              active = true;
-              break;
-            }
+    @SuppressWarnings("unchecked")
+    List<Entity> hits = world.getEntitiesWithinAABB((Class<Entity>)te.filter_class(), detectionVolume(pos));
+    if(hits.size() >= te.entity_count_threshold()) {
+      if(te.high_sensitivity()) {
+        active = true;
+      } else {
+        for(Entity e:hits) {
+          if(!e.doesEntityNotTriggerPressurePlate()) {
+            active = true;
+            break;
           }
         }
       }
-    //}
+    }
     if(active) {
       int t = te.configured_on_time();
       te.on_timer_reset( (t<=0) ? (default_pulse_on_time) : ((t<4) ? 4 : t));
@@ -187,18 +185,18 @@ public class ContactSwitchBlock extends SwitchBlock
     { count_threshold_ = ((sel<1) ? 1 : ((sel>=max_entity_count)) ? max_entity_count : sel); }
 
     @Override
-    public void writeNbt(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundNBT nbt, boolean updatePacket)
     {
-      super.writeNbt(nbt, updatePacket);
+      super.write(nbt, updatePacket);
       nbt.putInt("filter", filter());
       nbt.putBoolean("highsensitive", high_sensitivity());
       nbt.putInt("entitythreshold", entity_count_threshold());
     }
 
     @Override
-    public void readNbt(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundNBT nbt, boolean updatePacket)
     {
-      super.readNbt(nbt, updatePacket);
+      super.read(nbt, updatePacket);
       filter(nbt.getInt("filter"));
       high_sensitivity(nbt.getBoolean("highsensitive"));
       entity_count_threshold(nbt.getInt("entitythreshold"));
@@ -215,7 +213,7 @@ public class ContactSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
+    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final SwitchBlock block = (SwitchBlock)state.getBlock();
@@ -229,40 +227,29 @@ public class ContactSwitchBlock extends SwitchBlock
                 )));
       }
       if((direction==0) || (field==0)) return false;
-      switch(field) {
-        case 1: {
-          high_sensitivity(direction > 0);
-          Overlay.show(player,
-            Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity", TextFormatting.BLUE, new Object[]{
-              Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity." + (high_sensitivity() ? "high":"normal"))
-            })
-          );
-          break;
+      if(!show_only) {
+        switch(field) {
+          case 1: high_sensitivity(direction > 0); break;
+          case 2: entity_count_threshold(entity_count_threshold() + direction); break;
+          case 3: filter(filter() + direction); break;
+          case 4: on_power(MathHelper.clamp(on_power() + direction, 1, 15));
         }
-        case 2: {
-          entity_count_threshold(entity_count_threshold() + direction);
-          Overlay.show(player,
-            Auxiliaries.localizable("switchconfig.touchcontactmat.entity_threshold", TextFormatting.YELLOW, new Object[]{entity_count_threshold()})
-          );
-          break;
-        }
-        case 3: {
-          filter(filter() + direction);
-          Overlay.show(player,
-            Auxiliaries.localizable("switchconfig.touchcontactmat.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.touchcontactmat.entity_filter."+filter_class_names[filter_])})
-          );
-          break;
-        }
-        case 4: {
-          on_power(on_power() + direction);
-          if(on_power() < 1) on_power(1);
-          Overlay.show(player,
-            Auxiliaries.localizable("switchconfig.touchcontactmat.output_power", TextFormatting.RED, new Object[]{on_power()})
-          );
-          break;
-        }
+        markDirty();
       }
-      markDirty();
+      {
+        Overlay.show(player,
+          (new StringTextComponent(""))
+            .append(Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity", TextFormatting.BLUE, new Object[]{
+                Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity." + (high_sensitivity() ? "high":"normal"))
+              }))
+            .appendString(" | ")
+            .append(Auxiliaries.localizable("switchconfig.touchcontactmat.entity_threshold", TextFormatting.YELLOW, new Object[]{entity_count_threshold()}))
+            .appendString(" | ")
+            .append(Auxiliaries.localizable("switchconfig.touchcontactmat.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.touchcontactmat.entity_filter."+filter_class_names[filter_])}))
+            .appendString(" | ")
+            .append(Auxiliaries.localizable("switchconfig.touchcontactmat.output_power", TextFormatting.RED, new Object[]{on_power()}))
+        );
+      }
       return true;
     }
   }

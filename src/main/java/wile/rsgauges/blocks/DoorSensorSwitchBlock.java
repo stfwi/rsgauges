@@ -63,7 +63,7 @@ public class DoorSensorSwitchBlock extends SwitchBlock
     @Override
     public void tick()
     {
-      if(world.isRemote || (--update_timer_ > 0)) return;
+      if(world.isRemote() || (--update_timer_ > 0)) return;
       update_timer_ = 4;
       final BlockState state = world.getBlockState(getPos());
       if((state==null) || (!(state.getBlock() instanceof DoorSensorSwitchBlock))) return;

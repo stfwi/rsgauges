@@ -55,7 +55,7 @@ public class DimmerSwitchBlock extends SwitchBlock
   public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
   {
     if((!(state.getBlock() instanceof DimmerSwitchBlock))) return ActionResultType.FAIL;
-    if(world.isRemote) return ActionResultType.SUCCESS;
+    if(world.isRemote()) return ActionResultType.SUCCESS;
     SwitchTileEntity te = getTe(world, pos);
     if(te==null) return ActionResultType.FAIL;
     te.click_config(null, false);

@@ -164,7 +164,7 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   @SuppressWarnings("deprecation")
   public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
   {
-    if((state.getBlock() != newState.getBlock()) && (state.getBlock() instanceof RsBlock)) {
+    if((state.hasTileEntity() && (!state.isIn(newState.getBlock()) || !newState.hasTileEntity())) && (state.getBlock() instanceof RsBlock)) {
       RsBlock block = (RsBlock)state.getBlock();
       if(state.hasTileEntity()) {
         block.onRsBlockDestroyed(state, world, pos, false);
@@ -244,39 +244,34 @@ public abstract class RsBlock extends Block implements IWaterLoggable
     public RsTileEntity(TileEntityType<?> te_type)
     { super(te_type); }
 
-    public void writeNbt(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundNBT nbt, boolean updatePacket)
     {}
 
-    public void readNbt(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundNBT nbt, boolean updatePacket)
     {}
 
-    protected void syncToClients()
+    protected final void syncToClients()
     {
-      if(world.isRemote) return;
+      if(world.isRemote()) return;
       CompoundNBT nbt = new CompoundNBT();
-      writeNbt(nbt, true);
+      write(nbt, true);
       Networking.PacketTileNotifyServerToClient.sendToAllPlayers((ServerWorld)getWorld(), getPos(), nbt);
     }
 
-    public void onServerPacketReceived(CompoundNBT nbt)
-    { readNbt(nbt, true); }
+    public final void onServerPacketReceived(CompoundNBT nbt)
+    { read(nbt, true); }
 
     // --------------------------------------------------------------------------------------------------------
     // TileEntity
     // --------------------------------------------------------------------------------------------------------
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt)
-    { super.write(nbt); writeNbt(nbt, false); return nbt; }
-
-    // obb below
-    public void read(CompoundNBT nbt)
-    { readNbt(nbt, false); }
+    public final CompoundNBT write(CompoundNBT nbt)
+    { super.write(nbt); write(nbt, false); return nbt; }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
-    { super.read(state, nbt); read(nbt); }
-
+    public final void read(BlockState state, CompoundNBT nbt)
+    { super.read(state, nbt); read(nbt, false); }
   }
 
 }

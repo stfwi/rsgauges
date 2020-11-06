@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.16.4": {
+    "1.2.6-b2": "[A] Gauges can be explicitly set to Comparator-Input mode (click with a Redstone Torch).\n[A] Auto switch buttons only display the current configurations on first click.",
     "1.2.6-b1": "[U] Ported to 1.16.4.",
     "1.2.5": "[R] Release build 1.2.5.",
     "1.2.5-b1": "[A] Linked switches are marked with particles when holding the Switch Link Pearl.\n[U] Partial internal code refurbishments.",
@@ -17,6 +18,6 @@
   },
   "promos": {
     "1.16.4-recommended": "1.2.5",
-    "1.16.4-latest": "1.2.6-b1"
+    "1.16.4-latest": "1.2.6-b2"
   }
 }

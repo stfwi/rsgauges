@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "gui_light": "side",
+  "gui_light": "front",
 	"ambientocclusion": true,
 	"textures": {
     "front": "rsgauges:block/gauge/flatgauge5texture_s00",

@@ -127,9 +127,9 @@ public class ObserverSwitchBlock extends SwitchBlock
     { filter_index_ = (f>=BlockCategories.getMatcherNames().size()) ? (BlockCategories.getMatcherNames().size()-1) : ((f<0) ? 0 : f); }
 
     @Override
-    public void writeNbt(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundNBT nbt, boolean updatePacket)
     {
-      super.writeNbt(nbt, updatePacket);
+      super.write(nbt, updatePacket);
       nbt.putInt("range", range_);
       nbt.putInt("threshold", threshold_);
       nbt.putString("filter", filter_name());
@@ -137,9 +137,9 @@ public class ObserverSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void readNbt(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundNBT nbt, boolean updatePacket)
     {
-      super.readNbt(nbt, updatePacket);
+      super.read(nbt, updatePacket);
       range(nbt.getInt("range"));
       threshold(nbt.getInt("threshold"));
       filter_name(nbt.getString("filter"));
@@ -151,32 +151,25 @@ public class ObserverSwitchBlock extends SwitchBlock
     { super.reset(world); filter_index_=0; range_=0; threshold_=1; debounce_=0; update_timer_=0; debounce_counter_=0; }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
+    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final int direction = ((y >= 12) && (y <= 13)) ? (1) : (((y >= 9) && (y <= 10)) ? (-1) : (0));
-      final int field =
-        ((x>=1) && (x<=2)) ? (1) : (
-          ((x>=4) && (x<=5)) ? (2) : (
-            ((x>=7) && (x<=8)) ? (3) : (
-              ((x>=10) && (x<=11)) ? (4) : (
-                ((x>=13) && (x<=14)) ? (5) : (0)
-          ))));
+      final int field = ((x>=1) && (x<=2)) ? (1) : ( ((x>=4) && (x<=5)) ? (2) : ( ((x>=7) && (x<=8)) ? (3) : ( ((x>=10) && (x<=11)) ? (4) : ( ((x>=13) && (x<=14)) ? (5) : (0) ))));
       if((direction==0) || (field==0)) return false;
-
-      switch(field) {
-        case 1: {
-          range(range()+direction);
-          if(threshold() > range()) threshold(range());
-          break;
+      if(!show_only) {
+        switch(field) {
+          case 1: { range(range()+direction); if(threshold()>range()) {threshold(range());} break; }
+          case 2: { threshold(threshold()+direction); break; }
+          case 3: { debounce(debounce()+direction); break; }
+          case 4: { on_power(on_power() + direction); break; }
+          case 5: { filter(filter()+direction); break; }
         }
-        case 2: { threshold(threshold()+direction); break; }
-        case 3: { debounce(debounce()+direction); break; }
-        case 4: { on_power(on_power() + direction); break; }
-        case 5: { filter(filter()+direction); break; }
+        if(threshold() < 1) threshold(1);
+        if(on_power() < 1) on_power(1);
+        update_timer_ = 0;
+        markDirty();
       }
-      if(threshold() < 1) threshold(1);
-      if(on_power() < 1) on_power(1);
       {
         ArrayList<Object> tr = new ArrayList<>();
         StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
@@ -194,9 +187,7 @@ public class ObserverSwitchBlock extends SwitchBlock
         ));
         Overlay.show(player, Auxiliaries.localizable("switchconfig.blocksensor", TextFormatting.RESET, tr.toArray()));
       }
-      update_timer_ = 0;
-      markDirty();
-      return true;
+      return (!show_only);
     }
 
     public void observe()
@@ -205,7 +196,7 @@ public class ObserverSwitchBlock extends SwitchBlock
     @Override
     public void tick()
     {
-      if(world.isRemote || (--update_timer_ > 0)) return;
+      if(world.isRemote() || (--update_timer_ > 0)) return;
       update_timer_ = ((range_ <= 1) ? 20 : 10) + ((int)(Math.random()*3)); // Neighbours are fast updated using neighbourChanged notifications.
       final BlockState state = world.getBlockState(pos);
       if((state==null) || (!(state.getBlock() instanceof ObserverSwitchBlock))) return;

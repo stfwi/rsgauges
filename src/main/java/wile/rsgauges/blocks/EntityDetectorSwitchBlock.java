@@ -8,6 +8,7 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.util.text.*;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -20,8 +21,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
@@ -100,18 +99,18 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
     { return sensor_range_; }
 
     @Override
-    public void writeNbt(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundNBT nbt, boolean updatePacket)
     {
-      super.writeNbt(nbt, updatePacket);
+      super.write(nbt, updatePacket);
       nbt.putInt("range", sensor_range_);
       nbt.putInt("entitythreshold", sensor_entity_count_threshold_);
       nbt.putInt("filter", filter_);
     }
 
     @Override
-    public void readNbt(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundNBT nbt, boolean updatePacket)
     {
-      super.readNbt(nbt, updatePacket);
+      super.read(nbt, updatePacket);
       sensor_range(nbt.getInt("range"));
       sensor_entity_threshold(nbt.getInt("entitythreshold"));
       filter(nbt.getInt("filter"));
@@ -122,7 +121,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
     { super.reset(world); update_timer_=0; area_=null; sensor_range_=5; filter_=0; }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y)
+    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final int direction = (y >= 12) ? (1) : ((y <= 5) ? (-1) : (0));
@@ -132,39 +131,48 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
             ((x>=11) && (x<=13)) ? (4) : (0)
           )));
       if((direction==0) || (field==0)) return false;
-      switch(field) {
-        case 1: {
-          sensor_range(sensor_range()+direction);
-          area_ = null;
-          Overlay.show(player, Auxiliaries.localizable("switchconfig.detector.sensor_range", TextFormatting.BLUE, new Object[]{sensor_range()}));
-          break;
+      if(!show_only) {
+        switch(field) {
+          case 1: {
+            sensor_range(sensor_range()+direction);
+            area_ = null;
+            break;
+          }
+          case 2: {
+            sensor_entity_threshold(sensor_entity_threshold() + direction);
+            break;
+          }
+          case 3: {
+            filter(filter() + direction);
+            break;
+          }
+          case 4: {
+            on_power(on_power() + direction);
+            if(on_power() < 1) on_power(1);
+            break;
+          }
         }
-        case 2: {
-          sensor_entity_threshold(sensor_entity_threshold() + direction);
-          Overlay.show(player, Auxiliaries.localizable("switchconfig.detector.entity_threshold", TextFormatting.YELLOW, new Object[]{sensor_entity_threshold()}));
-          break;
-        }
-        case 3: {
-          filter(filter() + direction);
-          Overlay.show(player, Auxiliaries.localizable("switchconfig.detector.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}));
-          break;
-        }
-        case 4: {
-          on_power(on_power() + direction);
-          if(on_power() < 1) on_power(1);
-          Overlay.show(player, Auxiliaries.localizable("switchconfig.detector.output_power", TextFormatting.RED, new Object[]{on_power()}));
-          break;
-        }
+        markDirty();
       }
-      markDirty();
+      {
+        Overlay.show(player,
+          (new StringTextComponent(""))
+            .append(Auxiliaries.localizable("switchconfig.detector.sensor_range", TextFormatting.BLUE, new Object[]{sensor_range()}))
+            .appendString(" | ")
+            .append(Auxiliaries.localizable("switchconfig.detector.entity_threshold", TextFormatting.YELLOW, new Object[]{sensor_entity_threshold()}))
+            .appendString(" | ")
+            .append(Auxiliaries.localizable("switchconfig.detector.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}))
+            .appendString(" | ")
+            .append(Auxiliaries.localizable("switchconfig.detector.output_power", TextFormatting.RED, new Object[]{on_power()}))
+        );
+      }
       return true;
     }
 
     @Override
     public void tick()
     {
-      if(ModConfig.without_detector_switch_update) return;
-      if((world.isRemote) || (--update_timer_ > 0)) return;
+      if((world.isRemote()) || (--update_timer_ > 0)) return;
       update_timer_ = update_interval_;
       BlockState state = world.getBlockState(getPos());
       if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return;
