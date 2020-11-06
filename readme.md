@@ -1,7 +1,7 @@
 
-## Gauges and Switches (MC1.16.3)
+## Gauges and Switches (MC1.16.x)
 
-Mod sources for Minecraft version 1.16.3.
+Mod sources for Minecraft version 1.16.x.
 
 - Description, credits, and features: Please see the readme in the repository root.
 
@@ -9,6 +9,8 @@ Mod sources for Minecraft version 1.16.3.
 
 ----
 ## Version history
+
+    - v1.2.6-b1  [U] Ported to 1.16.4.
 
     - v1.2.5     [R] Release build 1.2.5.
 

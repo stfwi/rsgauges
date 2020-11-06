@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
-  "1.16.3": {
+  "1.16.4": {
+    "1.2.6-b1": "[U] Ported to 1.16.4.",
     "1.2.5": "[R] Release build 1.2.5.",
     "1.2.5-b1": "[A] Linked switches are marked with particles when holding the Switch Link Pearl.\n[U] Partial internal code refurbishments.",
     "1.2.4": "[U] Updated to Forge 1.16.3-34.1.0.\n[A] Indicators and Gauges are invertible (input from Vallen while Forgecraft'ing).\n[F] Ambient occlusion and GUI lightning fixes.",
@@ -15,7 +16,7 @@
     "1.2.4-a1": "[A] Initial port."
   },
   "promos": {
-    "1.16.3-recommended": "1.2.5",
-    "1.16.3-latest": "1.2.5"
+    "1.16.4-recommended": "1.2.5",
+    "1.16.4-latest": "1.2.6-b1"
   }
 }
