@@ -1,5 +1,5 @@
 /*
- * @file BlockIndicator.java
+ * @file IndicatorBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -28,7 +28,7 @@ public class IndicatorBlock extends AbstractGaugeBlock
   public IndicatorBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBB, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   {
     super(config, properties, unrotatedBB, powerOnSound, powerOffSound);
-    setDefaultState(getStateContainer().getBaseState().with(POWERED, false).with(WATERLOGGED, false).with(FACING, Direction.DOWN));
+    setDefaultState(super.getDefaultState().with(POWERED, false).with(FACING, Direction.DOWN));
   }
 
   public IndicatorBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBB)

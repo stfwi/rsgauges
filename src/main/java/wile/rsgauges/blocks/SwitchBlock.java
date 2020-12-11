@@ -1,5 +1,5 @@
 /*
- * @file BlockSwitch.java
+ * @file SwitchBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -9,6 +9,7 @@
  */
 package wile.rsgauges.blocks;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.state.StateContainer;
@@ -41,14 +42,17 @@ import net.minecraft.util.math.*;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.*;
+import wile.rsgauges.detail.SwitchLink.LinkMode;
+import wile.rsgauges.detail.SwitchLink.RequestResult;
 import wile.rsgauges.libmc.detail.*;
 import wile.rsgauges.items.SwitchLinkPearlItem;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 import javax.annotation.Nullable;
 
 @SuppressWarnings("unused")
-public class SwitchBlock extends RsDirectedBlock
+public class SwitchBlock extends RsDirectedBlock implements SwitchLink.ISwitchLinkable
 {
   // -- Entity stored changable state data.
   public static final long SWITCH_DATA_POWERED_POWER_MASK       = 0x000000000000000fl;
@@ -89,9 +93,6 @@ public class SwitchBlock extends RsDirectedBlock
   public static final long SWITCH_CONFIG_SENSOR_DETECTOR        = SWITCH_CONFIG_SENSOR_VOLUME|SWITCH_CONFIG_SENSOR_LINEAR;
   public static final long SWITCH_CONFIG_SENSOR_ENVIRONMENTAL   = SWITCH_CONFIG_SENSOR_LIGHT|SWITCH_CONFIG_TIMER_DAYTIME|SWITCH_CONFIG_SENSOR_RAIN|SWITCH_CONFIG_SENSOR_LIGHTNING;
   public static final long SWITCH_CONFIG_AUTOMATIC              = SWITCH_CONFIG_SENSOR_TIME|SWITCH_CONFIG_SENSOR_DETECTOR|SWITCH_CONFIG_SENSOR_ENVIRONMENTAL|SWITCH_CONFIG_SENSOR_BLOCKDETECT;
-  public static final long SWITCH_CONFIG_WALLMOUNT              = 0x0000010000000000l;
-  public static final long SWITCH_CONFIG_LATERAL                = 0x0000020000000000l;
-  public static final long SWITCH_CONFIG_LATERAL_WALLMOUNT      = SWITCH_CONFIG_WALLMOUNT|SWITCH_CONFIG_LATERAL;
   public static final long SWITCH_CONFIG_PROJECTILE_SENSE_ON    = 0x0000100000000000l;
   public static final long SWITCH_CONFIG_PROJECTILE_SENSE_OFF   = 0x0000200000000000l;
   public static final long SWITCH_CONFIG_PROJECTILE_SENSE       = SWITCH_CONFIG_PROJECTILE_SENSE_ON|SWITCH_CONFIG_PROJECTILE_SENSE_OFF;
@@ -102,7 +103,12 @@ public class SwitchBlock extends RsDirectedBlock
   public static final long SWITCH_CONFIG_SIDES_CONFIGURABLE     = 0x0040000000000000l;
   public static final long SWITCH_CONFIG_LINK_SOURCE_SUPPORT    = 0x0100000000000000l;
   public static final long SWITCH_CONFIG_LINK_TARGET_SUPPORT    = 0x0200000000000000l;
-  public static final long SWITCH_CONFIG_LINK_RELAY             = 0x0400000000000000l;
+  public static final long SWITCH_CONFIG_LINK_SENDER            = 0x0400000000000000l;
+
+  public static final long SWITCH_CONFIG_WALLMOUNT              = RSBLOCK_CONFIG_WALLMOUNT;
+  public static final long SWITCH_CONFIG_LATERAL                = RSBLOCK_CONFIG_LATERAL;
+  public static final long SWITCH_CONFIG_LATERAL_WALLMOUNT      = SWITCH_CONFIG_WALLMOUNT|SWITCH_CONFIG_LATERAL;
+
   // Entity stored changable state value data.
   public static final int SWITCH_DATA_SVD_ACTIVE_TIME_MASK      = 0x000000ff;
 
@@ -113,7 +119,6 @@ public class SwitchBlock extends RsDirectedBlock
   public static final int base_tick_rate = 2;
   public static final int default_pulse_on_time = 20;
   public final long config;
-  protected final AxisAlignedBB unrotated_bb_powered;
   protected final ModResources.BlockSoundEvent power_on_sound;
   protected final ModResources.BlockSoundEvent power_off_sound;
 
@@ -121,7 +126,7 @@ public class SwitchBlock extends RsDirectedBlock
 
   public SwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   {
-    super(config, properties, unrotatedBBUnpowered);
+    super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered);
     if((powerOnSound==null) && (powerOffSound==null)) {
       powerOnSound  = ModResources.BlockSoundEvents.DEFAULT_SWITCH_ACTIVATION;
       powerOffSound = ModResources.BlockSoundEvents.DEFAULT_SWITCH_DEACTIVATION;
@@ -129,10 +134,9 @@ public class SwitchBlock extends RsDirectedBlock
       if(powerOnSound==null) powerOnSound =  ModResources.BlockSoundEvents.DEFAULT_SWITCH_MUTE;
       if(powerOffSound==null) powerOffSound = ModResources.BlockSoundEvents.DEFAULT_SWITCH_MUTE;
     }
-    unrotated_bb_powered = (unrotatedBBPowered!=null) ? unrotatedBBPowered : unrotatedBBUnpowered;
     power_on_sound = powerOnSound;
     power_off_sound = powerOffSound;
-    setDefaultState(stateContainer.getBaseState().with(FACING, Direction.NORTH).with(POWERED, false));
+    setDefaultState(super.getDefaultState().with(POWERED, false));
     if((config & 0xff)==0xff) config &= ~0xffL; // explicitly initialise on and off power with 0.
     else if((config & 0xff)==0) config |= 15; // default power=15 if not specified.
     if((config & SWITCH_DATA_SIDE_ENABLED_MASK)!=0) config |= SWITCH_CONFIG_SIDES_CONFIGURABLE; // implicitly set flag if any side config is specified
@@ -159,7 +163,7 @@ public class SwitchBlock extends RsDirectedBlock
   @Override
   @SuppressWarnings("deprecation")
   public boolean canProvidePower(BlockState state)
-  { return ((config & SWITCH_CONFIG_LINK_RELAY)==0); }
+  { return ((config &SWITCH_CONFIG_LINK_SENDER)==0); }
 
   @Override
   public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
@@ -176,16 +180,26 @@ public class SwitchBlock extends RsDirectedBlock
   { return getPower(state, world, pos, side, true); }
 
   @Override
-  protected boolean isValidPositionOnSide(IWorldReader world, BlockPos pos, Direction side)
-  { return super.isValidPositionOnSide(world, pos, side); }
-
-  @Override
   public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
   {
     final SwitchTileEntity te = getTe(world, pos);
     if(te != null) te.reset(world);
     world.setBlockState(pos, world.getBlockState(pos).with(POWERED, false), 1|2|8|16);
     notifyNeighbours(world, pos, state,  te, true);
+  }
+
+  @Override
+  public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
+  {
+    if(!newState.isIn(this)) {
+      final SwitchTileEntity te = getTe(world, pos);
+      if(te!=null) {
+        te.unlinkAllSwitchLinks(true);
+        te.nooutput(true);
+        notifyNeighbours(world, pos, state,  te, true);
+      }
+    }
+    super.onReplaced(state, world, pos, newState, isMoving);
   }
 
   @Override
@@ -209,18 +223,16 @@ public class SwitchBlock extends RsDirectedBlock
     if(world.isRemote()) return ActionResultType.SUCCESS;
     te.click_config(null, false); // reset double click tracking
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit);
-    if(ck.touch_configured) {
-      if(te.touch_config(state, player, ck.x, ck.y)) {
-        ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
-      }
+    if((ck.touch_configured) && te.touch_config(state, player, ck.x, ck.y)) {
+      ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
       return ActionResultType.SUCCESS;
-    } else if(ck.wrenched) {
-      if(te.click_config(this, false)) {
-        ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
-        Overlay.show(player, te.configStatusTextComponentTranslation((SwitchBlock) state.getBlock()));
-      }
+    }
+    if(ck.wrenched && te.click_config(this, false)) {
+      ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
+      Overlay.show(player, te.configStatusTextComponentTranslation((SwitchBlock) state.getBlock()));
       return ActionResultType.SUCCESS;
-    } else if(
+    }
+    if(
       (!ModConfig.without_rightclick_item_switchconfig) &&
         (  ((ck.item==Items.REDSTONE) && (((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_PULSETIME_CONFIGURABLE) != 0)
           || (ck.item==Items.ENDER_PEARL)
@@ -229,7 +241,8 @@ public class SwitchBlock extends RsDirectedBlock
     ) {
       onBlockClicked(state, world, pos, player);
       return ActionResultType.SUCCESS;
-    } else if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))==0) {
+    }
+    if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))==0) {
       return ActionResultType.SUCCESS;
     } else {
       return onSwitchActivated(world, pos, state, player, hit.getFace()) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
@@ -242,7 +255,7 @@ public class SwitchBlock extends RsDirectedBlock
     if(world.isRemote()) return;
     final SwitchTileEntity te = getTe(world, pos);
     if(te == null) return;
-    final Item item_held = (player.inventory.getCurrentItem()!=null) ? (player.inventory.getCurrentItem().getItem()) : (Items.AIR);
+    final Item item_held = player.inventory.getCurrentItem().getItem();
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player);
     if(ck.wrenched) {
       // Switch output config using an accepted wrench with a single click
@@ -265,54 +278,40 @@ public class SwitchBlock extends RsDirectedBlock
           Overlay.show(player, Auxiliaries.localizable("switchlinking.target_assign.error_notarget"));
           ModResources.BlockSoundEvents.SWITCHLINK_CANNOT_LINK_THAT.play(world, pos);
         } else {
-          ItemStack link_stack = SwitchLinkPearlItem.createFromEnderPearl(world, pos, player);
-          if((link_stack==null) || (link_stack.getTag()==null)) {
+          ItemStack link_stack = SwitchLinkPearlItem.createFromPearl(world, pos, player);
+          if(link_stack.isEmpty()) {
             ModResources.BlockSoundEvents.SWITCHLINK_CANNOT_LINK_THAT.play(world, pos);
           } else {
-            link_stack.getTag().putLong("cdtime", world.getGameTime()); // see E_SELF_ASSIGN branch for SWITCH_LINK_PEARL
             player.inventory.setInventorySlotContents(player.inventory.currentItem, link_stack);
             Overlay.show(player, Auxiliaries.localizable("switchlinking.target_assign.ok"));
             ModResources.BlockSoundEvents.SWITCHLINK_LINK_TARGET_SELECTED.play(world, pos);
           }
         }
-        return;
       }
-    } else if((ck.item==ModContent.SWITCH_LINK_PEARL) && (player.inventory!=null) && (item_held==ModContent.SWITCH_LINK_PEARL)) {
+    } else if((ck.item==ModContent.SWITCH_LINK_PEARL) && (item_held==ModContent.SWITCH_LINK_PEARL)) {
       // Link config at source switch or assignemnt of target switch
       if(!ModConfig.without_switch_linking) {
         switch(te.assignSwitchLink(world, pos, player.inventory.getCurrentItem())) {
           case OK:
-            // Link target was assigned to ths switch
             player.inventory.getCurrentItem().shrink(1);
             ModResources.BlockSoundEvents.SWITCHLINK_LINK_SOURCE_SELECTED.play(world, pos);
             Overlay.show(player, Auxiliaries.localizable("switchlinking.source_assign.ok"));
             return;
           case E_SELF_ASSIGN: {
-            // Multi-left-clicking a target switch will reconfigure the pearl for that switch.
-            // Because of the item use config, the click event drops in rather fast (100ms approx), too fast
-            // for most users - therefore a cooldown timestamp is additionally saved in the item, not affecting
-            // the link itself. No elegance here but should work reliably.
-            final long cdtime = player.inventory.getCurrentItem().getTag().getLong("cdtime");
-            if(Math.abs(world.getGameTime()-cdtime) < 7) return;
-            SwitchLinkPearlItem.getCycledRelay(player.inventory.getCurrentItem(), world, pos);
-            Overlay.show(player, Auxiliaries.localizable("switchlinking.relayconfig.confval" + Integer.toString(SwitchLinkPearlItem.SwitchLink.fromItemStack(player.inventory.getCurrentItem()).relay())));
-            player.inventory.getCurrentItem().getTag().putLong("cdtime", world.getGameTime());
+            SwitchLinkPearlItem.cycleLinkMode(player.inventory.getCurrentItem(), world, pos, true);
+            Overlay.show(player, Auxiliaries.localizable("switchlinking.relayconfig.confval" + Integer.toString(SwitchLink.fromItemStack(player.inventory.getCurrentItem()).mode().index())));
             return;
           }
           case E_NOSOURCE:
-            // That switch cannot be a link source (not
             Overlay.show(player, Auxiliaries.localizable("switchlinking.source_assign.error_nosource"));
             break;
           case E_ALREADY_LINKED:
-            // Switch has already a pearl with that location
             Overlay.show(player, Auxiliaries.localizable("switchlinking.source_assign.error_alreadylinked"));
             break;
           case E_TOO_FAR:
-            // Too far away from the target switch
             Overlay.show(player, Auxiliaries.localizable("switchlinking.source_assign.error_toofaraway"));
             break;
           case E_FAILED:
-            // General error, e.g. blockstate could not be determined, not a switch at that location, etc.
             Overlay.show(player, Auxiliaries.localizable("switchlinking.source_assign.error_failed"));
             break;
         }
@@ -333,7 +332,7 @@ public class SwitchBlock extends RsDirectedBlock
       world.setBlockState(pos, state.with(POWERED, false), 1|2|8|16);
       power_off_sound.play(world, pos);
     }
-    if(((config & SWITCH_CONFIG_LINK_RELAY)==0) && (!te.nooutput())) {
+    if(((config &SWITCH_CONFIG_LINK_SENDER)==0) && (!te.nooutput())) {
       notifyNeighbours(world, pos, state, te, false);
     }
   }
@@ -346,9 +345,9 @@ public class SwitchBlock extends RsDirectedBlock
     if((te!=null) && (te.on_time_remaining() > 0)) { te.reschedule_block_tick(); return; }
     world.setBlockState(pos, (state=state.with(POWERED, false)), 1|2|8|16);
     power_off_sound.play(world, pos);
-    if((config & SWITCH_CONFIG_LINK_RELAY)==0) notifyNeighbours(world, pos, state, te, false);
+    if((config &SWITCH_CONFIG_LINK_SENDER)==0) notifyNeighbours(world, pos, state, te, false);
     if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-      if(!te.activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+      if(!te.activateSwitchLinks(0, true)) {
         ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
       }
     }
@@ -370,29 +369,8 @@ public class SwitchBlock extends RsDirectedBlock
     return (te instanceof SwitchTileEntity) ? ((SwitchTileEntity)te) : (null);
   }
 
-  @Override
-  public AxisAlignedBB getUnrotatedBB(BlockState state)
-  { return ((state==null) || (state.getBlock()!=this) || (!state.get(POWERED))) ? super.getUnrotatedBB() : unrotated_bb_powered; }
-
-  @Override
-  public boolean isWallMount()
-  { return ((config & (SWITCH_CONFIG_WALLMOUNT)) != 0); }
-
-  @Override
-  public boolean isLateral()
-  { return ((config & (SWITCH_CONFIG_LATERAL)) != 0); }
-
-  @Override
-  public boolean isCube()
-  { return ((config & (SWITCH_CONFIG_WALLMOUNT|SWITCH_CONFIG_LATERAL)) == 0); }
-
-  public boolean onLinkRequest(final SwitchLinkPearlItem.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final PlayerEntity player)
-  {
-    if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))==0) return false; // this override only allows manual switches
-    SwitchTileEntity te = getTe(world, pos);
-    if((te==null) || (!te.verifySwitchLinkTarget(link))) return false;
-    return onSwitchActivated(world, pos, world.getBlockState(pos), player, null);
-  }
+  protected VoxelShape getShape(BlockState state)
+  { return shapes_[state.get(FACING).getIndex()][state.get(POWERED)?1:0]; }
 
   /**
    * Neighbour blocks notification depending on the switch config. Assuming that the cpu time invested
@@ -457,7 +435,7 @@ public class SwitchBlock extends RsDirectedBlock
   private int getPower(BlockState state, IBlockReader world, BlockPos pos, Direction side, boolean strong)
   {
     // Transitional code, will be solved entirely with side config later
-    if(((config & SWITCH_CONFIG_LINK_RELAY)!=0) || (!(world instanceof World))) {
+    if(((config &SWITCH_CONFIG_LINK_SENDER)!=0) || (!(world instanceof World))) {
       // Relays have only inputs, not outputs.
       return 0;
     } else if((config & SWITCH_CONFIG_CONTACT)!=0) {
@@ -495,10 +473,10 @@ public class SwitchBlock extends RsDirectedBlock
       world.setBlockState(pos, (state=state.func_235896_a_(POWERED)), 1|2|8|16);
       if(was_powered) power_off_sound.play(world, pos); else power_on_sound.play(world, pos);
     } else {
-      world.setBlockState(pos, state.with(POWERED, true), 1|2|8|16);
+      world.setBlockState(pos, state=state.with(POWERED, true), 1|2|8|16);
       power_on_sound.play(world, pos);
     }
-    if((config & SWITCH_CONFIG_LINK_RELAY)==0) {
+    if((config &SWITCH_CONFIG_LINK_SENDER)==0) {
       notifyNeighbours(world, pos, state, te, false);
     }
     if((config & SWITCH_CONFIG_PULSE)!=0) {
@@ -508,13 +486,11 @@ public class SwitchBlock extends RsDirectedBlock
     }
     if(((config & (SWITCH_CONFIG_LINK_SOURCE_SUPPORT))!=0) && ((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE|SWITCH_CONFIG_SENSOR_BLOCKDETECT))!=0)) {
       if(!was_powered) {
-        // Manual switches fire link requests when changing from unpowered to powered,
-        // no matter if they are inverted or not.
-        if(!te.activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+        if(!te.activateSwitchLinks(state.get(POWERED)?te.on_power():0, was_powered!=state.get(POWERED))) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       } else if((config & SWITCH_CONFIG_PULSE) == 0) {
-        if(!te.activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+        if(!te.activateSwitchLinks(state.get(POWERED)?te.on_power():0, was_powered!=state.get(POWERED))) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       }
@@ -522,34 +498,97 @@ public class SwitchBlock extends RsDirectedBlock
     return true;
   }
 
+  // -------------------------------------------------------------------------------------------------------------------
+
   @Override
-  protected void onRsBlockDestroyed(BlockState state, World world, BlockPos pos, boolean isUpdateEvent)
+  public boolean switchLinkHasTargetSupport(World world, BlockPos pos)
+  { return (config & SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT)!=0;}
+
+  @Override
+  public boolean switchLinkHasSourceSupport(World world, BlockPos pos)
+  { return (config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0;}
+
+  @Override
+  public boolean switchLinkHasAnalogSupport(World world, BlockPos pos)
+  { return false; }
+
+  @Override
+  public ImmutableList<SwitchLink.LinkMode> switchLinkGetSupportedTargetModes()
   {
-    final SwitchTileEntity te = getTe(world, pos);
-    if(te!=null) te.unlinkAllSwitchLinks(true);
-    te.nooutput(true);
-    if(isUpdateEvent) world.removeBlock(pos, false);
-    notifyNeighbours(world, pos, state,  te, true);
+    if((config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) {
+      return ImmutableList.of(SwitchLink.LinkMode.ACTIVATE, SwitchLink.LinkMode.DEACTIVATE, SwitchLink.LinkMode.TOGGLE);
+    } else {
+      return ImmutableList.of(SwitchLink.LinkMode.AS_STATE, SwitchLink.LinkMode.ACTIVATE, SwitchLink.LinkMode.DEACTIVATE, SwitchLink.LinkMode.TOGGLE, SwitchLink.LinkMode.INV_STATE);
+    }
   }
+
+  @Override
+  public Optional<Integer> switchLinkOutputPower(World world, BlockPos pos)
+  {
+    SwitchTileEntity te = getTe(world, pos);
+    return (te==null) ? Optional.empty() : Optional.of(te.power(world.getBlockState(pos), false));
+  }
+
+  @Override
+  public Optional<Integer> switchLinkInputPower(World world, BlockPos pos)
+  {
+    BlockState state = world.getBlockState(pos);
+    if(!(state.getBlock() instanceof SwitchBlock)) return Optional.empty();
+    if(((SwitchBlock)(state.getBlock().getBlock())).isCube()) {
+      return Optional.of(world.getRedstonePowerFromNeighbors(pos));
+    } else {
+      Direction facing = state.get(FACING);
+      return Optional.of(world.getRedstonePower(pos.offset(facing), facing.getOpposite()));
+    }
+  }
+
+  @Override
+  public Optional<Integer> switchLinkComparatorInput(World world, BlockPos pos)
+  {
+    BlockState state = world.getBlockState(pos);
+    if(!(state.getBlock() instanceof SwitchBlock)) return Optional.empty();
+    BlockPos adjacent_pos = pos.offset(state.get(FACING));
+    BlockState adjacent = world.getBlockState(adjacent_pos);
+    if(!adjacent.hasComparatorInputOverride()) return Optional.empty();
+    return Optional.of(adjacent.getComparatorInputOverride(world, adjacent_pos));
+  }
+
+  @Override
+  public SwitchLink.RequestResult switchLinkTrigger(SwitchLink link)
+  {
+    if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))==0) return SwitchLink.RequestResult.REJECTED;
+    SwitchTileEntity te = getTe(link.world, link.target_position);
+    if((te==null) || (!te.verifySwitchLinkTarget(link))) return RequestResult.TARGET_GONE;
+    return onSwitchActivated(link.world, link.target_position, link.world.getBlockState(link.target_position), link.player, null) ? (SwitchLink.RequestResult.OK) : (SwitchLink.RequestResult.REJECTED);
+  }
+
+  @Override
+  public void switchLinkInit(SwitchLink link)
+  {
+    if((link.mode()!=LinkMode.AS_STATE) && (link.mode()!=LinkMode.INV_STATE)) return;
+    BlockState state = link.world.getBlockState(link.target_position);
+    if((link.source_power==0) == (state.get(POWERED)) ) onSwitchActivated(link.world, link.target_position, state, link.player, null);
+  }
+
+  @Override
+  public void switchLinkUnlink(SwitchLink link)
+  {}
 
   // -------------------------------------------------------------------------------------------------------------------
   // Tile entity
   // -------------------------------------------------------------------------------------------------------------------
 
-  /**
-   * Tile entity
-   */
   public static class SwitchTileEntity extends RsTileEntity
   {
     protected static final int max_pulse_time = 200;
-    protected long pulse_off_deadline_ = 0;     // pulse switch-off deadline, world ticks
-    protected int scd_ = 0; // serialised configuration data
-    protected int svd_ = 0; // serialised value data
-    protected long click_config_time_lastclicked_ = 0; // tracking of double left clicks (needed for configurable timing)
-    protected long click_config_last_cycled_ = 0;      // used to omit cycling the first config click (only show current config)
+    protected long pulse_off_deadline_ = 0;             // pulse switch-off deadline, world ticks
+    protected int scd_ = 0;                             // serialised configuration data
+    protected int svd_ = 0;                             // serialised value data
+    protected long click_config_time_lastclicked_ = 0;  // tracking of double left clicks (needed for configurable timing)
+    protected long click_config_last_cycled_ = 0;       // used to omit cycling the first config click (only show current config)
     protected long touch_config_time_lastclicked_ = 0;
-    protected long last_link_request_ = 0; // used to lock multiple link request to this entity in the same tick
-    protected ArrayList<SwitchLinkPearlItem.SwitchLink> links_ = null; // plugged link pearls
+    protected long last_link_request_ = 0;              // used to lock multiple link request to this entity in the same tick
+    protected ArrayList<SwitchLink> links_ = null;      // plugged link pearls
 
     public SwitchTileEntity(TileEntityType<?> te_type)
     { super(te_type); }
@@ -567,7 +606,7 @@ public class SwitchBlock extends RsDirectedBlock
         if(nbt.contains("links")) nbt.remove("links");
       } else {
         ListNBT tl = new ListNBT();
-        for(SwitchLinkPearlItem.SwitchLink e:links_) tl.add(e.toNbt());
+        for(SwitchLink e:links_) tl.add(e.toNbt());
         nbt.put("links", tl);
       }
     }
@@ -586,9 +625,9 @@ public class SwitchBlock extends RsDirectedBlock
         } else {
           // Save link pearl data.
           ListNBT tl = nbt.getList("links", nbt.getId()); // getId(): tag type byte of CompoundNBT, which are saved.
-          ArrayList<SwitchLinkPearlItem.SwitchLink> links = new ArrayList<>();
+          ArrayList<SwitchLink> links = new ArrayList<>();
           for(INBT e:tl) {
-            SwitchLinkPearlItem.SwitchLink lnk = SwitchLinkPearlItem.SwitchLink.fromNbt((CompoundNBT)e);
+            SwitchLink lnk = SwitchLink.fromNbt((CompoundNBT)e);
             links.add(lnk);
           }
           links_ = links;
@@ -764,7 +803,7 @@ public class SwitchBlock extends RsDirectedBlock
       if((block.config & (SWITCH_DATA_WEAK|SWITCH_CONFIG_WEAKABLE))==(SWITCH_DATA_WEAK)) {
         if(!weak()) weak(true); // strong/weak not settable, and always weak forced.
       }
-      if((ModConfig.without_switch_nooutput) || ((block.config & SWITCH_CONFIG_LINK_RELAY)!=0)) {
+      if((ModConfig.without_switch_nooutput) || ((block.config &SWITCH_CONFIG_LINK_SENDER)!=0)) {
         nooutput(false); // override last option, where not weak and not inverted is already set.
       }
       markDirty();
@@ -785,7 +824,7 @@ public class SwitchBlock extends RsDirectedBlock
       TranslationTextComponent status = Auxiliaries.localizable("switchconfig.options", TextFormatting.RESET);
       boolean statusset = false;
       if((on_power() < 15) || (off_power()>0)) {
-        if((block == null) || ((block.config & (SWITCH_CONFIG_AUTOMATIC|SWITCH_CONFIG_LINK_RELAY))==0)) {
+        if((block == null) || ((block.config & (SWITCH_CONFIG_AUTOMATIC|SWITCH_CONFIG_LINK_SENDER))==0)) {
           // power only for non-auto-switches
           statusset = true;
           status.append(Auxiliaries.localizable("switchconfig.options.output_power", TextFormatting.RED, new Object[]{on_power()}));
@@ -811,6 +850,7 @@ public class SwitchBlock extends RsDirectedBlock
       return status;
     }
 
+    // ---------------------------------------------------------------------------------------
 
     public static long linktime()
     { return System.currentTimeMillis(); } // not using ticks because there are scenarios where the world time is disabled.
@@ -821,7 +861,7 @@ public class SwitchBlock extends RsDirectedBlock
      * the called-side that no recursion or loop lock or other unwanted effects occur.
      * Returns boolean success.
      */
-    public boolean verifySwitchLinkTarget(final SwitchLinkPearlItem.SwitchLink link)
+    public boolean verifySwitchLinkTarget(final SwitchLink link)
     {
       final long t = linktime();
       if((world.isRemote()) || (last_link_request_ == t)) return false; // not in the same tick, people could try to link A to B and B to A.
@@ -837,19 +877,19 @@ public class SwitchBlock extends RsDirectedBlock
     enum SwitchLinkAssignmentResult {OK, E_SELF_ASSIGN, E_ALREADY_LINKED, E_TOO_FAR, E_NOSOURCE, E_FAILED}
     SwitchLinkAssignmentResult assignSwitchLink(final World world, final BlockPos sourcepos, final ItemStack stack)
     {
-      if(stack==null) return SwitchLinkAssignmentResult.E_FAILED;
-      final SwitchLinkPearlItem.SwitchLink link = SwitchLinkPearlItem.SwitchLink.fromItemStack(stack);
-      if((world==null) || (!link.valid) || (!sourcepos.equals(getPos()))) return SwitchLinkAssignmentResult.E_FAILED;
+      final SwitchLink link = SwitchLink.fromItemStack(stack);
+      if((!link.valid) || (!sourcepos.equals(getPos()))) return SwitchLinkAssignmentResult.E_FAILED;
       final BlockState state = world.getBlockState(sourcepos);
-      if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return SwitchLinkAssignmentResult.E_FAILED;
+      if(!(state.getBlock() instanceof SwitchBlock)) return SwitchLinkAssignmentResult.E_FAILED;
       if(link.target_position.equals(sourcepos)) return SwitchLinkAssignmentResult.E_SELF_ASSIGN;
       if((((SwitchBlock)state.getBlock()).config & SWITCH_CONFIG_LINK_SOURCE_SUPPORT)==0) return SwitchLinkAssignmentResult.E_NOSOURCE;
       if(link.isTooFar(sourcepos)) return SwitchLinkAssignmentResult.E_TOO_FAR;
       if(links_==null) links_ = new ArrayList<>();
-      for(SwitchLinkPearlItem.SwitchLink lnk: links_) {
+      for(SwitchLink lnk: links_) {
         if(lnk.target_position.equals(link.target_position)) return SwitchLinkAssignmentResult.E_ALREADY_LINKED;
       }
       links_.add(link);
+      link.initializeTarget(getWorld(), getPos(), state.get(POWERED)?on_power():0);
       markDirty();
       return SwitchLinkAssignmentResult.OK;
     }
@@ -862,7 +902,10 @@ public class SwitchBlock extends RsDirectedBlock
     {
       ArrayList<ItemStack> stacks = new ArrayList<>();
       if((world.isRemote()) || (links_==null)) return stacks;
-      for(SwitchLinkPearlItem.SwitchLink e:links_) stacks.add(e.toSwitchLinkPearl());
+      for(SwitchLink e:links_) {
+        stacks.add(e.toSwitchLinkPearl());
+        e.unlinkTarget(getWorld(), getPos());
+      }
       links_.clear();
       if(drop) { for(ItemStack e:stacks) world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), e)); }
       return stacks;
@@ -872,14 +915,14 @@ public class SwitchBlock extends RsDirectedBlock
      * Invokes the link targets of all pearls plugged into this switch, returns
      * true if all link requests succeeded.
      */
-    public boolean activateSwitchLinks(final int req)
+    public boolean activateSwitchLinks(int power, boolean state_changed)
     {
       if(ModConfig.without_switch_linking) return true;
       last_link_request_ = linktime();
       if(links_==null) return true;
       int n_fails = 0;
-      for(SwitchLinkPearlItem.SwitchLink lnk:links_) {
-        switch(lnk.request(req, world, pos, null)) {
+      for(SwitchLink lnk:links_) {
+        switch(lnk.trigger(world, pos, power, state_changed)) {
           case OK:
           case NOT_MATCHED:
             break;
@@ -895,14 +938,6 @@ public class SwitchBlock extends RsDirectedBlock
   // Mod specific user activation/click calculations
   // -------------------------------------------------------------------------------------------------------------------
 
-  /**
-   * Data class with static factory function to enable unified block activation
-   * click coordinates with respect to the device (UI) interface facing, normalised
-   * to 0..15. On `wrenched==true` the face was clicked with an valid wrench. If
-   * `touch_configured==false`, the block was not clicked on the main display
-   * facing side, and remaining instance data are not valid. If clicked with a
-   * redstone stack or dye, the corresponding data values will be non-default.
-   */
   protected static final class ClickInteraction
   {
     public boolean touch_configured = false;
@@ -945,7 +980,7 @@ public class SwitchBlock extends RsDirectedBlock
           case 4: xo = z  ; yo = y  ; break; // WEST
           case 5: xo = 1-z; yo = y  ; break; // EAST
         }
-        final AxisAlignedBB aa = block.getUnrotatedBB();
+        final AxisAlignedBB aa = block.getShape(block.getDefaultState().with(FACING, Direction.SOUTH)).getBoundingBox();
         xo = Math.round(((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25);
         yo = Math.round(((yo-aa.minY) * (1.0/(aa.maxY-aa.minY)) * 15.5) - 0.25);
       } else if(block.isLateral()) {
@@ -960,7 +995,7 @@ public class SwitchBlock extends RsDirectedBlock
           case 4: xo = 1-z; yo = 1-x; break; // WEST
           case 5: xo =   z; yo =   x; break; // EAST
         }
-        final AxisAlignedBB aa = block.getUnrotatedBB();
+        final AxisAlignedBB aa = block.getShape(block.getDefaultState().with(FACING, Direction.NORTH)).getBoundingBox();
         xo = 0.1 * Math.round(10.0 * (((xo-aa.minX) * (1.0/(aa.maxX-aa.minX)) * 15.5) - 0.25));
         yo = 0.1 * Math.round(10.0 * (((yo-(1.0-aa.maxZ)) * (1.0/(aa.maxZ-aa.minZ)) * 15.5) - 0.25));
       } else {

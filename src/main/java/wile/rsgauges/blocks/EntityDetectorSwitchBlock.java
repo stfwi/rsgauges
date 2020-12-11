@@ -1,5 +1,5 @@
 /*
- * @file BlockEntityDetectorSwitch.java
+ * @file DetectorSwitchTileEntity.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -59,7 +59,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
   /**
    * Tile entity for entity detection based auto switches
    */
-  public static class DetectorSwitchTileEntity extends TileEntityAutoSwitch implements ITickableTileEntity
+  public static class DetectorSwitchTileEntity extends AutoSwitchTileEntity implements ITickableTileEntity
   {
     public static final Class<?> filter_classes[] = { LivingEntity.class, PlayerEntity.class, MonsterEntity.class, AnimalEntity.class, VillagerEntity.class, ItemEntity.class, Entity.class };
     public static final String filter_class_names[] = { "creatures", "players", "mobs", "animals", "villagers", "objects", "everything" };

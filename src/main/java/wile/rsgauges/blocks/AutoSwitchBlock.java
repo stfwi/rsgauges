@@ -1,5 +1,5 @@
 /*
- * @file BlockAutoSwitch.java
+ * @file AutoSwitchBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -12,15 +12,14 @@ package wile.rsgauges.blocks;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.*;
-import net.minecraft.world.World;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.tileentity.TileEntity;
 import wile.rsgauges.blocks.IntervalTimerSwitchBlock.IntervalTimerSwitchTileEntity;
 import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.SwitchLinkPearlItem;
+import wile.rsgauges.detail.SwitchLink;
+
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -31,7 +30,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
   public AutoSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
-  { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
+  { this(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Block overrides
@@ -44,24 +43,24 @@ public abstract class AutoSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public boolean onLinkRequest(final SwitchLinkPearlItem.SwitchLink link, long req, final World world, final BlockPos pos, @Nullable final PlayerEntity player)
+  public SwitchLink.RequestResult switchLinkTrigger(SwitchLink link)
   {
-    if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote())) return false;
-    if((config & (SWITCH_CONFIG_TIMER_INTERVAL))==0) return false; // only interval timer can be a link target
-    BlockState state = world.getBlockState(pos);
-    if((state == null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return false;
-    TileEntityAutoSwitch te = getTe(world, pos);
-    if((te==null) || (!te.verifySwitchLinkTarget(link))) return false;
+    if((config & SWITCH_CONFIG_LINK_TARGET_SUPPORT)==0) return SwitchLink.RequestResult.REJECTED;
+    if((config & SWITCH_CONFIG_TIMER_INTERVAL)==0) return SwitchLink.RequestResult.REJECTED; // only interval timer can be a link target
+    BlockState state = link.world.getBlockState(link.target_position);
+    if((state == null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return SwitchLink.RequestResult.REJECTED;
+    AutoSwitchTileEntity te = getTe(link.world, link.target_position);
+    if((te==null) || (!te.verifySwitchLinkTarget(link))) return SwitchLink.RequestResult.REJECTED;
     te.updateSwitchState(state, this, !state.get(POWERED), 0);
-    return true;
+    return SwitchLink.RequestResult.OK;
   }
 
   @Override
-  public TileEntityAutoSwitch getTe(IWorldReader world, BlockPos pos)
+  public AutoSwitchTileEntity getTe(IWorldReader world, BlockPos pos)
   {
     TileEntity te = world.getTileEntity(pos);
-    if((!(te instanceof TileEntityAutoSwitch))) return null;
-    return (TileEntityAutoSwitch)te;
+    if((!(te instanceof AutoSwitchTileEntity))) return null;
+    return (AutoSwitchTileEntity)te;
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -71,12 +70,15 @@ public abstract class AutoSwitchBlock extends SwitchBlock
   /**
    * Tile entity base
    */
-  public static abstract class TileEntityAutoSwitch extends SwitchTileEntity
+  public static abstract class AutoSwitchTileEntity extends SwitchTileEntity
   {
-    public TileEntityAutoSwitch(TileEntityType<?> te_type)
+    public AutoSwitchTileEntity(TileEntityType<?> te_type)
     { super(te_type); }
 
     protected final void updateSwitchState(BlockState state, AutoSwitchBlock block, boolean active, int hold_time)
+    { updateSwitchState(state, block, active, hold_time, true); }
+
+    protected final void updateSwitchState(BlockState state, AutoSwitchBlock block, boolean active, int hold_time, boolean link_update)
     {
       if(active) {
         on_timer_reset(hold_time);
@@ -88,8 +90,8 @@ public abstract class AutoSwitchBlock extends SwitchBlock
           BlockPos np = pos.offset(state.get(FACING).getOpposite());
           Block nb = world.getBlockState(np).getBlock();
           world.notifyNeighborsOfStateChange(np, nb);
-          if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-            if(!activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+          if(link_update && ((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0)) {
+            if(!activateSwitchLinks(on_power(), true)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }
@@ -102,8 +104,8 @@ public abstract class AutoSwitchBlock extends SwitchBlock
           BlockPos np = pos.offset(state.get(FACING).getOpposite());
           Block nb = world.getBlockState(np).getBlock();
           world.notifyNeighborsOfStateChange(np, nb);
-          if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-            if(!activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_DEACTIVATE)) {
+          if(link_update && ((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0)) {
+            if(!activateSwitchLinks(0, true)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }

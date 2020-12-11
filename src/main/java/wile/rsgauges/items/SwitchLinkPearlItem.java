@@ -1,12 +1,12 @@
 package wile.rsgauges.items;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -19,7 +19,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,7 +26,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.blocks.SwitchBlock;
+import wile.rsgauges.detail.SwitchLink;
+import wile.rsgauges.detail.SwitchLink.ISwitchLinkable;
 import wile.rsgauges.libmc.detail.Overlay;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 
@@ -95,7 +95,7 @@ public class SwitchLinkPearlItem extends RsItem
       }
     }
     tooltip.add(Auxiliaries.localizable(
-      "switchlinking.relayconfig.confval" + Integer.toString(link.relay()),
+      "switchlinking.relayconfig.confval" + Integer.toString(link.mode().index()),
       TextFormatting.ITALIC
     ));
     super.addInformation(stack, world, tooltip, flag);
@@ -125,9 +125,10 @@ public class SwitchLinkPearlItem extends RsItem
     );
     Vector3d v = new Vector3d(0, ((world.getRandom().nextDouble()-0.5)*0.001), 0);
     BlockState state = world.getBlockState(lnk.target_position);
-    if((state==null) || (!(state.getBlock() instanceof SwitchBlock)) ) return;
+    if((state==null) || (!(state.getBlock() instanceof ISwitchLinkable)) ) return;
     p = p.add(state.getShape(world, lnk.target_position).getBoundingBox().getCenter());
-    if(state.get(SwitchBlock.POWERED)) {
+    int power = ((ISwitchLinkable)(state.getBlock())).switchLinkOutputPower(world, lnk.target_position).orElse(0);
+    if(power > 0) {
       world.addParticle((IParticleData)ParticleTypes.INSTANT_EFFECT, false, p.x, p.y, p.z, v.x, v.y, v.z);
     } else {
       world.addParticle((IParticleData)ParticleTypes.WITCH, false, p.x, p.y, p.z, v.x, v.y, v.z);
@@ -136,12 +137,11 @@ public class SwitchLinkPearlItem extends RsItem
 
   public static final void usePearl(World world, PlayerEntity player)
   {
-    switch(SwitchLink.fromPlayerActiveItem(world, player).request(SwitchLink.SWITCHLINK_RELAY_ACTIVATE, world, player.getPosition(), player)) {
+    switch(SwitchLink.fromPlayerActiveItem(world, player).trigger(world, player.getPosition(), player)) {
       case OK:
         ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_SUCCESS.play(world, player.getPosition());
         return;
       case TOO_FAR:
-      case BLOCK_UNLOADED:
         Overlay.show(player, Auxiliaries.localizable("switchlinking.switchlink_pearl.use.toofaraway", TextFormatting.DARK_RED));
         break;
       case TARGET_GONE:
@@ -155,169 +155,52 @@ public class SwitchLinkPearlItem extends RsItem
     ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, player.getPosition());
   }
 
-  public static final @Nullable ItemStack createFromEnderPearl(World world, BlockPos pos, PlayerEntity player)
+
+  public static final ItemStack createFromPearl(World world, BlockPos pos, PlayerEntity player)
   {
-    if((world==null) || (player==null) || (pos==null)) return null;
-    if((player.inventory==null) || (player.inventory.getCurrentItem()==null) || (player.inventory.getCurrentItem().getItem())!=Items.ENDER_PEARL) return null;
+    final ItemStack stack_held = player.inventory.getCurrentItem();
+    if(stack_held.isEmpty()) return ItemStack.EMPTY;
+    final ItemStack link_pearl = createForTarget(world, pos);
+    if(link_pearl.isEmpty()) return ItemStack.EMPTY;
+    link_pearl.getTag().putLong("cdtime", world.getGameTime());
+    if(stack_held.getCount() > 1) {
+      // @todo: move shrinked ender pearl stack into another slot
+      link_pearl.setCount(stack_held.getCount());
+    }
+    return link_pearl;
+  }
+
+  public static final ItemStack createForTarget(World world, BlockPos pos)
+  {
     final BlockState state = world.getBlockState(pos);
-    if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return null;
-    final int rl = ((((SwitchBlock)state.getBlock()).config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) ? SwitchLink.SWITCHLINK_RELAY_ACTIVATE : SwitchLink.SWITCHLINK_RELAY_STATE;
-    ItemStack stack = new ItemStack(ModContent.SWITCH_LINK_PEARL, player.inventory.getCurrentItem().getCount());
-    stack.setTag(SwitchLink.fromTargetPosition(world, pos).with_relay(rl).toNbt());
+    if(!(state.getBlock() instanceof SwitchLink.ISwitchLinkable)) return ItemStack.EMPTY;
+    ItemStack stack = new ItemStack(ModContent.SWITCH_LINK_PEARL);
+    final SwitchLink.LinkMode mode = ((SwitchLink.ISwitchLinkable)state.getBlock()).switchLinkGetSupportedTargetModes().get(0);
+    stack.setTag(SwitchLink.fromTargetPosition(world, pos).mode(mode).toNbt());
     return stack;
   }
 
-  public static final ItemStack getCycledRelay(ItemStack stack, World world, BlockPos target_pos)
+  public static final boolean cycleLinkMode(ItemStack stack, World world, BlockPos target_pos, boolean with_click_time)
   {
-    if((world==null) || (stack==null) || (stack.getItem()!=ModContent.SWITCH_LINK_PEARL)) return stack;
-    final SwitchLink current_link = SwitchLink.fromItemStack(stack);
-    if(!target_pos.equals(current_link.target_position)) return stack;
-    final BlockState state = world.getBlockState(current_link.target_position);
-    if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return stack;
-    final SwitchBlock block = (SwitchBlock)state.getBlock();
-    int next = current_link.relay()+1;
-    if(((block.config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) && ((next < SwitchLink.SWITCHLINK_RELAY_ACTIVATE) || (next > SwitchLink.SWITCHLINK_RELAY_TOGGLE))) next = SwitchLink.SWITCHLINK_RELAY_ACTIVATE;
-    SwitchLink lnk = current_link.with_relay((next < SwitchLink.SWITCHLINK_RELAY_EOL) ? next : 0);
-    if(!lnk.valid) return stack;
+    SwitchLink lnk = SwitchLink.fromItemStack(stack);
+    if(!target_pos.equals(lnk.target_position)) return false;
+    final BlockState state = world.getBlockState(lnk.target_position);
+    if((!(state.getBlock() instanceof SwitchLink.ISwitchLinkable))) return false;
+    final long t = world.getGameTime();
+    if(with_click_time) {
+      final long dt = Math.abs(t-stack.getTag().getLong("cdtime"));
+      if(dt < 7) return true;
+      if(dt > 40) { stack.getTag().putLong("cdtime", t); return true; }
+    }
+    final SwitchLink.ISwitchLinkable target = (SwitchLink.ISwitchLinkable)(state.getBlock());
+    ImmutableList<SwitchLink.LinkMode> modes = target.switchLinkGetSupportedTargetModes();
+    int index = modes.indexOf(lnk.mode())+1;
+    SwitchLink.LinkMode next = modes.get((index<0)||(index>=modes.size()) ? 0 : index);
+    lnk.mode(next);
+    if(!lnk.valid) return false;
     stack.setTag(lnk.toNbt());
-    return stack;
+    stack.getTag().putLong("cdtime", t);
+    return true;
   }
 
-  /**
-   * Class representing the link functionality of the switch link pearls.
-   * It has no purpose without this item, for which it is embedded in the item class.
-   */
-  public static class SwitchLink
-  {
-    public static final long SWITCHLINK_CONFIG_DEFAULT          = 0x0000000000000000;
-    public static final long SWITCHLINK_CONFIG_RELAY_MASK       = 0x0000000000000007;
-    public static final int  SWITCHLINK_RELAY_STATE             = 0x0;
-    public static final int  SWITCHLINK_RELAY_ACTIVATE          = 0x1;
-    public static final int  SWITCHLINK_RELAY_DEACTIVATE        = 0x2;
-    public static final int  SWITCHLINK_RELAY_TOGGLE            = 0x3;
-    public static final int  SWITCHLINK_RELAY_STATE_INV         = 0x4;
-    public static final int  SWITCHLINK_RELAY_EOL               = 0x5;
-
-    public enum RequestResult { OK, NOT_MATCHED, INVALID_LINKDATA, TOO_FAR, BLOCK_UNLOADED, TARGET_GONE, REJECTED }
-    public final BlockPos target_position;
-    public final String block_name;         // intentionally not Block, as this one could not be registered.
-    public final long config;
-    public final boolean valid;
-
-    public SwitchLink()
-    { target_position=BlockPos.ZERO; block_name=""; config=SWITCHLINK_CONFIG_DEFAULT; valid=false;}
-
-    public SwitchLink(BlockPos pos, String name, long cfg)
-    {
-      target_position = pos;
-      block_name = name;
-      config = cfg;
-      valid = (!block_name.isEmpty()) && (pos.toLong()!=0);
-    }
-
-    @Override
-    public String toString()
-    { return "SwitchLink{pos=" + target_position.toString() + ", block='" + block_name + "', config=" + Long.toString(config)+ "}"; }
-
-    public int relay()
-    { final int r=(int)(config & SWITCHLINK_CONFIG_RELAY_MASK); return (r<SWITCHLINK_RELAY_EOL) ? r : 0; }
-
-    public SwitchLink with_relay(int conf)
-    { return new SwitchLink(target_position, block_name, (config & ~SWITCHLINK_CONFIG_RELAY_MASK)|(conf & SWITCHLINK_CONFIG_RELAY_MASK)); }
-
-    public static SwitchLink fromNbt(final CompoundNBT nbt)
-    { return (nbt==null) ? (new SwitchLink()) : (new SwitchLink(BlockPos.fromLong(nbt.getLong("p")), nbt.getString("b"), nbt.getLong("t"))); }
-
-    public static SwitchLink fromItemStack(ItemStack stack)
-    { return ((stack==null) || (stack.isEmpty()) || (stack.getItem()!=ModContent.SWITCH_LINK_PEARL)) ? (new SwitchLink()) : (fromNbt(stack.getTag())); }
-
-    public static SwitchLink fromTargetPosition(final World world, final BlockPos targetPos)
-    {
-      if(targetPos==null) return new SwitchLink();
-      final BlockState state = world.getBlockState(targetPos);
-      if((state==null) || (!(state.getBlock() instanceof SwitchBlock))) return new SwitchLink();
-      final SwitchBlock block = (SwitchBlock)state.getBlock();
-      if((block.config & SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT)==0) return new SwitchLink();
-      return new SwitchLink(targetPos, block.getRegistryName().toString(), SWITCHLINK_CONFIG_DEFAULT);
-    }
-
-    public static SwitchLink fromPlayerActiveItem(World world, PlayerEntity player)
-    {
-      if((player==null) || (world.isRemote()) || (player.inventory==null) || (player.inventory.getCurrentItem()==null)) return new SwitchLink();
-      if(player.inventory.getCurrentItem().getItem()!=ModContent.SWITCH_LINK_PEARL) return null;
-      return SwitchLink.fromNbt(player.inventory.getCurrentItem().getTag());
-    }
-
-    public CompoundNBT toNbt()
-    {
-      CompoundNBT nbt = new CompoundNBT();
-      nbt.putString("b", block_name);
-      nbt.putLong("t", config);
-      nbt.putLong("p", target_position.toLong());
-      return nbt;
-    }
-
-    public ItemStack toSwitchLinkPearl()
-    {
-      ItemStack stack = new ItemStack(ModContent.SWITCH_LINK_PEARL);
-      stack.setCount(1);
-      stack.setTag(toNbt());
-      return stack;
-    }
-
-    public int distance(@Nullable final BlockPos pos)
-    { return ((pos==null) || (!valid)) ? -1 : (int)Math.sqrt(target_position.distanceSq(pos)); }
-
-    public boolean isTooFar(final BlockPos pos)
-    { return (ModConfig.max_switch_linking_distance > 0) && (((distance(pos) > ModConfig.max_switch_linking_distance))); }
-
-    @SuppressWarnings("deprecation")
-    public RequestResult request(final int req, final World world, final BlockPos source_pos, final @Nullable PlayerEntity player)
-    {
-      // Preconditions
-      if(ModConfig.without_switch_linking) return RequestResult.REJECTED;
-      if(!valid) return RequestResult.INVALID_LINKDATA;
-      if(isTooFar(source_pos)) return RequestResult.TOO_FAR;
-      if(!world.isBlockLoaded(target_position)) return RequestResult.BLOCK_UNLOADED;
-      final BlockState target_state=world.getBlockState(target_position);
-      if(target_state==null) return RequestResult.BLOCK_UNLOADED;
-      final Block block = target_state.getBlock();
-      if((!(block instanceof SwitchBlock)) || (!block.getRegistryName().toString().equals(block_name))) return RequestResult.TARGET_GONE;
-      final SwitchBlock target_block = (SwitchBlock)block;
-
-      // Match incoming request to the link config for requests coming from source switches
-      if(player==null) {
-        switch(relay()) {
-          case SWITCHLINK_RELAY_STATE:
-          case SWITCHLINK_RELAY_STATE_INV: {
-            boolean powered = target_state.get(SwitchBlock.POWERED);
-            if(relay()==SWITCHLINK_RELAY_STATE_INV) powered = !powered;
-            if(req == SWITCHLINK_RELAY_ACTIVATE) {
-              if(powered) return RequestResult.NOT_MATCHED;
-            } else if(req == SWITCHLINK_RELAY_DEACTIVATE) {
-              if(!powered) return RequestResult.NOT_MATCHED;
-              // Special case for all pulse switches. The default behaviour is
-              // to activate when rising edge, but not explicitly deactivate
-              // on falling edges. This opens some more usage options for the
-              // player, and is probably also what the player expects as default,
-              // if anything can be actually expected with these link mechanisms.
-              if((target_block.config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) return RequestResult.NOT_MATCHED;
-            }
-          } break;
-          case SWITCHLINK_RELAY_ACTIVATE:
-            if(req != SWITCHLINK_RELAY_ACTIVATE) return RequestResult.NOT_MATCHED;
-            break;
-          case SWITCHLINK_RELAY_DEACTIVATE:
-            if(req != SWITCHLINK_RELAY_DEACTIVATE) return RequestResult.NOT_MATCHED;
-            break;
-          case SWITCHLINK_RELAY_TOGGLE:
-            if((req != SWITCHLINK_RELAY_ACTIVATE) && (req != SWITCHLINK_RELAY_DEACTIVATE)) return RequestResult.NOT_MATCHED;
-            break;
-        }
-      }
-      // Invoke delegated handling in the target switch
-      return (target_block.onLinkRequest(this, req, world, target_position, player)) ? (RequestResult.OK) : (RequestResult.REJECTED);
-    }
-
-  }
 }

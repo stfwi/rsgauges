@@ -16,6 +16,8 @@
  */
 package wile.rsgauges.blocks;
 
+import com.google.common.collect.ImmutableList;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -43,14 +45,19 @@ import net.minecraft.world.World;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.ModConfig;
+import wile.rsgauges.detail.SwitchLink;
+import wile.rsgauges.detail.SwitchLink.LinkMode;
+import wile.rsgauges.detail.SwitchLink.RequestResult;
+import wile.rsgauges.items.SwitchLinkPearlItem;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.libmc.detail.Overlay;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 
-public class AbstractGaugeBlock extends RsDirectedBlock
+public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.ISwitchLinkable
 {
   public static final long GAUGE_DATA_POWER_MASK            = 0x000000000000000fl;
   public static final int  GAUGE_DATA_POWER_SHIFT           = 0;
@@ -64,11 +71,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   public AbstractGaugeBlock(long config, Block.Properties props, final AxisAlignedBB aabb, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  {
-    super(config, props, aabb);
-    power_on_sound = powerOnSound;
-    power_off_sound = powerOffSound;
-  }
+  { super(config, props, aabb, null); power_on_sound = powerOnSound; power_off_sound = powerOffSound; }
 
   public AbstractGaugeBlock(long config, Block.Properties props, final AxisAlignedBB aabb)
   { this(config, props, aabb, null, null); }
@@ -92,13 +95,42 @@ public class AbstractGaugeBlock extends RsDirectedBlock
   @Override
   public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
   {
-    if(world.isRemote()) return ActionResultType.CONSUME;
-    if(ModConfig.isWrench(player.getHeldItem(hand))) {
+    if(world.isRemote()) return ActionResultType.SUCCESS;
+    ItemStack stack_held = player.getHeldItem(hand);
+    if(ModConfig.isWrench(stack_held)) {
       GaugeTileEntity te = getTe(world, pos);
-      if(te==null) return ActionResultType.SUCCESS;
+      if(te==null) return ActionResultType.CONSUME;
       te.on_wrench(state, world, pos, player, player.getHeldItem(hand));
+    } else if((stack_held.getItem() == Items.ENDER_PEARL) || (stack_held.getItem() == ModContent.SWITCH_LINK_PEARL)) {
+      onBlockClicked(state, world, pos, player);
     }
-    return ActionResultType.SUCCESS;
+    return ActionResultType.CONSUME;
+  }
+
+  @Override
+  @SuppressWarnings("deprecation")
+  public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player)
+  {
+    final ItemStack item_held = player.inventory.getCurrentItem();
+    if(item_held.getItem() == Items.ENDER_PEARL) {
+      if(ModConfig.without_switch_linking) return;
+      ItemStack link_stack = SwitchLinkPearlItem.createFromPearl(world, pos, player);
+      if(link_stack.isEmpty()) {
+        Overlay.show(player, Auxiliaries.localizable("switchlinking.target_assign.error_notarget"));
+        ModResources.BlockSoundEvents.SWITCHLINK_CANNOT_LINK_THAT.play(world, pos);
+      } else {
+        player.inventory.setInventorySlotContents(player.inventory.currentItem, link_stack);
+        Overlay.show(player, Auxiliaries.localizable("switchlinking.target_assign.ok"));
+        ModResources.BlockSoundEvents.SWITCHLINK_LINK_TARGET_SELECTED.play(world, pos);
+      }
+    } else if(item_held.getItem() == ModContent.SWITCH_LINK_PEARL) {
+      if(ModConfig.without_switch_linking) return;
+      if(SwitchLinkPearlItem.cycleLinkMode(item_held, world, pos, true)) {
+        Overlay.show(player, Auxiliaries.localizable("switchlinking.relayconfig.confval" + Integer.toString(SwitchLink.fromItemStack(item_held).mode().index())));
+      } else {
+        Overlay.show(player, Auxiliaries.localizable("switchlinking.source_assign.error_nosource"));
+      }
+    }
   }
 
   @Override
@@ -150,6 +182,64 @@ public class AbstractGaugeBlock extends RsDirectedBlock
   { return false; }
 
   // -------------------------------------------------------------------------------------------------------------------
+  // Linking
+  // -------------------------------------------------------------------------------------------------------------------
+
+  @Override
+  public boolean switchLinkHasTargetSupport(World world, BlockPos pos)
+  { return true; }
+
+  @Override
+  public boolean switchLinkHasSourceSupport(World world, BlockPos pos)
+  { return false; }
+
+  @Override
+  public boolean switchLinkHasAnalogSupport(World world, BlockPos pos)
+  { return true; }
+
+  @Override
+  public ImmutableList<LinkMode> switchLinkGetSupportedTargetModes()
+  { return ImmutableList.of(LinkMode.AS_STATE, LinkMode.INV_STATE); }
+  @Override
+  public Optional<Integer> switchLinkOutputPower(World world, BlockPos pos)
+  {
+    GaugeTileEntity te = getTe(world, pos);
+    if(te==null) return Optional.empty();
+    return Optional.of(te.power());
+  }
+
+  @Override
+  public Optional<Integer> switchLinkInputPower(World world, BlockPos pos)
+  { return Optional.empty(); }
+
+  @Override
+  public Optional<Integer> switchLinkComparatorInput(World world, BlockPos pos)
+  { return Optional.empty(); }
+
+  @Override
+  public SwitchLink.RequestResult switchLinkTrigger(SwitchLink link)
+  {
+    GaugeTileEntity te = getTe(link.world, link.target_position);
+    if(te==null) return RequestResult.TARGET_GONE;
+    te.switchlink_input(link.source_power);
+    return RequestResult.OK;
+  }
+
+  @Override
+  public void switchLinkInit(SwitchLink link)
+  {
+    GaugeTileEntity te = getTe(link.world, link.target_position);
+    if(te!=null) te.switchlink_input(link.source_power);
+  }
+
+  @Override
+  public void switchLinkUnlink(SwitchLink link)
+  {
+    GaugeTileEntity te = getTe(link.world, link.target_position);
+    if(te!=null) te.switchlink_input(0);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
   // Tile entity
   // -------------------------------------------------------------------------------------------------------------------
 
@@ -168,6 +258,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock
     private long trigger_timer_ = 0;
     private long scd_ = 0;
     private long last_wrench_click_ = 0;
+    private int switchlink_input_ = 0;
 
     public GaugeTileEntity(TileEntityType<?> te_type)
     { super(te_type); }
@@ -186,6 +277,12 @@ public class AbstractGaugeBlock extends RsDirectedBlock
 
     public void inverted(boolean i)
     { scd_ =  (scd_ & (~GAUGE_DATA_INVERTED)) | (i ? GAUGE_DATA_INVERTED : 0); }
+
+    public int switchlink_input()
+    { return switchlink_input_; }
+
+    public void switchlink_input(int power)
+    { switchlink_input_ = power; trigger_timer_ = Math.min(trigger_timer_, 1); }
 
     public boolean comparator_mode()
     { return (scd_ & GAUGE_DATA_COMPARATOR_MODE) != 0; }
@@ -234,11 +331,11 @@ public class AbstractGaugeBlock extends RsDirectedBlock
 
     @Override
     public void write(CompoundNBT nbt, boolean updatePacket)
-    { nbt.putLong("scd", scd_); }
+    { nbt.putLong("scd", scd_); nbt.putInt("lnkinp", switchlink_input_); }
 
     @Override
     public void read(CompoundNBT nbt, boolean updatePacket)
-    { scd_= nbt.getLong("scd"); }
+    { scd_= nbt.getLong("scd"); switchlink_input_ = nbt.getInt("lnkinp"); }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -303,6 +400,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock
               block.power_off_sound.play(world, pos);
             }
           }
+          p = Math.max(p, switchlink_input_);
           power(p);
           if(block instanceof IndicatorBlock) {
             boolean powered = p != 0; // TE also used for indicator, no need to register yet another tile entity.

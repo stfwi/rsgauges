@@ -1,5 +1,5 @@
 /*
- * @file BlockObserverSwitch.java
+ * @file ObserverSwitchBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)

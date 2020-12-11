@@ -321,7 +321,7 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "industrial_shock_sensitive_contact_mat"));
 
   // Industrial trap door switch (shock vibration sensitive)
-  public static final BlockTrapdoorSwitch INDUSTRIAL_SHOCK_SENSITIVE_TRAPDOOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+  public static final TrapdoorSwitchBlock INDUSTRIAL_SHOCK_SENSITIVE_TRAPDOOR = (TrapdoorSwitchBlock)(new TrapdoorSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
@@ -335,7 +335,7 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "industrial_shock_sensitive_trapdoor"));
 
   // Industrial trap door switch (high sensitive shock vibration sensitive)
-  public static final BlockTrapdoorSwitch INDUSTRIAL_HIGH_SENSITIVE_TRAPDOOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+  public static final TrapdoorSwitchBlock INDUSTRIAL_HIGH_SENSITIVE_TRAPDOOR = (TrapdoorSwitchBlock)(new TrapdoorSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
@@ -351,7 +351,7 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "industrial_high_sensitive_trapdoor"));
 
   // Industrial trap door switch (item trap door)
-  public static final BlockTrapdoorSwitch INDUSTRIAL_FALLTHROUGH_DETECTOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+  public static final TrapdoorSwitchBlock INDUSTRIAL_FALLTHROUGH_DETECTOR = (TrapdoorSwitchBlock)(new TrapdoorSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -523,9 +523,9 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_cased_pulse_receiver"));
 
   // Industrial bistable link relay
-  public static final LinkRelaySwitchBlock INDUSTRIAL_SWITCHLINK_RELAY = (LinkRelaySwitchBlock)(new LinkRelaySwitchBlock(
+  public static final LinkSenderSwitchBlock INDUSTRIAL_SWITCHLINK_RELAY = (LinkSenderSwitchBlock)(new LinkSenderSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
-    SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_LINK_RELAY|
+    SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_LINK_SENDER|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_DATA_WEAK|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
     SWITCH_METALLIC_BLOCK_PROPERTIES,
@@ -535,9 +535,9 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_relay"));
 
   // Industrial pulse link relay
-  public static final LinkRelaySwitchBlock INDUSTRIAL_SWITCHLINK_PULSE_RELAY = (LinkRelaySwitchBlock)(new LinkRelaySwitchBlock(
+  public static final LinkSenderSwitchBlock INDUSTRIAL_SWITCHLINK_PULSE_RELAY = (LinkSenderSwitchBlock)(new LinkSenderSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
-    SwitchBlock.SWITCH_CONFIG_LINK_RELAY|
+    SwitchBlock.SWITCH_CONFIG_LINK_SENDER|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_DATA_WEAK|
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
@@ -615,7 +615,7 @@ public class ModContent
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
     INDICATOR_METALLIC_BLOCK_PROPERTIES,
     Auxiliaries.getPixeledAABB(4,6.5,0, 11.5, 9.5, 4),
-    new ModResources.BlockSoundEvent(ModResources.ALARM_SIREN_SOUND),
+    new ModResources.BlockSoundEvent(ModResources.ALARM_SIREN_SOUND, 2f),
     null
   )).setRegistryName(new ResourceLocation(MODID, "industrial_alarm_siren"));
 
@@ -804,7 +804,7 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "rustic_shock_sensitive_plate"));
 
   // Rustic trap door switch (shock vibration sensitive)
-  public static final BlockTrapdoorSwitch RUSTIC_SHOCK_SENSITIVE_TRAPDOOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+  public static final TrapdoorSwitchBlock RUSTIC_SHOCK_SENSITIVE_TRAPDOOR = (TrapdoorSwitchBlock)(new TrapdoorSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
@@ -818,7 +818,7 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "rustic_shock_sensitive_trapdoor"));
 
   // Rustic trap door switch (high sensitive shock vibration sensitive)
-  public static final BlockTrapdoorSwitch RUSTIC_HIGH_SENSITIVE_TRAPDOOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+  public static final TrapdoorSwitchBlock RUSTIC_HIGH_SENSITIVE_TRAPDOOR = (TrapdoorSwitchBlock)(new TrapdoorSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
@@ -834,7 +834,7 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "rustic_high_sensitive_trapdoor"));
 
   // Rustic trap door switch (item trap door)
-  public static final BlockTrapdoorSwitch RUSTIC_FALLTHROUGH_DETECTOR = (BlockTrapdoorSwitch)(new BlockTrapdoorSwitch(
+  public static final TrapdoorSwitchBlock RUSTIC_FALLTHROUGH_DETECTOR = (TrapdoorSwitchBlock)(new TrapdoorSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_CONTACT|SwitchBlock.SWITCH_CONFIG_LATERAL_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
     SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_CONFIG_PULSETIME_CONFIGURABLE|
@@ -843,8 +843,7 @@ public class ModContent
     Auxiliaries.getPixeledAABB(0,12.6,0, 16,13,16),
     Auxiliaries.getPixeledAABB(0,12.6,0, 16,13,16),
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.5f),
-    null // new ModResources.BlockSoundEvent(SoundEvents.BLOCK_IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    //Auxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
+    null
   )).setRegistryName(new ResourceLocation(MODID, "rustic_fallthrough_detector"));
 
   public static final GaugeBlock RUSTIC_CIRCULAR_GAUGE = (GaugeBlock)(new GaugeBlock(
@@ -1132,7 +1131,7 @@ public class ModContent
   )).setRegistryName(new ResourceLocation(MODID, "valve_wheel_switch"));
 
   // Elevator button
-  public static final PulseSwitchBlock ELEVATOR_BUTTON = (PulseSwitchBlock)(new PulseSwitchBlock(
+  public static final ElevatorSwitchBlock ELEVATOR_BUTTON = (ElevatorSwitchBlock)(new ElevatorSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|

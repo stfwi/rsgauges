@@ -11,7 +11,7 @@
   "block.rsgauges.door_sensor_switch": "Door sensor",
   "block.rsgauges.door_sensor_switch.help": "§6A player detector that is mounted on walls above doors.§r",
   "block.rsgauges.elevator_button": "双稳态红石开关（电梯按钮）",
-  "block.rsgauges.elevator_button.help": "${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}",
+  "block.rsgauges.elevator_button.help": "(EN:Points up, down, or in both directions depending on where you click the wall when placing)\n${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}",
   "block.rsgauges.glass_button": "脉冲红石开关 (星形玻璃按钮)",
   "block.rsgauges.glass_button.help": "${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}",
   "block.rsgauges.glass_contact_mat": "接触红石开关 (玻璃板)",

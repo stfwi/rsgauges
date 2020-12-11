@@ -11,7 +11,7 @@
   "block.rsgauges.door_sensor_switch": "Türöffner",
   "block.rsgauges.door_sensor_switch.help": "§6Erkennt Spieler, wird an Wänden über Türen montiert.§r",
   "block.rsgauges.elevator_button": "Fahrstuhl-Knopf",
-  "block.rsgauges.elevator_button.help": "${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}",
+  "block.rsgauges.elevator_button.help": "Richtungspfeile hoch, runter, oder beide - je nach Klick-Höhe beim Platzieren.\n${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help}",
   "block.rsgauges.glass_button": "Glasknopf",
   "block.rsgauges.glass_button.help": "${rsgauges.switch.feature.typepulse.help}${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.pulseextend.help} ${rsgauges.switch.feature.pulsetime.help} ${rsgauges.switch.feature.linktarget.help} ${rsgauges.switch.feature.linksource.help} ${rsgauges.switch.feature.colortinting.help}",
   "block.rsgauges.glass_contact_mat": "Redstone-Glasplatte",

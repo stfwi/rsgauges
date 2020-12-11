@@ -1,5 +1,5 @@
 /*
- * @file BlockSensitiveGlass.java
+ * @file SensitiveGlassBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -46,7 +46,7 @@ public class SensitiveGlassBlock extends RsBlock
   public SensitiveGlassBlock(Block.Properties properties)
   {
     super(RSBLOCK_CONFIG_TRANSLUCENT, properties, Auxiliaries.getPixeledAABB(0, 0, 0, 16, 16,16 ));
-    setDefaultState(getDefaultState().with(POWERED, false).with(COLOR, DyeColor.WHITE));
+    setDefaultState(super.getDefaultState().with(POWERED, false).with(COLOR, DyeColor.WHITE));
   }
 
   // -------------------------------------------------------------------------------------------------------------------

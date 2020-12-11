@@ -8,6 +8,8 @@
  */
 package wile.rsgauges.libmc.detail;
 
+import javafx.geometry.Pos;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -26,6 +28,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -381,15 +384,6 @@ public class Auxiliaries
       // (void)e; well, then not. Priority is not to get unneeded crashes because of version logging.
     }
   }
-
-
-
-
-
-
-
-
-
 
   // -------------------------------------------------------------------------------------------------------------------
   // Coorsys/AABB transformations,

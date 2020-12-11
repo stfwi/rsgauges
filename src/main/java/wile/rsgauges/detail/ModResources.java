@@ -9,10 +9,7 @@
  */
 package wile.rsgauges.detail;
 
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
@@ -36,7 +33,6 @@ public class ModResources
   public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event)
   {
     for(SoundEvent se:created_sounds_) {event.getRegistry().register(se);}
-    // created_sounds_.clear();
   }
 
   /**
@@ -64,7 +60,13 @@ public class ModResources
       if(SidedProxy.isClientSide()) {
         world.playSound(SidedProxy.getPlayerClientSide(), pos, se_, SoundCategory.BLOCKS, volume_, pitch_);
       } else {
-        world.playSound(null, pos, se_, SoundCategory.BLOCKS, volume_, pitch_);
+        float volume = Math.min(volume_, 1f);
+        world.playSound(null, pos, se_, SoundCategory.BLOCKS, volume, pitch_);
+        if(volume_ > 1.1f) {
+          for(Direction dir: Direction.values()) {
+            world.playSound(null, pos.offset(dir, 15), se_, SoundCategory.BLOCKS, volume, pitch_);
+          }
+        }
       }
     }
   }

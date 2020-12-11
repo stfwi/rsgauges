@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Logger;
@@ -21,8 +22,8 @@ import wile.rsgauges.items.SwitchLinkPearlItem;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class ModConfig
@@ -155,7 +156,7 @@ public class ModConfig
         // @Config.Name("Without sound indicators")
         without_sound_indicators = builder
           .translation(ModRsGauges.MODID + ".config.without_sound_indicators")
-          .comment("Completely disable all sound emmitting indicators.")
+          .comment("Completely disable all sound emitting indicators.")
           .define("without_sound_indicators", false);
         // @Config.Name("Without pulse switches")
         without_pulse_switches = builder
@@ -215,7 +216,7 @@ public class ModConfig
           .comment(
             "Disables the possibility to right click switches with Redstone Dust, " +
             "Ender Pearls or Switch Link pearls for configuration or linking. " +
-            "Can be useful if it is important to the players that no unforseen " +
+            "Can be useful if it is important to the players that no unforeseen " +
             "switch configuration happens when activating a switch was intended. " +
             "Affects server side only. Can be changed during operation."
           )
@@ -245,10 +246,10 @@ public class ModConfig
         // @Config.Name("Accepted wrenches")
         accepted_wrenches = builder
           .translation(ModRsGauges.MODID + ".config.accepted_wrenches")
-          .comment("Comma sepatated list of items names that can be used alter configurable " +
+          .comment("Comma separated list of items names that can be used alter configurable " +
                    "blocks of this mod. This applies when the display side of the block is " +
                    "right click (activated) with the item in the main hand.")
-          .define("accepted_wrenches", "redstone_torch");
+          .define("accepted_wrenches", "minecraft:redstone_torch,immersiveengineering:screwdriver,immersiveengineering:hammer");
         builder.pop();
       }
       // --- TWEAKS -------------------------------------------------------------
@@ -356,7 +357,7 @@ public class ModConfig
   public static int gauge_update_interval = 4;
   public static int config_left_click_timeout = 600;
   public static double switch_status_overlay_y = 0.75;
-  public static String accepted_wrenches = "";
+  public static final Set<ResourceLocation> accepted_wrenches = new HashSet<>(Arrays.asList(new ResourceLocation("minecraft","redsdtone_torch")));
   public static boolean with_experimental = false;
 
   private static final void updateOptouts()
@@ -436,7 +437,7 @@ public class ModConfig
             if((without_pulse_switches) && (((bl.config & SwitchBlock.SWITCH_CONFIG_PULSE)!=0) || (bl instanceof PulseSwitchBlock))) return true;
             if((without_contact_switches) && ((bl.config & SwitchBlock.SWITCH_CONFIG_CONTACT)!=0)) return true;
             if((without_analog_switches) && (bl instanceof DimmerSwitchBlock)) return true;
-            if((without_linkrelay_switches) && (((bl.config & SwitchBlock.SWITCH_CONFIG_LINK_RELAY)!=0) || (bl instanceof LinkRelaySwitchBlock))) return true;
+            if((without_linkrelay_switches) && (((bl.config & SwitchBlock.SWITCH_CONFIG_LINK_SENDER)!=0) || (bl instanceof LinkSenderSwitchBlock))) return true;
             if(without_automatic_switches) {
               if((bl.config & SwitchBlock.SWITCH_CONFIG_AUTOMATIC)!=0) return true;
               if(bl instanceof PulseKnockSwitchBlock) return true;
@@ -446,7 +447,7 @@ public class ModConfig
             }
             if(without_switch_linking) {
               if(bl instanceof LinkReceiverSwitchBlock) return true;
-              if(bl instanceof LinkRelaySwitchBlock) return true;
+              if(bl instanceof LinkSenderSwitchBlock) return true;
             }
             if(without_decorative) {
               if(bl==ModContent.ELEVATOR_BUTTON) return true;
@@ -479,7 +480,6 @@ public class ModConfig
     without_pulsetime_config = SERVER.without_pulsetime_config.get();
     config_left_click_timeout= SERVER.config_left_click_timeout.get();
     without_switch_nooutput = SERVER.without_switch_nooutput.get();
-    accepted_wrenches = SERVER.accepted_wrenches.get();
     without_indicators = SERVER.without_indicators.get();
     without_blinking_indicators = SERVER.without_blinking_indicators.get();
     without_sound_indicators = SERVER.without_sound_indicators.get();
@@ -495,14 +495,24 @@ public class ModConfig
     without_rightclick_item_switchconfig = SERVER.without_rightclick_item_switchconfig.get();
     with_experimental = SERVER.with_experimental.get();
     // Wrenches
-    accepted_wrenches = accepted_wrenches.toLowerCase().replaceAll("[\\s]","").replaceAll(",,",",");
-    accepted_wrenches = ("," + accepted_wrenches + ",").replaceAll(",air,",",redstone_torch,");
-    accepted_wrenches = accepted_wrenches.replaceAll("[,]+$", "").replaceAll("^[,]+", "");
+    {
+      String cfg_wrenches = SERVER.accepted_wrenches.get().toLowerCase().replaceAll("[\\s,]"," ").trim();
+      List<ResourceLocation> wrenches = Arrays.stream(cfg_wrenches.split(" "))
+        .filter(e->!e.trim().isEmpty())
+        .map(ResourceLocation::tryCreate)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
+      wrenches.add(new ResourceLocation("minecraft", "redstone_torch"));
+      wrenches.remove(new ResourceLocation("minecraft", "air"));
+      accepted_wrenches.clear();
+      accepted_wrenches.addAll(wrenches);
+    }
+    LOGGER.info("Accepted wrenches: " + accepted_wrenches.stream().map(ResourceLocation::toString).collect(Collectors.joining(",")));
     // Opt-outs
     updateOptouts();
   }
 
   public static final boolean isWrench(final ItemStack stack)
-  { return (("," + accepted_wrenches + ",").contains("," + stack.getItem().getRegistryName().getPath() + ",")); }
+  { return accepted_wrenches.contains(stack.getItem().getRegistryName()); }
 
 }

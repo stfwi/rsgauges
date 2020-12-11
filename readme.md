@@ -10,6 +10,12 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    - v1.2.7-b1  [A] Analog Switch Linking signals added.
+                 [A] Gauges and Indicators can be wirelessly connected to switches.
+                 [A] Comparator Switch and Link Sender support analog data transmissions.
+                 [A] Elevator Button up/down arrows added depending on where the wall is
+                     clicked when placing.
+
     - v1.2.6     [R] Release build  1.2.6.
 
     - v1.2.6-b2  [A] Gauges can be explicitly set to Comparator-Input mode (click with a Redstone Torch).

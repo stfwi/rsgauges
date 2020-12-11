@@ -19,7 +19,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.StateContainer;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.tileentity.TileEntityType;
@@ -78,11 +77,7 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   { this(config, properties, VoxelShapes.create(aabb)); }
 
   public RsBlock(long config, Block.Properties properties, final VoxelShape vshape)
-  {
-    super(properties);
-    this.config = config;
-    setDefaultState(this.getStateContainer().getBaseState());
-  }
+  { super(properties); this.config = config; setDefaultState(this.getStateContainer().getBaseState().with(WATERLOGGED, false)); }
 
   public RenderTypeHint getRenderTypeHint()
   { return render_layer_map_[(int)((config>>60)&0x3)]; }
@@ -164,21 +159,9 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   @SuppressWarnings("deprecation")
   public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
   {
-    if((state.hasTileEntity() && (!state.isIn(newState.getBlock()) || !newState.hasTileEntity())) && (state.getBlock() instanceof RsBlock)) {
-      RsBlock block = (RsBlock)state.getBlock();
-      if(state.hasTileEntity()) {
-        block.onRsBlockDestroyed(state, world, pos, false);
-        world.removeTileEntity(pos);
-        world.updateComparatorOutputLevel(pos, this);
-        world.notifyNeighborsOfStateChange(pos, state.getBlock());
-      }
-      if(newState.getBlock() == Blocks.WATER) {
-        AxisAlignedBB aabb = block.getShape(state, world, pos, ISelectionContext.dummy()).getBoundingBox();
-        if((aabb.getXSize()*aabb.getYSize()*aabb.getZSize()) >= 0.6) {
-          world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-        }
-      }
-    }
+    super.onReplaced(state, world, pos, newState, isMoving);
+    world.updateComparatorOutputLevel(pos, newState.getBlock());
+    world.notifyNeighborsOfStateChange(pos, newState.getBlock());
   }
 
   @Override
@@ -218,16 +201,6 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   @Override
   @SuppressWarnings("deprecation")
   public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rnd)
-  {}
-
-  // -------------------------------------------------------------------------------------------------------------------
-
-  /**
-   * RsBlock handler before a block gets dropped as item in the world.
-   * Allows actions in the tile entity to happen before the forge/MC
-   * block dropping actions are invoked.
-   */
-  protected void onRsBlockDestroyed(BlockState state, World world, BlockPos pos, boolean isUpdateEvent)
   {}
 
   // -------------------------------------------------------------------------------------------------------------------

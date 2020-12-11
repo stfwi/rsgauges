@@ -1,5 +1,5 @@
 /*
- * @file BlockEnvironmentalSensorSwitch.java
+ * @file EnvironmentalSensorSwitchBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -53,7 +53,7 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
   /**
    * Tile entity for environmental and time sensor based switches
    */
-  public static class EnvironmentalSensorSwitchTileEntity extends TileEntityAutoSwitch implements ITickableTileEntity
+  public static class EnvironmentalSensorSwitchTileEntity extends AutoSwitchTileEntity implements ITickableTileEntity
   {
     protected static final int debounce_max = 10;
     protected int update_interval_ = 10;

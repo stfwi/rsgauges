@@ -1,5 +1,5 @@
 /*
- * @file BlockComparatorSwitch.java
+ * @file ComparatorSwitchBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -32,6 +32,7 @@ import wile.rsgauges.detail.ModResources;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class ComparatorSwitchBlock extends AutoSwitchBlock
 {
@@ -58,12 +59,23 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
   public TileEntity createTileEntity(BlockState state, IBlockReader world)
   { return new ComparatorSwitchTileEntity(ModContent.TET_COMPARATOR_SWITCH); }
 
+  @Override
+  public Optional<Integer> switchLinkOutputPower(World world, BlockPos pos)
+  {
+    TileEntity te = world.getTileEntity(pos);
+    if((!(te instanceof ComparatorSwitchTileEntity))) return Optional.empty();
+    return Optional.of(((ComparatorSwitchTileEntity)te).link_output_power());
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   // Tile entity
   // -------------------------------------------------------------------------------------------------------------------
 
   public static class ComparatorSwitchTileEntity extends EnvironmentalSensorSwitchTileEntity implements ITickableTileEntity
   {
+    private int link_output_power_ = 0;
+    public int link_output_power() { return link_output_power_; }
+
     public ComparatorSwitchTileEntity(TileEntityType<?> te_type)
     { super(te_type); }
 
@@ -209,16 +221,20 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
       update_timer_ = update_interval_ + (int)(Math.random()*2); // sensor timing noise using rnd
       BlockState state = getBlockState();
       if((!(state.getBlock() instanceof ComparatorSwitchBlock))) return;
-      boolean active = state.get(POWERED);
+      final boolean last_active = state.get(POWERED);
+      boolean active = last_active;
       final Direction facing = state.get(FACING);
       final BlockPos adjacent_pos = getPos().offset(facing.getOpposite());
       final BlockState adjacent_state = getWorld().getBlockState(adjacent_pos);
       acquisition_mode(acquisition_mode()); // just to ensure that no nbt loading or so may cause exceeding the container limits.
       final int value = MathHelper.clamp(acquisitions[acquisition_mode()].sample(world, adjacent_pos, adjacent_state, facing), -1, 15);
+      final int last_link_output_power = link_output_power_;
       if(value < 0) {
         active = false;
         update_timer_ = 20;
+        link_output_power_= 0;
       } else {
+        link_output_power_ = value;
         // switch value evaluation
         int measurement = 0;
         if(threshold0_off() >= threshold0_on()) {
@@ -237,7 +253,12 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
         }
       }
       // state setting
-      updateSwitchState(state, (ComparatorSwitchBlock)(state.getBlock()), active, 0);
+      updateSwitchState(state, (ComparatorSwitchBlock)(state.getBlock()), active, 0, false);
+      if(link_output_power_ != last_link_output_power) {
+        if(!activateSwitchLinks(link_output_power_, (last_active != active))) {
+          ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+        }
+      }
     }
   }
 }

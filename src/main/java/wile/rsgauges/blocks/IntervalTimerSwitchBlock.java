@@ -1,5 +1,5 @@
 /*
- * @file BlockIntervalTimerSwitch.java
+ * @file IntervalTimerSwitchBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -50,7 +50,7 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
   /**
    * Tile entity for timer interval based switches
    */
-  public static class IntervalTimerSwitchTileEntity extends TileEntityAutoSwitch implements ITickableTileEntity
+  public static class IntervalTimerSwitchTileEntity extends AutoSwitchTileEntity implements ITickableTileEntity
   {
     private static final int ramp_max = 5;
     private static final int t_max = 20 * 60 * 10; // 10min @20clk/s

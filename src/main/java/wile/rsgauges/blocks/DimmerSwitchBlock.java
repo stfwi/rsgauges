@@ -1,5 +1,5 @@
 /*
- * @file BlockAutoSwitch.java
+ * @file DimmerSwitchBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -25,7 +25,6 @@ import net.minecraft.util.math.BlockPos;
 import wile.rsgauges.libmc.detail.Overlay;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.SwitchLinkPearlItem;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -76,12 +75,9 @@ public class DimmerSwitchBlock extends SwitchBlock
           te.markDirty();
         }
         if(was_powered && (p==0)) power_off_sound.play(world, pos); else power_on_sound.play(world, pos);
-        if(((was_powered) == (p==0)) && (((config & SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0)) ) {
-          if(!was_powered) {
-            // Fire link requests when changing from unpowered to powered.
-            if(!te.activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
-              ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
-            }
+        if((state_p!=p) && ((config & SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0))  {
+          if(!te.activateSwitchLinks(p, (state_p==0)!=(p==0))) {
+            ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
           }
         }
       }

@@ -1,5 +1,5 @@
 /*
- * @file BlockGauge.java
+ * @file GaugeBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -31,10 +31,7 @@ public class GaugeBlock extends AbstractGaugeBlock
   public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
 
   public GaugeBlock(long config, Block.Properties props, final AxisAlignedBB aabb, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  {
-    super(config, props, aabb, powerOnSound, powerOffSound);
-    setDefaultState(getStateContainer().getBaseState());
-  }
+  { super(config, props, aabb, powerOnSound, powerOffSound); setDefaultState(super.getDefaultState().with(POWER, 0)); }
 
   public GaugeBlock(long config, Block.Properties props, final AxisAlignedBB aabb)
   { this(config, props, aabb, null, null); }

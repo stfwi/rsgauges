@@ -1,5 +1,5 @@
 /*
- * @file BlockContactSwitch.java
+ * @file ContactSwitchBlock.java
  * @author Stefan Wilhelm (wile)
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
@@ -36,7 +36,6 @@ import net.minecraft.util.text.TextFormatting;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
-import wile.rsgauges.items.SwitchLinkPearlItem;
 import wile.rsgauges.libmc.detail.Overlay;
 
 import javax.annotation.Nullable;
@@ -115,7 +114,7 @@ public class ContactSwitchBlock extends SwitchBlock
       power_on_sound.play(world, pos);
       notifyNeighbours(world, pos, state, te, false);
       if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-        if(!te.activateSwitchLinks(SwitchLinkPearlItem.SwitchLink.SWITCHLINK_RELAY_ACTIVATE)) {
+        if(!te.activateSwitchLinks(te.on_power(), true)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       }
@@ -218,7 +217,7 @@ public class ContactSwitchBlock extends SwitchBlock
       if(state == null) return false;
       final SwitchBlock block = (SwitchBlock)state.getBlock();
       int direction=0, field=0;
-      if((block.config & (SWITCH_CONFIG_LATERAL)) != 0) {
+      if(block.isLateral()) {
         direction = ((y>=13) && (y<=15)) ? (1) : (((y>=10) && (y<=12)) ? (-1) : (0));
         field = ((x>=9.5) && (x<=10.1)) ? (1) : (
                 ((x>=10.9) && (x<=11.7)) ? (2) : (
