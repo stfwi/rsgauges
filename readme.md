@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    - v1.2.7-b2  [F] Config load/apply condition fixed.
+
     - v1.2.7-b1  [A] Analog Switch Linking signals added.
                  [A] Gauges and Indicators can be wirelessly connected to switches.
                  [A] Comparator Switch and Link Sender support analog data transmissions.
