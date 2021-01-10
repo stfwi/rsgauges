@@ -52,8 +52,7 @@ public class ModRsGauges
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeEvents::onClientSetup);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeEvents::onConfigLoad);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeEvents::onConfigReload);
-    ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, ModConfig.SERVER_CONFIG_SPEC);
-    ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT_CONFIG_SPEC);
+    ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_CONFIG_SPEC);
     MinecraftForge.EVENT_BUS.register(this);
     PlayerBlockInteraction.init(MODID, LOGGER);
   }

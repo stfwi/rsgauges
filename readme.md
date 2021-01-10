@@ -10,6 +10,9 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    - v1.2.7     [R] Release build v1.2.7.
+                 [F] Opt-out config pack level based.
+
     - v1.2.7-b2  [F] Config load/apply condition fixed.
 
     - v1.2.7-b1  [A] Analog Switch Linking signals added.
