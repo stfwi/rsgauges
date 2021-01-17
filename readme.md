@@ -10,6 +10,10 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    - v1.2.8     [R] Release build.
+                 [U] MC1.16.5 enabled.
+                 [M] Block materials unified.
+
     - v1.2.7     [R] Release build v1.2.7.
                  [F] Opt-out config pack level based.
 
