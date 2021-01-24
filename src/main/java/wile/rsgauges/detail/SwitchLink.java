@@ -188,7 +188,7 @@ public class SwitchLink
     this.source_position = source_pos;
     this.source_power = power;
     int target_power = target.switchLinkOutputPower(world, target_position).orElse(-1);
-    if(target_power<0) return RequestResult.REJECTED;
+    if(target_power<0) return RequestResult.REJECTED; // no target support
     boolean analog = target.switchLinkHasAnalogSupport(world, target_position);
     switch(mode()) {
       case AS_STATE: {

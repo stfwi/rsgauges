@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    - v1.2.9-b1  [F] Fixed Stained Redstone Sensitive Glass recipe (issue #40).
+
     - v1.2.8     [R] Release build.
                  [U] MC1.16.5 enabled.
                  [M] Block materials unified.

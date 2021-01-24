@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.16.4": {
+    "1.2.9-b1": "[F] Fixed Stained Redstone Sensitive Glass recipe (issue #40).",
     "1.2.8": "[R] Release build.\n[U] MC1.16.5 enabled.\n[M] Block materials unified.",
     "1.2.7": "[R] Release build v1.2.7.\n[F] Opt-out config pack level based.",
     "1.2.7-b2": "[F] Config load/apply condition fixed.",
@@ -23,6 +24,6 @@
   },
   "promos": {
     "1.16.4-recommended": "1.2.8",
-    "1.16.4-latest": "1.2.8"
+    "1.16.4-latest": "1.2.9-b1"
   }
 }

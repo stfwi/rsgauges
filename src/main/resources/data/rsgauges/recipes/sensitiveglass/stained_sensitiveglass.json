@@ -25,7 +25,7 @@
    "item": "minecraft:glass"
   },
   "D": {
-    "tag": "forge:dyes"
+   "item": "minecraft:white_dye"
   }
  }
 }
