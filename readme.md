@@ -4,6 +4,8 @@
 A [Minecraft](https://minecraft.net) (Java Edition) mod based on [`Forge`](http://www.minecraftforge.net/). The Mod adds gauges, stylish buttons,
 levers, pressure plates, timers, and other devices to measure or "produce" redstone power to the game.
 
+***Note for coders/modders: Please take a look into the MC version branches to view/clone the source code.***
+
 ![brief](documentation/rsgauges-brief.png)
 
 [Screenshots in documentation readme here](documentation/readme.md).
@@ -19,15 +21,7 @@ Main distribution channel for this mod is CurseForge:
 ## Version history
 
 Mod versions are tracked in the readme files for individual Minecraft versions, and
-of course in the commits of this repository. Beta and release versions that are
-distributed as compiled `jar`s are tagged accordingly. Release versions are merged
-into the `master` branch, while beta/alpha version tags link to `develop` branch
-commits.
-
-  - [1.12](1.12/readme.md)
-  - [1.14](1.14/readme.md)
-  - [1.15](1.15/readme.md)
-  - [1.16](1.16/readme.md)
+of course in the commits of this repository. Simply take a look into the other branches.
 
 ----
 
