@@ -10,6 +10,7 @@ package wile.rsgauges.blocks;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
@@ -22,11 +23,18 @@ import javax.annotation.Nullable;
 
 public class LinkSenderSwitchBlock extends SwitchBlock
 {
-  public LinkSenderSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
+  private final boolean is_analog;
 
-  public LinkSenderSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
-  { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
+  public LinkSenderSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
+  { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); is_analog = analog_device; }
+
+  @Override
+  public boolean switchLinkHasAnalogSupport(World world, BlockPos pos)
+  { return is_analog; }
+
+  @Override
+  protected int getPower(BlockState state, IBlockReader world, BlockPos pos, Direction side, boolean strong)
+  { return 0; }
 
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
@@ -76,7 +84,7 @@ public class LinkSenderSwitchBlock extends SwitchBlock
         }
       }
     }
-    if(!te.activateSwitchLinks(power, powered!=was_powered)) {
+    if(!te.activateSwitchLinks(power, powered?15:0, powered!=was_powered)) {
       ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
     }
   }

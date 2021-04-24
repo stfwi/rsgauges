@@ -192,9 +192,9 @@ public class ModConfig
   public static boolean without_switch_nooutput = false;
   public static boolean without_rightclick_item_switchconfig = false;
   public static int max_switch_linking_distance = 16;
-  public static int autoswitch_linear_update_interval = 4;
-  public static int autoswitch_volumetric_update_interval = 4;
-  public static int gauge_update_interval = 4;
+  public static int autoswitch_linear_update_interval = 2;
+  public static int autoswitch_volumetric_update_interval = 2;
+  public static int gauge_update_interval = 2;
   public static int config_left_click_timeout = 600;
   public static double switch_status_overlay_y = 0.75;
   public static final Set<ResourceLocation> accepted_wrenches = new HashSet<>(Arrays.asList(new ResourceLocation("minecraft","redsdtone_torch")));

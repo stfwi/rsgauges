@@ -5,6 +5,7 @@
     "#minecraft:leaves",
     "#minecraft:logs",
     "#minecraft:small_flowers",
-    "minecraft:carved_pumpkin"
+    "minecraft:carved_pumpkin",
+    "minecraft:vine"
   ]
 }

@@ -84,28 +84,28 @@ public abstract class AutoSwitchBlock extends SwitchBlock
         on_timer_reset(hold_time);
         if(!state.get(POWERED)) {
           if(this instanceof IntervalTimerSwitchTileEntity) ((IntervalTimerSwitchTileEntity)this).restart();
-          world.setBlockState(pos, (state.with(POWERED, true)), 1|2|8|16);
+          world.setBlockState(pos, (state.with(POWERED, true)), 2|8|16);
           block.power_on_sound.play(world, pos);
           world.notifyNeighborsOfStateChange(pos, block);
           BlockPos np = pos.offset(state.get(FACING).getOpposite());
           Block nb = world.getBlockState(np).getBlock();
           world.notifyNeighborsOfStateChange(np, nb);
           if(link_update && ((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0)) {
-            if(!activateSwitchLinks(on_power(), true)) {
+            if(!activateSwitchLinks(on_power(), 15, true)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }
         }
       } else if(state.get(POWERED)) {
         if((hold_time<=0) || (on_time_remaining() <= 0)) {
-          world.setBlockState(pos, (state.with(POWERED, false)), 1|2|8|16);
+          world.setBlockState(pos, state.with(POWERED, false), 2|8|16);
           block.power_off_sound.play(world, pos);
           world.notifyNeighborsOfStateChange(pos, block);
           BlockPos np = pos.offset(state.get(FACING).getOpposite());
           Block nb = world.getBlockState(np).getBlock();
           world.notifyNeighborsOfStateChange(np, nb);
           if(link_update && ((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0)) {
-            if(!activateSwitchLinks(0, true)) {
+            if(!activateSwitchLinks(0, 0, true)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
             }
           }

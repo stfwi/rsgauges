@@ -487,7 +487,7 @@ public class ModContent
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.2f, 1.2f)
   )).setRegistryName(new ResourceLocation(MODID, "industrial_block_detector"));
 
-  // Industrial bistable link relay receiver switch
+  // Industrial bistable link receiver switch
   public static final LinkReceiverSwitchBlock INDUSTRIAL_SWITCHLINK_RECEIVER = (LinkReceiverSwitchBlock)(new LinkReceiverSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_BISTABLE|
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
@@ -495,10 +495,23 @@ public class ModContent
     switch_metallic_block_properties(),
     Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+    false
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_receiver"));
 
-  // Industrial full block bistable link relay receiver switch
+  // Industrial analog link receiver
+  public static final LinkReceiverSwitchBlock INDUSTRIAL_SWITCHLINK_RECEIVER_ANALOG = (LinkReceiverSwitchBlock)(new LinkReceiverSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_BISTABLE|
+    SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    switch_metallic_block_properties(),
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+    true
+  )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_receiver_analog"));
+
+  // Industrial full block bistable link receiver switch
   public static final LinkReceiverSwitchBlock INDUSTRIAL_SWITCHLINK_CASED_RECEIVER = (LinkReceiverSwitchBlock)(new LinkReceiverSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_FULLCUBE|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
@@ -507,10 +520,11 @@ public class ModContent
     switch_metallic_block_properties(),
     Auxiliaries.getPixeledAABB(0,0,0, 16, 16, 16), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+    false
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_cased_receiver"));
 
-  // Industrial pulse link relay receiver switch
+  // Industrial pulse link receiver switch
   public static final LinkReceiverSwitchBlock INDUSTRIAL_SWITCHLINK_PULSE_RECEIVER = (LinkReceiverSwitchBlock)(new LinkReceiverSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
     SwitchBlock.SWITCH_CONFIG_LCLICK_RESETTABLE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
@@ -519,10 +533,11 @@ public class ModContent
     switch_metallic_block_properties(),
     Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+    false
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_pulse_receiver"));
 
-  // Industrial full block pulse link relay receiver switch
+  // Industrial full block pulse link receiver switch
   public static final LinkReceiverSwitchBlock INDUSTRIAL_SWITCHLINK_CASED_PULSE_RECEIVER = (LinkReceiverSwitchBlock)(new LinkReceiverSwitchBlock(
     SwitchBlock.RSBLOCK_CONFIG_FULLCUBE|SwitchBlock.SWITCH_CONFIG_NOT_PASSABLE|
     SwitchBlock.SWITCH_CONFIG_PULSE|SwitchBlock.SWITCH_CONFIG_WEAKABLE|
@@ -532,7 +547,8 @@ public class ModContent
     switch_metallic_block_properties(),
     Auxiliaries.getPixeledAABB(0,0,0, 16, 16, 16), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+    false
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_cased_pulse_receiver"));
 
   // Industrial bistable link relay
@@ -544,8 +560,22 @@ public class ModContent
     switch_metallic_block_properties(),
     Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+    false
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_relay"));
+
+  // Industrial analog link relay
+  public static final LinkSenderSwitchBlock INDUSTRIAL_SWITCHLINK_RELAY_ANALOG = (LinkSenderSwitchBlock)(new LinkSenderSwitchBlock(
+    SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|
+    SwitchBlock.SWITCH_CONFIG_BISTABLE|SwitchBlock.SWITCH_CONFIG_LINK_SENDER|
+    SwitchBlock.SWITCH_CONFIG_INVERTABLE|SwitchBlock.SWITCH_DATA_WEAK|
+    SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
+    switch_metallic_block_properties(),
+    Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+    true
+  )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_relay_analog"));
 
   // Industrial pulse link relay
   public static final LinkSenderSwitchBlock INDUSTRIAL_SWITCHLINK_PULSE_RELAY = (LinkSenderSwitchBlock)(new LinkSenderSwitchBlock(
@@ -557,7 +587,8 @@ public class ModContent
     switch_metallic_block_properties(),
     Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
     new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f),
-    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f)
+    new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.7f),
+    false
   )).setRegistryName(new ResourceLocation(MODID, "industrial_switchlink_pulse_relay"));
 
   // Bistable industrial knock surge detctor
@@ -1231,9 +1262,11 @@ public class ModContent
     INDUSTRIAL_SWITCHLINK_RECEIVER,
     INDUSTRIAL_SWITCHLINK_CASED_RECEIVER,
     INDUSTRIAL_SWITCHLINK_PULSE_RECEIVER,
+    INDUSTRIAL_SWITCHLINK_RECEIVER_ANALOG,
     INDUSTRIAL_SWITCHLINK_CASED_PULSE_RECEIVER,
     INDUSTRIAL_SWITCHLINK_RELAY,
     INDUSTRIAL_SWITCHLINK_PULSE_RELAY,
+    INDUSTRIAL_SWITCHLINK_RELAY_ANALOG,
     INDUSTRIAL_BISTABLE_KNOCK_SWITCH,
     INDUSTRIAL_PULSE_KNOCK_SWITCH,
     INDUSTRIAL_ANALOG_GAUGE,

@@ -8,6 +8,7 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.entity.item.HangingEntity;
 import net.minecraft.util.text.*;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.entity.Entity;
@@ -178,7 +179,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
       if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return;
       AutoSwitchBlock block = (AutoSwitchBlock)(state.getBlock());
       // initialisations
-      if(update_interval_==0) {
+      if(update_interval_ == 0) {
         if((block.config & SWITCH_CONFIG_SENSOR_LINEAR) != 0) {
           update_interval_ = ModConfig.autoswitch_linear_update_interval;
         } else {
@@ -199,7 +200,6 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
         AxisAlignedBB bb = Auxiliaries.transform_forward(range_bb, facing).offset(getPos()).expand(1,1,1);
         area_ = new AxisAlignedBB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
       }
-
       // measurement
       boolean active = false;
       @SuppressWarnings("unchecked")
@@ -208,6 +208,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
         int num_seen = 0;
         final Vector3d switch_position = new Vector3d((double)getPos().getX()+.5, (double)getPos().getY()+.5, (double)getPos().getZ()+.5);
         for(Entity e:hits) {
+          if(e instanceof HangingEntity) continue;
           if(
             (
               world.rayTraceBlocks(

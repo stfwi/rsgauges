@@ -77,7 +77,8 @@ public class SwitchLink
   public final String block_name;         // intentionally not Block, as one could not be registered anymore.
   public final boolean valid;
   private long config;
-  public int source_power = 0;
+  public int source_analog_power = 0;
+  public int source_digital_power = 0;
   public BlockPos source_position = BlockPos.ZERO;
   @Nullable public World world;
   @Nullable public PlayerEntity player;
@@ -174,44 +175,46 @@ public class SwitchLink
     this.world = world;
     this.source_position = source_pos;
     this.player = player;
-    this.source_power = (p<=0) ? (15) : (0);
+    this.source_analog_power = (p<=0) ? (15) : (0);
+    this.source_digital_power = this.source_analog_power;
     return target.switchLinkTrigger(this);
   }
 
   @SuppressWarnings("deprecation")
-  public RequestResult trigger(final World world, final BlockPos source_pos, int power, boolean state_changed)
+  public RequestResult trigger(final World world, final BlockPos source_pos, int analog_power, int digital_power, boolean state_changed)
   {
     final ISwitchLinkable target = target(world, source_pos);
     if(target==null) return RequestResult.REJECTED;
     this.player = null;
     this.world = world;
     this.source_position = source_pos;
-    this.source_power = power;
+    this.source_analog_power = analog_power;
+    this.source_digital_power = digital_power;
     int target_power = target.switchLinkOutputPower(world, target_position).orElse(-1);
     if(target_power<0) return RequestResult.REJECTED; // no target support
     boolean analog = target.switchLinkHasAnalogSupport(world, target_position);
     switch(mode()) {
       case AS_STATE: {
         if(analog) {
-          if(target_power == power) return RequestResult.NOT_MATCHED;
+          if(target_power == analog_power) return RequestResult.NOT_MATCHED;
         } else {
-          if((target_power==0) == (power==0)) return RequestResult.NOT_MATCHED;
+          if((!state_changed) || ((target_power==0) == (digital_power==0))) return RequestResult.NOT_MATCHED;
         }
       } break;
       case INV_STATE: {
         if(analog) {
-          power = 15 - power;
-          this.source_power = power;
-          if(target_power == power) return RequestResult.NOT_MATCHED;
+          analog_power = 15 - analog_power;
+          this.source_analog_power = analog_power;
+          if(target_power == digital_power) return RequestResult.NOT_MATCHED;
         } else {
-          if((target_power==0) != (power==0)) return RequestResult.NOT_MATCHED;
+          if((!state_changed) || ((target_power==0) != (digital_power==0))) return RequestResult.NOT_MATCHED;
         }
       } break;
       case ACTIVATE: {
-        if((!state_changed) || (power==0)) return RequestResult.NOT_MATCHED;
+        if((!state_changed) || (digital_power==0)) return RequestResult.NOT_MATCHED;
       } break;
       case DEACTIVATE: {
-        if((!state_changed) || (power!=0)) return RequestResult.NOT_MATCHED;
+        if((!state_changed) || (digital_power!=0)) return RequestResult.NOT_MATCHED;
       } break;
       case TOGGLE: {
         if(!state_changed) return RequestResult.NOT_MATCHED;
@@ -230,13 +233,14 @@ public class SwitchLink
     target.switchLinkUnlink(this);
   }
 
-  public void initializeTarget(final World world, final BlockPos source_pos, int source_power)
+  public void initializeTarget(final World world, final BlockPos source_pos, int analog_power, int digital_power)
   {
     ISwitchLinkable target = target(world, this.target_position);
     if(target==null) return;
     this.world = world;
     this.source_position = source_pos;
-    this.source_power = source_power;
+    this.source_analog_power = analog_power;
+    this.source_digital_power = digital_power;
     this.player = null;
     target.switchLinkInit(this);
   }

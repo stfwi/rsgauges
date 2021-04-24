@@ -254,8 +254,8 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
       }
       // state setting
       updateSwitchState(state, (ComparatorSwitchBlock)(state.getBlock()), active, 0, false);
-      if(link_output_power_ != last_link_output_power) {
-        if(!activateSwitchLinks(link_output_power_, (last_active != active))) {
+      if((link_output_power_ != last_link_output_power) || (last_active != active)) {
+        if(!activateSwitchLinks(link_output_power_, active?15:0, (last_active != active))) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       }

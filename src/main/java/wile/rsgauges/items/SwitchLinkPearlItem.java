@@ -108,7 +108,7 @@ public class SwitchLinkPearlItem extends RsItem
       return new ActionResult<>(ActionResultType.PASS, player.getHeldItem(hand));
     } else {
       usePearl(world, player);
-      return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
+      return new ActionResult<>(ActionResultType.CONSUME, player.getHeldItem(hand));
     }
   }
 

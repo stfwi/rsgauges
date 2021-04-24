@@ -19,6 +19,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import wile.rsgauges.libmc.detail.Overlay;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.libmc.detail.Auxiliaries;
@@ -26,6 +27,7 @@ import wile.rsgauges.detail.ModResources;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class IntervalTimerSwitchBlock extends AutoSwitchBlock
 {
@@ -42,6 +44,14 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world)
   { return new IntervalTimerSwitchTileEntity(ModContent.TET_TIMER_SWITCH); }
+
+  @Override
+  public Optional<Integer> switchLinkOutputPower(World world, BlockPos pos)
+  {
+    BlockState state = world.getBlockState(pos);
+    if(!(state.getBlock() instanceof IntervalTimerSwitchBlock)) return Optional.empty();
+    return Optional.of(state.get(POWERED) ? 15 : 0);
+  }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Tile entity

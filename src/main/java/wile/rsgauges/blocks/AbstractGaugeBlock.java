@@ -200,6 +200,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
   @Override
   public ImmutableList<LinkMode> switchLinkGetSupportedTargetModes()
   { return ImmutableList.of(LinkMode.AS_STATE, LinkMode.INV_STATE); }
+
   @Override
   public Optional<Integer> switchLinkOutputPower(World world, BlockPos pos)
   {
@@ -221,7 +222,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
   {
     GaugeTileEntity te = getTe(link.world, link.target_position);
     if(te==null) return RequestResult.TARGET_GONE;
-    te.switchlink_input(link.source_power);
+    te.switchlink_input(link.source_analog_power);
     return RequestResult.OK;
   }
 
@@ -229,7 +230,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
   public void switchLinkInit(SwitchLink link)
   {
     GaugeTileEntity te = getTe(link.world, link.target_position);
-    if(te!=null) te.switchlink_input(link.source_power);
+    if(te!=null) te.switchlink_input(link.source_analog_power);
   }
 
   @Override

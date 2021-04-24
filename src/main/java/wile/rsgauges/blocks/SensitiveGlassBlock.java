@@ -110,7 +110,7 @@ public class SensitiveGlassBlock extends RsBlock
     Optional<DyeColor> dye = ColorUtils.getColorFromDyeItem(stack);
     if(!dye.isPresent()) return ActionResultType.PASS;
     world.setBlockState(pos, state.with(COLOR, dye.get()), 1|2);
-    return ActionResultType.SUCCESS;
+    return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
   }
 
   @Override

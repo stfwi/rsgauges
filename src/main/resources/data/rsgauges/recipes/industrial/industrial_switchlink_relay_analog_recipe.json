@@ -1,0 +1,17 @@
+{
+ "conditions": [
+  {
+   "type": "rsgauges:optional",
+   "result": "rsgauges:industrial_switchlink_relay_analog",
+   "required": [ "rsgauges:industrial_switchlink_relay" ]
+  }
+ ],
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+  { "item": "rsgauges:industrial_switchlink_relay" },
+  { "item": "minecraft:comparator" }
+ ],
+ "result": {
+  "item": "rsgauges:industrial_switchlink_relay_analog"
+ }
+}

@@ -50,7 +50,7 @@ public class PlayerBlockInteraction
       final BlockState state = event.getWorld().getBlockState(pos);
       if(!((state.getBlock()) instanceof INeighbourBlockInteractionSensitive)) continue;
       if(((INeighbourBlockInteractionSensitive)state.getBlock()).onNeighborBlockPlayerInteraction(world, pos, state, fromPos, event.getEntityLiving(), event.getHand(), is_lclick)) {
-        event.setCancellationResult(ActionResultType.SUCCESS);
+        event.setCancellationResult(ActionResultType.CONSUME);
       }
     }
   }

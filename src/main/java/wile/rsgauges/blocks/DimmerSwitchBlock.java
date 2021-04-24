@@ -22,6 +22,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import wile.rsgauges.ModContent;
 import wile.rsgauges.libmc.detail.Overlay;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
@@ -76,17 +77,18 @@ public class DimmerSwitchBlock extends SwitchBlock
         }
         if(was_powered && (p==0)) power_off_sound.play(world, pos); else power_on_sound.play(world, pos);
         if((state_p!=p) && ((config & SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0))  {
-          if(!te.activateSwitchLinks(p, (state_p==0)!=(p==0))) {
+          if(!te.activateSwitchLinks(p, (p>0)?15:0, (state_p==0)!=(p==0))) {
             ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
           }
         }
       }
-      return ActionResultType.SUCCESS;
     } else if(ck.wrenched) {
       if(te.click_config(this, false)) {
         Overlay.show(player, te.configStatusTextComponentTranslation((SwitchBlock) state.getBlock()));
       }
+    } else if(ck.item== ModContent.SWITCH_LINK_PEARL) {
+      onBlockClicked(state, world, pos, player);
     }
-    return ActionResultType.SUCCESS;
+    return ActionResultType.CONSUME;
   }
 }

@@ -32,7 +32,7 @@ minecraft {
     client {
       workingDirectory project.file('run')
       property 'forge.logging.markers', ''//SCAN,REGISTRIES,REGISTRYDUMP
-      property 'forge.logging.console.level', 'debug'
+      property 'forge.logging.console.level', 'info' // debug
       mods {
         rsgauges {
           source sourceSets.main
@@ -42,7 +42,7 @@ minecraft {
     server {
       workingDirectory project.file('run')
       property 'forge.logging.markers', ''//SCAN,REGISTRIES,REGISTRYDUMP
-      property 'forge.logging.console.level', 'debug'
+      property 'forge.logging.console.level', 'info' // debug
       mods {
         rsgauges {
           source sourceSets.main

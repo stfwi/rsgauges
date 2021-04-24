@@ -225,12 +225,12 @@ public class SwitchBlock extends RsDirectedBlock implements SwitchLink.ISwitchLi
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit);
     if((ck.touch_configured) && te.touch_config(state, player, ck.x, ck.y)) {
       ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
-      return ActionResultType.SUCCESS;
+      return ActionResultType.CONSUME;
     }
     if(ck.wrenched && te.click_config(this, false)) {
       ModResources.BlockSoundEvents.DEFAULT_SWITCH_CONFIGCLICK.play(world, pos);
       Overlay.show(player, te.configStatusTextComponentTranslation((SwitchBlock) state.getBlock()));
-      return ActionResultType.SUCCESS;
+      return ActionResultType.CONSUME;
     }
     if(
       (!ModConfig.without_rightclick_item_switchconfig) &&
@@ -240,12 +240,12 @@ public class SwitchBlock extends RsDirectedBlock implements SwitchLink.ISwitchLi
         )
     ) {
       onBlockClicked(state, world, pos, player);
-      return ActionResultType.SUCCESS;
+      return ActionResultType.CONSUME;
     }
     if((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE))==0) {
-      return ActionResultType.SUCCESS;
+      return ActionResultType.CONSUME;
     } else {
-      return onSwitchActivated(world, pos, state, player, hit.getFace()) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
+      return onSwitchActivated(world, pos, state, player, hit.getFace()) ? ActionResultType.CONSUME : ActionResultType.FAIL;
     }
   }
 
@@ -347,7 +347,7 @@ public class SwitchBlock extends RsDirectedBlock implements SwitchLink.ISwitchLi
     power_off_sound.play(world, pos);
     if((config &SWITCH_CONFIG_LINK_SENDER)==0) notifyNeighbours(world, pos, state, te, false);
     if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-      if(!te.activateSwitchLinks(0, true)) {
+      if(!te.activateSwitchLinks(0, 0, true)) {
         ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
       }
     }
@@ -432,7 +432,7 @@ public class SwitchBlock extends RsDirectedBlock implements SwitchLink.ISwitchLi
   /**
    * Used in getStrongPower() and getWeakPower()
    */
-  private int getPower(BlockState state, IBlockReader world, BlockPos pos, Direction side, boolean strong)
+  protected int getPower(BlockState state, IBlockReader world, BlockPos pos, Direction side, boolean strong)
   {
     // Transitional code, will be solved entirely with side config later
     if(((config &SWITCH_CONFIG_LINK_SENDER)!=0) || (!(world instanceof World))) {
@@ -485,12 +485,13 @@ public class SwitchBlock extends RsDirectedBlock implements SwitchLink.ISwitchLi
       te.reschedule_block_tick();
     }
     if(((config & (SWITCH_CONFIG_LINK_SOURCE_SUPPORT))!=0) && ((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE|SWITCH_CONFIG_SENSOR_BLOCKDETECT))!=0)) {
+      final boolean powered = state.get(POWERED);
       if(!was_powered) {
-        if(!te.activateSwitchLinks(state.get(POWERED)?te.on_power():0, was_powered!=state.get(POWERED))) {
+        if(!te.activateSwitchLinks(powered?te.on_power():0, powered?15:0, was_powered!=powered)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       } else if((config & SWITCH_CONFIG_PULSE) == 0) {
-        if(!te.activateSwitchLinks(state.get(POWERED)?te.on_power():0, was_powered!=state.get(POWERED))) {
+        if(!te.activateSwitchLinks(powered?te.on_power():0, powered?15:0, was_powered!=powered)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       }
@@ -567,7 +568,7 @@ public class SwitchBlock extends RsDirectedBlock implements SwitchLink.ISwitchLi
   {
     if((link.mode()!=LinkMode.AS_STATE) && (link.mode()!=LinkMode.INV_STATE)) return;
     BlockState state = link.world.getBlockState(link.target_position);
-    if((link.source_power==0) == (state.get(POWERED)) ) onSwitchActivated(link.world, link.target_position, state, link.player, null);
+    if((link.source_digital_power==0) == (state.get(POWERED))) onSwitchActivated(link.world, link.target_position, state, link.player, null);
   }
 
   @Override
@@ -889,7 +890,8 @@ public class SwitchBlock extends RsDirectedBlock implements SwitchLink.ISwitchLi
         if(lnk.target_position.equals(link.target_position)) return SwitchLinkAssignmentResult.E_ALREADY_LINKED;
       }
       links_.add(link);
-      link.initializeTarget(getWorld(), getPos(), state.get(POWERED)?on_power():0);
+      final boolean powered = state.get(POWERED);
+      link.initializeTarget(getWorld(), getPos(), powered?on_power():0, powered?15:0);
       markDirty();
       return SwitchLinkAssignmentResult.OK;
     }
@@ -915,14 +917,14 @@ public class SwitchBlock extends RsDirectedBlock implements SwitchLink.ISwitchLi
      * Invokes the link targets of all pearls plugged into this switch, returns
      * true if all link requests succeeded.
      */
-    public boolean activateSwitchLinks(int power, boolean state_changed)
+    public boolean activateSwitchLinks(int analog_power, int digital_power, boolean state_changed)
     {
       if(ModConfig.without_switch_linking) return true;
       last_link_request_ = linktime();
       if(links_==null) return true;
       int n_fails = 0;
       for(SwitchLink lnk:links_) {
-        switch(lnk.trigger(world, pos, power, state_changed)) {
+        switch(lnk.trigger(world, pos, analog_power, digital_power, state_changed)) {
           case OK:
           case NOT_MATCHED:
             break;

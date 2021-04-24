@@ -35,6 +35,8 @@
     "minecraft:white_stained_glass_pane",
     "minecraft:yellow_stained_glass",
     "minecraft:yellow_stained_glass_pane",
+    "minecraft:obsidian",
+    "minecraft:crying_obsidian",
     "#forge:glass",
     "#forge:glass_panes"
   ]

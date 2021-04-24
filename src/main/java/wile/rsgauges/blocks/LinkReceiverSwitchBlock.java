@@ -20,15 +20,14 @@ import javax.annotation.Nullable;
 
 public class LinkReceiverSwitchBlock extends SwitchBlock
 {
-  public LinkReceiverSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
+  private final boolean is_analog;
 
-  public LinkReceiverSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
-  { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
+  public LinkReceiverSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
+  { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); is_analog = analog_device; }
 
   @Override
   public boolean switchLinkHasAnalogSupport(World world, BlockPos pos)
-  { return true; }
+  { return is_analog; }
 
   @Override
   public SwitchLink.RequestResult switchLinkTrigger(SwitchLink link)
@@ -38,8 +37,9 @@ public class LinkReceiverSwitchBlock extends SwitchBlock
     SwitchTileEntity te = getTe(world, pos);
     BlockState state = world.getBlockState(pos);
     if((te==null) || (!te.verifySwitchLinkTarget(link))) return RequestResult.TARGET_GONE;
-    te.on_power(link.source_power);
-    final boolean powered = (link.source_power>0);
+    final int p = is_analog ? link.source_analog_power : link.source_digital_power;
+    te.on_power(p);
+    final boolean powered = (p>0);
     final boolean was_powered = state.get(POWERED);
     if(powered != was_powered) {
       if((config & SWITCH_CONFIG_PULSE)==0) {
@@ -56,7 +56,7 @@ public class LinkReceiverSwitchBlock extends SwitchBlock
       }
     }
     notifyNeighbours(world, pos, state, te, false);
-    if(!te.activateSwitchLinks(te.on_power(), powered != was_powered)) {
+    if(!te.activateSwitchLinks(te.on_power(), powered?15:0, powered != was_powered)) {
       ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
     }
     return SwitchLink.RequestResult.OK;
