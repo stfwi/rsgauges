@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    - v1.2.11    [F] Lang file fixes.
+
     - v1.2.10    [A] Dimmer Switch can be used as analog Switch Link source.
                  [A] Industrial Analog Switch Link Receiver added.
                  [A] Industrial Analog Switch Link Transmitter added.
