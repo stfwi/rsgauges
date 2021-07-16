@@ -86,7 +86,7 @@ public class BlockCategories
       Block b = st.getBlock();
       if(b.getTags().contains(new ResourceLocation(MODID, "water_like"))) return true;
       if(st.getFluidState().isEmpty()) return false;
-      return (st.getFluidState().getFluid() == Fluids.WATER) || (st.getFluidState().getFluid() == Fluids.FLOWING_WATER);
+      return (st.getFluidState().getType() == Fluids.WATER) || (st.getFluidState().getType() == Fluids.FLOWING_WATER);
     });
 
     matchers_.put("ore", (final World w, final BlockPos p) -> {

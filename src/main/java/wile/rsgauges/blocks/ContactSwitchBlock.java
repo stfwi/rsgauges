@@ -12,7 +12,7 @@ package wile.rsgauges.blocks;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.block.Block;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,7 +44,7 @@ import java.util.Random;
 
 public class ContactSwitchBlock extends SwitchBlock
 {
-  public ContactSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public ContactSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config|SwitchBlock.SWITCH_CONFIG_CONTACT, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -53,28 +53,28 @@ public class ContactSwitchBlock extends SwitchBlock
 
   @Override
   public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
-  { return (side==null) || ((side==(Direction.UP)) && (!isWallMount())) || (side==(state.get(FACING).getOpposite())); }
+  { return (side==null) || ((side==(Direction.UP)) && (!isWallMount())) || (side==(state.getValue(FACING).getOpposite())); }
 
   @Override
-  public void onFallenUpon(World world, BlockPos pos, Entity entity, float distance)
+  public void fallOn(World world, BlockPos pos, Entity entity, float distance)
   {
     if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0)) onEntityCollided(world, pos, world.getBlockState(pos));
-    super.onFallenUpon(world, pos, entity, distance);
+    super.fallOn(world, pos, entity, distance);
   }
 
   @Override
-  public void onEntityWalk(World world, BlockPos pos, Entity entity)
+  public void stepOn(World world, BlockPos pos, Entity entity)
   {
-    if(world.isRemote()) return;
-    if(((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==(SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE)) && (!entity.isSneaking())) {
+    if(world.isClientSide()) return;
+    if(((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==(SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE)) && (!entity.isShiftKeyDown())) {
       onEntityCollided(world, pos, world.getBlockState(pos));
     }
   }
 
   @Override
-  public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
+  public void entityInside(BlockState state, World world, BlockPos pos, Entity entity)
   {
-    if(world.isRemote()) return;
+    if(world.isClientSide()) return;
     if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) && (entity.fallDistance < 0.2)) return;
     onEntityCollided(world, pos, state);
   }
@@ -85,19 +85,19 @@ public class ContactSwitchBlock extends SwitchBlock
 
   protected boolean onEntityCollided(World world, BlockPos pos, BlockState state)
   {
-    if(world.isRemote()) return false;
+    if(world.isClientSide()) return false;
     ContactSwitchTileEntity te = getTe(world, pos);
     if(te == null) return false;
     boolean active = false;
-    final boolean powered = state.get(POWERED);
+    final boolean powered = state.getValue(POWERED);
     @SuppressWarnings("unchecked")
-    List<Entity> hits = world.getEntitiesWithinAABB((Class<Entity>)te.filter_class(), detectionVolume(pos));
+    List<Entity> hits = world.getEntitiesOfClass((Class<Entity>)te.filter_class(), detectionVolume(pos));
     if(hits.size() >= te.entity_count_threshold()) {
       if(te.high_sensitivity()) {
         active = true;
       } else {
         for(Entity e:hits) {
-          if(!e.doesEntityNotTriggerPressurePlate()) {
+          if(!e.isIgnoringBlockTriggers()) {
             active = true;
             break;
           }
@@ -106,11 +106,11 @@ public class ContactSwitchBlock extends SwitchBlock
     }
     if(active) {
       int t = te.configured_on_time();
-      te.on_timer_reset( (t<=0) ? (default_pulse_on_time) : ((t<4) ? 4 : t));
+      te.on_timer_reset( (t<=0) ? (default_pulse_on_time) : (Math.max(t, 4)));
     }
     if(active && (!powered)) {
-      state = state.with(POWERED, true);
-      world.setBlockState(pos, state, 1|2|8|16);
+      state = state.setValue(POWERED, true);
+      world.setBlock(pos, state, 1|2|8|16);
       power_on_sound.play(world, pos);
       notifyNeighbours(world, pos, state, te, false);
       if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
@@ -130,12 +130,12 @@ public class ContactSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   protected AxisAlignedBB detectionVolume(BlockPos pos)
-  { return new AxisAlignedBB(Vector3d.copy(pos), Vector3d.copy(pos).add(1,2,1)); }
+  { return new AxisAlignedBB(Vector3d.atLowerCornerOf(pos), Vector3d.atLowerCornerOf(pos).add(1,2,1)); }
 
   @Override
   public ContactSwitchTileEntity getTe(IWorldReader world, BlockPos pos)
   {
-    TileEntity te = world.getTileEntity(pos);
+    TileEntity te = world.getBlockEntity(pos);
     if((!(te instanceof ContactSwitchTileEntity))) return null;
     return (ContactSwitchTileEntity)te;
   }
@@ -181,7 +181,7 @@ public class ContactSwitchBlock extends SwitchBlock
     { return count_threshold_; }
 
     public void entity_count_threshold(int sel)
-    { count_threshold_ = ((sel<1) ? 1 : ((sel>=max_entity_count)) ? max_entity_count : sel); }
+    { count_threshold_ = ((sel<1) ? 1 : Math.min(sel, max_entity_count)); }
 
     @Override
     public void write(CompoundNBT nbt, boolean updatePacket)
@@ -233,7 +233,7 @@ public class ContactSwitchBlock extends SwitchBlock
           case 3: filter(filter() + direction); break;
           case 4: on_power(MathHelper.clamp(on_power() + direction, 1, 15));
         }
-        markDirty();
+        setChanged();
       }
       {
         Overlay.show(player,
@@ -241,11 +241,11 @@ public class ContactSwitchBlock extends SwitchBlock
             .append(Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity", TextFormatting.BLUE, new Object[]{
                 Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity." + (high_sensitivity() ? "high":"normal"))
               }))
-            .appendString(" | ")
+            .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.touchcontactmat.entity_threshold", TextFormatting.YELLOW, new Object[]{entity_count_threshold()}))
-            .appendString(" | ")
+            .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.touchcontactmat.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.touchcontactmat.entity_filter."+filter_class_names[filter_])}))
-            .appendString(" | ")
+            .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.touchcontactmat.output_power", TextFormatting.RED, new Object[]{on_power()}))
         );
       }

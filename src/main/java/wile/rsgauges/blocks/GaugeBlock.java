@@ -16,13 +16,15 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.block.Block;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.util.math.AxisAlignedBB;
 import wile.rsgauges.detail.ModResources;
+
 import javax.annotation.Nullable;
 
 
@@ -30,10 +32,10 @@ public class GaugeBlock extends AbstractGaugeBlock
 {
   public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
 
-  public GaugeBlock(long config, Block.Properties props, final AxisAlignedBB aabb, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
-  { super(config, props, aabb, powerOnSound, powerOffSound); setDefaultState(super.getDefaultState().with(POWER, 0)); }
+  public GaugeBlock(long config, AbstractBlock.Properties props, final AxisAlignedBB aabb, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  { super(config, props, aabb, powerOnSound, powerOffSound); registerDefaultState(super.defaultBlockState().setValue(POWER, 0)); }
 
-  public GaugeBlock(long config, Block.Properties props, final AxisAlignedBB aabb)
+  public GaugeBlock(long config, AbstractBlock.Properties props, final AxisAlignedBB aabb)
   { this(config, props, aabb, null, null); }
 
   @Override
@@ -41,10 +43,10 @@ public class GaugeBlock extends AbstractGaugeBlock
   public BlockState getStateForPlacement(BlockItemUseContext context)
   {
     final BlockState state = super.getStateForPlacement(context);
-    return (state==null) ? null : state.with(POWER, 0);
+    return (state==null) ? null : state.setValue(POWER, 0);
   }
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { super.fillStateContainer(builder); builder.add(POWER); }
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  { super.createBlockStateDefinition(builder); builder.add(POWER); }
 }

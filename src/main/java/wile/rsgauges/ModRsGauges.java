@@ -134,7 +134,7 @@ public class ModRsGauges
 
   public static final ItemGroup ITEMGROUP = (new ItemGroup("tab" + MODID) {
     @OnlyIn(Dist.CLIENT)
-    public ItemStack createIcon()
+    public ItemStack makeIcon()
     { return new ItemStack(ModContent.INDUSTRIAL_SMALL_LEVER); }
   });
 

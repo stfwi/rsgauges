@@ -17,7 +17,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.block.Block;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockReader;
@@ -30,12 +30,13 @@ import wile.rsgauges.detail.ModResources;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
+
 public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
 {
-  public EnvironmentalSensorSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public EnvironmentalSensorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public EnvironmentalSensorSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public EnvironmentalSensorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -79,13 +80,13 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
     { return debounce_; }
 
     public void threshold0_on(double v)
-    { threshold0_on_ = (v<0) ? (0) : ((v>15.0) ? (15.0) : (v)); }
+    { threshold0_on_ = (v<0) ? (0) : (Math.min(v, 15.0)); }
 
     public void threshold0_off(double v)
-    { threshold0_off_ = (v<0) ? (0) : ((v>15.0) ? (15.0) : (v)); }
+    { threshold0_off_ = (v<0) ? (0) : (Math.min(v, 15.0)); }
 
     public void debounce(int v)
-    { debounce_ = (v<0) ? (0) : ((v>debounce_max) ? (debounce_max) : (v)); }
+    { debounce_ = (v<0) ? (0) : (Math.min(v, debounce_max)); }
 
     @Override
     public void write(CompoundNBT nbt, boolean updatePacket)
@@ -131,17 +132,17 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
           }
           if(threshold0_on() < 1) threshold0_on(1);
           if(on_power() < 1) on_power(1);
-          markDirty();
+          setChanged();
         }
         {
           ArrayList<Object> tr = new ArrayList<>();
           final TranslationTextComponent trunit = Auxiliaries.localizable("switchconfig.lightsensor.lightunit");
-          StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
+          StringTextComponent separator = (new StringTextComponent(" | ")); separator.withStyle(TextFormatting.GRAY);
           tr.add(Auxiliaries.localizable("switchconfig.lightsensor.threshold_on", TextFormatting.BLUE, new Object[]{(int)threshold0_on(), trunit}));
-          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.lightsensor.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off(), trunit})));
-          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.lightsensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off(), trunit})));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
           if(debounce()>0) {
-            tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.DARK_GREEN, new Object[]{debounce()})));
+            tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.DARK_GREEN, new Object[]{debounce()})));
           } else {
             tr.add(new StringTextComponent(""));
           }
@@ -153,7 +154,7 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
             case 4: { on_power(on_power() + direction); break; }
           }
           if(on_power() < 1) on_power(1);
-          markDirty();
+          setChanged();
         }
         if((block.config & SWITCH_CONFIG_SENSOR_RAIN)!=0) {
           Overlay.show(player, Auxiliaries.localizable("switchconfig.rainsensor.output_power", TextFormatting.RED, new Object[]{on_power()}));
@@ -167,20 +168,20 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
     @Override
     public void tick()
     {
-      if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
+      if((!hasLevel()) || (getLevel().isClientSide) || (--update_timer_ > 0)) return;
       if(update_interval_ < 10) update_interval_ = 10;
       update_timer_ = update_interval_ + (int)(Math.random()*5); // sensor timing noise using rnd
-      BlockState state = getWorld().getBlockState(getPos());
+      BlockState state = getLevel().getBlockState(getBlockPos());
       if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return;
       AutoSwitchBlock block = (AutoSwitchBlock)(state.getBlock());
-      boolean active = state.get(POWERED);
+      boolean active = state.getValue(POWERED);
       if((block.config & SWITCH_CONFIG_SENSOR_LIGHT) != 0) {
         if((threshold0_on()==0) && (threshold0_off()==0) ) {
           threshold0_on(7);
           threshold0_off(6);
         } else {
           // measurement
-          double value = getWorld().getLight(pos);
+          double value = getLevel().getMaxLocalRawBrightness(worldPosition);
           // switch value evaluation
           int measurement = 0;
           if(threshold0_off() >= threshold0_on()) {
@@ -204,8 +205,8 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
           }
         }
       } else if((block.config & SWITCH_CONFIG_SENSOR_RAIN)!=0) {
-        if((state.get(FACING)!= Direction.UP) && (state.get(FACING)!=Direction.DOWN)) {
-          debounce_counter_ += getWorld().isRainingAt(getPos().offset(Direction.UP, 1)) ? 1 : -1;
+        if((state.getValue(FACING)!= Direction.UP) && (state.getValue(FACING)!=Direction.DOWN)) {
+          debounce_counter_ += getLevel().isRainingAt(getBlockPos().relative(Direction.UP, 1)) ? 1 : -1;
           if(debounce_counter_ <= 0) {
             debounce_counter_ = 0;
             active = false;
@@ -215,7 +216,7 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
           }
         }
       } else if((block.config & SWITCH_CONFIG_SENSOR_LIGHTNING)!=0) {
-        debounce_counter_ += (getWorld().isThundering() && (getWorld().isRainingAt(getPos()) || getWorld().isRainingAt(getPos().offset(Direction.UP, 20)) )) ? 1 : -1;
+        debounce_counter_ += (getLevel().isThundering() && (getLevel().isRainingAt(getBlockPos()) || getLevel().isRainingAt(getBlockPos().relative(Direction.UP, 20)) )) ? 1 : -1;
         if(debounce_counter_ <= 0) {
           debounce_counter_ = 0;
           active = false;

@@ -34,6 +34,7 @@ import wile.rsgauges.libmc.detail.Auxiliaries;
 import javax.annotation.Nullable;
 import java.util.List;
 
+
 public class SwitchLinkPearlItem extends RsItem
 {
   public SwitchLinkPearlItem(Item.Properties properties)
@@ -41,7 +42,7 @@ public class SwitchLinkPearlItem extends RsItem
 
   @Override
   @OnlyIn(Dist.CLIENT)
-  public boolean hasEffect(ItemStack stack)
+  public boolean isFoil(ItemStack stack)
   { return false; }
 
   @Override
@@ -57,7 +58,7 @@ public class SwitchLinkPearlItem extends RsItem
   { return false; }
 
   @Override
-  public boolean canPlayerBreakBlockWhileHolding(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
+  public boolean canAttackBlock(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
   { return false; }
 
   @Override
@@ -66,7 +67,7 @@ public class SwitchLinkPearlItem extends RsItem
 
   @Override
   @OnlyIn(Dist.CLIENT)
-  public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+  public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
   {
     final SwitchLink link = SwitchLink.fromItemStack(stack);
     if(Auxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, (!link.valid))) return;
@@ -76,14 +77,14 @@ public class SwitchLinkPearlItem extends RsItem
       tooltip.add(Auxiliaries.localizable(
         "switchlinking.switchlink_pearl.tooltip.linkedblock",
         TextFormatting.GRAY,
-        new Object[]{ (new TranslationTextComponent(targetBlock.getTranslationKey()))
-          .mergeStyle(TextFormatting.YELLOW)
-          .mergeStyle(TextFormatting.ITALIC)
+        new Object[]{ (new TranslationTextComponent(targetBlock.getDescriptionId()))
+          .withStyle(TextFormatting.YELLOW)
+          .withStyle(TextFormatting.ITALIC)
         }
       ));
     }
     if(Minecraft.getInstance().player!=null) {
-      final int distance = link.distance(Minecraft.getInstance().player.getPosition());
+      final int distance = link.distance(Minecraft.getInstance().player.blockPosition());
       if(distance >= 0) {
         tooltip.add(new StringTextComponent(Auxiliaries.localizable(
           "switchlinking.switchlink_pearl.tooltip.linkeddistance",
@@ -98,27 +99,27 @@ public class SwitchLinkPearlItem extends RsItem
       "switchlinking.relayconfig.confval" + Integer.toString(link.mode().index()),
       TextFormatting.ITALIC
     ));
-    super.addInformation(stack, world, tooltip, flag);
+    super.appendHoverText(stack, world, tooltip, flag);
   }
 
   @Override
-  public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)
+  public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand)
   {
-    if(world.isRemote() || (!player.isSneaking())) {
-      return new ActionResult<>(ActionResultType.PASS, player.getHeldItem(hand));
+    if(world.isClientSide() || (!player.isShiftKeyDown())) {
+      return new ActionResult<>(ActionResultType.PASS, player.getItemInHand(hand));
     } else {
       usePearl(world, player);
-      return new ActionResult<>(ActionResultType.CONSUME, player.getHeldItem(hand));
+      return new ActionResult<>(ActionResultType.CONSUME, player.getItemInHand(hand));
     }
   }
 
   @Override
   public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected)
   {
-    if((!selected) || (!entity.world.isRemote()) || (world.getRandom().nextDouble() > 0.3)) return;
+    if((!selected) || (!entity.level.isClientSide()) || (world.getRandom().nextDouble() > 0.3)) return;
     final SwitchLink lnk = SwitchLink.fromItemStack(stack);
-    if((!lnk.valid) || (lnk.target_position.distanceSq(entity.getPosition()) > 900)) return;
-    Vector3d p = Vector3d.copy(lnk.target_position).add(
+    if((!lnk.valid) || (lnk.target_position.distSqr(entity.blockPosition()) > 900)) return;
+    Vector3d p = Vector3d.atLowerCornerOf(lnk.target_position).add(
       ((world.getRandom().nextDouble()-0.5)*0.2),
       ((world.getRandom().nextDouble()-0.5)*0.2),
       ((world.getRandom().nextDouble()-0.5)*0.2)
@@ -126,7 +127,7 @@ public class SwitchLinkPearlItem extends RsItem
     Vector3d v = new Vector3d(0, ((world.getRandom().nextDouble()-0.5)*0.001), 0);
     BlockState state = world.getBlockState(lnk.target_position);
     if((state==null) || (!(state.getBlock() instanceof ISwitchLinkable)) ) return;
-    p = p.add(state.getShape(world, lnk.target_position).getBoundingBox().getCenter());
+    p = p.add(state.getShape(world, lnk.target_position).bounds().getCenter());
     int power = ((ISwitchLinkable)(state.getBlock())).switchLinkOutputPower(world, lnk.target_position).orElse(0);
     if(power > 0) {
       world.addParticle((IParticleData)ParticleTypes.INSTANT_EFFECT, false, p.x, p.y, p.z, v.x, v.y, v.z);
@@ -137,9 +138,9 @@ public class SwitchLinkPearlItem extends RsItem
 
   public static final void usePearl(World world, PlayerEntity player)
   {
-    switch(SwitchLink.fromPlayerActiveItem(world, player).trigger(world, player.getPosition(), player)) {
+    switch(SwitchLink.fromPlayerActiveItem(world, player).trigger(world, player.blockPosition(), player)) {
       case OK:
-        ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_SUCCESS.play(world, player.getPosition());
+        ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_SUCCESS.play(world, player.blockPosition());
         return;
       case TOO_FAR:
         Overlay.show(player, Auxiliaries.localizable("switchlinking.switchlink_pearl.use.toofaraway", TextFormatting.DARK_RED));
@@ -152,13 +153,13 @@ public class SwitchLinkPearlItem extends RsItem
       case REJECTED:
         break;
     }
-    ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, player.getPosition());
+    ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, player.blockPosition());
   }
 
 
   public static final ItemStack createFromPearl(World world, BlockPos pos, PlayerEntity player)
   {
-    final ItemStack stack_held = player.inventory.getCurrentItem();
+    final ItemStack stack_held = player.inventory.getSelected();
     if(stack_held.isEmpty()) return ItemStack.EMPTY;
     final ItemStack link_pearl = createForTarget(world, pos);
     if(link_pearl.isEmpty()) return ItemStack.EMPTY;

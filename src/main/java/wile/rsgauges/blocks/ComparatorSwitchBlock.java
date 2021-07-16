@@ -12,6 +12,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,10 +37,10 @@ import java.util.Optional;
 
 public class ComparatorSwitchBlock extends AutoSwitchBlock
 {
-  public ComparatorSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public ComparatorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public ComparatorSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public ComparatorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -62,7 +63,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
   @Override
   public Optional<Integer> switchLinkOutputPower(World world, BlockPos pos)
   {
-    TileEntity te = world.getTileEntity(pos);
+    TileEntity te = world.getBlockEntity(pos);
     if((!(te instanceof ComparatorSwitchTileEntity))) return Optional.empty();
     return Optional.of(((ComparatorSwitchTileEntity)te).link_output_power());
   }
@@ -87,18 +88,18 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
     private static final Acquisition acquisitions[] = {
       // 0: Comparator input override
       (world, pos, state, side) -> {
-        return (!state.hasComparatorInputOverride()) ? (-1) : (state.getComparatorInputOverride(world, pos));
+        return (!state.hasAnalogOutputSignal()) ? (-1) : (state.getAnalogOutputSignal(world, pos));
       },
       // 1: Used inventory slots
       (world, pos, state, side) -> {
-        final TileEntity te = world.getTileEntity(pos);
+        final TileEntity te = world.getBlockEntity(pos);
         if(te==null) {
           return -1;
         } else if(te instanceof IInventory) {
           IInventory inventory = (IInventory)te;
-          final int size = inventory.getSizeInventory();
+          final int size = inventory.getContainerSize();
           int n = 0;
-          for(int i=0; i<size; ++i) n += inventory.getStackInSlot(i).isEmpty() ? 0 : 1;
+          for(int i=0; i<size; ++i) n += inventory.getItem(i).isEmpty() ? 0 : 1;
           return (int)Math.round(((double)n*15)/(double)size);
         } else {
           final IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
@@ -112,14 +113,14 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
       },
       // 2: Free inventory slots
       (world, pos, state, side) -> {
-        final TileEntity te = world.getTileEntity(pos);
+        final TileEntity te = world.getBlockEntity(pos);
         if(te==null) {
           return -1;
         } else if(te instanceof IInventory) {
           IInventory inventory = (IInventory)te;
-          final int size = inventory.getSizeInventory();
+          final int size = inventory.getContainerSize();
           int n = 0;
-          for(int i = 0; i < size; ++i) n += inventory.getStackInSlot(i).isEmpty() ? 1 : 0;
+          for(int i = 0; i < size; ++i) n += inventory.getItem(i).isEmpty() ? 1 : 0;
           return (int)Math.round(((double)n*15)/(double)size);
         } else {
           final IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
@@ -133,7 +134,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
       },
       // 3: Redstone signal
       (world, pos, state, side) -> {
-        return world.getRedstonePower(pos, side);
+        return world.getSignal(pos, side);
       }
     };
 
@@ -194,16 +195,16 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
           }
         }
         if(on_power() < 1) on_power(1);
-        markDirty();
+        setChanged();
       }
       {
-        StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
+        StringTextComponent separator = (new StringTextComponent(" | ")); separator.withStyle(TextFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
         tr.add(Auxiliaries.localizable("switchconfig.comparator_switch.threshold_on", TextFormatting.BLUE, new Object[]{(int)threshold0_on()}));
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.comparator_switch.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off()})));
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.comparator_switch.mode"+((int)acquisition_mode()), TextFormatting.DARK_GREEN, new Object[]{})));
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.mode"+((int)acquisition_mode()), TextFormatting.DARK_GREEN, new Object[]{})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", TextFormatting.RED, new Object[]{(int)on_power()})));
         Overlay.show(player, Auxiliaries.localizable("switchconfig.comparator_switch", TextFormatting.RESET, tr.toArray()));
       }
       return true;
@@ -216,18 +217,18 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
     @Override
     public void tick()
     {
-      if((!hasWorld()) || (getWorld().isRemote()) || (--update_timer_ > 0)) return;
+      if((!hasLevel()) || (getLevel().isClientSide()) || (--update_timer_ > 0)) return;
       if(update_interval_ < 4) update_interval_ = 4;
       update_timer_ = update_interval_ + (int)(Math.random()*2); // sensor timing noise using rnd
       BlockState state = getBlockState();
       if((!(state.getBlock() instanceof ComparatorSwitchBlock))) return;
-      final boolean last_active = state.get(POWERED);
+      final boolean last_active = state.getValue(POWERED);
       boolean active = last_active;
-      final Direction facing = state.get(FACING);
-      final BlockPos adjacent_pos = getPos().offset(facing.getOpposite());
-      final BlockState adjacent_state = getWorld().getBlockState(adjacent_pos);
+      final Direction facing = state.getValue(FACING);
+      final BlockPos adjacent_pos = getBlockPos().relative(facing.getOpposite());
+      final BlockState adjacent_state = getLevel().getBlockState(adjacent_pos);
       acquisition_mode(acquisition_mode()); // just to ensure that no nbt loading or so may cause exceeding the container limits.
-      final int value = MathHelper.clamp(acquisitions[acquisition_mode()].sample(world, adjacent_pos, adjacent_state, facing), -1, 15);
+      final int value = MathHelper.clamp(acquisitions[acquisition_mode()].sample(level, adjacent_pos, adjacent_state, facing), -1, 15);
       final int last_link_output_power = link_output_power_;
       if(value < 0) {
         active = false;
@@ -256,7 +257,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
       updateSwitchState(state, (ComparatorSwitchBlock)(state.getBlock()), active, 0, false);
       if((link_output_power_ != last_link_output_power) || (last_active != active)) {
         if(!activateSwitchLinks(link_output_power_, active?15:0, (last_active != active))) {
-          ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+          ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(level, worldPosition);
         }
       }
     }

@@ -16,6 +16,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.DirectionalBlock;
 import net.minecraft.block.BlockState;
@@ -24,7 +25,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+
 import javax.annotation.Nullable;
+
 
 public class RsDirectedBlock extends RsBlock
 {
@@ -38,10 +41,10 @@ public class RsDirectedBlock extends RsBlock
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  public RsDirectedBlock(long config, Block.Properties properties, @Nullable AxisAlignedBB aabb1, @Nullable AxisAlignedBB aabb2)
+  public RsDirectedBlock(long config, AbstractBlock.Properties properties, @Nullable AxisAlignedBB aabb1, @Nullable AxisAlignedBB aabb2)
   {
-    super(config | (((config & RSBLOCK_CONFIG_TRANSLUCENT)==0) && ((aabb1.getXSize()<0.99) || (aabb1.getYSize()<0.99) || (aabb1.getXSize()<0.99)) ? RSBLOCK_CONFIG_CUTOUT : 0), properties);
-    setDefaultState(super.getDefaultState().with(FACING, Direction.SOUTH));
+    super(config | (((config & RSBLOCK_CONFIG_TRANSLUCENT)==0) && ((aabb1.getXsize()<0.99) || (aabb1.getYsize()<0.99) || (aabb1.getXsize()<0.99)) ? RSBLOCK_CONFIG_CUTOUT : 0), properties);
+    registerDefaultState(super.defaultBlockState().setValue(FACING, Direction.SOUTH));
     VoxelShape[][] shapes = new VoxelShape[Direction.values().length][2];
     if(aabb1==null) aabb1 = new AxisAlignedBB(0,0,0,1,1,1);
     if(aabb2==null) aabb2 = aabb1;
@@ -61,9 +64,9 @@ public class RsDirectedBlock extends RsBlock
         } else {
           // Wall or floor attached blocks where the UI and actuated facing is on the top.
           switch(i_dir) {
-            case 0: bb = new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); break; // D --> bb
-            case 1: bb = new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); break; // U --> bb
-            case 2: bb = new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); break; // N --> bb
+            case 0: // U --> bb
+            case 1: // N --> bb
+            case 2: bb = new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); break; // D --> bb
             case 3: bb = new AxisAlignedBB(1-bb.maxX, bb.minY, 1-bb.maxZ, 1-bb.minX, bb.maxY, 1-bb.minZ); break; // S
             case 4: bb = new AxisAlignedBB(  bb.minZ, bb.minY, 1-bb.maxX,   bb.maxZ, bb.maxY, 1-bb.minX); break; // W
             case 5: bb = new AxisAlignedBB(1-bb.maxZ, bb.minY,   bb.minX, 1-bb.minZ, bb.maxY,   bb.maxX); break; // E
@@ -80,7 +83,7 @@ public class RsDirectedBlock extends RsBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   protected VoxelShape getShape(BlockState state)
-  { return shapes_[state.get(FACING).getIndex()][0]; }
+  { return shapes_[state.getValue(FACING).get3DDataValue()][0]; }
 
   @Override
   public VoxelShape getShape(BlockState state, IBlockReader source, BlockPos pos, ISelectionContext selectionContext)
@@ -91,39 +94,39 @@ public class RsDirectedBlock extends RsBlock
   { return getShape(state, world, pos, selectionContext); }
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { super.fillStateContainer(builder); builder.add(FACING); }
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  { super.createBlockStateDefinition(builder); builder.add(FACING); }
 
   @Override
   @Nullable
   public BlockState getStateForPlacement(BlockItemUseContext context)
   {
-    if(!isValidPositionOnSide(context.getWorld(), context.getPos(), context.getFace())) return null;
+    if(!isValidPositionOnSide(context.getLevel(), context.getClickedPos(), context.getClickedFace())) return null;
     final BlockState state = super.getStateForPlacement(context);
     if(state==null) return null;
     Direction facing;
     if(isWallMount() && (!isLateral())) {
-      facing = context.getFace(); // e.g. pulse/bistable switches. Placed on the wall with the ui facing to the player.
+      facing = context.getClickedFace(); // e.g. pulse/bistable switches. Placed on the wall with the ui facing to the player.
     } else if(isWallMount() && isLateral()) {
-      facing = context.getFace().getOpposite(); // e.g. trap door switch. Placed on the wall the player clicked, reverse orientation.
+      facing = context.getClickedFace().getOpposite(); // e.g. trap door switch. Placed on the wall the player clicked, reverse orientation.
     } else if((!isWallMount()) && isLateral()) {
-      facing = context.getPlacementHorizontalFacing(); // e.g. contact mats or full blocks, placed in the direction the player is looking.
+      facing = context.getHorizontalDirection(); // e.g. contact mats or full blocks, placed in the direction the player is looking.
     } else {
       facing = context.getNearestLookingDirection();
     }
     if(isOpositePlacement()) facing = facing.getOpposite();
-    return state.with(FACING, facing);
+    return state.setValue(FACING, facing);
   }
 
   @SuppressWarnings("unused")
   @Override
-  public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos currentPos, BlockPos facingPos)
+  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos currentPos, BlockPos facingPos)
   {
-    if(isCube() || ((!world.isAirBlock(facingPos)) && (!facingState.getMaterial().isLiquid()))) return state;
-    Direction blockfacing = state.get(FACING);
-    if((!isWallMount()) && (isLateral()) && (facing==Direction.DOWN)) return Blocks.AIR.getDefaultState(); // floor mount, e.g. contact mats
-    if(isWallMount() && (!isLateral()) && (facing==state.get(FACING).getOpposite())) return Blocks.AIR.getDefaultState(); // wallmount are placed facing the player
-    if(isWallMount() && (isLateral()) && (facing==state.get(FACING))) return Blocks.AIR.getDefaultState();  // trapdoors etc are placed facing the neighbour block
+    if(isCube() || ((!world.isEmptyBlock(facingPos)) && (!facingState.getMaterial().isLiquid()))) return state;
+    Direction blockfacing = state.getValue(FACING);
+    if((!isWallMount()) && (isLateral()) && (facing==Direction.DOWN)) return Blocks.AIR.defaultBlockState(); // floor mount, e.g. contact mats
+    if(isWallMount() && (!isLateral()) && (facing==state.getValue(FACING).getOpposite())) return Blocks.AIR.defaultBlockState(); // wallmount are placed facing the player
+    if(isWallMount() && (isLateral()) && (facing==state.getValue(FACING))) return Blocks.AIR.defaultBlockState();  // trapdoors etc are placed facing the neighbour block
     return state;
   }
 
@@ -165,12 +168,12 @@ public class RsDirectedBlock extends RsBlock
   protected boolean isAffectedByNeigbour(BlockState state, IWorld world, BlockPos pos, BlockPos neighborPos)
   {
     if(isCube()) return true;
-    if((!isWallMount()) && (!(pos.down().equals(neighborPos)))) return false;
-    if((!isLateral()) && (!pos.offset(state.get(FACING).getOpposite()).equals(neighborPos))) return false;
-    if(!pos.offset(state.get(FACING).getOpposite()).equals(neighborPos)) return false;
+    if((!isWallMount()) && (!(pos.below().equals(neighborPos)))) return false;
+    if((!isLateral()) && (!pos.relative(state.getValue(FACING).getOpposite()).equals(neighborPos))) return false;
+    if(!pos.relative(state.getValue(FACING).getOpposite()).equals(neighborPos)) return false;
     final BlockState neighborState = world.getBlockState(neighborPos);
     if(neighborState == null) return false;
-    if((world.isAirBlock(neighborPos)) || (neighborState.getMaterial().isLiquid())) return false;
+    if((world.isEmptyBlock(neighborPos)) || (neighborState.getMaterial().isLiquid())) return false;
     return true;
   }
 
@@ -197,7 +200,7 @@ public class RsDirectedBlock extends RsBlock
    * standing in front of the device).
    */
   protected Direction getAbsoluteFacing(BlockState state, Direction relativeSide)
-  { return ((state==null) || (relativeSide==null)) ? Direction.NORTH : facing_transform_lut[state.get(FACING).getIndex()][relativeSide.getIndex()]; }
+  { return ((state==null) || (relativeSide==null)) ? Direction.NORTH : facing_transform_lut[state.getValue(FACING).get3DDataValue()][relativeSide.get3DDataValue()]; }
 
   protected boolean isValidPositionOnSide(IWorldReader world, BlockPos pos, Direction side)
   {
@@ -205,11 +208,11 @@ public class RsDirectedBlock extends RsBlock
       return true;
     } else if(isLateral() && (!isWallMount())) {
       if(side != Direction.UP) return false; // must be supported from the bottom.
-      if(!Block.hasSolidSideOnTop(world, pos.down())) return false;
+      if(!Block.canSupportRigidBlock(world, pos.below())) return false;
       return true;
     } else if(isWallMount()) {
       if(isLateral() && ((side == Direction.UP) || (side == Direction.DOWN))) return false; // lateral blocks only on walls.
-      final BlockPos blockpos = pos.offset(side.getOpposite());
+      final BlockPos blockpos = pos.relative(side.getOpposite());
       final BlockState state = world.getBlockState(blockpos);
     }
     return true;

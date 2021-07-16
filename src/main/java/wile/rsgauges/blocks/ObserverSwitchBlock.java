@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 public class ObserverSwitchBlock extends SwitchBlock
 {
-  public ObserverSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public ObserverSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ public class ObserverSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
   {
     if(!isAffectedByNeigbour(state, world, pos, facingPos)) return state;
     final ObserverSwitchTileEntity te = getTe(world, pos);
@@ -59,7 +59,7 @@ public class ObserverSwitchBlock extends SwitchBlock
   @Override
   public ObserverSwitchTileEntity getTe(IWorldReader world, BlockPos pos)
   {
-    TileEntity te = world.getTileEntity(pos);
+    TileEntity te = world.getBlockEntity(pos);
     if((!(te instanceof ObserverSwitchTileEntity))) return null;
     return (ObserverSwitchTileEntity)te;
   }
@@ -115,16 +115,16 @@ public class ObserverSwitchBlock extends SwitchBlock
     }
 
     void debounce(int i)
-    { debounce_ = (i<=0) ? 0 : ((i>debounce_max) ? debounce_max : i); }
+    { debounce_ = (i<=0) ? 0 : (Math.min(i, debounce_max)); }
 
     void range(int i)
-    { range_ = (i<=0) ? 0 : ((i>range_max) ? range_max : i); }
+    { range_ = (i<=0) ? 0 : (Math.min(i, range_max)); }
 
     void threshold(int i)
-    { threshold_ = (i<=0) ? 0 : ((i>threshold_max) ? threshold_max : i); }
+    { threshold_ = (i<=0) ? 0 : (Math.min(i, threshold_max)); }
 
     void filter(int f)
-    { filter_index_ = (f>=BlockCategories.getMatcherNames().size()) ? (BlockCategories.getMatcherNames().size()-1) : ((f<0) ? 0 : f); }
+    { filter_index_ = (f>=BlockCategories.getMatcherNames().size()) ? (BlockCategories.getMatcherNames().size()-1) : (Math.max(f, 0)); }
 
     @Override
     public void write(CompoundNBT nbt, boolean updatePacket)
@@ -168,20 +168,20 @@ public class ObserverSwitchBlock extends SwitchBlock
         if(threshold() < 1) threshold(1);
         if(on_power() < 1) on_power(1);
         update_timer_ = 0;
-        markDirty();
+        setChanged();
       }
       {
         ArrayList<Object> tr = new ArrayList<>();
-        StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
+        StringTextComponent separator = (new StringTextComponent(" | ")); separator.withStyle(TextFormatting.GRAY);
         tr.add(Auxiliaries.localizable("switchconfig.blocksensor.range", TextFormatting.BLUE, new Object[]{range()}));
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.blocksensor.threshold", TextFormatting.YELLOW, new Object[]{threshold()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.threshold", TextFormatting.YELLOW, new Object[]{threshold()})));
         if(debounce()>0) {
-          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.AQUA, new Object[]{debounce()})));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.AQUA, new Object[]{debounce()})));
         } else {
           tr.add(new StringTextComponent(""));
         }
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.blocksensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.blocksensor.filter",
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.filter",
           TextFormatting.DARK_GREEN,
           new Object[]{new TranslationTextComponent("rsgauges.switchconfig.blocksensor.filter."+filter_name())})
         ));
@@ -196,21 +196,21 @@ public class ObserverSwitchBlock extends SwitchBlock
     @Override
     public void tick()
     {
-      if(world.isRemote() || (--update_timer_ > 0)) return;
+      if(level.isClientSide() || (--update_timer_ > 0)) return;
       update_timer_ = ((range_ <= 1) ? 20 : 10) + ((int)(Math.random()*3)); // Neighbours are fast updated using neighbourChanged notifications.
-      final BlockState state = world.getBlockState(pos);
+      final BlockState state = level.getBlockState(worldPosition);
       if((state==null) || (!(state.getBlock() instanceof ObserverSwitchBlock))) return;
       final ObserverSwitchBlock block = (ObserverSwitchBlock) state.getBlock();
-      final Direction obervationDirection = state.get(FACING);
+      final Direction obervationDirection = state.getValue(FACING);
       int n_matched = 0;
       final int rng =  (range_ < 2) ? 1 : range_;
-      final int tr = (threshold_ > rng) ? rng : threshold_;
+      final int tr = Math.min(threshold_, rng);
       String fname = filter_name();
       final BlockCategories.Matcher matcher = BlockCategories.getMatcher(fname);
       for(int n=1; n<=rng; ++n) {
-        final BlockPos p = pos.offset(obervationDirection, n);
-        if(!world.isAreaLoaded(p,1)) continue;
-        if(!matcher.match(world, p)) continue;
+        final BlockPos p = worldPosition.relative(obervationDirection, n);
+        if(!level.isAreaLoaded(p,1)) continue;
+        if(!matcher.match(level, p)) continue;
         if(++n_matched >= tr) break;
       }
       boolean active = (n_matched >= threshold_);
@@ -225,7 +225,7 @@ public class ObserverSwitchBlock extends SwitchBlock
           active = false;
         }
       }
-      if(state.get(POWERED) != active) block.onSwitchActivated(world, pos, state, null, null);
+      if(state.getValue(POWERED) != active) block.onSwitchActivated(level, worldPosition, state, null, null);
     }
   }
 

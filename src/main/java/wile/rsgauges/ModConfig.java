@@ -285,7 +285,7 @@ public class ModConfig
       String cfg_wrenches = COMMON.accepted_wrenches.get().toLowerCase().replaceAll("[\\s,]"," ").trim();
       List<ResourceLocation> wrenches = Arrays.stream(cfg_wrenches.split(" "))
         .filter(e->!e.trim().isEmpty())
-        .map(ResourceLocation::tryCreate)
+        .map(ResourceLocation::tryParse)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
       wrenches.add(new ResourceLocation("minecraft", "redstone_torch"));

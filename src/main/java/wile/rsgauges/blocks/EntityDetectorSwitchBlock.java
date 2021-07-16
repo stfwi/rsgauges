@@ -22,7 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.block.Block;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
@@ -37,12 +37,13 @@ import wile.rsgauges.detail.ModResources;
 import javax.annotation.Nullable;
 import java.util.List;
 
+
 public class EntityDetectorSwitchBlock extends AutoSwitchBlock
 {
-  public EntityDetectorSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public EntityDetectorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public EntityDetectorSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public EntityDetectorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -88,13 +89,13 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
     { return (filter_<=0) ? (filter_classes[0]) : ((filter_ >= filter_classes.length) ? (filter_classes[filter_classes.length-1]) : filter_classes[filter_]); }
 
     public void sensor_entity_threshold(int count)
-    { sensor_entity_count_threshold_ = (count < 1) ? 1 : count; }
+    { sensor_entity_count_threshold_ = Math.max(count, 1); }
 
     public int sensor_entity_threshold()
     { return sensor_entity_count_threshold_; }
 
     public void sensor_range(int r)
-    { sensor_range_ = (r<1) ? (1) : ((r>max_sensor_range_) ? max_sensor_range_ : r); }
+    { sensor_range_ = (r<1) ? (1) : (Math.min(r, max_sensor_range_)); }
 
     public int sensor_range()
     { return sensor_range_; }
@@ -153,17 +154,17 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
             break;
           }
         }
-        markDirty();
+        setChanged();
       }
       {
         Overlay.show(player,
           (new StringTextComponent(""))
             .append(Auxiliaries.localizable("switchconfig.detector.sensor_range", TextFormatting.BLUE, new Object[]{sensor_range()}))
-            .appendString(" | ")
+            .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.detector.entity_threshold", TextFormatting.YELLOW, new Object[]{sensor_entity_threshold()}))
-            .appendString(" | ")
+            .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.detector.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}))
-            .appendString(" | ")
+            .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.detector.output_power", TextFormatting.RED, new Object[]{on_power()}))
         );
       }
@@ -173,9 +174,9 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
     @Override
     public void tick()
     {
-      if((world.isRemote()) || (--update_timer_ > 0)) return;
+      if((level.isClientSide()) || (--update_timer_ > 0)) return;
       update_timer_ = update_interval_;
-      BlockState state = world.getBlockState(getPos());
+      BlockState state = level.getBlockState(getBlockPos());
       if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return;
       AutoSwitchBlock block = (AutoSwitchBlock)(state.getBlock());
       // initialisations
@@ -196,24 +197,24 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
         } else {
           range_bb = new AxisAlignedBB(0,0,0, 1,0,0);
         }
-        Direction facing = state.get(FACING);
-        AxisAlignedBB bb = Auxiliaries.transform_forward(range_bb, facing).offset(getPos()).expand(1,1,1);
+        Direction facing = state.getValue(FACING);
+        AxisAlignedBB bb = Auxiliaries.transform_forward(range_bb, facing).move(getBlockPos()).expandTowards(1,1,1);
         area_ = new AxisAlignedBB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
       }
       // measurement
       boolean active = false;
       @SuppressWarnings("unchecked")
-      List<Entity> hits = world.getEntitiesWithinAABB((Class<Entity>)filter_class(), area_);
+      List<Entity> hits = level.getEntitiesOfClass((Class<Entity>)filter_class(), area_);
       if(hits.size() >= sensor_entity_count_threshold_) {
         int num_seen = 0;
-        final Vector3d switch_position = new Vector3d((double)getPos().getX()+.5, (double)getPos().getY()+.5, (double)getPos().getZ()+.5);
+        final Vector3d switch_position = new Vector3d((double)getBlockPos().getX()+.5, (double)getBlockPos().getY()+.5, (double)getBlockPos().getZ()+.5);
         for(Entity e:hits) {
           if(e instanceof HangingEntity) continue;
           if(
             (
-              world.rayTraceBlocks(
+              level.clip(
                 new RayTraceContext(
-                  new Vector3d(e.getPosition().getX()-0.2, e.getPosition().getY()+e.getEyeHeight(), e.getPosition().getZ()-0.2),
+                  new Vector3d(e.blockPosition().getX()-0.2, e.blockPosition().getY()+e.getEyeHeight(), e.blockPosition().getZ()-0.2),
                   switch_position,
                   RayTraceContext.BlockMode.OUTLINE,
                   RayTraceContext.FluidMode.NONE,
@@ -223,9 +224,9 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
             )
             ||
             (
-              world.rayTraceBlocks(
+              level.clip(
                 new RayTraceContext(
-                  new Vector3d(e.getPosition().getX()+0.2, e.getPosition().getY()+e.getEyeHeight(), e.getPosition().getZ()+0.2),
+                  new Vector3d(e.blockPosition().getX()+0.2, e.blockPosition().getY()+e.getEyeHeight(), e.blockPosition().getZ()+0.2),
                   switch_position,
                   RayTraceContext.BlockMode.OUTLINE,
                   RayTraceContext.FluidMode.NONE,

@@ -98,22 +98,22 @@ public final class ColorUtils
     final Item item = stack.getItem();
     if(item instanceof DyeItem) return Optional.of(((DyeItem)item).getDyeColor());
     // There must be a standard for that somewhere ...
-    if(item.isIn(Tags.Items.DYES_BLACK)) return Optional.of(DyeColor.BLACK);
-    if(item.isIn(Tags.Items.DYES_RED)) return Optional.of(DyeColor.RED);
-    if(item.isIn(Tags.Items.DYES_GREEN)) return Optional.of(DyeColor.GREEN);
-    if(item.isIn(Tags.Items.DYES_BROWN)) return Optional.of(DyeColor.BROWN);
-    if(item.isIn(Tags.Items.DYES_BLUE)) return Optional.of(DyeColor.BLUE);
-    if(item.isIn(Tags.Items.DYES_PURPLE)) return Optional.of(DyeColor.PURPLE);
-    if(item.isIn(Tags.Items.DYES_CYAN)) return Optional.of(DyeColor.CYAN);
-    if(item.isIn(Tags.Items.DYES_LIGHT_GRAY)) return Optional.of(DyeColor.LIGHT_GRAY);
-    if(item.isIn(Tags.Items.DYES_GRAY)) return Optional.of(DyeColor.GRAY);
-    if(item.isIn(Tags.Items.DYES_PINK)) return Optional.of(DyeColor.PINK);
-    if(item.isIn(Tags.Items.DYES_LIME)) return Optional.of(DyeColor.LIME);
-    if(item.isIn(Tags.Items.DYES_YELLOW)) return Optional.of(DyeColor.YELLOW);
-    if(item.isIn(Tags.Items.DYES_LIGHT_BLUE)) return Optional.of(DyeColor.LIGHT_BLUE);
-    if(item.isIn(Tags.Items.DYES_MAGENTA)) return Optional.of(DyeColor.MAGENTA);
-    if(item.isIn(Tags.Items.DYES_ORANGE)) return Optional.of(DyeColor.ORANGE);
-    if(item.isIn(Tags.Items.DYES_WHITE)) return Optional.of(DyeColor.WHITE);
+    if(item.is(Tags.Items.DYES_BLACK)) return Optional.of(DyeColor.BLACK);
+    if(item.is(Tags.Items.DYES_RED)) return Optional.of(DyeColor.RED);
+    if(item.is(Tags.Items.DYES_GREEN)) return Optional.of(DyeColor.GREEN);
+    if(item.is(Tags.Items.DYES_BROWN)) return Optional.of(DyeColor.BROWN);
+    if(item.is(Tags.Items.DYES_BLUE)) return Optional.of(DyeColor.BLUE);
+    if(item.is(Tags.Items.DYES_PURPLE)) return Optional.of(DyeColor.PURPLE);
+    if(item.is(Tags.Items.DYES_CYAN)) return Optional.of(DyeColor.CYAN);
+    if(item.is(Tags.Items.DYES_LIGHT_GRAY)) return Optional.of(DyeColor.LIGHT_GRAY);
+    if(item.is(Tags.Items.DYES_GRAY)) return Optional.of(DyeColor.GRAY);
+    if(item.is(Tags.Items.DYES_PINK)) return Optional.of(DyeColor.PINK);
+    if(item.is(Tags.Items.DYES_LIME)) return Optional.of(DyeColor.LIME);
+    if(item.is(Tags.Items.DYES_YELLOW)) return Optional.of(DyeColor.YELLOW);
+    if(item.is(Tags.Items.DYES_LIGHT_BLUE)) return Optional.of(DyeColor.LIGHT_BLUE);
+    if(item.is(Tags.Items.DYES_MAGENTA)) return Optional.of(DyeColor.MAGENTA);
+    if(item.is(Tags.Items.DYES_ORANGE)) return Optional.of(DyeColor.ORANGE);
+    if(item.is(Tags.Items.DYES_WHITE)) return Optional.of(DyeColor.WHITE);
     return Optional.empty();
   }
 

@@ -4,7 +4,7 @@
  * @copyright (C) 2018 Stefan Wilhelm
  * @license MIT (see https://opensource.org/licenses/MIT)
  *
- * Auto switch specialised for day timer clocks.
+ * Auto switch specialized for day timer clocks.
  */
 package wile.rsgauges.blocks;
 
@@ -13,7 +13,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.block.Block;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockReader;
@@ -27,12 +27,13 @@ import wile.rsgauges.libmc.detail.Overlay;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
+
 public class DayTimerSwitchBlock extends AutoSwitchBlock
 {
-  public DayTimerSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public DayTimerSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public DayTimerSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public DayTimerSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -82,20 +83,20 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
           case 4: { on_power(on_power() + direction); break; }
         }
         if(on_power() < 1) on_power(1);
-        markDirty();
+        setChanged();
       }
       {
-        StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
+        StringTextComponent separator = (new StringTextComponent(" | ")); separator.withStyle(TextFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
         tr.add(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_on", TextFormatting.BLUE, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_off", TextFormatting.YELLOW, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_off", TextFormatting.YELLOW, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
         if(debounce()>0) {
-          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.daytimerclock.random", TextFormatting.DARK_GREEN, new Object[]{debounce()}) ));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.random", TextFormatting.DARK_GREEN, new Object[]{debounce()}) ));
         } else {
           tr.add(new StringTextComponent(""));
         }
-        tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
         Overlay.show(player, Auxiliaries.localizable("switchconfig.daytimerclock", TextFormatting.RESET, tr.toArray()));
       }
       return true;
@@ -104,13 +105,13 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
     @Override
     public void tick()
     {
-      if((!hasWorld()) || (getWorld().isRemote) || (--update_timer_ > 0)) return;
+      if((!hasLevel()) || (getLevel().isClientSide) || (--update_timer_ > 0)) return;
       if(update_interval_ < 10) update_interval_ = 10;
       update_timer_ = update_interval_ + (int)(Math.random()*5); // sensor timing noise using rnd
       BlockState state = getBlockState();
       if((!(state.getBlock() instanceof DayTimerSwitchBlock))) return;
-      boolean active = state.get(POWERED);
-      long wt = world.getDayTime() % 24000;
+      boolean active = state.getValue(POWERED);
+      long wt = level.getDayTime() % 24000;
       final double t = 15.0/24000.0 * wt;
       boolean active_setpoint;
       if(threshold0_on() == threshold0_off()) {

@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
@@ -21,11 +22,12 @@ import wile.rsgauges.detail.ModResources;
 
 import javax.annotation.Nullable;
 
+
 public class LinkSenderSwitchBlock extends SwitchBlock
 {
   private final boolean is_analog;
 
-  public LinkSenderSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
+  public LinkSenderSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); is_analog = analog_device; }
 
   @Override
@@ -37,12 +39,12 @@ public class LinkSenderSwitchBlock extends SwitchBlock
   { return 0; }
 
   @Override
-  public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+  public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
   {
     final SwitchTileEntity te = getTe(world, pos);
     if(te != null) te.reset(world);
-    world.setBlockState(pos, world.getBlockState(pos).with(POWERED, false), 1|2|8|16);
-    neighborChanged(state, world, pos, state.getBlock(), pos.offset(state.get(FACING).getOpposite()), false);
+    world.setBlock(pos, world.getBlockState(pos).setValue(POWERED, false), 1|2|8|16);
+    neighborChanged(state, world, pos, state.getBlock(), pos.relative(state.getValue(FACING).getOpposite()), false);
   }
 
   @Override
@@ -53,25 +55,25 @@ public class LinkSenderSwitchBlock extends SwitchBlock
     if(te==null) return;
     int power;
     if(isCube()) {
-      power = world.getRedstonePowerFromNeighbors(pos);
+      power = world.getBestNeighborSignal(pos);
     } else {
-      Direction facing = state.get(FACING).getOpposite();
-      final BlockPos neighbour_pos = pos.offset(facing);
+      Direction facing = state.getValue(FACING).getOpposite();
+      final BlockPos neighbour_pos = pos.relative(facing);
       final BlockState neighbour_state = world.getBlockState(neighbour_pos);
-      if(!state.canProvidePower()) {
-        power = world.getRedstonePowerFromNeighbors(neighbour_pos);
+      if(!state.isSignalSource()) {
+        power = world.getBestNeighborSignal(neighbour_pos);
       } else {
-        power = Math.max(neighbour_state.getWeakPower(world, neighbour_pos, facing), neighbour_state.getStrongPower(world, neighbour_pos, facing));
+        power = Math.max(neighbour_state.getSignal(world, neighbour_pos, facing), neighbour_state.getDirectSignal(world, neighbour_pos, facing));
       }
     }
     if(((config & SWITCH_CONFIG_INVERTABLE)!=0) && (te.inverted())) power = 15-power; // inverted==redstone input state inverted
     if(te.on_power() == power) return; // power state not changed
     te.on_power(power);
     final boolean powered = (power > 0);
-    final boolean was_powered = state.get(POWERED);
+    final boolean was_powered = state.getValue(POWERED);
     if(powered != was_powered) {
       if(((config & SWITCH_CONFIG_PULSE)==0) || (powered && !was_powered)) {
-        world.setBlockState(pos, state.with(POWERED, powered), 1|2|8|16);
+        world.setBlock(pos, state.setValue(POWERED, powered), 1|2|8|16);
         if((config & SWITCH_CONFIG_PULSE)!=0) {
           te.on_timer_reset();
           te.on_timer_extend();

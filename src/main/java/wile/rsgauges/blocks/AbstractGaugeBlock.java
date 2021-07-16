@@ -33,6 +33,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -70,10 +71,10 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  public AbstractGaugeBlock(long config, Block.Properties props, final AxisAlignedBB aabb, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public AbstractGaugeBlock(long config, AbstractBlock.Properties props, final AxisAlignedBB aabb, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, props, aabb, null); power_on_sound = powerOnSound; power_off_sound = powerOffSound; }
 
-  public AbstractGaugeBlock(long config, Block.Properties props, final AxisAlignedBB aabb)
+  public AbstractGaugeBlock(long config, AbstractBlock.Properties props, final AxisAlignedBB aabb)
   { this(config, props, aabb, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -83,35 +84,35 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
   @Override
   public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
   {
-    if((world.isRemote()) || (!isAffectedByNeigbour(state, world, pos, fromPos))) return;
+    if((world.isClientSide()) || (!isAffectedByNeigbour(state, world, pos, fromPos))) return;
     final GaugeTileEntity te = getTe(world, pos);
     if(te == null) te.reset_timer();
   }
 
   @Override
-  public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
-  { world.getPendingBlockTicks().scheduleTick(pos, state.getBlock(), 1); }
+  public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
+  { world.getBlockTicks().scheduleTick(pos, state.getBlock(), 1); }
 
   @Override
-  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
   {
-    if(world.isRemote()) return ActionResultType.SUCCESS;
-    ItemStack stack_held = player.getHeldItem(hand);
+    if(world.isClientSide()) return ActionResultType.SUCCESS;
+    ItemStack stack_held = player.getItemInHand(hand);
     if(ModConfig.isWrench(stack_held)) {
       GaugeTileEntity te = getTe(world, pos);
       if(te==null) return ActionResultType.CONSUME;
-      te.on_wrench(state, world, pos, player, player.getHeldItem(hand));
+      te.on_wrench(state, world, pos, player, player.getItemInHand(hand));
     } else if((stack_held.getItem() == Items.ENDER_PEARL) || (stack_held.getItem() == ModContent.SWITCH_LINK_PEARL)) {
-      onBlockClicked(state, world, pos, player);
+      attack(state, world, pos, player);
     }
     return ActionResultType.CONSUME;
   }
 
   @Override
   @SuppressWarnings("deprecation")
-  public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player)
+  public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player)
   {
-    final ItemStack item_held = player.inventory.getCurrentItem();
+    final ItemStack item_held = player.inventory.getSelected();
     if(item_held.getItem() == Items.ENDER_PEARL) {
       if(ModConfig.without_switch_linking) return;
       ItemStack link_stack = SwitchLinkPearlItem.createFromPearl(world, pos, player);
@@ -119,7 +120,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
         Overlay.show(player, Auxiliaries.localizable("switchlinking.target_assign.error_notarget"));
         ModResources.BlockSoundEvents.SWITCHLINK_CANNOT_LINK_THAT.play(world, pos);
       } else {
-        player.inventory.setInventorySlotContents(player.inventory.currentItem, link_stack);
+        player.inventory.setItem(player.inventory.selected, link_stack);
         Overlay.show(player, Auxiliaries.localizable("switchlinking.target_assign.ok"));
         ModResources.BlockSoundEvents.SWITCHLINK_LINK_TARGET_SELECTED.play(world, pos);
       }
@@ -143,18 +144,18 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
 
   @Override
   public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
-  { return ((state.getBlock() instanceof GaugeBlock) && (side == state.get(FACING).getOpposite())); }
+  { return ((state.getBlock() instanceof GaugeBlock) && (side == state.getValue(FACING).getOpposite())); }
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { super.fillStateContainer(builder); }
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  { super.createBlockStateDefinition(builder); }
 
   @Override
   @Nullable
   public BlockState getStateForPlacement(BlockItemUseContext context)
   {
     final BlockState state = super.getStateForPlacement(context);
-    return (state==null) ? (null) : ((state.hasProperty(GaugeBlock.POWER)) ? (state.with(GaugeBlock.POWER, 0)) : (state));
+    return (state==null) ? (null) : ((state.hasProperty(GaugeBlock.POWER)) ? (state.setValue(GaugeBlock.POWER, 0)) : (state));
   }
 
   @Override
@@ -246,7 +247,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
 
   public GaugeTileEntity getTe(IWorldReader world, BlockPos pos)
   {
-    final TileEntity te = world.getTileEntity(pos);
+    final TileEntity te = world.getBlockEntity(pos);
     return (te instanceof GaugeTileEntity) ? ((GaugeTileEntity)te) : (null);
   }
 
@@ -271,7 +272,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
     { return (int)((scd_ & GAUGE_DATA_POWER_MASK) >> GAUGE_DATA_POWER_SHIFT); }
 
     public void power(int p)
-    { scd_ =  (scd_ & (~GAUGE_DATA_POWER_MASK)) | ((((p<=0)?(0):((p>15)?15:p)) << GAUGE_DATA_POWER_SHIFT) & GAUGE_DATA_POWER_MASK); }
+    { scd_ =  (scd_ & (~GAUGE_DATA_POWER_MASK)) | ((((p<=0)?(0):(Math.min(p, 15))) << GAUGE_DATA_POWER_SHIFT) & GAUGE_DATA_POWER_MASK); }
 
     public boolean inverted()
     { return (scd_ & GAUGE_DATA_INVERTED) != 0; }
@@ -295,7 +296,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
     { trigger_timer_= 0; }
 
     public void reset()
-    { reset(getWorld()); }
+    { reset(getLevel()); }
 
     public void reset(IWorldReader world)
     {
@@ -305,8 +306,8 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
       } else {
         try {
           final long current_scd = scd_;
-          scd_ = (int) ((((GaugeBlock) (world.getBlockState(getPos()).getBlock())).config));
-          if(current_scd != scd_) markDirty();
+          scd_ = (int) ((((GaugeBlock) (world.getBlockState(getBlockPos()).getBlock())).config));
+          if(current_scd != scd_) setChanged();
         } catch(Exception e) {
           scd_ = 0; // ok, the default then
         }
@@ -347,48 +348,48 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
       try {
         BlockState state = getBlockState();
         final AbstractGaugeBlock block = (AbstractGaugeBlock) state.getBlock();
-        if(world.isRemote()) {
+        if(level.isClientSide()) {
           if(((block.config & GAUGE_DATA_BLINKING) != 0) && (block instanceof IndicatorBlock)) {
-            if(state.get(IndicatorBlock.POWERED)) {
+            if(state.getValue(IndicatorBlock.POWERED)) {
               if((block.power_off_sound != null) || (block.power_on_sound != null)) {
                 final boolean alternation = (System.currentTimeMillis() & 1024) < 512;
                 if(alternation != alternation_state_ ) {
                   alternation_state_ = alternation;
                   if(alternation && (block.power_on_sound != null)) {
-                    block.power_on_sound.play(world, pos);
+                    block.power_on_sound.play(level, worldPosition);
                   } else if(!alternation && (block.power_off_sound != null)) {
-                    block.power_off_sound.play(world, pos);
+                    block.power_off_sound.play(level, worldPosition);
                   }
                 }
               }
             }
           }
         } else {
-          final BlockPos neighbourPos = pos.offset((Direction) state.get(GaugeBlock.FACING), -1);
-          if(!world.isBlockLoaded(neighbourPos)) return;
-          final BlockState neighborState = world.getBlockState(neighbourPos);
+          final BlockPos neighbourPos = worldPosition.relative((Direction) state.getValue(GaugeBlock.FACING), -1);
+          if(!level.hasChunkAt(neighbourPos)) return;
+          final BlockState neighborState = level.getBlockState(neighbourPos);
           int p = 0;
           if(comparator_mode()) {
             // Explicit comparator-only mode
-            if(neighborState.hasComparatorInputOverride()) {
-              p = neighborState.getComparatorInputOverride(world, neighbourPos);
+            if(neighborState.hasAnalogOutputSignal()) {
+              p = neighborState.getAnalogOutputSignal(level, neighbourPos);
             }
           } else {
             // Direct or indirect redstonr mode, automatic comparator mode if applicable
-            if((block instanceof IndicatorBlock) && (world.isBlockPowered(getPos()))) {
+            if((block instanceof IndicatorBlock) && (level.hasNeighborSignal(getBlockPos()))) {
               p = 15;
-            } else if(neighborState.canProvidePower()) {
-              p = world.getRedstonePower(neighbourPos, state.get(FACING).getOpposite());
-            } else if(neighborState.hasComparatorInputOverride()) {
-              p = neighborState.getComparatorInputOverride(world, neighbourPos);
+            } else if(neighborState.isSignalSource()) {
+              p = level.getSignal(neighbourPos, state.getValue(FACING).getOpposite());
+            } else if(neighborState.hasAnalogOutputSignal()) {
+              p = neighborState.getAnalogOutputSignal(level, neighbourPos);
             } else {
               final boolean is_indicator = (block instanceof IndicatorBlock);
               for(Direction nbf : Direction.values()) {
                 if((p >= 15) || (is_indicator && (p>0))) break;
-                final BlockPos nbp = neighbourPos.offset(nbf);
-                if(!world.isBlockLoaded(nbp)) continue;
-                final BlockState nbs = world.getBlockState(nbp);
-                p = Math.max(p, world.getRedstonePower(nbp, nbf));
+                final BlockPos nbp = neighbourPos.relative(nbf);
+                if(!level.hasChunkAt(nbp)) continue;
+                final BlockState nbs = level.getBlockState(nbp);
+                p = Math.max(p, level.getSignal(nbp, nbf));
               }
             }
           }
@@ -396,18 +397,18 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements SwitchLink.IS
           final boolean sync = (power() != p);
           if((block.config & GAUGE_DATA_BLINKING) == 0) {
             if((block.power_on_sound != null) && (power() == 0) && (p > 0)) {
-              block.power_on_sound.play(world, pos);
+              block.power_on_sound.play(level, worldPosition);
             } else if((block.power_off_sound != null) && (power() > 0) && (p == 0)) {
-              block.power_off_sound.play(world, pos);
+              block.power_off_sound.play(level, worldPosition);
             }
           }
           p = Math.max(p, switchlink_input_);
           power(p);
           if(block instanceof IndicatorBlock) {
             boolean powered = p != 0; // TE also used for indicator, no need to register yet another tile entity.
-            if(state.get(IndicatorBlock.POWERED) != powered) world.setBlockState(pos, state.with(IndicatorBlock.POWERED, powered), 1|2|16); // |32
+            if(state.getValue(IndicatorBlock.POWERED) != powered) level.setBlock(worldPosition, state.setValue(IndicatorBlock.POWERED, powered), 1|2|16); // |32
           } else if(block instanceof GaugeBlock) {
-            if((state.get(GaugeBlock.POWER) != p)) world.setBlockState(pos, state.with(GaugeBlock.POWER, p), 1|2|8|16); // |32
+            if((state.getValue(GaugeBlock.POWER) != p)) level.setBlock(worldPosition, state.setValue(GaugeBlock.POWER, p), 1|2|8|16); // |32
           }
         }
       } catch(Throwable e) {

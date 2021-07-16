@@ -14,7 +14,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.block.Block;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockReader;
@@ -29,12 +29,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Optional;
 
+
 public class IntervalTimerSwitchBlock extends AutoSwitchBlock
 {
-  public IntervalTimerSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public IntervalTimerSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public IntervalTimerSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public IntervalTimerSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
   {
     BlockState state = world.getBlockState(pos);
     if(!(state.getBlock() instanceof IntervalTimerSwitchBlock)) return Optional.empty();
-    return Optional.of(state.get(POWERED) ? 15 : 0);
+    return Optional.of(state.getValue(POWERED) ? 15 : 0);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -96,16 +97,16 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
     { return ramp_; }
 
     public void p_set(int v)
-    { p_set_ = (v<1) ? (1) : ((v>15) ? (15) : (v)); }
+    { p_set_ = (v<1) ? (1) : (Math.min(v, 15)); }
 
     public void t_on(int v)
-    { t_on_ = (v<0) ? (0) : ((v>t_max) ? (t_max) : (v)); }
+    { t_on_ = (v<0) ? (0) : (Math.min(v, t_max)); }
 
     public void t_off(int v)
-    { t_off_ = (v<0) ? (0) : ((v>t_max) ? (t_max) : (v)); }
+    { t_off_ = (v<0) ? (0) : (Math.min(v, t_max)); }
 
     public void ramp(int v)
-    { ramp_ = (v<0) ? (0) : ((v>ramp_max) ? (ramp_max) : (v)); }
+    { ramp_ = (v<0) ? (0) : (Math.min(v, ramp_max)); }
 
     @Override
     public void write(CompoundNBT nbt, boolean updatePacket)
@@ -136,7 +137,7 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
       else if(ticks <  800) ticks += 100; // 40s   ->  5.0s steps
       else if(ticks < 2400) ticks += 200; //  2min -> 10.0s steps
       else                  ticks += 600; //  5min -> 30.0s steps
-      return (ticks > t_max) ? (t_max) : (ticks);
+      return Math.min(ticks, t_max);
     }
 
     private int next_lower_interval_setting(int ticks)
@@ -148,7 +149,7 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
       else if(ticks <  800) ticks -= 100; // 40s   ->  5.0s steps
       else if(ticks < 2400) ticks -= 200; //  2min -> 10.0s steps
       else                  ticks -= 600; //  5min -> 30.0s steps
-      return (ticks < t_min) ? (t_min) : (ticks);
+      return Math.max(ticks, t_min);
     }
 
     @Override
@@ -169,20 +170,20 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
           case 3: ramp(ramp()+direction); break;
           case 4: p_set( ((p_set()<=0) ? 15 : p_set()) + direction); break;
         }
-        markDirty();
+        setChanged();
       }
       {
-        boolean switch_state = state.get(POWERED);
+        boolean switch_state = state.getValue(POWERED);
         if(!selected) switch_state = !switch_state; // will be switched in turn.
         updateSwitchState(state, (AutoSwitchBlock) state.getBlock(), switch_state, 0);
         {
-          StringTextComponent separator = (new StringTextComponent(" | ")); separator.mergeStyle(TextFormatting.GRAY);
+          StringTextComponent separator = (new StringTextComponent(" | ")); separator.withStyle(TextFormatting.GRAY);
           ArrayList<Object> tr = new ArrayList<>();
           tr.add(Auxiliaries.localizable("switchconfig.intervaltimer.t_on", TextFormatting.BLUE, new Object[]{Auxiliaries.ticksToSecondsString(t_on())}));
-          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.intervaltimer.t_off", TextFormatting.YELLOW, new Object[]{Auxiliaries.ticksToSecondsString(t_off())})));
-          tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.intervaltimer.output_power", TextFormatting.RED, new Object[]{p_set()})));
-          if(ramp()>0) tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.intervaltimer.ramp", TextFormatting.DARK_GREEN, new Object[]{ramp()})));
-          if(!switch_state) tr.add(separator.deepCopy().append(Auxiliaries.localizable("switchconfig.intervaltimer.standby", TextFormatting.AQUA)));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.t_off", TextFormatting.YELLOW, new Object[]{Auxiliaries.ticksToSecondsString(t_off())})));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.output_power", TextFormatting.RED, new Object[]{p_set()})));
+          if(ramp()>0) tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.ramp", TextFormatting.DARK_GREEN, new Object[]{ramp()})));
+          if(!switch_state) tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.standby", TextFormatting.AQUA)));
           while(tr.size() < 5) tr.add(new StringTextComponent("")); // const lang file formatting arg count.
           Overlay.show(player, Auxiliaries.localizable("switchconfig.intervaltimer", TextFormatting.RESET, tr.toArray()));
         }
@@ -192,12 +193,12 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
 
     @Override
     public int power(BlockState state, boolean strong)
-    { return (nooutput() || (!state.get(POWERED)) || ((strong && weak())) ? (0) : on_power()); }
+    { return (nooutput() || (!state.getValue(POWERED)) || ((strong && weak())) ? (0) : on_power()); }
 
     @Override
     public void tick()
     {
-      if((!hasWorld()) || (getWorld().isRemote()) || (--update_timer_ > 0)) return;
+      if((!hasLevel()) || (getLevel().isClientSide()) || (--update_timer_ > 0)) return;
       int p = p_;
       if((t_on()<=0) || (t_off()<=0) || (p_set() <= 0)) {
         p_ = 0;
@@ -223,13 +224,13 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
       }
       if(p != p_) {
         on_power((inverted() ? (15-p_) : (p_)));
-        BlockState state = getWorld().getBlockState(getPos());
-        if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock)) || (!state.get(POWERED))) {
+        BlockState state = getLevel().getBlockState(getBlockPos());
+        if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock)) || (!state.getValue(POWERED))) {
           update_timer_ = 200 + ((int)(Math.random() * 10));
           on_power(inverted() ? (15) : (0));
         }
-        world.notifyNeighborsOfStateChange(pos, state.getBlock());
-        world.notifyNeighborsOfStateChange(pos.offset(state.get(FACING).getOpposite()), state.getBlock());
+        level.updateNeighborsAt(worldPosition, state.getBlock());
+        level.updateNeighborsAt(worldPosition.relative(state.getValue(FACING).getOpposite()), state.getBlock());
       }
     }
   }

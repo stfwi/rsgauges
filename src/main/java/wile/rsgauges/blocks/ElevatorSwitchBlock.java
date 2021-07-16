@@ -9,6 +9,7 @@
  */
 package wile.rsgauges.blocks;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
@@ -25,13 +26,13 @@ public class ElevatorSwitchBlock extends PulseSwitchBlock
 {
   public static final IntegerProperty VARIANT = IntegerProperty.create("variant", 0, 2);
 
-  public ElevatorSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public ElevatorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   {
     super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound);
-    setDefaultState(super.getDefaultState().with(VARIANT, 0));
+    registerDefaultState(super.defaultBlockState().setValue(VARIANT, 0));
   }
 
-  public ElevatorSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public ElevatorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
   { this(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -39,8 +40,8 @@ public class ElevatorSwitchBlock extends PulseSwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { super.fillStateContainer(builder); builder.add(VARIANT); }
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  { super.createBlockStateDefinition(builder); builder.add(VARIANT); }
 
   @Override
   @Nullable
@@ -49,12 +50,12 @@ public class ElevatorSwitchBlock extends PulseSwitchBlock
     BlockState state = super.getStateForPlacement(context);
     if(state==null) return null;
     int variant = 0;
-    if(context.getFace().getAxis().isHorizontal()) {
-      int y = (int)Math.round(context.getHitVec().subtract(Vector3d.copyCentered(context.getPos())).scale(16).getY());
+    if(context.getClickedFace().getAxis().isHorizontal()) {
+      int y = (int)Math.round(context.getClickLocation().subtract(Vector3d.atCenterOf(context.getClickedPos())).scale(16).y());
       if(y >  4) variant = 2;
       if(y < -4) variant = 1;
     }
-    return state.with(VARIANT, variant);
+    return state.setValue(VARIANT, variant);
   }
 
 }

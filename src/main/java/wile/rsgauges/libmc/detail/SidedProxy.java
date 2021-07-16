@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.DistExecutor;
+
 import javax.annotation.Nullable;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class SidedProxy
 
   // --------------------------------------------------------------------------------------------------------
 
-  private static ISidedProxy proxy = DistExecutor.unsafeRunForDist(()->ClientProxy::new, ()->ServerProxy::new);
+  private static final ISidedProxy proxy = DistExecutor.unsafeRunForDist(()->ClientProxy::new, ()->ServerProxy::new);
 
   private interface ISidedProxy
   {
@@ -56,7 +57,7 @@ public class SidedProxy
   private static final class ClientProxy implements ISidedProxy
   {
     public @Nullable PlayerEntity getPlayerClientSide() { return Minecraft.getInstance().player; }
-    public @Nullable World getWorldClientSide() { return Minecraft.getInstance().world; }
+    public @Nullable World getWorldClientSide() { return Minecraft.getInstance().level; }
     public @Nullable Minecraft mc() { return Minecraft.getInstance(); }
     public Optional<Boolean> isCtrlDown() { return Optional.of(Auxiliaries.isCtrlDown()); }
     public Optional<Boolean> isShiftDown() { return Optional.of(Auxiliaries.isShiftDown()); }

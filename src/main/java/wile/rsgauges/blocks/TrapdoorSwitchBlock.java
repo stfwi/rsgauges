@@ -11,7 +11,7 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.world.IBlockReader;
@@ -22,11 +22,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.detail.SwitchLink;
+
 import javax.annotation.Nullable;
+
 
 public class TrapdoorSwitchBlock extends ContactSwitchBlock
 {
-  public TrapdoorSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public TrapdoorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -35,37 +37,37 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
 
   @Override
   @SuppressWarnings("deprecation")
-  public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type)
+  public boolean isPathfindable(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type)
   {
     /// -> was public boolean isPassable(IWorldReader world, BlockPos pos)
     switch(type) {
-      case LAND:  return (!state.get(POWERED));
-      case AIR:   return (!state.get(POWERED));
-      default:    return true;
+      case LAND:
+      case AIR:  return (!state.getValue(POWERED));
+      default:   return true;
     }
   }
 
   @Override
-  public void onFallenUpon(World world, BlockPos pos, Entity entity, float distance)
+  public void fallOn(World world, BlockPos pos, Entity entity, float distance)
   {
     if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0)) {
-      if(world.isRemote()) return;
+      if(world.isClientSide()) return;
       onEntityCollided(world, pos, world.getBlockState(pos));
-      final BlockPos[] neighbors = { pos.add(1,0,0), pos.add(-1,0,0), pos.add(0,0,1), pos.add(0,0,-1), pos.add(1,0,1), pos.add(-1,0,-1), pos.add(-1,0,1), pos.add(1,0,-1), };
+      final BlockPos[] neighbors = { pos.offset(1,0,0), pos.offset(-1,0,0), pos.offset(0,0,1), pos.offset(0,0,-1), pos.offset(1,0,1), pos.offset(-1,0,-1), pos.offset(-1,0,1), pos.offset(1,0,-1), };
       for(BlockPos p: neighbors) {
         final BlockState st = world.getBlockState(p);
         if((st!=null) && (st.getBlock()==this)) onEntityCollided(world, p, st);
       }
     }
-    super.onFallenUpon(world, pos, entity, distance);
+    super.fallOn(world, pos, entity, distance);
   }
 
   @Override
-  public void onEntityWalk(World world, BlockPos pos, Entity entity)
+  public void stepOn(World world, BlockPos pos, Entity entity)
   {
-    if(((config & SWITCH_CONFIG_HIGH_SENSITIVE)==0) || (world.isRemote()) || (entity.isSneaking())) return;
+    if(((config & SWITCH_CONFIG_HIGH_SENSITIVE)==0) || (world.isClientSide()) || (entity.isShiftKeyDown())) return;
     onEntityCollided(world, pos, world.getBlockState(pos));
-    final BlockPos[] neighbors = { pos.add(1,0,0), pos.add(-1,0,0), pos.add(0,0,1), pos.add(0,0,-1), pos.add(1,0,1), pos.add(-1,0,-1), pos.add(-1,0,1), pos.add(1,0,-1), };
+    final BlockPos[] neighbors = { pos.offset(1,0,0), pos.offset(-1,0,0), pos.offset(0,0,1), pos.offset(0,0,-1), pos.offset(1,0,1), pos.offset(-1,0,-1), pos.offset(-1,0,1), pos.offset(1,0,-1), };
     for(BlockPos p: neighbors) {
       final BlockState st = world.getBlockState(p);
       if((st!=null) && (st.getBlock()==this)) onEntityCollided(world, p, st);
@@ -73,9 +75,9 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
   }
 
   @Override
-  public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
+  public void entityInside(BlockState state, World world, BlockPos pos, Entity entity)
   {
-    if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) && (entity.getHeight() < 0.9)) return; // close on items
+    if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) && (entity.getBbHeight() < 0.9)) return; // close on items
     onEntityCollided(world, pos, state);
   }
 
@@ -85,9 +87,9 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
   protected AxisAlignedBB detectionVolume(BlockPos pos)
   {
     if((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==0) {
-      return new AxisAlignedBB(Vector3d.copy(pos).add(0,0,0), Vector3d.copy(pos).add(1,1,1));
+      return new AxisAlignedBB(Vector3d.atLowerCornerOf(pos).add(0,0,0), Vector3d.atLowerCornerOf(pos).add(1,1,1));
     } else {
-      return new AxisAlignedBB(Vector3d.copy(pos).add(-0.2,0,-0.2), Vector3d.copy(pos).add(1.2,2,1.2));
+      return new AxisAlignedBB(Vector3d.atLowerCornerOf(pos).add(-0.2,0,-0.2), Vector3d.atLowerCornerOf(pos).add(1.2,2,1.2));
     }
   }
 
@@ -96,16 +98,16 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
   {
     final World world = link.world;
     final BlockPos pos = link.target_position;
-    if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isRemote())) return SwitchLink.RequestResult.REJECTED;
+    if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isClientSide())) return SwitchLink.RequestResult.REJECTED;
     BlockState state = world.getBlockState(pos);
     if((state == null) || (!(state.getBlock() instanceof TrapdoorSwitchBlock))) return SwitchLink.RequestResult.REJECTED;
-    if(state.get(POWERED)) return SwitchLink.RequestResult.OK; // already active
+    if(state.getValue(POWERED)) return SwitchLink.RequestResult.OK; // already active
     ContactSwitchTileEntity te = getTe(world, pos);
     if((te==null) || (!te.verifySwitchLinkTarget(link))) return SwitchLink.RequestResult.REJECTED;
-    world.setBlockState(pos, state.with(POWERED, true), 1|2|8|16);
+    world.setBlock(pos, state.setValue(POWERED, true), 1|2|8|16);
     power_on_sound.play(world, pos);
     notifyNeighbours(world, pos, state, te, false);
-    te.on_timer_reset( (te.configured_on_time()==0) ? (default_pulse_on_time) : ( (te.configured_on_time() < 2) ? 2 : te.configured_on_time()) );
+    te.on_timer_reset( (te.configured_on_time()==0) ? (default_pulse_on_time) : (Math.max(te.configured_on_time(), 2)) );
     te.reschedule_block_tick();
     return SwitchLink.RequestResult.OK;
   }

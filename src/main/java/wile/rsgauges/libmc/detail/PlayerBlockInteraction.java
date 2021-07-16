@@ -39,14 +39,14 @@ public class PlayerBlockInteraction
   public static void onPlayerInteract(PlayerInteractEvent event)
   {
     final World world = event.getWorld();
-    if(world.isRemote()) return;
+    if(world.isClientSide()) return;
     final boolean is_rclick = (event instanceof RightClickBlock) && (event.getHand()==Hand.MAIN_HAND);
     final boolean is_lclick = (event instanceof LeftClickBlock) && (event.getHand()==Hand.MAIN_HAND) && (event.getFace()!=Direction.DOWN); // last one temporary workaround for double trigger on mouse release
     if((!is_rclick) && (!is_lclick)) return;
     final BlockPos fromPos = event.getPos();
     for(Direction facing: Direction.values()) {
       if(event.getFace() == facing) continue;
-      final BlockPos pos = fromPos.offset(facing);
+      final BlockPos pos = fromPos.relative(facing);
       final BlockState state = event.getWorld().getBlockState(pos);
       if(!((state.getBlock()) instanceof INeighbourBlockInteractionSensitive)) continue;
       if(((INeighbourBlockInteractionSensitive)state.getBlock()).onNeighborBlockPlayerInteraction(world, pos, state, fromPos, event.getEntityLiving(), event.getHand(), is_lclick)) {

@@ -91,7 +91,7 @@ public class SwitchLink
     target_position = pos;
     block_name = name;
     config = cfg;
-    valid = (!block_name.isEmpty()) && (pos.toLong()!=0);
+    valid = (!block_name.isEmpty()) && (pos.asLong()!=0);
   }
 
   @Override
@@ -105,7 +105,7 @@ public class SwitchLink
   { config = (config & ~0xfL)|(rm.index()); return this; }
 
   public static SwitchLink fromNbt(final CompoundNBT nbt)
-  { return (nbt==null) ? (new SwitchLink()) : (new SwitchLink(BlockPos.fromLong(nbt.getLong("p")), nbt.getString("b"), nbt.getLong("t"))); }
+  { return (nbt==null) ? (new SwitchLink()) : (new SwitchLink(BlockPos.of(nbt.getLong("p")), nbt.getString("b"), nbt.getLong("t"))); }
 
   public static SwitchLink fromItemStack(ItemStack stack)
   { return ((stack==null) || (stack.isEmpty()) || (stack.getItem()!=ModContent.SWITCH_LINK_PEARL)) ? (new SwitchLink()) : (fromNbt(stack.getTag())); }
@@ -121,9 +121,9 @@ public class SwitchLink
 
   public static SwitchLink fromPlayerActiveItem(World world, PlayerEntity player)
   {
-    if((player==null) || (world.isRemote()) || (player.inventory==null) || (player.inventory.getCurrentItem()==null)) return new SwitchLink();
-    if(player.inventory.getCurrentItem().getItem()!=ModContent.SWITCH_LINK_PEARL) return null;
-    return SwitchLink.fromNbt(player.inventory.getCurrentItem().getTag());
+    if((player==null) || (world.isClientSide()) || (player.inventory==null) || (player.inventory.getSelected()==null)) return new SwitchLink();
+    if(player.inventory.getSelected().getItem()!=ModContent.SWITCH_LINK_PEARL) return null;
+    return SwitchLink.fromNbt(player.inventory.getSelected().getTag());
   }
 
   public CompoundNBT toNbt()
@@ -131,7 +131,7 @@ public class SwitchLink
     CompoundNBT nbt = new CompoundNBT();
     nbt.putString("b", block_name);
     nbt.putLong("t", config);
-    nbt.putLong("p", target_position.toLong());
+    nbt.putLong("p", target_position.asLong());
     return nbt;
   }
 
@@ -144,7 +144,7 @@ public class SwitchLink
   }
 
   public int distance(@Nullable final BlockPos pos)
-  { return ((pos==null) || (!valid)) ? -1 : (int)Math.sqrt(target_position.distanceSq(pos)); }
+  { return ((pos==null) || (!valid)) ? -1 : (int)Math.sqrt(target_position.distSqr(pos)); }
 
   public boolean isTooFar(final BlockPos pos)
   { return (ModConfig.max_switch_linking_distance > 0) && (((distance(pos) > ModConfig.max_switch_linking_distance))); }
@@ -153,7 +153,7 @@ public class SwitchLink
   @Nullable
   private ISwitchLinkable target(final World world, final BlockPos source_pos)
   {
-    if((ModConfig.without_switch_linking) || (!valid) || isTooFar(source_pos) || (!world.isBlockLoaded(target_position))) return null;
+    if((ModConfig.without_switch_linking) || (!valid) || isTooFar(source_pos) || (!world.hasChunkAt(target_position))) return null;
     final BlockState target_state = world.getBlockState(target_position);
     final Block block = target_state.getBlock();
     if((!(block instanceof ISwitchLinkable)) || (!block.getRegistryName().toString().equals(block_name))) return null;
@@ -164,8 +164,8 @@ public class SwitchLink
   public RequestResult trigger(final World world, final BlockPos source_pos, final PlayerEntity player)
   {
     if(ModConfig.without_switch_linking) return RequestResult.NOT_MATCHED;
-    if((!valid) || (world.isRemote())) return RequestResult.INVALID_LINKDATA;
-    if(isTooFar(source_pos) || ((!world.isBlockLoaded(target_position)))) return RequestResult.TOO_FAR;
+    if((!valid) || (world.isClientSide())) return RequestResult.INVALID_LINKDATA;
+    if(isTooFar(source_pos) || ((!world.hasChunkAt(target_position)))) return RequestResult.TOO_FAR;
     final BlockState target_state = world.getBlockState(target_position);
     if(target_state==null) return RequestResult.TOO_FAR;
     final Block block = target_state.getBlock();

@@ -19,6 +19,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.StateContainer;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.tileentity.TileEntityType;
@@ -70,14 +71,14 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  public RsBlock(long config, Block.Properties properties)
+  public RsBlock(long config, AbstractBlock.Properties properties)
   { this(config, properties, Auxiliaries.getPixeledAABB(0, 0, 0, 16, 16,16 )); }
 
-  public RsBlock(long config, Block.Properties properties, final AxisAlignedBB aabb)
+  public RsBlock(long config, AbstractBlock.Properties properties, final AxisAlignedBB aabb)
   { this(config, properties, VoxelShapes.create(aabb)); }
 
-  public RsBlock(long config, Block.Properties properties, final VoxelShape vshape)
-  { super(properties); this.config = config; setDefaultState(this.getStateContainer().getBaseState().with(WATERLOGGED, false)); }
+  public RsBlock(long config, AbstractBlock.Properties properties, final VoxelShape vshape)
+  { super(properties); this.config = config; registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false)); }
 
   public RenderTypeHint getRenderTypeHint()
   { return render_layer_map_[(int)((config>>60)&0x3)]; }
@@ -88,7 +89,7 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
   @Override
   @OnlyIn(Dist.CLIENT)
-  public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+  public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
   { Auxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, true); }
 
   @Override
@@ -104,7 +105,7 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   @Override
   @SuppressWarnings("deprecation")
   public VoxelShape getShape(BlockState state, IBlockReader source, BlockPos pos, ISelectionContext selectionContext)
-  { return VoxelShapes.fullCube(); }
+  { return VoxelShapes.block(); }
 
   @Override
   @SuppressWarnings("deprecation")
@@ -112,7 +113,7 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   { return getShape(state, world, pos, selectionContext); }
 
   @Override
-  public boolean canSpawnInBlock()
+  public boolean isPossibleToRespawnInThis()
   { return false; }
 
   @Override
@@ -121,12 +122,12 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
   @Override
   @SuppressWarnings("deprecation")
-  public PushReaction getPushReaction(BlockState state)
+  public PushReaction getPistonPushReaction(BlockState state)
   { return PushReaction.DESTROY; }
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { super.fillStateContainer(builder); builder.add(WATERLOGGED); }
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  { super.createBlockStateDefinition(builder); builder.add(WATERLOGGED); }
 
   @Override
   @Nullable
@@ -135,10 +136,10 @@ public abstract class RsBlock extends Block implements IWaterLoggable
     BlockState state = super.getStateForPlacement(context);
     if(state==null) return null;
     if((config & RSBLOCK_NOT_WATERLOGGABLE)==0) {
-      FluidState fs = context.getWorld().getFluidState(context.getPos());
-      state = state.with(WATERLOGGED,fs.getFluid()==Fluids.WATER);
+      FluidState fs = context.getLevel().getFluidState(context.getClickedPos());
+      state = state.setValue(WATERLOGGED,fs.getType()==Fluids.WATER);
     } else {
-      state = state.with(WATERLOGGED, false);
+      state = state.setValue(WATERLOGGED, false);
     }
     return state;
   }
@@ -146,30 +147,30 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   @Override
   @SuppressWarnings("deprecation")
   public FluidState getFluidState(BlockState state)
-  { return ((config & RSBLOCK_NOT_WATERLOGGABLE)==0) ? (state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state)) : super.getFluidState(state); }
+  { return ((config & RSBLOCK_NOT_WATERLOGGABLE)==0) ? (state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state)) : super.getFluidState(state); }
 
   @Override
   public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos)
   {
-    if(((config & RSBLOCK_NOT_WATERLOGGABLE)==0) && state.get(WATERLOGGED)) return false;
+    if(((config & RSBLOCK_NOT_WATERLOGGABLE)==0) && state.getValue(WATERLOGGED)) return false;
     return super.propagatesSkylightDown(state, reader, pos);
   }
 
   @Override
   @SuppressWarnings("deprecation")
-  public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
+  public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
   {
-    super.onReplaced(state, world, pos, newState, isMoving);
-    world.updateComparatorOutputLevel(pos, newState.getBlock());
-    world.notifyNeighborsOfStateChange(pos, newState.getBlock());
+    super.onRemove(state, world, pos, newState, isMoving);
+    world.updateNeighbourForOutputSignal(pos, newState.getBlock());
+    world.updateNeighborsAt(pos, newState.getBlock());
   }
 
   @Override
   @SuppressWarnings("deprecation")
-  public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
   {
     if((config & RSBLOCK_NOT_WATERLOGGABLE)==0) {
-      if(state.get(WATERLOGGED)) world.getPendingFluidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+      if(state.getValue(WATERLOGGED)) world.getLiquidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
     }
     return state;
   }
@@ -190,12 +191,12 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
   @Override
   @SuppressWarnings("deprecation")
-  public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player)
+  public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player)
   {}
 
   @Override
   @SuppressWarnings("deprecation")
-  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
   { return ActionResultType.PASS; }
 
   @Override
@@ -225,10 +226,10 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
     protected final void syncToClients()
     {
-      if(world.isRemote()) return;
+      if(level.isClientSide()) return;
       CompoundNBT nbt = new CompoundNBT();
       write(nbt, true);
-      Networking.PacketTileNotifyServerToClient.sendToAllPlayers((ServerWorld)getWorld(), getPos(), nbt);
+      Networking.PacketTileNotifyServerToClient.sendToAllPlayers((ServerWorld)getLevel(), getBlockPos(), nbt);
     }
 
     public final void onServerPacketReceived(CompoundNBT nbt)
@@ -239,12 +240,12 @@ public abstract class RsBlock extends Block implements IWaterLoggable
     // --------------------------------------------------------------------------------------------------------
 
     @Override
-    public final CompoundNBT write(CompoundNBT nbt)
-    { super.write(nbt); write(nbt, false); return nbt; }
+    public final CompoundNBT save(CompoundNBT nbt)
+    { super.save(nbt); write(nbt, false); return nbt; }
 
     @Override
-    public final void read(BlockState state, CompoundNBT nbt)
-    { super.read(state, nbt); read(nbt, false); }
+    public final void load(BlockState state, CompoundNBT nbt)
+    { super.load(state, nbt); read(nbt, false); }
   }
 
 }

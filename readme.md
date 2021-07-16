@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    - v1.2.12    [U] Mappings ported, updated to Forge 1.16.5-36.2.0.
+
     - v1.2.11    [F] Lang file fixes.
 
     - v1.2.10    [A] Dimmer Switch can be used as analog Switch Link source.

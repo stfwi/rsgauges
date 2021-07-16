@@ -11,6 +11,7 @@ package wile.rsgauges.blocks;
 
 import net.minecraft.util.ActionResultType;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,13 +31,14 @@ import wile.rsgauges.detail.ModResources;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+
 public class DimmerSwitchBlock extends SwitchBlock
 {
   public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  public DimmerSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public DimmerSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config|0xff, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -48,14 +50,14 @@ public class DimmerSwitchBlock extends SwitchBlock
   {}
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-  { super.fillStateContainer(builder); builder.add(POWER); }
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  { super.createBlockStateDefinition(builder); builder.add(POWER); }
 
   @Override
-  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
   {
     if((!(state.getBlock() instanceof DimmerSwitchBlock))) return ActionResultType.FAIL;
-    if(world.isRemote()) return ActionResultType.SUCCESS;
+    if(world.isClientSide()) return ActionResultType.SUCCESS;
     SwitchTileEntity te = getTe(world, pos);
     if(te==null) return ActionResultType.FAIL;
     te.click_config(null, false);
@@ -69,11 +71,11 @@ public class DimmerSwitchBlock extends SwitchBlock
         Overlay.show(player,
           Auxiliaries.localizable("switchconfig.dimmerswitch.output_power", TextFormatting.RED, new Object[]{p})
         );
-        final int state_p = state.get(POWER);
+        final int state_p = state.getValue(POWER);
         if(state_p!=p) {
-          world.setBlockState(pos, state.with(POWER, p).with(POWERED, p>0), 1|2|8|16);
+          world.setBlock(pos, state.setValue(POWER, p).setValue(POWERED, p>0), 1|2|8|16);
           notifyNeighbours(world, pos, state, te, false);
-          te.markDirty();
+          te.setChanged();
         }
         if(was_powered && (p==0)) power_off_sound.play(world, pos); else power_on_sound.play(world, pos);
         if((state_p!=p) && ((config & SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0))  {
@@ -87,7 +89,7 @@ public class DimmerSwitchBlock extends SwitchBlock
         Overlay.show(player, te.configStatusTextComponentTranslation((SwitchBlock) state.getBlock()));
       }
     } else if(ck.item== ModContent.SWITCH_LINK_PEARL) {
-      onBlockClicked(state, world, pos, player);
+      attack(state, world, pos, player);
     }
     return ActionResultType.CONSUME;
   }

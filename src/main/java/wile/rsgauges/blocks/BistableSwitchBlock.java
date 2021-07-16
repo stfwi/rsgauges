@@ -13,7 +13,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.block.Block;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.*;
 import wile.rsgauges.ModContent;
@@ -25,13 +25,13 @@ import javax.annotation.Nullable;
 
 public class BistableSwitchBlock extends SwitchBlock
 {
-  public BistableSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public BistableSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public BistableSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public BistableSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
-  public BistableSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBB)
+  public BistableSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBB)
   { super(config, properties, unrotatedBB, unrotatedBB, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------

@@ -8,7 +8,7 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
@@ -18,11 +18,12 @@ import wile.rsgauges.detail.SwitchLink.RequestResult;
 
 import javax.annotation.Nullable;
 
+
 public class LinkReceiverSwitchBlock extends SwitchBlock
 {
   private final boolean is_analog;
 
-  public LinkReceiverSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
+  public LinkReceiverSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); is_analog = analog_device; }
 
   @Override
@@ -40,14 +41,14 @@ public class LinkReceiverSwitchBlock extends SwitchBlock
     final int p = is_analog ? link.source_analog_power : link.source_digital_power;
     te.on_power(p);
     final boolean powered = (p>0);
-    final boolean was_powered = state.get(POWERED);
+    final boolean was_powered = state.getValue(POWERED);
     if(powered != was_powered) {
       if((config & SWITCH_CONFIG_PULSE)==0) {
-        world.setBlockState(pos, state.with(POWERED, powered), 1|2|8|16);
+        world.setBlock(pos, state.setValue(POWERED, powered), 1|2|8|16);
         (powered ? power_off_sound : power_on_sound).play(world, pos);
       } else {
         if(powered) {
-          world.setBlockState(pos, state.with(POWERED, true), 1|2|8|16);
+          world.setBlock(pos, state.setValue(POWERED, true), 1|2|8|16);
           power_on_sound.play(world, pos);
           te.on_timer_reset();
           te.on_timer_extend();

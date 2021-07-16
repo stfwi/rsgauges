@@ -20,7 +20,7 @@ import java.util.LinkedList;
 
 public class ModResources
 {
-  private static LinkedList<SoundEvent> created_sounds_ = new LinkedList<>();
+  private static final LinkedList<SoundEvent> created_sounds_ = new LinkedList<>();
 
   private static SoundEvent createSoundEvent(String name)
   {
@@ -64,7 +64,7 @@ public class ModResources
         world.playSound(null, pos, se_, SoundCategory.BLOCKS, volume, pitch_);
         if(volume_ > 1.1f) {
           for(Direction dir: Direction.values()) {
-            world.playSound(null, pos.offset(dir, 15), se_, SoundCategory.BLOCKS, volume, pitch_);
+            world.playSound(null, pos.relative(dir, 15), se_, SoundCategory.BLOCKS, volume, pitch_);
           }
         }
       }
@@ -74,16 +74,16 @@ public class ModResources
   public static final class BlockSoundEvents
   {
     // Switch default sounds
-    public static final BlockSoundEvent DEFAULT_SWITCH_MUTE          = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0f, 1f);
-    public static final BlockSoundEvent DEFAULT_SWITCH_ACTIVATION    = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.3f, 0.92f);
-    public static final BlockSoundEvent DEFAULT_SWITCH_DEACTIVATION  = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.3f, 0.82f);
-    public static final BlockSoundEvent DEFAULT_SWITCH_CONFIGCLICK   = new ModResources.BlockSoundEvent(SoundEvents.BLOCK_LEVER_CLICK, 0.01f, 1.9f);
+    public static final BlockSoundEvent DEFAULT_SWITCH_MUTE          = new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0f, 1f);
+    public static final BlockSoundEvent DEFAULT_SWITCH_ACTIVATION    = new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.3f, 0.92f);
+    public static final BlockSoundEvent DEFAULT_SWITCH_DEACTIVATION  = new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.3f, 0.82f);
+    public static final BlockSoundEvent DEFAULT_SWITCH_CONFIGCLICK   = new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f);
     // Switch link sounds
-    public static final BlockSoundEvent SWITCHLINK_CANNOT_LINK_THAT      = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMAN_SCREAM, 0.2f, 2.5f);
-    public static final BlockSoundEvent SWITCHLINK_LINK_TARGET_SELECTED  = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 0.2f, 2.0f);
-    public static final BlockSoundEvent SWITCHLINK_LINK_SOURCE_SELECTED  = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 0.2f, 2.0f);
+    public static final BlockSoundEvent SWITCHLINK_CANNOT_LINK_THAT      = new ModResources.BlockSoundEvent(SoundEvents.ENDERMAN_SCREAM, 0.2f, 2.5f);
+    public static final BlockSoundEvent SWITCHLINK_LINK_TARGET_SELECTED  = new ModResources.BlockSoundEvent(SoundEvents.ENDERMAN_TELEPORT, 0.2f, 2.0f);
+    public static final BlockSoundEvent SWITCHLINK_LINK_SOURCE_SELECTED  = new ModResources.BlockSoundEvent(SoundEvents.ENDERMAN_TELEPORT, 0.2f, 2.0f);
     public static final BlockSoundEvent SWITCHLINK_LINK_SOURCE_FAILED    = SWITCHLINK_CANNOT_LINK_THAT;
-    public static final BlockSoundEvent SWITCHLINK_LINK_PEAL_USE_SUCCESS = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMAN_AMBIENT, 0.1f, 4f);
-    public static final BlockSoundEvent SWITCHLINK_LINK_PEAL_USE_FAILED  = new ModResources.BlockSoundEvent(SoundEvents.ENTITY_ENDERMAN_HURT, 0.1f, 2.0f);
+    public static final BlockSoundEvent SWITCHLINK_LINK_PEAL_USE_SUCCESS = new ModResources.BlockSoundEvent(SoundEvents.ENDERMAN_AMBIENT, 0.1f, 4f);
+    public static final BlockSoundEvent SWITCHLINK_LINK_PEAL_USE_FAILED  = new ModResources.BlockSoundEvent(SoundEvents.ENDERMAN_HURT, 0.1f, 2.0f);
   }
 }

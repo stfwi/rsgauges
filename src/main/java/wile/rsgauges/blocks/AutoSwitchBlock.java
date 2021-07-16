@@ -10,6 +10,7 @@
 package wile.rsgauges.blocks;
 
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntityType;
@@ -26,10 +27,10 @@ import java.util.Random;
 
 public abstract class AutoSwitchBlock extends SwitchBlock
 {
-  public AutoSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public AutoSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public AutoSwitchBlock(long config, Block.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public AutoSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
   { this(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -51,14 +52,14 @@ public abstract class AutoSwitchBlock extends SwitchBlock
     if((state == null) || (!(state.getBlock() instanceof AutoSwitchBlock))) return SwitchLink.RequestResult.REJECTED;
     AutoSwitchTileEntity te = getTe(link.world, link.target_position);
     if((te==null) || (!te.verifySwitchLinkTarget(link))) return SwitchLink.RequestResult.REJECTED;
-    te.updateSwitchState(state, this, !state.get(POWERED), 0);
+    te.updateSwitchState(state, this, !state.getValue(POWERED), 0);
     return SwitchLink.RequestResult.OK;
   }
 
   @Override
   public AutoSwitchTileEntity getTe(IWorldReader world, BlockPos pos)
   {
-    TileEntity te = world.getTileEntity(pos);
+    TileEntity te = world.getBlockEntity(pos);
     if((!(te instanceof AutoSwitchTileEntity))) return null;
     return (AutoSwitchTileEntity)te;
   }
@@ -82,31 +83,31 @@ public abstract class AutoSwitchBlock extends SwitchBlock
     {
       if(active) {
         on_timer_reset(hold_time);
-        if(!state.get(POWERED)) {
+        if(!state.getValue(POWERED)) {
           if(this instanceof IntervalTimerSwitchTileEntity) ((IntervalTimerSwitchTileEntity)this).restart();
-          world.setBlockState(pos, (state.with(POWERED, true)), 2|8|16);
-          block.power_on_sound.play(world, pos);
-          world.notifyNeighborsOfStateChange(pos, block);
-          BlockPos np = pos.offset(state.get(FACING).getOpposite());
-          Block nb = world.getBlockState(np).getBlock();
-          world.notifyNeighborsOfStateChange(np, nb);
+          level.setBlock(worldPosition, (state.setValue(POWERED, true)), 2|8|16);
+          block.power_on_sound.play(level, worldPosition);
+          level.updateNeighborsAt(worldPosition, block);
+          BlockPos np = worldPosition.relative(state.getValue(FACING).getOpposite());
+          Block nb = level.getBlockState(np).getBlock();
+          level.updateNeighborsAt(np, nb);
           if(link_update && ((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0)) {
             if(!activateSwitchLinks(on_power(), 15, true)) {
-              ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+              ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(level, worldPosition);
             }
           }
         }
-      } else if(state.get(POWERED)) {
+      } else if(state.getValue(POWERED)) {
         if((hold_time<=0) || (on_time_remaining() <= 0)) {
-          world.setBlockState(pos, state.with(POWERED, false), 2|8|16);
-          block.power_off_sound.play(world, pos);
-          world.notifyNeighborsOfStateChange(pos, block);
-          BlockPos np = pos.offset(state.get(FACING).getOpposite());
-          Block nb = world.getBlockState(np).getBlock();
-          world.notifyNeighborsOfStateChange(np, nb);
+          level.setBlock(worldPosition, state.setValue(POWERED, false), 2|8|16);
+          block.power_off_sound.play(level, worldPosition);
+          level.updateNeighborsAt(worldPosition, block);
+          BlockPos np = worldPosition.relative(state.getValue(FACING).getOpposite());
+          Block nb = level.getBlockState(np).getBlock();
+          level.updateNeighborsAt(np, nb);
           if(link_update && ((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0)) {
             if(!activateSwitchLinks(0, 0, true)) {
-              ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
+              ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(level, worldPosition);
             }
           }
         }
