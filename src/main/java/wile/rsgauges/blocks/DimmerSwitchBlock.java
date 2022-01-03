@@ -63,12 +63,12 @@ public class DimmerSwitchBlock extends SwitchBlock
     if(te==null) return InteractionResult.FAIL;
     te.click_config(null, false);
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit);
-    boolean was_powered = te.on_power()!=0;
+    boolean was_powered = te.setpower()!=0;
     if(ck.touch_configured) {
       int p = (int)ck.y;
-      if(p != te.on_power()) {
-        te.on_power(p);
-        p = te.on_power();
+      if(p != te.setpower()) {
+        te.setpower(p);
+        p = te.setpower();
         Overlay.show(player,
           Auxiliaries.localizable("switchconfig.dimmerswitch.output_power", ChatFormatting.RED, new Object[]{p})
         );

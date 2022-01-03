@@ -194,7 +194,7 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
 
     @Override
     public int power(BlockState state, boolean strong)
-    { return (nooutput() || (!state.getValue(POWERED)) || ((strong && weak())) ? (0) : on_power()); }
+    { return (nooutput() || (!state.getValue(POWERED)) || ((strong && weak())) ? (0) : setpower()); }
 
     @Override
     public void tick()
@@ -224,11 +224,11 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
         }
       }
       if(p != p_) {
-        on_power((inverted() ? (15-p_) : (p_)));
+        setpower((inverted() ? (15-p_) : (p_)));
         BlockState state = getLevel().getBlockState(getBlockPos());
         if((state==null) || (!(state.getBlock() instanceof AutoSwitchBlock)) || (!state.getValue(POWERED))) {
           update_timer_ = 200 + ((int)(Math.random() * 10));
-          on_power(inverted() ? (15) : (0));
+          setpower(inverted() ? (15) : (0));
         }
         level.updateNeighborsAt(worldPosition, state.getBlock());
         level.updateNeighborsAt(worldPosition.relative(state.getValue(FACING).getOpposite()), state.getBlock());

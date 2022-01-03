@@ -68,8 +68,8 @@ public class LinkSenderSwitchBlock extends SwitchBlock
       }
     }
     if(((config & SWITCH_CONFIG_INVERTABLE)!=0) && (te.inverted())) power = 15-power; // inverted==redstone input state inverted
-    if(te.on_power() == power) return; // power state not changed
-    te.on_power(power);
+    if(te.setpower() == power) return; // power state not changed
+    te.setpower(power);
     final boolean powered = (power > 0);
     final boolean was_powered = state.getValue(POWERED);
     if(powered != was_powered) {

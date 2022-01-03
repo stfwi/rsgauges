@@ -66,7 +66,7 @@ public class SwitchBlock extends RsDirectedBlock implements EntityBlock, SwitchL
 {
   // -- Entity stored changable state data.
   public static final long SWITCH_DATA_POWERED_POWER_MASK       = 0x000000000000000fl;
-  public static final long SWITCH_DATA_UNPOWERED_POWER_MASK     = 0x00000000000000f0l;
+  public static final long SWITCH_DATA_RESERVED_MASK            = 0x00000000000000f0l;
   public static final long SWITCH_DATA_INVERTED                 = 0x0000000000000100l;
   public static final long SWITCH_DATA_WEAK                     = 0x0000000000000200l;
   public static final long SWITCH_DATA_NOOUTPUT                 = 0x0000000000000400l;
@@ -487,11 +487,11 @@ public class SwitchBlock extends RsDirectedBlock implements EntityBlock, SwitchL
     if(((config & (SWITCH_CONFIG_LINK_SOURCE_SUPPORT))!=0) && ((config & (SWITCH_CONFIG_BISTABLE|SWITCH_CONFIG_PULSE|SWITCH_CONFIG_SENSOR_BLOCKDETECT))!=0)) {
       final boolean powered = state.getValue(POWERED);
       if(!was_powered) {
-        if(!te.activateSwitchLinks(powered?te.on_power():0, powered?15:0, was_powered!=powered)) {
+        if(!te.activateSwitchLinks(powered?te.setpower():0, powered?15:0, was_powered!=powered)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       } else if((config & SWITCH_CONFIG_PULSE) == 0) {
-        if(!te.activateSwitchLinks(powered?te.on_power():0, powered?15:0, was_powered!=powered)) {
+        if(!te.activateSwitchLinks(powered?te.setpower():0, powered?15:0, was_powered!=powered)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       }
@@ -642,11 +642,8 @@ public class SwitchBlock extends RsDirectedBlock implements EntityBlock, SwitchL
     public void configured_on_time(int t)
     { svd_ = (svd_ & (~SWITCH_DATA_SVD_ACTIVE_TIME_MASK)) | ((t & SWITCH_DATA_SVD_ACTIVE_TIME_MASK) << 0); }
 
-    public int on_power()
+    public int setpower()
     { return ((scd_ & ((int)SWITCH_DATA_POWERED_POWER_MASK)) >> 0); }
-
-    public int off_power()
-    { return ((scd_ & ((int)SWITCH_DATA_UNPOWERED_POWER_MASK)) >> 8); }
 
     public boolean inverted()
     { return ((scd_ & ((int)SWITCH_DATA_INVERTED)) != 0); }
@@ -660,11 +657,8 @@ public class SwitchBlock extends RsDirectedBlock implements EntityBlock, SwitchL
     public long enabled_sides()
     { return (scd_ & (SWITCH_DATA_SIDE_ENABLED_MASK)); }
 
-    public void on_power(int p)
+    public void setpower(int p)
     { scd_ = (scd_ & ~((int)SWITCH_DATA_POWERED_POWER_MASK)) | (int)(((p<0)?0:(Math.min(p, 15)) & ((int)SWITCH_DATA_POWERED_POWER_MASK))<<0); }
-
-    public void off_power(int p)
-    { scd_ = (scd_ & ~((int)SWITCH_DATA_UNPOWERED_POWER_MASK)) | ((int)(((p<0)?0:(Math.min(p, 15)) & 0x000f)<<8) & ((int)SWITCH_DATA_UNPOWERED_POWER_MASK)); }
 
     public void inverted(boolean val)
     { if(val) scd_ |= ((int)SWITCH_DATA_INVERTED); else scd_ &= ~((int)SWITCH_DATA_INVERTED); }
@@ -698,7 +692,7 @@ public class SwitchBlock extends RsDirectedBlock implements EntityBlock, SwitchL
      * Returns the current power depending on the block settings.
      */
     public int power(BlockState state, boolean strong)
-    { return nooutput() ? (0) : ((strong && weak()) ? (0) : ( (inverted() == state.getValue(POWERED)) ? off_power() : on_power() )); }
+    { return nooutput() ? (0) : ((strong && weak()) ? (0) : ( (inverted() == state.getValue(POWERED)) ? 0 : setpower() )); }
 
     /**
      * Schedules the off_timer_ value ahead.
@@ -862,11 +856,11 @@ public class SwitchBlock extends RsDirectedBlock implements EntityBlock, SwitchL
       separator.withStyle(ChatFormatting.GRAY);
       TranslatableComponent status = Auxiliaries.localizable("switchconfig.options", ChatFormatting.RESET);
       boolean statusset = false;
-      if((on_power() < 15) || (off_power()>0)) {
+      if(setpower() < 15) {
         if((block == null) || ((block.config & (SWITCH_CONFIG_AUTOMATIC|SWITCH_CONFIG_LINK_SENDER))==0)) {
           // power only for non-auto-switches
           statusset = true;
-          status.append(Auxiliaries.localizable("switchconfig.options.output_power", ChatFormatting.RED, new Object[]{on_power()}));
+          status.append(Auxiliaries.localizable("switchconfig.options.output_power", ChatFormatting.RED, new Object[]{setpower()}));
         }
       }
       if(nooutput()) {
@@ -929,7 +923,7 @@ public class SwitchBlock extends RsDirectedBlock implements EntityBlock, SwitchL
       }
       links_.add(link);
       final boolean powered = state.getValue(POWERED);
-      link.initializeTarget(getLevel(), getBlockPos(), powered?on_power():0, powered?15:0);
+      link.initializeTarget(getLevel(), getBlockPos(), powered? setpower():0, powered?15:0);
       setChanged();
       return SwitchLinkAssignmentResult.OK;
     }

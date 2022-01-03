@@ -86,11 +86,11 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
             break;
           }
           case 4 -> {
-            on_power(on_power() + direction);
+            setpower(setpower() + direction);
             break;
           }
         }
-        if(on_power() < 1) on_power(1);
+        if(setpower() < 1) setpower(1);
         setChanged();
       }
       {
@@ -98,13 +98,13 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
         ArrayList<Object> tr = new ArrayList<>();
         tr.add(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_on", ChatFormatting.BLUE, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
         tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_off", ChatFormatting.YELLOW, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", ChatFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", ChatFormatting.RED, new Object[]{setpower()})));
         if(debounce()>0) {
           tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.random", ChatFormatting.DARK_GREEN, new Object[]{debounce()}) ));
         } else {
           tr.add(new TextComponent(""));
         }
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", ChatFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", ChatFormatting.RED, new Object[]{setpower()})));
         Overlay.show(player, Auxiliaries.localizable("switchconfig.daytimerclock", ChatFormatting.RESET, tr.toArray()));
       }
       return true;

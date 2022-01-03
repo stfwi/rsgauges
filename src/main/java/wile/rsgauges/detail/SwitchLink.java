@@ -195,29 +195,29 @@ public class SwitchLink
     boolean analog = target.switchLinkHasAnalogSupport(world, target_position);
     switch (mode()) {
       case AS_STATE -> {
-        if (analog) {
-          if (target_power == analog_power) return RequestResult.NOT_MATCHED;
+        if(analog) {
+          if(target_power == analog_power) return RequestResult.NOT_MATCHED;
         } else {
-          if ((!state_changed) || ((target_power == 0) == (digital_power == 0))) return RequestResult.NOT_MATCHED;
+          if((!state_changed) || ((target_power == 0) == (digital_power == 0))) return RequestResult.NOT_MATCHED;
         }
       }
       case INV_STATE -> {
-        if (analog) {
+        if(analog) {
           analog_power = 15 - analog_power;
           this.source_analog_power = analog_power;
-          if (target_power == digital_power) return RequestResult.NOT_MATCHED;
+          if(target_power == analog_power) return RequestResult.NOT_MATCHED;
         } else {
-          if ((!state_changed) || ((target_power == 0) != (digital_power == 0))) return RequestResult.NOT_MATCHED;
+          if((!state_changed) || ((target_power == 0) != (digital_power == 0))) return RequestResult.NOT_MATCHED;
         }
       }
       case ACTIVATE -> {
-        if ((!state_changed) || (digital_power == 0)) return RequestResult.NOT_MATCHED;
+        if((!state_changed) || (digital_power == 0)) return RequestResult.NOT_MATCHED;
       }
       case DEACTIVATE -> {
-        if ((!state_changed) || (digital_power != 0)) return RequestResult.NOT_MATCHED;
+        if((!state_changed) || (digital_power != 0)) return RequestResult.NOT_MATCHED;
       }
       case TOGGLE -> {
-        if (!state_changed) return RequestResult.NOT_MATCHED;
+        if(!state_changed) return RequestResult.NOT_MATCHED;
       }
     }
     return target.switchLinkTrigger(this);

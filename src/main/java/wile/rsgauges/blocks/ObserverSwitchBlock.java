@@ -175,7 +175,7 @@ public class ObserverSwitchBlock extends SwitchBlock
             break;
           }
           case 4 -> {
-            on_power(on_power() + direction);
+            setpower(setpower() + direction);
             break;
           }
           case 5 -> {
@@ -184,7 +184,7 @@ public class ObserverSwitchBlock extends SwitchBlock
           }
         }
         if(threshold() < 1) threshold(1);
-        if(on_power() < 1) on_power(1);
+        if(setpower() < 1) setpower(1);
         update_timer_ = 0;
         setChanged();
       }
@@ -198,7 +198,7 @@ public class ObserverSwitchBlock extends SwitchBlock
         } else {
           tr.add(new TextComponent(""));
         }
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.output_power", ChatFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.output_power", ChatFormatting.RED, new Object[]{setpower()})));
         tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.filter",
           ChatFormatting.DARK_GREEN,
           new Object[]{new TranslatableComponent("rsgauges.switchconfig.blocksensor.filter."+filter_name())})

@@ -132,12 +132,12 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
               break;
             }
             case 4 -> {
-              on_power(on_power() + direction);
+              setpower(setpower() + direction);
               break;
             }
           }
           if(threshold0_on() < 1) threshold0_on(1);
-          if(on_power() < 1) on_power(1);
+          if(setpower() < 1) setpower(1);
           setChanged();
         }
         {
@@ -146,7 +146,7 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
           TextComponent separator = (new TextComponent(" | ")); separator.withStyle(ChatFormatting.GRAY);
           tr.add(Auxiliaries.localizable("switchconfig.lightsensor.threshold_on", ChatFormatting.BLUE, new Object[]{(int)threshold0_on(), trunit}));
           tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.threshold_off", ChatFormatting.YELLOW, new Object[]{(int)threshold0_off(), trunit})));
-          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.output_power", ChatFormatting.RED, new Object[]{on_power()})));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.output_power", ChatFormatting.RED, new Object[]{setpower()})));
           if(debounce()>0) {
             tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", ChatFormatting.DARK_GREEN, new Object[]{debounce()})));
           } else {
@@ -158,17 +158,17 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
         if(!show_only) {
           switch (field) {
             case 4 -> {
-              on_power(on_power() + direction);
+              setpower(setpower() + direction);
               break;
             }
           }
-          if(on_power() < 1) on_power(1);
+          if(setpower() < 1) setpower(1);
           setChanged();
         }
         if((block.config & SWITCH_CONFIG_SENSOR_RAIN)!=0) {
-          Overlay.show(player, Auxiliaries.localizable("switchconfig.rainsensor.output_power", ChatFormatting.RED, new Object[]{on_power()}));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.rainsensor.output_power", ChatFormatting.RED, new Object[]{setpower()}));
         } else {
-          Overlay.show(player, Auxiliaries.localizable("switchconfig.thundersensor.output_power", ChatFormatting.RED, new Object[]{on_power()}));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.thundersensor.output_power", ChatFormatting.RED, new Object[]{setpower()}));
         }
       }
       return true;

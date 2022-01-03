@@ -93,7 +93,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
           Block nb = level.getBlockState(np).getBlock();
           level.updateNeighborsAt(np, nb);
           if(link_update && ((block.config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0)) {
-            if(!activateSwitchLinks(on_power(), 15, true)) {
+            if(!activateSwitchLinks(setpower(), 15, true)) {
               ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(level, worldPosition);
             }
           }
