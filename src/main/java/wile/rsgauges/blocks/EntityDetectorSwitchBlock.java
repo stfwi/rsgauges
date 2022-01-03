@@ -8,31 +8,34 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.entity.item.HangingEntity;
-import net.minecraft.util.text.*;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.tileentity.TileEntity;
-import wile.rsgauges.ModContent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import wile.rsgauges.ModConfig;
+import wile.rsgauges.ModContent;
+import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.libmc.detail.Overlay;
-import wile.rsgauges.detail.ModResources;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -40,10 +43,10 @@ import java.util.List;
 
 public class EntityDetectorSwitchBlock extends AutoSwitchBlock
 {
-  public EntityDetectorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public EntityDetectorSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public EntityDetectorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public EntityDetectorSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -51,8 +54,9 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world)
-  { return new DetectorSwitchTileEntity(ModContent.TET_DETECTOR_SWITCH); }
+  @Nullable
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+  { return new DetectorSwitchTileEntity(pos, state); }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Tile entity
@@ -61,23 +65,23 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
   /**
    * Tile entity for entity detection based auto switches
    */
-  public static class DetectorSwitchTileEntity extends AutoSwitchTileEntity implements ITickableTileEntity
+  public static class DetectorSwitchTileEntity extends AutoSwitchTileEntity
   {
-    public static final Class<?> filter_classes[] = { LivingEntity.class, PlayerEntity.class, MonsterEntity.class, AnimalEntity.class, VillagerEntity.class, ItemEntity.class, Entity.class };
+    public static final Class<?> filter_classes[] = { LivingEntity.class, Player.class, Monster.class, Animal.class, Villager.class, ItemEntity.class, Entity.class };
     public static final String filter_class_names[] = { "creatures", "players", "mobs", "animals", "villagers", "objects", "everything" };
     private static final int max_sensor_range_ = 16;
     private int sensor_entity_count_threshold_ = 1;
     private int sensor_range_ = 5;
     private int filter_ = 0;
-    private AxisAlignedBB area_ = null;
+    private AABB area_ = null;
     private int update_interval_ = 8;
     private int update_timer_ = 0;
 
-    public DetectorSwitchTileEntity(TileEntityType<?> te_type)
-    { super(te_type); }
+    public DetectorSwitchTileEntity(BlockEntityType<?> te_type, BlockPos pos, BlockState state)
+    { super(te_type, pos, state); }
 
-    public DetectorSwitchTileEntity()
-    { super(ModContent.TET_DETECTOR_SWITCH); }
+    public DetectorSwitchTileEntity(BlockPos pos, BlockState state)
+    { super(ModContent.TET_DETECTOR_SWITCH, pos, state); }
 
     public int filter()
     { return filter_; }
@@ -101,7 +105,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
     { return sensor_range_; }
 
     @Override
-    public void write(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundTag nbt, boolean updatePacket)
     {
       super.write(nbt, updatePacket);
       nbt.putInt("range", sensor_range_);
@@ -110,7 +114,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
     }
 
     @Override
-    public void read(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundTag nbt, boolean updatePacket)
     {
       super.read(nbt, updatePacket);
       sensor_range(nbt.getInt("range"));
@@ -119,11 +123,11 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
     }
 
     @Override
-    public void reset(@Nullable IWorldReader world)
+    public void reset(@Nullable LevelReader world)
     { super.reset(world); update_timer_=0; area_=null; sensor_range_=5; filter_=0; }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
+    public boolean activation_config(BlockState state, @Nullable Player player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final int direction = (y >= 12) ? (1) : ((y <= 5) ? (-1) : (0));
@@ -134,23 +138,23 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
           )));
       if((direction==0) || (field==0)) return false;
       if(!show_only) {
-        switch(field) {
-          case 1: {
-            sensor_range(sensor_range()+direction);
+        switch (field) {
+          case 1 -> {
+            sensor_range(sensor_range() + direction);
             area_ = null;
             break;
           }
-          case 2: {
+          case 2 -> {
             sensor_entity_threshold(sensor_entity_threshold() + direction);
             break;
           }
-          case 3: {
+          case 3 -> {
             filter(filter() + direction);
             break;
           }
-          case 4: {
+          case 4 -> {
             on_power(on_power() + direction);
-            if(on_power() < 1) on_power(1);
+            if (on_power() < 1) on_power(1);
             break;
           }
         }
@@ -158,14 +162,14 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
       }
       {
         Overlay.show(player,
-          (new StringTextComponent(""))
-            .append(Auxiliaries.localizable("switchconfig.detector.sensor_range", TextFormatting.BLUE, new Object[]{sensor_range()}))
+          (new TextComponent(""))
+            .append(Auxiliaries.localizable("switchconfig.detector.sensor_range", ChatFormatting.BLUE, new Object[]{sensor_range()}))
             .append(" | ")
-            .append(Auxiliaries.localizable("switchconfig.detector.entity_threshold", TextFormatting.YELLOW, new Object[]{sensor_entity_threshold()}))
+            .append(Auxiliaries.localizable("switchconfig.detector.entity_threshold", ChatFormatting.YELLOW, new Object[]{sensor_entity_threshold()}))
             .append(" | ")
-            .append(Auxiliaries.localizable("switchconfig.detector.entity_filter", TextFormatting.DARK_GREEN, new Object[]{new TranslationTextComponent("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}))
+            .append(Auxiliaries.localizable("switchconfig.detector.entity_filter", ChatFormatting.DARK_GREEN, new Object[]{new TranslatableComponent("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}))
             .append(" | ")
-            .append(Auxiliaries.localizable("switchconfig.detector.output_power", TextFormatting.RED, new Object[]{on_power()}))
+            .append(Auxiliaries.localizable("switchconfig.detector.output_power", ChatFormatting.RED, new Object[]{on_power()}))
         );
       }
       return true;
@@ -189,17 +193,17 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
       }
       if(area_ == null) {
         int size = sensor_range();
-        AxisAlignedBB range_bb;
+        AABB range_bb;
         if((block.config & SWITCH_CONFIG_SENSOR_VOLUME) != 0) {
-          range_bb = new AxisAlignedBB(0,-2,-size, size,2,size);
+          range_bb = new AABB(0,-2,-size, size,2,size);
         } else if((block.config & SWITCH_CONFIG_SENSOR_LINEAR) != 0) {
-          range_bb = new AxisAlignedBB(-0.5,-0.5,-0.5, size,0.5,0.5);
+          range_bb = new AABB(-0.5,-0.5,-0.5, size,0.5,0.5);
         } else {
-          range_bb = new AxisAlignedBB(0,0,0, 1,0,0);
+          range_bb = new AABB(0,0,0, 1,0,0);
         }
         Direction facing = state.getValue(FACING);
-        AxisAlignedBB bb = Auxiliaries.transform_forward(range_bb, facing).move(getBlockPos()).expandTowards(1,1,1);
-        area_ = new AxisAlignedBB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
+        AABB bb = Auxiliaries.transform_forward(range_bb, facing).move(getBlockPos()).expandTowards(1,1,1);
+        area_ = new AABB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
       }
       // measurement
       boolean active = false;
@@ -207,32 +211,32 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
       List<Entity> hits = level.getEntitiesOfClass((Class<Entity>)filter_class(), area_);
       if(hits.size() >= sensor_entity_count_threshold_) {
         int num_seen = 0;
-        final Vector3d switch_position = new Vector3d((double)getBlockPos().getX()+.5, (double)getBlockPos().getY()+.5, (double)getBlockPos().getZ()+.5);
+        final Vec3 switch_position = new Vec3((double)getBlockPos().getX()+.5, (double)getBlockPos().getY()+.5, (double)getBlockPos().getZ()+.5);
         for(Entity e:hits) {
           if(e instanceof HangingEntity) continue;
           if(
             (
               level.clip(
-                new RayTraceContext(
-                  new Vector3d(e.blockPosition().getX()-0.2, e.blockPosition().getY()+e.getEyeHeight(), e.blockPosition().getZ()-0.2),
+                new ClipContext(
+                  new Vec3(e.blockPosition().getX()-0.2, e.blockPosition().getY()+e.getEyeHeight(), e.blockPosition().getZ()-0.2),
                   switch_position,
-                  RayTraceContext.BlockMode.OUTLINE,
-                  RayTraceContext.FluidMode.NONE,
+                  ClipContext.Block.OUTLINE,
+                  ClipContext.Fluid.NONE,
                   e
                 )
-              ).getType() != RayTraceResult.Type.BLOCK
+              ).getType() != HitResult.Type.BLOCK
             )
             ||
             (
               level.clip(
-                new RayTraceContext(
-                  new Vector3d(e.blockPosition().getX()+0.2, e.blockPosition().getY()+e.getEyeHeight(), e.blockPosition().getZ()+0.2),
+                new ClipContext(
+                  new Vec3(e.blockPosition().getX()+0.2, e.blockPosition().getY()+e.getEyeHeight(), e.blockPosition().getZ()+0.2),
                   switch_position,
-                  RayTraceContext.BlockMode.OUTLINE,
-                  RayTraceContext.FluidMode.NONE,
+                  ClipContext.Block.OUTLINE,
+                  ClipContext.Fluid.NONE,
                   e
                 )
-              ).getType() != RayTraceResult.Type.BLOCK
+              ).getType() != HitResult.Type.BLOCK
             )
           ) {
             if(++num_seen >= sensor_entity_count_threshold_) {

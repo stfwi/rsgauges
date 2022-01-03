@@ -8,20 +8,19 @@
  */
 package wile.rsgauges;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -48,11 +47,9 @@ public class ModRsGauges
     Auxiliaries.init(MODID, LOGGER, ModConfig::getServerConfig);
     Auxiliaries.logGitVersion(MODNAME);
     OptionalRecipeCondition.init(MODID, LOGGER);
+    ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_CONFIG_SPEC);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeEvents::onSetup);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeEvents::onClientSetup);
-    FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeEvents::onConfigLoad);
-    FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeEvents::onConfigReload);
-    ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_CONFIG_SPEC);
     MinecraftForge.EVENT_BUS.register(this);
     PlayerBlockInteraction.init(MODID, LOGGER);
   }
@@ -77,16 +74,8 @@ public class ModRsGauges
     { ModContent.registerItems(event); ModContent.registerBlockItems(event); }
 
     @SubscribeEvent
-    public static final void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> event)
+    public static final void onTileEntityRegistry(final RegistryEvent.Register<BlockEntityType<?>> event)
     { ModContent.registerTileEntities(event); }
-
-    //@SubscribeEvent
-    public static final void onRegisterEntityTypes(final RegistryEvent.Register<EntityType<?>> event)
-    {}
-
-    //@SubscribeEvent
-    public static final void onRegisterContainerTypes(final RegistryEvent.Register<ContainerType<?>> event)
-    {}
 
     @SubscribeEvent
     public static final void onRegisterSounds(final RegistryEvent.Register<SoundEvent> event)
@@ -107,22 +96,18 @@ public class ModRsGauges
       ModContent.processContentClientSide(event);
     }
 
-    public static void onConfigLoad(net.minecraftforge.fml.config.ModConfig.Loading configEvent)
-    {
-      try {
-        ModConfig.apply();
-      } catch(Throwable e) {
-        logger().error("Failed to load changed config: " + e.getMessage());
-      }
-    }
+    @SubscribeEvent
+    public static void onConfigLoad(final ModConfigEvent.Loading event)
+    { ModConfig.apply(); }
 
-    public static void onConfigReload(net.minecraftforge.fml.config.ModConfig.Reloading configEvent)
+    @SubscribeEvent
+    public static void onConfigReload(final ModConfigEvent.Reloading event)
     {
       try {
-        logger().info("Config file changed {}", configEvent.getConfig().getFileName());
+        Auxiliaries.logger().info("Config file changed {}", event.getConfig().getFileName());
         ModConfig.apply();
       } catch(Throwable e) {
-        logger().error("Failed to load changed config: " + e.getMessage());
+        Auxiliaries.logger().error("Failed to load changed config: " + e.getMessage());
       }
     }
 
@@ -132,7 +117,7 @@ public class ModRsGauges
   // Item group / creative tab
   // -------------------------------------------------------------------------------------------------------------------
 
-  public static final ItemGroup ITEMGROUP = (new ItemGroup("tab" + MODID) {
+  public static final CreativeModeTab ITEMGROUP = (new CreativeModeTab("tab" + MODID) {
     @OnlyIn(Dist.CLIENT)
     public ItemStack makeIcon()
     { return new ItemStack(ModContent.INDUSTRIAL_SMALL_LEVER); }

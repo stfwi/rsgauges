@@ -9,24 +9,20 @@
 package wile.rsgauges.libmc.detail;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.DistExecutor;
-
 import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class SidedProxy
 {
-  public static boolean isClientSide()
-  { return proxy.mc() != null; }
-
   @Nullable
-  public static PlayerEntity getPlayerClientSide()
+  public static Player getPlayerClientSide()
   { return proxy.getPlayerClientSide(); }
 
   @Nullable
-  public static World getWorldClientSide()
+  public static Level getWorldClientSide()
   { return proxy.getWorldClientSide(); }
 
   @Nullable
@@ -47,8 +43,8 @@ public class SidedProxy
 
   private interface ISidedProxy
   {
-    default @Nullable PlayerEntity getPlayerClientSide() { return null; }
-    default @Nullable World getWorldClientSide() { return null; }
+    default @Nullable Player getPlayerClientSide() { return null; }
+    default @Nullable Level getWorldClientSide() { return null; }
     default @Nullable Minecraft mc() { return null; }
     default Optional<Boolean> isCtrlDown() { return Optional.empty(); }
     default Optional<Boolean> isShiftDown() { return Optional.empty(); }
@@ -56,8 +52,8 @@ public class SidedProxy
 
   private static final class ClientProxy implements ISidedProxy
   {
-    public @Nullable PlayerEntity getPlayerClientSide() { return Minecraft.getInstance().player; }
-    public @Nullable World getWorldClientSide() { return Minecraft.getInstance().level; }
+    public @Nullable Player getPlayerClientSide() { return Minecraft.getInstance().player; }
+    public @Nullable Level getWorldClientSide() { return Minecraft.getInstance().level; }
     public @Nullable Minecraft mc() { return Minecraft.getInstance(); }
     public Optional<Boolean> isCtrlDown() { return Optional.of(Auxiliaries.isCtrlDown()); }
     public Optional<Boolean> isShiftDown() { return Optional.of(Auxiliaries.isShiftDown()); }

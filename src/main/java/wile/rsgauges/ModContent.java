@@ -12,21 +12,25 @@
  */
 package wile.rsgauges;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.BlockItem;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraft.util.SoundEvents;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.libmc.detail.Auxiliaries.IExperimentalFeature;
 import wile.rsgauges.detail.ModResources;
@@ -39,106 +43,131 @@ import javax.annotation.Nonnull;
 
 public class ModContent
 {
+  private static final String MODID = ModRsGauges.MODID;
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Registry auxiliary functions.
+  //--------------------------------------------------------------------------------------------------------------------
+
+  private static class ModRegistry
+  {
+    private static Block[] blocks_of_type(Class<? extends Block> clazz)
+    { return registeredBlocks.stream().filter(clazz::isInstance).toArray(Block[]::new); }
+
+    private static <T extends RsBlock.RsTileEntity> BlockEntityType<T> register(String name, BlockEntityType.BlockEntitySupplier<T> ctor, Block... blocks)
+    {
+      final BlockEntityType<T> tet =  BlockEntityType.Builder.of(ctor, blocks).build(null);
+      tet.setRegistryName(MODID, name);
+      return tet;
+    }
+
+    private static <T extends RsBlock.RsTileEntity> BlockEntityType<T> register(String name, BlockEntityType.BlockEntitySupplier<T> ctor, Class<? extends Block> clazz)
+    {
+      final BlockEntityType<T> tet =  BlockEntityType.Builder.of(ctor, blocks_of_type(clazz)).build(null);
+      tet.setRegistryName(MODID, name);
+      return tet;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<?> builder)
+    {
+      final EntityType<T> et = (EntityType<T>)builder.build(new ResourceLocation(MODID, name).toString());
+      et.setRegistryName(MODID, name);
+      return et;
+    }
+  }
+
   // -----------------------------------------------------------------------------------------------------------------
   // -- Internal constants, default block properties
   // -----------------------------------------------------------------------------------------------------------------
 
-  private static final String MODID = ModRsGauges.MODID;
-
-  private static final AbstractBlock.Properties gauge_metallic_block_properties()
+  private static final BlockBehaviour.Properties gauge_metallic_block_properties()
   {
-    return AbstractBlock.Properties.of(Material.METAL, MaterialColor.METAL)
-                .strength(0.5f, 15f)
-                .sound(SoundType.METAL)
-                .harvestLevel(0)
-                .noCollission()
-                .isValidSpawn((s,w,p,e)->false);
+    return BlockBehaviour.Properties.of(Material.METAL, MaterialColor.METAL)
+      .strength(0.5f, 15f)
+      .sound(SoundType.METAL)
+      .noCollission()
+      .isValidSpawn((s,w,p,e)->false);
   }
 
-  private static final AbstractBlock.Properties gauge_glass_block_properties() {
-    return (AbstractBlock.Properties
+  private static final BlockBehaviour.Properties gauge_glass_block_properties() {
+    return (BlockBehaviour.Properties
       .of(Material.METAL, MaterialColor.METAL)
       .strength(0.5f, 15f)
       .sound(SoundType.METAL)
-      .harvestLevel(0)
       .noOcclusion()
       .isValidSpawn((s,w,p,e)->false)
     );
   }
 
-  private static final AbstractBlock.Properties indicator_metallic_block_properties()
+  private static final BlockBehaviour.Properties indicator_metallic_block_properties()
   {
-    return AbstractBlock.Properties
+    return BlockBehaviour.Properties
       .of(Material.METAL, MaterialColor.METAL)
       .strength(0.5f, 15f)
       .sound(SoundType.METAL)
-      .harvestLevel(0)
       .lightLevel((state)->3)
       .noOcclusion()
       .isValidSpawn((s,w,p,e)->false);
   }
 
-  private static final AbstractBlock.Properties indicator_glass_block_properties()
+  private static final BlockBehaviour.Properties indicator_glass_block_properties()
   {
-    return AbstractBlock.Properties
+    return BlockBehaviour.Properties
         .of(Material.METAL, MaterialColor.METAL)
         .strength(0.5f, 15f)
         .sound(SoundType.METAL)
-        .harvestLevel(0)
-        .lightLevel((state)->3)
+          .lightLevel((state)->3)
         .noOcclusion()
         .isValidSpawn((s,w,p,e)->false);
   }
 
-  private static final AbstractBlock.Properties alarm_lamp_block_properties()
+  private static final BlockBehaviour.Properties alarm_lamp_block_properties()
   {
-    return AbstractBlock.Properties
+    return BlockBehaviour.Properties
       .of(Material.METAL, MaterialColor.METAL)
       .strength(0.5f, 15f)
       .sound(SoundType.METAL)
-      .harvestLevel(0)
       .noOcclusion()
       .lightLevel((state)->state.getValue(IndicatorBlock.POWERED)?12:2)
       .isValidSpawn((s,w,p,e)->false);
   }
 
-  private static final AbstractBlock.Properties colored_sensitive_glass_block_properties()
+  private static final BlockBehaviour.Properties colored_sensitive_glass_block_properties()
   {
-    return (AbstractBlock.Properties
+    return (BlockBehaviour.Properties
       .of(Material.BUILDABLE_GLASS, MaterialColor.METAL)
       .strength(0.35f, 15f)
       .sound(SoundType.METAL)
-      .harvestLevel(0)
       .noOcclusion()
       .isValidSpawn((s,w,p,e)->false)
     );
   }
 
-  private static final AbstractBlock.Properties light_emitting_sensitive_glass_block_properties()
+  private static final BlockBehaviour.Properties light_emitting_sensitive_glass_block_properties()
   {
-    return AbstractBlock.Properties
+    return BlockBehaviour.Properties
       .of(Material.BUILDABLE_GLASS, MaterialColor.METAL)
       .strength(0.35f, 15f)
       .sound(SoundType.METAL)
-      .harvestLevel(0)
       .noOcclusion().emissiveRendering((s,w,p)->true)
       .lightLevel((state)->state.getValue(SensitiveGlassBlock.POWERED)?15:0)
       .isValidSpawn((s,w,p,e)->false);
   }
 
-  private static final AbstractBlock.Properties switch_metallic_block_properties()
+  private static final BlockBehaviour.Properties switch_metallic_block_properties()
   { return gauge_metallic_block_properties(); }
 
-  private static final AbstractBlock.Properties switch_glass_block_properties()
+  private static final BlockBehaviour.Properties switch_glass_block_properties()
   { return gauge_glass_block_properties(); }
 
-  private static final AbstractBlock.Properties switch_metallic_faint_light_block_properties()
+  private static final BlockBehaviour.Properties switch_metallic_faint_light_block_properties()
   {
-    return AbstractBlock.Properties
+    return BlockBehaviour.Properties
       .of(Material.METAL, MaterialColor.METAL)
       .strength(0.5f, 15f)
       .sound(SoundType.METAL)
-      .harvestLevel(0)
       .lightLevel((state)->5);
   }
 
@@ -1221,8 +1250,8 @@ public class ModContent
     SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
     SwitchBlock.SWITCH_CONFIG_TOUCH_CONFIGURABLE|
     SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
-    AbstractBlock.Properties.of(Material.WOOL, MaterialColor.METAL).strength(0.1f, 32000f).sound(SoundType.METAL),
-    new AxisAlignedBB(0,0,0,1,1,1), null,
+    BlockBehaviour.Properties.of(Material.WOOL, MaterialColor.METAL).strength(0.1f, 32000f).sound(SoundType.METAL),
+    new AABB(0,0,0,1,1,1), null,
     null, null
   )).setRegistryName(new ResourceLocation(MODID, "qube"));
 
@@ -1338,60 +1367,18 @@ public class ModContent
   // Tile entities bound exclusively to the blocks above
   //--------------------------------------------------------------------------------------------------------------------
 
-  private static Block[] blocks_of_type(Class<? extends Block> clazz)
-  { return registeredBlocks.stream().filter(clazz::isInstance).toArray(Block[]::new); }
+  public static final BlockEntityType<AbstractGaugeBlock.GaugeTileEntity> TET_GAUGE = ModRegistry.register("te_gauge", AbstractGaugeBlock.GaugeTileEntity::new, AbstractGaugeBlock.class);
+  public static final BlockEntityType<SwitchBlock.SwitchTileEntity> TET_SWITCH = ModRegistry.register("te_switch", SwitchBlock.SwitchTileEntity::new, SwitchBlock.class);
+  public static final BlockEntityType<ContactSwitchBlock.ContactSwitchTileEntity> TET_CONTACT_SWITCH = ModRegistry.register("te_contact_switch", ContactSwitchBlock.ContactSwitchTileEntity::new, ContactSwitchBlock.class);
+  public static final BlockEntityType<EntityDetectorSwitchBlock.DetectorSwitchTileEntity> TET_DETECTOR_SWITCH = ModRegistry.register("te_detector_switch", EntityDetectorSwitchBlock.DetectorSwitchTileEntity::new, EntityDetectorSwitchBlock.class);
+  public static final BlockEntityType<EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity> TET_ENVSENSOR_SWITCH = ModRegistry.register("te_envsensor_switch", EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity::new, EnvironmentalSensorSwitchBlock.class);
+  public static final BlockEntityType<DayTimerSwitchBlock.DayTimerSwitchTileEntity> TET_DAYTIMER_SWITCH = ModRegistry.register("te_daytimer_switch", DayTimerSwitchBlock.DayTimerSwitchTileEntity::new, DayTimerSwitchBlock.class);
+  public static final BlockEntityType<IntervalTimerSwitchBlock.IntervalTimerSwitchTileEntity> TET_TIMER_SWITCH = ModRegistry.register("te_intervaltimer_switch", IntervalTimerSwitchBlock.IntervalTimerSwitchTileEntity::new, IntervalTimerSwitchBlock.class);
+  public static final BlockEntityType<ComparatorSwitchBlock.ComparatorSwitchTileEntity> TET_COMPARATOR_SWITCH = ModRegistry.register("te_comparator_switch", ComparatorSwitchBlock.ComparatorSwitchTileEntity::new, ComparatorSwitchBlock.class);
+  public static final BlockEntityType<ObserverSwitchBlock.ObserverSwitchTileEntity> TET_OBSERVER_SWITCH = ModRegistry.register("te_observer_switch", ObserverSwitchBlock.ObserverSwitchTileEntity::new, ObserverSwitchBlock.class);
+  public static final BlockEntityType<DoorSensorSwitchBlock.DoorSensorSwitchTileEntity> TET_DOORSENSOR_SWITCH = ModRegistry.register("te_doorsensor_switch", DoorSensorSwitchBlock.DoorSensorSwitchTileEntity::new, DoorSensorSwitchBlock.class);
 
-  public static final TileEntityType<?> TET_GAUGE = TileEntityType.Builder
-    .of(AbstractGaugeBlock.GaugeTileEntity::new, blocks_of_type(AbstractGaugeBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_gauge");
-
-  public static final TileEntityType<?> TET_SWITCH = TileEntityType.Builder
-    .of(SwitchBlock.SwitchTileEntity::new, blocks_of_type(SwitchBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_switch");
-
-  public static final TileEntityType<?> TET_CONTACT_SWITCH = TileEntityType.Builder
-    .of(ContactSwitchBlock.ContactSwitchTileEntity::new, blocks_of_type(ContactSwitchBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_contact_switch");
-
-  public static final TileEntityType<?> TET_DETECTOR_SWITCH = TileEntityType.Builder
-    .of(EntityDetectorSwitchBlock.DetectorSwitchTileEntity::new, blocks_of_type(EntityDetectorSwitchBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_detector_switch");
-
-  public static final TileEntityType<?> TET_ENVSENSOR_SWITCH = TileEntityType.Builder
-    .of(EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity::new, blocks_of_type(EnvironmentalSensorSwitchBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_envsensor_switch");
-
-  public static final TileEntityType<?> TET_DAYTIMER_SWITCH = TileEntityType.Builder
-    .of(DayTimerSwitchBlock.DayTimerSwitchTileEntity::new, blocks_of_type(DayTimerSwitchBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_daytimer_switch");
-
-  public static final TileEntityType<?> TET_TIMER_SWITCH = TileEntityType.Builder
-    .of(IntervalTimerSwitchBlock.IntervalTimerSwitchTileEntity::new, blocks_of_type(IntervalTimerSwitchBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_timer_switch");
-
-  public static final TileEntityType<?> TET_COMPARATOR_SWITCH = TileEntityType.Builder
-    .of(ComparatorSwitchBlock.ComparatorSwitchTileEntity::new, blocks_of_type(ComparatorSwitchBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_comparator_switch");
-
-  public static final TileEntityType<?> TET_OBSERVER_SWITCH = TileEntityType.Builder
-    .of(ObserverSwitchBlock.ObserverSwitchTileEntity::new, blocks_of_type(ObserverSwitchBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_observer_switch");
-
-  public static final TileEntityType<?> TET_DOORSENSOR_SWITCH = TileEntityType.Builder
-    .of(DoorSensorSwitchBlock.DoorSensorSwitchTileEntity::new, blocks_of_type(DoorSensorSwitchBlock.class))
-    .build(null)
-    .setRegistryName(ModRsGauges.MODID, "te_doorsensor_switch");
-
-  private static final TileEntityType<?> tile_entity_types[] = {
+  private static final BlockEntityType<?> tile_entity_types[] = {
     TET_GAUGE,
     TET_SWITCH,
     TET_CONTACT_SWITCH,
@@ -1435,16 +1422,10 @@ public class ModContent
   { return (block==TESTING_QUBE) || (block instanceof IExperimentalFeature); }
 
   public static final void registerBlocks(final RegistryEvent.Register<Block> event)
-  {
-    for(Block e:registeredBlocks) event.getRegistry().register(e);
-    Auxiliaries.logInfo("Registered " + Integer.toString(registeredBlocks.size()) + " blocks.");
-  }
+  { for(Block e:registeredBlocks) event.getRegistry().register(e); }
 
   public static final void registerItems(final RegistryEvent.Register<Item> event)
-  {
-    for(Item e:registeredItems) event.getRegistry().register(e);
-    Auxiliaries.logInfo("Registered " + Integer.toString(registeredItems.size()) + " items.");
-  }
+  { for(Item e:registeredItems) event.getRegistry().register(e); }
 
   public static final void registerBlockItems(final RegistryEvent.Register<Item> event)
   {
@@ -1455,34 +1436,26 @@ public class ModContent
     }
   }
 
-  public static final void registerTileEntities(final RegistryEvent.Register<TileEntityType<?>> event)
-  {
-    for(final TileEntityType<?> e:tile_entity_types) event.getRegistry().register(e);
-    Auxiliaries.logInfo("Registered " + Integer.toString(tile_entity_types.length) + " tile entities.");
-  }
+  public static final void registerTileEntities(final RegistryEvent.Register<BlockEntityType<?>> event)
+  { for(final BlockEntityType<?> e:tile_entity_types) event.getRegistry().register(e); }
 
   public static final void processRegisteredContent()
   {}
 
-  public static final void processContentClientSide(final FMLClientSetupEvent event)
+  @OnlyIn(Dist.CLIENT)
+  public static void processContentClientSide(final FMLClientSetupEvent event)
   {
     // Block renderer selection
     for(Block block: getRegisteredBlocks()) {
       if(block instanceof RsBlock) {
         switch(((RsBlock)block).getRenderTypeHint()) {
-          case CUTOUT:
-            RenderTypeLookup.setRenderLayer(block, RenderType.cutout());
-            break;
-          case CUTOUT_MIPPED:
-            RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped());
-            break;
-          case TRANSLUCENT:
-            RenderTypeLookup.setRenderLayer(block, RenderType.translucent());
-            break;
-          case SOLID:
-            break;
+          case CUTOUT: ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout()); break;
+          case CUTOUT_MIPPED: ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()); break;
+          case TRANSLUCENT: ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent()); break;
+          case SOLID: break;
         }
       }
     }
   }
+
 }

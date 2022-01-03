@@ -8,16 +8,15 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.*;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.blocks.EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity;
 import wile.rsgauges.detail.ModResources;
@@ -30,10 +29,10 @@ import java.util.ArrayList;
 
 public class DayTimerSwitchBlock extends AutoSwitchBlock
 {
-  public DayTimerSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public DayTimerSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public DayTimerSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public DayTimerSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -41,23 +40,24 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world)
-  { return new DayTimerSwitchTileEntity(ModContent.TET_DAYTIMER_SWITCH); }
+  @Nullable
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+  { return new DayTimerSwitchTileEntity(pos, state); }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Tile entity
   // -------------------------------------------------------------------------------------------------------------------
 
-  public static class DayTimerSwitchTileEntity extends EnvironmentalSensorSwitchTileEntity implements ITickableTileEntity
+  public static class DayTimerSwitchTileEntity extends EnvironmentalSensorSwitchTileEntity
   {
-    public DayTimerSwitchTileEntity(TileEntityType<?> te_type)
-    { super(te_type); }
+    public DayTimerSwitchTileEntity(BlockEntityType<?> te_type, BlockPos pos, BlockState state)
+    { super(te_type, pos, state); }
 
-    public DayTimerSwitchTileEntity()
-    { super(ModContent.TET_DAYTIMER_SWITCH); }
+    public DayTimerSwitchTileEntity(BlockPos pos, BlockState state)
+    { super(ModContent.TET_DAYTIMER_SWITCH, pos, state); }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
+    public boolean activation_config(BlockState state, @Nullable Player player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final SwitchBlock block = (SwitchBlock)state.getBlock();
@@ -66,38 +66,46 @@ public class DayTimerSwitchBlock extends AutoSwitchBlock
       if((direction==0) || (field==0)) return false;
       if(!show_only) {
         final double time_scaling = 15.0d * 500.0d / 24000.0d; // 1/2h
-        switch(field) {
-          case 1: {
-            double v = threshold0_on()+(time_scaling*direction);
-            if(v < 0) v += 15.0; else if(v > 15) v = 0;
+        switch (field) {
+          case 1 -> {
+            double v = threshold0_on() + (time_scaling * direction);
+            if (v < 0) v += 15.0;
+            else if (v > 15) v = 0;
             threshold0_on(v);
             break;
           }
-          case 2: {
-            double v = threshold0_off()+(time_scaling*direction);
-            if(v < 0) v += 15.0; else if(v > 15) v = 0;
+          case 2 -> {
+            double v = threshold0_off() + (time_scaling * direction);
+            if (v < 0) v += 15.0;
+            else if (v > 15) v = 0;
             threshold0_off(v);
             break;
           }
-          case 3: { debounce(debounce()+direction); break; }
-          case 4: { on_power(on_power() + direction); break; }
+          case 3 -> {
+            debounce(debounce() + direction);
+            break;
+          }
+          case 4 -> {
+            on_power(on_power() + direction);
+            break;
+          }
         }
         if(on_power() < 1) on_power(1);
         setChanged();
       }
       {
-        StringTextComponent separator = (new StringTextComponent(" | ")); separator.withStyle(TextFormatting.GRAY);
+        TextComponent separator = (new TextComponent(" | ")); separator.withStyle(ChatFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
-        tr.add(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_on", TextFormatting.BLUE, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_off", TextFormatting.YELLOW, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_on", ChatFormatting.BLUE, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_on()*24000.0/15.0))}));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.daytime_off", ChatFormatting.YELLOW, new Object[]{Auxiliaries.daytimeToString((long)(threshold0_off()*24000.0/15.0))})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", ChatFormatting.RED, new Object[]{on_power()})));
         if(debounce()>0) {
-          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.random", TextFormatting.DARK_GREEN, new Object[]{debounce()}) ));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.random", ChatFormatting.DARK_GREEN, new Object[]{debounce()}) ));
         } else {
-          tr.add(new StringTextComponent(""));
+          tr.add(new TextComponent(""));
         }
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", TextFormatting.RED, new Object[]{on_power()})));
-        Overlay.show(player, Auxiliaries.localizable("switchconfig.daytimerclock", TextFormatting.RESET, tr.toArray()));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.daytimerclock.output_power", ChatFormatting.RED, new Object[]{on_power()})));
+        Overlay.show(player, Auxiliaries.localizable("switchconfig.daytimerclock", ChatFormatting.RESET, tr.toArray()));
       }
       return true;
     }

@@ -9,23 +9,22 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.*;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import wile.rsgauges.ModContent;
-import wile.rsgauges.libmc.detail.Overlay;
-import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.libmc.detail.Overlay;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -33,10 +32,10 @@ import java.util.ArrayList;
 
 public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
 {
-  public EnvironmentalSensorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public EnvironmentalSensorSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public EnvironmentalSensorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public EnvironmentalSensorSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -44,8 +43,9 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world)
-  { return new EnvironmentalSensorSwitchTileEntity(ModContent.TET_ENVSENSOR_SWITCH); }
+  @Nullable
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+  { return new EnvironmentalSensorSwitchTileEntity(pos, state); }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Tile entity
@@ -54,7 +54,7 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
   /**
    * Tile entity for environmental and time sensor based switches
    */
-  public static class EnvironmentalSensorSwitchTileEntity extends AutoSwitchTileEntity implements ITickableTileEntity
+  public static class EnvironmentalSensorSwitchTileEntity extends AutoSwitchTileEntity
   {
     protected static final int debounce_max = 10;
     protected int update_interval_ = 10;
@@ -64,11 +64,11 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
     protected int update_timer_ = 0;
     protected int debounce_counter_ = 0;
 
-    public EnvironmentalSensorSwitchTileEntity(TileEntityType<?> te_type)
-    { super(te_type); }
+    public EnvironmentalSensorSwitchTileEntity(BlockEntityType<?> te_type, BlockPos pos, BlockState state)
+    { super(te_type, pos, state); }
 
-    public EnvironmentalSensorSwitchTileEntity()
-    { super(ModContent.TET_ENVSENSOR_SWITCH); }
+    public EnvironmentalSensorSwitchTileEntity(BlockPos pos, BlockState state)
+    { super(ModContent.TET_ENVSENSOR_SWITCH, pos, state); }
 
     public double threshold0_on()
     { return threshold0_on_; }
@@ -89,7 +89,7 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
     { debounce_ = (v<0) ? (0) : (Math.min(v, debounce_max)); }
 
     @Override
-    public void write(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundTag nbt, boolean updatePacket)
     {
       super.write(nbt, updatePacket);
       nbt.putDouble("threshold0_on", threshold0_on());
@@ -98,7 +98,7 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
     }
 
     @Override
-    public void read(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundTag nbt, boolean updatePacket)
     {
       super.read(nbt, updatePacket);
       threshold0_on(nbt.getDouble("threshold0_on"));
@@ -107,7 +107,7 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
     }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
+    public boolean activation_config(BlockState state, @Nullable Player player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final SwitchBlock block = (SwitchBlock)state.getBlock();
@@ -116,19 +116,25 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
       if((direction==0) || (field==0)) return false;
       if((block.config & SWITCH_CONFIG_SENSOR_LIGHT)!=0) {
         if(!show_only) {
-          switch(field) {
-            case 1: {
-              threshold0_on(threshold0_on()+direction);
-              if(threshold0_off() > threshold0_on()) threshold0_off(threshold0_on());
+          switch (field) {
+            case 1 -> {
+              threshold0_on(threshold0_on() + direction);
+              if (threshold0_off() > threshold0_on()) threshold0_off(threshold0_on());
               break;
             }
-            case 2: {
-              threshold0_off(threshold0_off()+direction);
-              if(threshold0_on() < threshold0_off()) threshold0_on(threshold0_off());
+            case 2 -> {
+              threshold0_off(threshold0_off() + direction);
+              if (threshold0_on() < threshold0_off()) threshold0_on(threshold0_off());
               break;
             }
-            case 3: { debounce(debounce()+direction); break; }
-            case 4: { on_power(on_power() + direction); break; }
+            case 3 -> {
+              debounce(debounce() + direction);
+              break;
+            }
+            case 4 -> {
+              on_power(on_power() + direction);
+              break;
+            }
           }
           if(threshold0_on() < 1) threshold0_on(1);
           if(on_power() < 1) on_power(1);
@@ -136,30 +142,33 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
         }
         {
           ArrayList<Object> tr = new ArrayList<>();
-          final TranslationTextComponent trunit = Auxiliaries.localizable("switchconfig.lightsensor.lightunit");
-          StringTextComponent separator = (new StringTextComponent(" | ")); separator.withStyle(TextFormatting.GRAY);
-          tr.add(Auxiliaries.localizable("switchconfig.lightsensor.threshold_on", TextFormatting.BLUE, new Object[]{(int)threshold0_on(), trunit}));
-          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.threshold_off", TextFormatting.YELLOW, new Object[]{(int)threshold0_off(), trunit})));
-          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
+          final TranslatableComponent trunit = Auxiliaries.localizable("switchconfig.lightsensor.lightunit");
+          TextComponent separator = (new TextComponent(" | ")); separator.withStyle(ChatFormatting.GRAY);
+          tr.add(Auxiliaries.localizable("switchconfig.lightsensor.threshold_on", ChatFormatting.BLUE, new Object[]{(int)threshold0_on(), trunit}));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.threshold_off", ChatFormatting.YELLOW, new Object[]{(int)threshold0_off(), trunit})));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.output_power", ChatFormatting.RED, new Object[]{on_power()})));
           if(debounce()>0) {
-            tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.DARK_GREEN, new Object[]{debounce()})));
+            tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", ChatFormatting.DARK_GREEN, new Object[]{debounce()})));
           } else {
-            tr.add(new StringTextComponent(""));
+            tr.add(new TextComponent(""));
           }
-          Overlay.show(player, Auxiliaries.localizable("switchconfig.lightsensor", TextFormatting.RESET, tr.toArray()));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.lightsensor", ChatFormatting.RESET, tr.toArray()));
         }
       } else if((block.config & (SWITCH_CONFIG_SENSOR_RAIN|SWITCH_CONFIG_SENSOR_LIGHTNING))!=0) {
         if(!show_only) {
-          switch(field) {
-            case 4: { on_power(on_power() + direction); break; }
+          switch (field) {
+            case 4 -> {
+              on_power(on_power() + direction);
+              break;
+            }
           }
           if(on_power() < 1) on_power(1);
           setChanged();
         }
         if((block.config & SWITCH_CONFIG_SENSOR_RAIN)!=0) {
-          Overlay.show(player, Auxiliaries.localizable("switchconfig.rainsensor.output_power", TextFormatting.RED, new Object[]{on_power()}));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.rainsensor.output_power", ChatFormatting.RED, new Object[]{on_power()}));
         } else {
-          Overlay.show(player, Auxiliaries.localizable("switchconfig.thundersensor.output_power", TextFormatting.RED, new Object[]{on_power()}));
+          Overlay.show(player, Auxiliaries.localizable("switchconfig.thundersensor.output_power", ChatFormatting.RED, new Object[]{on_power()}));
         }
       }
       return true;

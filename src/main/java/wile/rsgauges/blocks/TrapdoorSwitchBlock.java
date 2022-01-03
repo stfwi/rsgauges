@@ -11,15 +11,15 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.pathfinding.PathType;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.detail.SwitchLink;
 
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 public class TrapdoorSwitchBlock extends ContactSwitchBlock
 {
-  public TrapdoorSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public TrapdoorSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -37,18 +37,17 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
 
   @Override
   @SuppressWarnings("deprecation")
-  public boolean isPathfindable(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type)
+  public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type)
   {
-    /// -> was public boolean isPassable(IWorldReader world, BlockPos pos)
-    switch(type) {
-      case LAND:
-      case AIR:  return (!state.getValue(POWERED));
-      default:   return true;
-    }
+    /// -> was public boolean isPassable(LevelReader world, BlockPos pos)
+    return switch (type) {
+      case LAND, AIR -> (!state.getValue(POWERED));
+      default -> true;
+    };
   }
 
   @Override
-  public void fallOn(World world, BlockPos pos, Entity entity, float distance)
+  public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float distance)
   {
     if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0)) {
       if(world.isClientSide()) return;
@@ -59,11 +58,11 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
         if((st!=null) && (st.getBlock()==this)) onEntityCollided(world, p, st);
       }
     }
-    super.fallOn(world, pos, entity, distance);
+    super.fallOn(world, state, pos, entity, distance);
   }
 
   @Override
-  public void stepOn(World world, BlockPos pos, Entity entity)
+  public void stepOn(Level world, BlockPos pos, BlockState state, Entity entity)
   {
     if(((config & SWITCH_CONFIG_HIGH_SENSITIVE)==0) || (world.isClientSide()) || (entity.isShiftKeyDown())) return;
     onEntityCollided(world, pos, world.getBlockState(pos));
@@ -75,7 +74,7 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
   }
 
   @Override
-  public void entityInside(BlockState state, World world, BlockPos pos, Entity entity)
+  public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity)
   {
     if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) && (entity.getBbHeight() < 0.9)) return; // close on items
     onEntityCollided(world, pos, state);
@@ -84,19 +83,19 @@ public class TrapdoorSwitchBlock extends ContactSwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  protected AxisAlignedBB detectionVolume(BlockPos pos)
+  protected AABB detectionVolume(BlockPos pos)
   {
     if((config & (SWITCH_CONFIG_SHOCK_SENSITIVE|SWITCH_CONFIG_HIGH_SENSITIVE))==0) {
-      return new AxisAlignedBB(Vector3d.atLowerCornerOf(pos).add(0,0,0), Vector3d.atLowerCornerOf(pos).add(1,1,1));
+      return new AABB(Vec3.atLowerCornerOf(pos).add(0,0,0), Vec3.atLowerCornerOf(pos).add(1,1,1));
     } else {
-      return new AxisAlignedBB(Vector3d.atLowerCornerOf(pos).add(-0.2,0,-0.2), Vector3d.atLowerCornerOf(pos).add(1.2,2,1.2));
+      return new AABB(Vec3.atLowerCornerOf(pos).add(-0.2,0,-0.2), Vec3.atLowerCornerOf(pos).add(1.2,2,1.2));
     }
   }
 
   @Override
   public SwitchLink.RequestResult switchLinkTrigger(SwitchLink link)
   {
-    final World world = link.world;
+    final Level world = link.world;
     final BlockPos pos = link.target_position;
     if((world==null) || ((config & (SWITCH_CONFIG_LINK_TARGET_SUPPORT))==0) || (world.isClientSide())) return SwitchLink.RequestResult.REJECTED;
     BlockState state = world.getBlockState(pos);

@@ -2,6 +2,14 @@
   "replace": false,
   "values": [
     "#minecraft:planks",
-    "#minecraft:wooden_slabs"
+    "#minecraft:wooden_slabs",
+    "minecraft:oak_planks",
+    "minecraft:spruce_planks",
+    "minecraft:birch_planks",
+    "minecraft:jungle_planks",
+    "minecraft:acacia_planks",
+    "minecraft:dark_oak_planks",
+    "minecraft:crimson_planks",
+    "minecraft:warped_planks"
   ]
 }

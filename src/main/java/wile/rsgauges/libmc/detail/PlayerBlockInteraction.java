@@ -8,13 +8,13 @@
  */
 package wile.rsgauges.libmc.detail;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
@@ -27,7 +27,7 @@ public class PlayerBlockInteraction
 {
   public interface INeighbourBlockInteractionSensitive
   {
-    default boolean onNeighborBlockPlayerInteraction(World world, BlockPos pos, BlockState state, BlockPos fromPos, LivingEntity entity, Hand hand, boolean isLeftClick)
+    default boolean onNeighborBlockPlayerInteraction(Level world, BlockPos pos, BlockState state, BlockPos fromPos, LivingEntity entity, InteractionHand hand, boolean isLeftClick)
     { return false; }
   }
 
@@ -38,10 +38,10 @@ public class PlayerBlockInteraction
 
   public static void onPlayerInteract(PlayerInteractEvent event)
   {
-    final World world = event.getWorld();
+    final Level world = event.getWorld();
     if(world.isClientSide()) return;
-    final boolean is_rclick = (event instanceof RightClickBlock) && (event.getHand()==Hand.MAIN_HAND);
-    final boolean is_lclick = (event instanceof LeftClickBlock) && (event.getHand()==Hand.MAIN_HAND) && (event.getFace()!=Direction.DOWN); // last one temporary workaround for double trigger on mouse release
+    final boolean is_rclick = (event instanceof RightClickBlock) && (event.getHand()==InteractionHand.MAIN_HAND);
+    final boolean is_lclick = (event instanceof LeftClickBlock) && (event.getHand()==InteractionHand.MAIN_HAND) && (event.getFace()!= Direction.DOWN); // last one temporary workaround for double trigger on mouse release
     if((!is_rclick) && (!is_lclick)) return;
     final BlockPos fromPos = event.getPos();
     for(Direction facing: Direction.values()) {
@@ -50,10 +50,9 @@ public class PlayerBlockInteraction
       final BlockState state = event.getWorld().getBlockState(pos);
       if(!((state.getBlock()) instanceof INeighbourBlockInteractionSensitive)) continue;
       if(((INeighbourBlockInteractionSensitive)state.getBlock()).onNeighborBlockPlayerInteraction(world, pos, state, fromPos, event.getEntityLiving(), event.getHand(), is_lclick)) {
-        event.setCancellationResult(ActionResultType.CONSUME);
+        event.setCancellationResult(InteractionResult.CONSUME);
       }
     }
   }
-
 
 }

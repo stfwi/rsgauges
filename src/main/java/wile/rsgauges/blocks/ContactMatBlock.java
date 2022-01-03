@@ -8,16 +8,16 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.phys.AABB;
 import wile.rsgauges.detail.ModResources;
 import javax.annotation.Nullable;
 
 public class ContactMatBlock extends ContactSwitchBlock
 {
-  public ContactMatBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public ContactMatBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public ContactMatBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public ContactMatBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 }

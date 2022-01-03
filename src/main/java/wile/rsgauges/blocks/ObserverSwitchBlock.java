@@ -13,26 +13,25 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.world.IWorld;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.block.*;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.BlockCategories;
-import wile.rsgauges.libmc.detail.Overlay;
-import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.libmc.detail.Overlay;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ import java.util.ArrayList;
 
 public class ObserverSwitchBlock extends SwitchBlock
 {
-  public ObserverSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public ObserverSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -48,7 +47,7 @@ public class ObserverSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
   {
     if(!isAffectedByNeigbour(state, world, pos, facingPos)) return state;
     final ObserverSwitchTileEntity te = getTe(world, pos);
@@ -57,22 +56,23 @@ public class ObserverSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public ObserverSwitchTileEntity getTe(IWorldReader world, BlockPos pos)
+  public ObserverSwitchTileEntity getTe(LevelReader world, BlockPos pos)
   {
-    TileEntity te = world.getBlockEntity(pos);
+    BlockEntity te = world.getBlockEntity(pos);
     if((!(te instanceof ObserverSwitchTileEntity))) return null;
     return (ObserverSwitchTileEntity)te;
   }
 
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world)
-  { return new ObserverSwitchTileEntity(ModContent.TET_OBSERVER_SWITCH); }
+  @Nullable
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+  { return new ObserverSwitchTileEntity(pos, state); }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Tile entity
   // -------------------------------------------------------------------------------------------------------------------
 
-  public static class ObserverSwitchTileEntity extends SwitchTileEntity implements ITickableTileEntity
+  public static class ObserverSwitchTileEntity extends SwitchTileEntity
   {
     public final int debounce_max = 10;
     public final int range_max = 8;
@@ -86,11 +86,11 @@ public class ObserverSwitchBlock extends SwitchBlock
     private int update_timer_ = 0;
     private int debounce_counter_ = 0;
 
-    public ObserverSwitchTileEntity(TileEntityType<?> te_type)
-    { super(te_type); }
+    public ObserverSwitchTileEntity(BlockEntityType<?> te_type, BlockPos pos, BlockState state)
+    { super(te_type, pos, state); }
 
-    public ObserverSwitchTileEntity()
-    { super(ModContent.TET_OBSERVER_SWITCH); }
+    public ObserverSwitchTileEntity(BlockPos pos, BlockState state)
+    { super(ModContent.TET_OBSERVER_SWITCH, pos, state); }
 
     int debounce()
     { return debounce_; }
@@ -127,7 +127,7 @@ public class ObserverSwitchBlock extends SwitchBlock
     { filter_index_ = (f>=BlockCategories.getMatcherNames().size()) ? (BlockCategories.getMatcherNames().size()-1) : (Math.max(f, 0)); }
 
     @Override
-    public void write(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundTag nbt, boolean updatePacket)
     {
       super.write(nbt, updatePacket);
       nbt.putInt("range", range_);
@@ -137,7 +137,7 @@ public class ObserverSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void read(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundTag nbt, boolean updatePacket)
     {
       super.read(nbt, updatePacket);
       range(nbt.getInt("range"));
@@ -147,23 +147,41 @@ public class ObserverSwitchBlock extends SwitchBlock
     }
 
     @Override
-    public void reset(@Nullable IWorldReader world)
+    public void reset(@Nullable LevelReader world)
     { super.reset(world); filter_index_=0; range_=0; threshold_=1; debounce_=0; update_timer_=0; debounce_counter_=0; }
 
     @Override
-    public boolean activation_config(BlockState state, @Nullable PlayerEntity player, double x, double y, boolean show_only)
+    public boolean activation_config(BlockState state, @Nullable Player player, double x, double y, boolean show_only)
     {
       if(state == null) return false;
       final int direction = ((y >= 12) && (y <= 13)) ? (1) : (((y >= 9) && (y <= 10)) ? (-1) : (0));
       final int field = ((x>=1) && (x<=2)) ? (1) : ( ((x>=4) && (x<=5)) ? (2) : ( ((x>=7) && (x<=8)) ? (3) : ( ((x>=10) && (x<=11)) ? (4) : ( ((x>=13) && (x<=14)) ? (5) : (0) ))));
       if((direction==0) || (field==0)) return false;
       if(!show_only) {
-        switch(field) {
-          case 1: { range(range()+direction); if(threshold()>range()) {threshold(range());} break; }
-          case 2: { threshold(threshold()+direction); break; }
-          case 3: { debounce(debounce()+direction); break; }
-          case 4: { on_power(on_power() + direction); break; }
-          case 5: { filter(filter()+direction); break; }
+        switch (field) {
+          case 1 -> {
+            range(range() + direction);
+            if (threshold() > range()) {
+              threshold(range());
+            }
+            break;
+          }
+          case 2 -> {
+            threshold(threshold() + direction);
+            break;
+          }
+          case 3 -> {
+            debounce(debounce() + direction);
+            break;
+          }
+          case 4 -> {
+            on_power(on_power() + direction);
+            break;
+          }
+          case 5 -> {
+            filter(filter() + direction);
+            break;
+          }
         }
         if(threshold() < 1) threshold(1);
         if(on_power() < 1) on_power(1);
@@ -172,20 +190,20 @@ public class ObserverSwitchBlock extends SwitchBlock
       }
       {
         ArrayList<Object> tr = new ArrayList<>();
-        StringTextComponent separator = (new StringTextComponent(" | ")); separator.withStyle(TextFormatting.GRAY);
-        tr.add(Auxiliaries.localizable("switchconfig.blocksensor.range", TextFormatting.BLUE, new Object[]{range()}));
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.threshold", TextFormatting.YELLOW, new Object[]{threshold()})));
+        TextComponent separator = (new TextComponent(" | ")); separator.withStyle(ChatFormatting.GRAY);
+        tr.add(Auxiliaries.localizable("switchconfig.blocksensor.range", ChatFormatting.BLUE, new Object[]{range()}));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.threshold", ChatFormatting.YELLOW, new Object[]{threshold()})));
         if(debounce()>0) {
-          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", TextFormatting.AQUA, new Object[]{debounce()})));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", ChatFormatting.AQUA, new Object[]{debounce()})));
         } else {
-          tr.add(new StringTextComponent(""));
+          tr.add(new TextComponent(""));
         }
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.output_power", TextFormatting.RED, new Object[]{on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.output_power", ChatFormatting.RED, new Object[]{on_power()})));
         tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.filter",
-          TextFormatting.DARK_GREEN,
-          new Object[]{new TranslationTextComponent("rsgauges.switchconfig.blocksensor.filter."+filter_name())})
+          ChatFormatting.DARK_GREEN,
+          new Object[]{new TranslatableComponent("rsgauges.switchconfig.blocksensor.filter."+filter_name())})
         ));
-        Overlay.show(player, Auxiliaries.localizable("switchconfig.blocksensor", TextFormatting.RESET, tr.toArray()));
+        Overlay.show(player, Auxiliaries.localizable("switchconfig.blocksensor", ChatFormatting.RESET, tr.toArray()));
       }
       return (!show_only);
     }
@@ -194,13 +212,13 @@ public class ObserverSwitchBlock extends SwitchBlock
     { if(update_timer_ > 2) update_timer_ = 0; } // cooldown time to prevent state jitters
 
     @Override
+    @SuppressWarnings("deprecation")
     public void tick()
     {
       if(level.isClientSide() || (--update_timer_ > 0)) return;
       update_timer_ = ((range_ <= 1) ? 20 : 10) + ((int)(Math.random()*3)); // Neighbours are fast updated using neighbourChanged notifications.
       final BlockState state = level.getBlockState(worldPosition);
-      if((state==null) || (!(state.getBlock() instanceof ObserverSwitchBlock))) return;
-      final ObserverSwitchBlock block = (ObserverSwitchBlock) state.getBlock();
+      if((state==null) || (!(state.getBlock() instanceof final ObserverSwitchBlock block))) return;
       final Direction obervationDirection = state.getValue(FACING);
       int n_matched = 0;
       final int rng =  (range_ < 2) ? 1 : range_;

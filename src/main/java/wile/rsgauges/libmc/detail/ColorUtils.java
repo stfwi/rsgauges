@@ -8,15 +8,18 @@
  */
 package wile.rsgauges.libmc.detail;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.item.*;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.world.IBlockDisplayReader;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -33,13 +36,13 @@ public final class ColorUtils
   /**
    * Vanilla interface wrapper allowing to filter the tintable blocks during color handler registration.
    */
-  public interface IBlockColorTintSupport extends IBlockColor
+  public interface IBlockColorTintSupport extends BlockColor
   {
     default boolean hasColorTint() { return false; }
-    default int getColor(BlockState state, @Nullable IBlockDisplayReader world, @Nullable BlockPos pos, int tintIndex) { return 0xffffffff; }
+    default int getColor(BlockState state, @Nullable BlockAndTintGetter world, @Nullable BlockPos pos, int tintIndex) { return 0xffffffff; }
   }
 
-  public interface IItemColorTintSupport extends IItemColor
+  public interface IItemColorTintSupport extends ItemColor
   {
     default boolean hasColorTint() { return false; }
     default int getColor(ItemStack stack, int tintIndex) { return 0xffffffff; }
@@ -72,7 +75,7 @@ public final class ColorUtils
         (ItemStack stack, int tintIndex) -> (((IItemColorTintSupport)(stack.getItem())).getColor(stack, tintIndex)),
         items_supplier_.get().stream()
           .filter(e -> ((e instanceof IItemColorTintSupport) && (((IItemColorTintSupport)e).hasColorTint())))
-          .collect(Collectors.toList()).toArray(new IItemProvider[]{})
+          .collect(Collectors.toList()).toArray(new ItemLike[]{})
       );
     }
   }
@@ -98,22 +101,22 @@ public final class ColorUtils
     final Item item = stack.getItem();
     if(item instanceof DyeItem) return Optional.of(((DyeItem)item).getDyeColor());
     // There must be a standard for that somewhere ...
-    if(item.is(Tags.Items.DYES_BLACK)) return Optional.of(DyeColor.BLACK);
-    if(item.is(Tags.Items.DYES_RED)) return Optional.of(DyeColor.RED);
-    if(item.is(Tags.Items.DYES_GREEN)) return Optional.of(DyeColor.GREEN);
-    if(item.is(Tags.Items.DYES_BROWN)) return Optional.of(DyeColor.BROWN);
-    if(item.is(Tags.Items.DYES_BLUE)) return Optional.of(DyeColor.BLUE);
-    if(item.is(Tags.Items.DYES_PURPLE)) return Optional.of(DyeColor.PURPLE);
-    if(item.is(Tags.Items.DYES_CYAN)) return Optional.of(DyeColor.CYAN);
-    if(item.is(Tags.Items.DYES_LIGHT_GRAY)) return Optional.of(DyeColor.LIGHT_GRAY);
-    if(item.is(Tags.Items.DYES_GRAY)) return Optional.of(DyeColor.GRAY);
-    if(item.is(Tags.Items.DYES_PINK)) return Optional.of(DyeColor.PINK);
-    if(item.is(Tags.Items.DYES_LIME)) return Optional.of(DyeColor.LIME);
-    if(item.is(Tags.Items.DYES_YELLOW)) return Optional.of(DyeColor.YELLOW);
-    if(item.is(Tags.Items.DYES_LIGHT_BLUE)) return Optional.of(DyeColor.LIGHT_BLUE);
-    if(item.is(Tags.Items.DYES_MAGENTA)) return Optional.of(DyeColor.MAGENTA);
-    if(item.is(Tags.Items.DYES_ORANGE)) return Optional.of(DyeColor.ORANGE);
-    if(item.is(Tags.Items.DYES_WHITE)) return Optional.of(DyeColor.WHITE);
+    if(stack.is(Tags.Items.DYES_BLACK)) return Optional.of(DyeColor.BLACK);
+    if(stack.is(Tags.Items.DYES_RED)) return Optional.of(DyeColor.RED);
+    if(stack.is(Tags.Items.DYES_GREEN)) return Optional.of(DyeColor.GREEN);
+    if(stack.is(Tags.Items.DYES_BROWN)) return Optional.of(DyeColor.BROWN);
+    if(stack.is(Tags.Items.DYES_BLUE)) return Optional.of(DyeColor.BLUE);
+    if(stack.is(Tags.Items.DYES_PURPLE)) return Optional.of(DyeColor.PURPLE);
+    if(stack.is(Tags.Items.DYES_CYAN)) return Optional.of(DyeColor.CYAN);
+    if(stack.is(Tags.Items.DYES_LIGHT_GRAY)) return Optional.of(DyeColor.LIGHT_GRAY);
+    if(stack.is(Tags.Items.DYES_GRAY)) return Optional.of(DyeColor.GRAY);
+    if(stack.is(Tags.Items.DYES_PINK)) return Optional.of(DyeColor.PINK);
+    if(stack.is(Tags.Items.DYES_LIME)) return Optional.of(DyeColor.LIME);
+    if(stack.is(Tags.Items.DYES_YELLOW)) return Optional.of(DyeColor.YELLOW);
+    if(stack.is(Tags.Items.DYES_LIGHT_BLUE)) return Optional.of(DyeColor.LIGHT_BLUE);
+    if(stack.is(Tags.Items.DYES_MAGENTA)) return Optional.of(DyeColor.MAGENTA);
+    if(stack.is(Tags.Items.DYES_ORANGE)) return Optional.of(DyeColor.ORANGE);
+    if(stack.is(Tags.Items.DYES_WHITE)) return Optional.of(DyeColor.WHITE);
     return Optional.empty();
   }
 

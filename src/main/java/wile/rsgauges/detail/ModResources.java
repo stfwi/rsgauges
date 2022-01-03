@@ -9,9 +9,14 @@
  */
 package wile.rsgauges.detail;
 
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.RegistryEvent;
 import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.libmc.detail.SidedProxy;
@@ -56,15 +61,15 @@ public class ModResources
     public float volume() { return volume_; }
     public float pitch() { return pitch_; }
 
-    public void play(World world, BlockPos pos) {
-      if(SidedProxy.isClientSide()) {
-        world.playSound(SidedProxy.getPlayerClientSide(), pos, se_, SoundCategory.BLOCKS, volume_, pitch_);
+    public void play(Level world, BlockPos pos) {
+      if(!(world instanceof ServerLevel)) {
+        world.playSound(SidedProxy.getPlayerClientSide(), pos, se_, SoundSource.BLOCKS, volume_, pitch_);
       } else {
         float volume = Math.min(volume_, 1f);
-        world.playSound(null, pos, se_, SoundCategory.BLOCKS, volume, pitch_);
+        world.playSound(null, pos, se_, SoundSource.BLOCKS, volume, pitch_);
         if(volume_ > 1.1f) {
           for(Direction dir: Direction.values()) {
-            world.playSound(null, pos.relative(dir, 15), se_, SoundCategory.BLOCKS, volume, pitch_);
+            world.playSound(null, pos.relative(dir, 15), se_, SoundSource.BLOCKS, volume, pitch_);
           }
         }
       }

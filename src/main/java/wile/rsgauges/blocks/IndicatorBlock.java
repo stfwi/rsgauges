@@ -10,14 +10,14 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.AABB;
 import wile.rsgauges.detail.ModResources;
 
 import javax.annotation.Nullable;
@@ -27,24 +27,24 @@ public class IndicatorBlock extends AbstractGaugeBlock
 {
   public static final BooleanProperty POWERED = BooleanProperty.create("power");
 
-  public IndicatorBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBB, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public IndicatorBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBB, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   {
     super(config, properties, unrotatedBB, powerOnSound, powerOffSound);
     registerDefaultState(super.defaultBlockState().setValue(POWERED, false).setValue(FACING, Direction.DOWN));
   }
 
-  public IndicatorBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBB)
+  public IndicatorBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBB)
   { this(config, properties, unrotatedBB, null, null); }
 
   @Override
   @Nullable
-  public BlockState getStateForPlacement(BlockItemUseContext context)
+  public BlockState getStateForPlacement(BlockPlaceContext context)
   {
     final BlockState state = super.getStateForPlacement(context);
     return (state==null) ? (null) : (state.setValue(POWERED, context.getLevel().hasNeighborSignal(context.getClickedPos())));
   }
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
   { super.createBlockStateDefinition(builder); builder.add(POWERED); }
 }

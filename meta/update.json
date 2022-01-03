@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
-  "1.16.5": {
+  "1.18.1": {
+    "1.2.13-b1": "[U] Initial 1.18.1 port.",
     "1.2.12": "[U] Mappings ported, updated to Forge 1.16.5-36.2.0.",
     "1.2.11": "[F] Lang file fixes.",
     "1.2.10": "[A] Dimmer Switch can be used as analog Switch Link source.\n[A] Industrial Analog Switch Link Receiver added.\n[A] Industrial Analog Switch Link Transmitter added.\n[F] Comparator Switch link triggering bug fixed.",
@@ -27,7 +28,7 @@
     "1.2.4-a1": "[A] Initial port."
   },
   "promos": {
-    "1.16.5-recommended": "1.2.12",
-    "1.16.5-latest": "1.2.12"
+    "1.18.1-recommended": "1.2.12",
+    "1.18.1-latest": "1.2.13-b1"
   }
 }

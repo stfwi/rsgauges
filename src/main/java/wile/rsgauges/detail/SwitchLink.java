@@ -9,14 +9,15 @@
 package wile.rsgauges.detail;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModContent;
 
@@ -33,11 +34,11 @@ public class SwitchLink
 {
   public interface ISwitchLinkable
   {
-    boolean switchLinkHasTargetSupport(World world, BlockPos pos);
+    boolean switchLinkHasTargetSupport(Level world, BlockPos pos);
 
-    boolean switchLinkHasSourceSupport(World world, BlockPos pos);
+    boolean switchLinkHasSourceSupport(Level world, BlockPos pos);
 
-    boolean switchLinkHasAnalogSupport(World world, BlockPos pos);
+    boolean switchLinkHasAnalogSupport(Level world, BlockPos pos);
 
     void switchLinkUnlink(SwitchLink link);
 
@@ -48,11 +49,11 @@ public class SwitchLink
 
     SwitchLink.RequestResult switchLinkTrigger(SwitchLink link);
 
-    Optional<Integer> switchLinkOutputPower(World world, BlockPos pos);
+    Optional<Integer> switchLinkOutputPower(Level world, BlockPos pos);
 
-    Optional<Integer> switchLinkInputPower(World world, BlockPos pos);
+    Optional<Integer> switchLinkInputPower(Level world, BlockPos pos);
 
-    Optional<Integer> switchLinkComparatorInput(World world, BlockPos pos);
+    Optional<Integer> switchLinkComparatorInput(Level world, BlockPos pos);
   }
 
   public enum LinkMode
@@ -67,7 +68,7 @@ public class SwitchLink
     private final int index_;
     LinkMode(int i)          { index_ = i; }
     public int index()       { return index_; }
-    static LinkMode fromInt(int val) { return BY_INDEX[MathHelper.clamp((int)val, 0, VALUES.length-1)]; }
+    static LinkMode fromInt(int val) { return BY_INDEX[Mth.clamp((int)val, 0, VALUES.length-1)]; }
     public long toInt()      { return index(); }
   }
 
@@ -80,8 +81,8 @@ public class SwitchLink
   public int source_analog_power = 0;
   public int source_digital_power = 0;
   public BlockPos source_position = BlockPos.ZERO;
-  @Nullable public World world;
-  @Nullable public PlayerEntity player;
+  @Nullable public Level world;
+  @Nullable public Player player;
 
   public SwitchLink()
   { target_position = BlockPos.ZERO; block_name = ""; config = 0; valid = false; }
@@ -104,13 +105,13 @@ public class SwitchLink
   public SwitchLink mode(LinkMode rm)
   { config = (config & ~0xfL)|(rm.index()); return this; }
 
-  public static SwitchLink fromNbt(final CompoundNBT nbt)
+  public static SwitchLink fromNbt(final CompoundTag nbt)
   { return (nbt==null) ? (new SwitchLink()) : (new SwitchLink(BlockPos.of(nbt.getLong("p")), nbt.getString("b"), nbt.getLong("t"))); }
 
   public static SwitchLink fromItemStack(ItemStack stack)
   { return ((stack==null) || (stack.isEmpty()) || (stack.getItem()!=ModContent.SWITCH_LINK_PEARL)) ? (new SwitchLink()) : (fromNbt(stack.getTag())); }
 
-  public static SwitchLink fromTargetPosition(final World world, final BlockPos pos)
+  public static SwitchLink fromTargetPosition(final Level world, final BlockPos pos)
   {
     if(pos==null) return new SwitchLink();
     final BlockState state = world.getBlockState(pos);
@@ -119,16 +120,16 @@ public class SwitchLink
     return new SwitchLink(pos, state.getBlock().getRegistryName().toString(), 0);
   }
 
-  public static SwitchLink fromPlayerActiveItem(World world, PlayerEntity player)
+  public static SwitchLink fromPlayerActiveItem(Level world, Player player)
   {
-    if((player==null) || (world.isClientSide()) || (player.inventory==null) || (player.inventory.getSelected()==null)) return new SwitchLink();
-    if(player.inventory.getSelected().getItem()!=ModContent.SWITCH_LINK_PEARL) return null;
-    return SwitchLink.fromNbt(player.inventory.getSelected().getTag());
+    if((player==null) || (world.isClientSide()) || (player.getInventory()==null) || (player.getInventory().getSelected()==null)) return new SwitchLink();
+    if(player.getInventory().getSelected().getItem()!=ModContent.SWITCH_LINK_PEARL) return null;
+    return SwitchLink.fromNbt(player.getInventory().getSelected().getTag());
   }
 
-  public CompoundNBT toNbt()
+  public CompoundTag toNbt()
   {
-    CompoundNBT nbt = new CompoundNBT();
+    CompoundTag nbt = new CompoundTag();
     nbt.putString("b", block_name);
     nbt.putLong("t", config);
     nbt.putLong("p", target_position.asLong());
@@ -151,7 +152,7 @@ public class SwitchLink
 
   @SuppressWarnings("deprecation")
   @Nullable
-  private ISwitchLinkable target(final World world, final BlockPos source_pos)
+  private ISwitchLinkable target(final Level world, final BlockPos source_pos)
   {
     if((ModConfig.without_switch_linking) || (!valid) || isTooFar(source_pos) || (!world.hasChunkAt(target_position))) return null;
     final BlockState target_state = world.getBlockState(target_position);
@@ -161,7 +162,7 @@ public class SwitchLink
   }
 
   @SuppressWarnings("deprecation")
-  public RequestResult trigger(final World world, final BlockPos source_pos, final PlayerEntity player)
+  public RequestResult trigger(final Level world, final BlockPos source_pos, final Player player)
   {
     if(ModConfig.without_switch_linking) return RequestResult.NOT_MATCHED;
     if((!valid) || (world.isClientSide())) return RequestResult.INVALID_LINKDATA;
@@ -169,8 +170,7 @@ public class SwitchLink
     final BlockState target_state = world.getBlockState(target_position);
     if(target_state==null) return RequestResult.TOO_FAR;
     final Block block = target_state.getBlock();
-    if((!(block instanceof ISwitchLinkable)) || (!block.getRegistryName().toString().equals(block_name))) return RequestResult.TARGET_GONE;
-    final ISwitchLinkable target = (ISwitchLinkable)block;
+    if((!(block instanceof final ISwitchLinkable target)) || (!block.getRegistryName().toString().equals(block_name))) return RequestResult.TARGET_GONE;
     final int p = target.switchLinkOutputPower(world, target_position).orElse(0);
     this.world = world;
     this.source_position = source_pos;
@@ -181,7 +181,7 @@ public class SwitchLink
   }
 
   @SuppressWarnings("deprecation")
-  public RequestResult trigger(final World world, final BlockPos source_pos, int analog_power, int digital_power, boolean state_changed)
+  public RequestResult trigger(final Level world, final BlockPos source_pos, int analog_power, int digital_power, boolean state_changed)
   {
     final ISwitchLinkable target = target(world, source_pos);
     if(target==null) return RequestResult.REJECTED;
@@ -193,37 +193,37 @@ public class SwitchLink
     int target_power = target.switchLinkOutputPower(world, target_position).orElse(-1);
     if(target_power<0) return RequestResult.REJECTED; // no target support
     boolean analog = target.switchLinkHasAnalogSupport(world, target_position);
-    switch(mode()) {
-      case AS_STATE: {
-        if(analog) {
-          if(target_power == analog_power) return RequestResult.NOT_MATCHED;
+    switch (mode()) {
+      case AS_STATE -> {
+        if (analog) {
+          if (target_power == analog_power) return RequestResult.NOT_MATCHED;
         } else {
-          if((!state_changed) || ((target_power==0) == (digital_power==0))) return RequestResult.NOT_MATCHED;
+          if ((!state_changed) || ((target_power == 0) == (digital_power == 0))) return RequestResult.NOT_MATCHED;
         }
-      } break;
-      case INV_STATE: {
-        if(analog) {
+      }
+      case INV_STATE -> {
+        if (analog) {
           analog_power = 15 - analog_power;
           this.source_analog_power = analog_power;
-          if(target_power == digital_power) return RequestResult.NOT_MATCHED;
+          if (target_power == digital_power) return RequestResult.NOT_MATCHED;
         } else {
-          if((!state_changed) || ((target_power==0) != (digital_power==0))) return RequestResult.NOT_MATCHED;
+          if ((!state_changed) || ((target_power == 0) != (digital_power == 0))) return RequestResult.NOT_MATCHED;
         }
-      } break;
-      case ACTIVATE: {
-        if((!state_changed) || (digital_power==0)) return RequestResult.NOT_MATCHED;
-      } break;
-      case DEACTIVATE: {
-        if((!state_changed) || (digital_power!=0)) return RequestResult.NOT_MATCHED;
-      } break;
-      case TOGGLE: {
-        if(!state_changed) return RequestResult.NOT_MATCHED;
-      } break;
+      }
+      case ACTIVATE -> {
+        if ((!state_changed) || (digital_power == 0)) return RequestResult.NOT_MATCHED;
+      }
+      case DEACTIVATE -> {
+        if ((!state_changed) || (digital_power != 0)) return RequestResult.NOT_MATCHED;
+      }
+      case TOGGLE -> {
+        if (!state_changed) return RequestResult.NOT_MATCHED;
+      }
     }
     return target.switchLinkTrigger(this);
   }
 
-  public void unlinkTarget(final World world, final BlockPos source_pos)
+  public void unlinkTarget(final Level world, final BlockPos source_pos)
   {
     ISwitchLinkable target = target(world, this.target_position);
     if(target==null) return;
@@ -233,7 +233,7 @@ public class SwitchLink
     target.switchLinkUnlink(this);
   }
 
-  public void initializeTarget(final World world, final BlockPos source_pos, int analog_power, int digital_power)
+  public void initializeTarget(final Level world, final BlockPos source_pos, int analog_power, int digital_power)
   {
     ISwitchLinkable target = target(world, this.target_position);
     if(target==null) return;
@@ -245,19 +245,19 @@ public class SwitchLink
     target.switchLinkInit(this);
   }
 
-  public static Optional<Integer> getOutputPower(World world, BlockPos pos)
+  public static Optional<Integer> getOutputPower(Level world, BlockPos pos)
   {
     BlockState state = world.getBlockState(pos);
     return (!(state.getBlock() instanceof ISwitchLinkable)) ? Optional.empty() : ((ISwitchLinkable)(state.getBlock())).switchLinkOutputPower(world, pos);
   }
 
-  public static Optional<Integer> getInputPower(World world, BlockPos pos)
+  public static Optional<Integer> getInputPower(Level world, BlockPos pos)
   {
     BlockState state = world.getBlockState(pos);
     return (!(state.getBlock() instanceof ISwitchLinkable)) ? Optional.empty() : ((ISwitchLinkable)(state.getBlock())).switchLinkInputPower(world, pos);
   }
 
-  public static Optional<Integer> getComparatorInput(World world, BlockPos pos)
+  public static Optional<Integer> getComparatorInput(Level world, BlockPos pos)
   {
     BlockState state = world.getBlockState(pos);
     return (!(state.getBlock() instanceof ISwitchLinkable)) ? Optional.empty() : ((ISwitchLinkable)(state.getBlock())).switchLinkComparatorInput(world, pos);

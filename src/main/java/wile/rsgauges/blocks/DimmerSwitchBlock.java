@@ -9,24 +9,25 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.util.ActionResultType;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import wile.rsgauges.ModContent;
-import wile.rsgauges.libmc.detail.Overlay;
-import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.libmc.detail.Overlay;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -38,7 +39,7 @@ public class DimmerSwitchBlock extends SwitchBlock
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  public DimmerSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public DimmerSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config|0xff, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -46,20 +47,20 @@ public class DimmerSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
   {}
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
   { super.createBlockStateDefinition(builder); builder.add(POWER); }
 
   @Override
-  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+  public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
   {
-    if((!(state.getBlock() instanceof DimmerSwitchBlock))) return ActionResultType.FAIL;
-    if(world.isClientSide()) return ActionResultType.SUCCESS;
+    if((!(state.getBlock() instanceof DimmerSwitchBlock))) return InteractionResult.FAIL;
+    if(world.isClientSide()) return InteractionResult.SUCCESS;
     SwitchTileEntity te = getTe(world, pos);
-    if(te==null) return ActionResultType.FAIL;
+    if(te==null) return InteractionResult.FAIL;
     te.click_config(null, false);
     ClickInteraction ck = ClickInteraction.get(state, world, pos, player, hand, hit);
     boolean was_powered = te.on_power()!=0;
@@ -69,7 +70,7 @@ public class DimmerSwitchBlock extends SwitchBlock
         te.on_power(p);
         p = te.on_power();
         Overlay.show(player,
-          Auxiliaries.localizable("switchconfig.dimmerswitch.output_power", TextFormatting.RED, new Object[]{p})
+          Auxiliaries.localizable("switchconfig.dimmerswitch.output_power", ChatFormatting.RED, new Object[]{p})
         );
         final int state_p = state.getValue(POWER);
         if(state_p!=p) {
@@ -91,6 +92,6 @@ public class DimmerSwitchBlock extends SwitchBlock
     } else if(ck.item== ModContent.SWITCH_LINK_PEARL) {
       attack(state, world, pos, player);
     }
-    return ActionResultType.CONSUME;
+    return InteractionResult.CONSUME;
   }
 }

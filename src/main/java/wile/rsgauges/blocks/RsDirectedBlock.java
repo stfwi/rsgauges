@@ -8,28 +8,28 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.DirectionalBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
 
-public class RsDirectedBlock extends RsBlock
+public abstract class RsDirectedBlock extends RsBlock
 {
   public static final long RSBLOCK_CONFIG_WALLMOUNT         = 0x4000000000000000l;
   public static final long RSBLOCK_CONFIG_LATERAL           = 0x8000000000000000l;
@@ -41,38 +41,45 @@ public class RsDirectedBlock extends RsBlock
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  public RsDirectedBlock(long config, AbstractBlock.Properties properties, @Nullable AxisAlignedBB aabb1, @Nullable AxisAlignedBB aabb2)
+  public RsDirectedBlock(long config, BlockBehaviour.Properties properties, @Nullable AABB aabb1, @Nullable AABB aabb2)
   {
     super(config | (((config & RSBLOCK_CONFIG_TRANSLUCENT)==0) && ((aabb1.getXsize()<0.99) || (aabb1.getYsize()<0.99) || (aabb1.getXsize()<0.99)) ? RSBLOCK_CONFIG_CUTOUT : 0), properties);
     registerDefaultState(super.defaultBlockState().setValue(FACING, Direction.SOUTH));
     VoxelShape[][] shapes = new VoxelShape[Direction.values().length][2];
-    if(aabb1==null) aabb1 = new AxisAlignedBB(0,0,0,1,1,1);
+    if(aabb1==null) aabb1 = new AABB(0,0,0,1,1,1);
     if(aabb2==null) aabb2 = aabb1;
     for(int i_dir=0; i_dir<Direction.values().length; ++i_dir) {
       for(int i_pow=0; i_pow<2; ++i_pow) {
-        AxisAlignedBB bb = (i_pow==0) ? aabb1 : aabb2;
+        AABB bb = (i_pow==0) ? aabb1 : aabb2;
         if((config & RSBLOCK_CONFIG_LATERAL) == 0) {
           // Wall attached blocks where the UI is facing to the player.
-          switch(i_dir) {
-            case 0: bb = new AxisAlignedBB(1-bb.maxX, 1-bb.maxZ, 1-bb.maxY, 1-bb.minX, 1-bb.minZ, 1-bb.minY); break; // D
-            case 1: bb = new AxisAlignedBB(1-bb.maxX,   bb.minZ,   bb.minY, 1-bb.minX,   bb.maxZ,   bb.maxY); break; // U
-            case 2: bb = new AxisAlignedBB(1-bb.maxX,   bb.minY, 1-bb.maxZ, 1-bb.minX,   bb.maxY, 1-bb.minZ); break; // N
-            case 3: bb = new AxisAlignedBB(  bb.minX,   bb.minY,   bb.minZ,   bb.maxX,   bb.maxY,   bb.maxZ); break; // S --> bb
-            case 4: bb = new AxisAlignedBB(1-bb.maxZ,   bb.minY,   bb.minX, 1-bb.minZ,   bb.maxY,   bb.maxX); break; // W
-            case 5: bb = new AxisAlignedBB(  bb.minZ,   bb.minY, 1-bb.maxX,   bb.maxZ,   bb.maxY, 1-bb.minX); break; // E
+          switch (i_dir) {
+            case 0 -> bb = new AABB(1 - bb.maxX, 1 - bb.maxZ, 1 - bb.maxY, 1 - bb.minX, 1 - bb.minZ, 1 - bb.minY);
+            // D
+            case 1 -> bb = new AABB(1 - bb.maxX, bb.minZ, bb.minY, 1 - bb.minX, bb.maxZ, bb.maxY);
+            // U
+            case 2 -> bb = new AABB(1 - bb.maxX, bb.minY, 1 - bb.maxZ, 1 - bb.minX, bb.maxY, 1 - bb.minZ);
+            // N
+            case 3 -> bb = new AABB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
+            // S --> bb
+            case 4 -> bb = new AABB(1 - bb.maxZ, bb.minY, bb.minX, 1 - bb.minZ, bb.maxY, bb.maxX);
+            // W
+            case 5 -> bb = new AABB(bb.minZ, bb.minY, 1 - bb.maxX, bb.maxZ, bb.maxY, 1 - bb.minX);
+            // E
           }
         } else {
           // Wall or floor attached blocks where the UI and actuated facing is on the top.
-          switch(i_dir) {
-            case 0: // U --> bb
-            case 1: // N --> bb
-            case 2: bb = new AxisAlignedBB(  bb.minX, bb.minY,   bb.minZ,   bb.maxX, bb.maxY,   bb.maxZ); break; // D --> bb
-            case 3: bb = new AxisAlignedBB(1-bb.maxX, bb.minY, 1-bb.maxZ, 1-bb.minX, bb.maxY, 1-bb.minZ); break; // S
-            case 4: bb = new AxisAlignedBB(  bb.minZ, bb.minY, 1-bb.maxX,   bb.maxZ, bb.maxY, 1-bb.minX); break; // W
-            case 5: bb = new AxisAlignedBB(1-bb.maxZ, bb.minY,   bb.minX, 1-bb.minZ, bb.maxY,   bb.maxX); break; // E
-          }
+          // E
+          bb = switch (i_dir) { // U --> bb
+            // N --> bb
+            case 0, 1, 2 -> new AABB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ); // D --> bb
+            case 3 -> new AABB(1 - bb.maxX, bb.minY, 1 - bb.maxZ, 1 - bb.minX, bb.maxY, 1 - bb.minZ); // S
+            case 4 -> new AABB(bb.minZ, bb.minY, 1 - bb.maxX, bb.maxZ, bb.maxY, 1 - bb.minX); // W
+            case 5 -> new AABB(1 - bb.maxZ, bb.minY, bb.minX, 1 - bb.minZ, bb.maxY, bb.maxX);
+            default -> bb;
+          };
         }
-        shapes[i_dir][i_pow] = VoxelShapes.create(bb);
+        shapes[i_dir][i_pow] = Shapes.create(bb);
       }
     }
     shapes_ = shapes;
@@ -86,20 +93,20 @@ public class RsDirectedBlock extends RsBlock
   { return shapes_[state.getValue(FACING).get3DDataValue()][0]; }
 
   @Override
-  public VoxelShape getShape(BlockState state, IBlockReader source, BlockPos pos, ISelectionContext selectionContext)
+  public VoxelShape getShape(BlockState state, BlockGetter source, BlockPos pos, CollisionContext selectionContext)
   { return getShape(state); }
 
   @Override
-  public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext)
+  public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext selectionContext)
   { return getShape(state, world, pos, selectionContext); }
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
   { super.createBlockStateDefinition(builder); builder.add(FACING); }
 
   @Override
   @Nullable
-  public BlockState getStateForPlacement(BlockItemUseContext context)
+  public BlockState getStateForPlacement(BlockPlaceContext context)
   {
     if(!isValidPositionOnSide(context.getLevel(), context.getClickedPos(), context.getClickedFace())) return null;
     final BlockState state = super.getStateForPlacement(context);
@@ -120,7 +127,7 @@ public class RsDirectedBlock extends RsBlock
 
   @SuppressWarnings("unused")
   @Override
-  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos currentPos, BlockPos facingPos)
+  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos currentPos, BlockPos facingPos)
   {
     if(isCube() || ((!world.isEmptyBlock(facingPos)) && (!facingState.getMaterial().isLiquid()))) return state;
     Direction blockfacing = state.getValue(FACING);
@@ -165,7 +172,7 @@ public class RsDirectedBlock extends RsBlock
    * the device pop off and dropped as item.
    * Returns true if the neighbour block change may affect the state of the device.
    */
-  protected boolean isAffectedByNeigbour(BlockState state, IWorld world, BlockPos pos, BlockPos neighborPos)
+  protected boolean isAffectedByNeigbour(BlockState state, LevelAccessor world, BlockPos pos, BlockPos neighborPos)
   {
     if(isCube()) return true;
     if((!isWallMount()) && (!(pos.below().equals(neighborPos)))) return false;
@@ -202,7 +209,7 @@ public class RsDirectedBlock extends RsBlock
   protected Direction getAbsoluteFacing(BlockState state, Direction relativeSide)
   { return ((state==null) || (relativeSide==null)) ? Direction.NORTH : facing_transform_lut[state.getValue(FACING).get3DDataValue()][relativeSide.get3DDataValue()]; }
 
-  protected boolean isValidPositionOnSide(IWorldReader world, BlockPos pos, Direction side)
+  protected boolean isValidPositionOnSide(LevelReader world, BlockPos pos, Direction side)
   {
     if(isCube()) {
       return true;

@@ -9,14 +9,15 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.*;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import wile.rsgauges.blocks.IntervalTimerSwitchBlock.IntervalTimerSwitchTileEntity;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.detail.SwitchLink;
@@ -27,10 +28,10 @@ import java.util.Random;
 
 public abstract class AutoSwitchBlock extends SwitchBlock
 {
-  public AutoSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
+  public AutoSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); }
 
-  public AutoSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered)
+  public AutoSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered)
   { this(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, null, null); }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -38,7 +39,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
   {}
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -57,9 +58,9 @@ public abstract class AutoSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public AutoSwitchTileEntity getTe(IWorldReader world, BlockPos pos)
+  public AutoSwitchTileEntity getTe(LevelReader world, BlockPos pos)
   {
-    TileEntity te = world.getBlockEntity(pos);
+    BlockEntity te = world.getBlockEntity(pos);
     if((!(te instanceof AutoSwitchTileEntity))) return null;
     return (AutoSwitchTileEntity)te;
   }
@@ -73,8 +74,8 @@ public abstract class AutoSwitchBlock extends SwitchBlock
    */
   public static abstract class AutoSwitchTileEntity extends SwitchTileEntity
   {
-    public AutoSwitchTileEntity(TileEntityType<?> te_type)
-    { super(te_type); }
+    public AutoSwitchTileEntity(BlockEntityType<?> te_type, BlockPos pos, BlockState state)
+    { super(te_type, pos, state); }
 
     protected final void updateSwitchState(BlockState state, AutoSwitchBlock block, boolean active, int hold_time)
     { updateSwitchState(state, block, active, hold_time, true); }

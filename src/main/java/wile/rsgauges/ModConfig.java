@@ -9,11 +9,11 @@
  */
 package wile.rsgauges;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Logger;
@@ -181,7 +181,7 @@ public class ModConfig
   // Cache
   //--------------------------------------------------------------------------------------------------------------------
 
-  private static final CompoundNBT server_config_ = new CompoundNBT();
+  private static final CompoundTag server_config_ = new CompoundTag();
   private static HashSet<String> optouts_ = new HashSet<>();
   private static boolean with_experimental_features_ = false;
   private static boolean with_config_logging_ = false;
@@ -199,7 +199,7 @@ public class ModConfig
   public static double switch_status_overlay_y = 0.75;
   public static final Set<ResourceLocation> accepted_wrenches = new HashSet<>(Arrays.asList(new ResourceLocation("minecraft","redsdtone_torch")));
 
-  public static final CompoundNBT getServerConfig()
+  public static final CompoundTag getServerConfig()
   { return server_config_; }
 
   private static final void updateOptouts()

@@ -13,37 +13,42 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.world.*;
-import net.minecraft.loot.LootContext;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.StateContainer;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.IWaterLoggable;
-import net.minecraft.block.material.PushReaction;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.util.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.gameevent.GameEventListener;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import wile.rsgauges.libmc.detail.Auxiliaries;
@@ -55,7 +60,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public abstract class RsBlock extends Block implements IWaterLoggable
+public abstract class RsBlock extends Block implements EntityBlock
 {
   public static final long RSBLOCK_CONFIG_SOLID              = 0x0000000000000000l;
   public static final long RSBLOCK_CONFIG_CUTOUT             = 0x1000000000000000l;
@@ -71,17 +76,27 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  public RsBlock(long config, AbstractBlock.Properties properties)
+  public RsBlock(long config, BlockBehaviour.Properties properties)
   { this(config, properties, Auxiliaries.getPixeledAABB(0, 0, 0, 16, 16,16 )); }
 
-  public RsBlock(long config, AbstractBlock.Properties properties, final AxisAlignedBB aabb)
-  { this(config, properties, VoxelShapes.create(aabb)); }
+  public RsBlock(long config, BlockBehaviour.Properties properties, final AABB aabb)
+  { this(config, properties, Shapes.create(aabb)); }
 
-  public RsBlock(long config, AbstractBlock.Properties properties, final VoxelShape vshape)
+  public RsBlock(long config, BlockBehaviour.Properties properties, final VoxelShape vshape)
   { super(properties); this.config = config; registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false)); }
 
   public RenderTypeHint getRenderTypeHint()
   { return render_layer_map_[(int)((config>>60)&0x3)]; }
+
+  @Override
+  @Nullable
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> te_type)
+  { return (world.isClientSide) ? (null) : ((Level w, BlockPos p, BlockState s, T te) -> ((RsTileEntity)te).tick()); } // To be evaluated if
+
+  @Override
+  @Nullable
+  public <T extends BlockEntity> GameEventListener getListener(Level world, T te)
+  { return null; }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Block overrides
@@ -89,13 +104,8 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
   @Override
   @OnlyIn(Dist.CLIENT)
-  public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+  public void appendHoverText(final ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag flag)
   { Auxiliaries.Tooltip.addInformation(stack, world, tooltip, flag, true); }
-
-  @Override
-  @OnlyIn(Dist.CLIENT)
-  public boolean addHitEffects(BlockState state, World worldObj, RayTraceResult target, net.minecraft.client.particle.ParticleManager manager)
-  { return true; }
 
   @OnlyIn(Dist.CLIENT)
   @SuppressWarnings("deprecation")
@@ -104,12 +114,12 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
   @Override
   @SuppressWarnings("deprecation")
-  public VoxelShape getShape(BlockState state, IBlockReader source, BlockPos pos, ISelectionContext selectionContext)
-  { return VoxelShapes.block(); }
+  public VoxelShape getShape(BlockState state, BlockGetter source, BlockPos pos, CollisionContext selectionContext)
+  { return Shapes.block(); }
 
   @Override
   @SuppressWarnings("deprecation")
-  public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext)
+  public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext selectionContext)
   { return getShape(state, world, pos, selectionContext); }
 
   @Override
@@ -117,7 +127,7 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   { return false; }
 
   @Override
-  public boolean canCreatureSpawn(BlockState state, IBlockReader world, BlockPos pos, EntitySpawnPlacementRegistry.PlacementType type, @Nullable EntityType<?> entityType)
+  public boolean isValidSpawn(BlockState state, BlockGetter world, BlockPos pos, SpawnPlacements.Type type, @Nullable EntityType<?> entityType)
   { return false; }
 
   @Override
@@ -126,18 +136,18 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   { return PushReaction.DESTROY; }
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
   { super.createBlockStateDefinition(builder); builder.add(WATERLOGGED); }
 
   @Override
   @Nullable
-  public BlockState getStateForPlacement(BlockItemUseContext context)
+  public BlockState getStateForPlacement(BlockPlaceContext context)
   {
     BlockState state = super.getStateForPlacement(context);
     if(state==null) return null;
     if((config & RSBLOCK_NOT_WATERLOGGABLE)==0) {
       FluidState fs = context.getLevel().getFluidState(context.getClickedPos());
-      state = state.setValue(WATERLOGGED,fs.getType()==Fluids.WATER);
+      state = state.setValue(WATERLOGGED,fs.getType()== Fluids.WATER);
     } else {
       state = state.setValue(WATERLOGGED, false);
     }
@@ -150,7 +160,7 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   { return ((config & RSBLOCK_NOT_WATERLOGGABLE)==0) ? (state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state)) : super.getFluidState(state); }
 
   @Override
-  public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos)
+  public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos)
   {
     if(((config & RSBLOCK_NOT_WATERLOGGABLE)==0) && state.getValue(WATERLOGGED)) return false;
     return super.propagatesSkylightDown(state, reader, pos);
@@ -158,7 +168,7 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
   @Override
   @SuppressWarnings("deprecation")
-  public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
+  public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving)
   {
     super.onRemove(state, world, pos, newState, isMoving);
     world.updateNeighbourForOutputSignal(pos, newState.getBlock());
@@ -167,17 +177,17 @@ public abstract class RsBlock extends Block implements IWaterLoggable
 
   @Override
   @SuppressWarnings("deprecation")
-  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
   {
     if((config & RSBLOCK_NOT_WATERLOGGABLE)==0) {
-      if(state.getValue(WATERLOGGED)) world.getLiquidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+      if(state.getValue(WATERLOGGED)) world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
     }
     return state;
   }
 
   @Override
   @SuppressWarnings("deprecation")
-  public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+  public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
   {}
 
   @Override
@@ -186,22 +196,18 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   { return Collections.singletonList(new ItemStack(state.getBlock().asItem())); }
 
   @Override
-  public boolean hasTileEntity(BlockState state)
-  { return false; }
-
-  @Override
   @SuppressWarnings("deprecation")
-  public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player)
+  public void attack(BlockState state, Level world, BlockPos pos, Player player)
   {}
 
   @Override
   @SuppressWarnings("deprecation")
-  public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-  { return ActionResultType.PASS; }
+  public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+  { return InteractionResult.PASS; }
 
   @Override
   @SuppressWarnings("deprecation")
-  public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rnd)
+  public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rnd)
   {}
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -211,41 +217,44 @@ public abstract class RsBlock extends Block implements IWaterLoggable
   /**
    * Main RsBlock derivate tile entity base
    */
-  public static abstract class RsTileEntity extends TileEntity implements Networking.IPacketTileNotifyReceiver
+  public static abstract class RsTileEntity extends BlockEntity implements Networking.IPacketTileNotifyReceiver
   {
     private static final int NBT_ENTITY_TYPE = 1; // forge-doc: use 1, does not matter, only used by vanilla.
 
-    public RsTileEntity(TileEntityType<?> te_type)
-    { super(te_type); }
+    public RsTileEntity(BlockEntityType<?> te_type, BlockPos pos, BlockState state)
+    { super(te_type, pos, state); }
 
-    public void write(CompoundNBT nbt, boolean updatePacket)
+    public void write(CompoundTag nbt, boolean updatePacket)
     {}
 
-    public void read(CompoundNBT nbt, boolean updatePacket)
+    public void read(CompoundTag nbt, boolean updatePacket)
+    {}
+
+    public void tick()
     {}
 
     protected final void syncToClients()
     {
       if(level.isClientSide()) return;
-      CompoundNBT nbt = new CompoundNBT();
+      CompoundTag nbt = new CompoundTag();
       write(nbt, true);
-      Networking.PacketTileNotifyServerToClient.sendToAllPlayers((ServerWorld)getLevel(), getBlockPos(), nbt);
+      Networking.PacketTileNotifyServerToClient.sendToPlayers(this, nbt);
     }
 
-    public final void onServerPacketReceived(CompoundNBT nbt)
+    public final void onServerPacketReceived(CompoundTag nbt)
     { read(nbt, true); }
 
     // --------------------------------------------------------------------------------------------------------
-    // TileEntity
+    // BlockEntity
     // --------------------------------------------------------------------------------------------------------
 
     @Override
-    public final CompoundNBT save(CompoundNBT nbt)
-    { super.save(nbt); write(nbt, false); return nbt; }
+    public final void saveAdditional(CompoundTag nbt)
+    { super.saveAdditional(nbt); write(nbt, false); }
 
     @Override
-    public final void load(BlockState state, CompoundNBT nbt)
-    { super.load(state, nbt); read(nbt, false); }
+    public final void load(CompoundTag nbt)
+    { super.load(nbt); read(nbt, false); }
   }
 
 }

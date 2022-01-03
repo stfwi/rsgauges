@@ -8,10 +8,11 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.*;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.detail.SwitchLink;
 import wile.rsgauges.detail.SwitchLink.RequestResult;
@@ -23,18 +24,18 @@ public class LinkReceiverSwitchBlock extends SwitchBlock
 {
   private final boolean is_analog;
 
-  public LinkReceiverSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
+  public LinkReceiverSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); is_analog = analog_device; }
 
   @Override
-  public boolean switchLinkHasAnalogSupport(World world, BlockPos pos)
+  public boolean switchLinkHasAnalogSupport(Level world, BlockPos pos)
   { return is_analog; }
 
   @Override
   public SwitchLink.RequestResult switchLinkTrigger(SwitchLink link)
   {
     BlockPos pos = link.target_position;
-    World world = link.world;
+    Level world = link.world;
     SwitchTileEntity te = getTe(world, pos);
     BlockState state = world.getBlockState(pos);
     if((te==null) || (!te.verifySwitchLinkTarget(link))) return RequestResult.TARGET_GONE;

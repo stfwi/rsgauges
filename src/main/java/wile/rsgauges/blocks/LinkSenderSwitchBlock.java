@@ -8,16 +8,17 @@
  */
 package wile.rsgauges.blocks;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
-import net.minecraft.block.Block;
-import net.minecraft.util.math.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import wile.rsgauges.detail.ModResources;
 
 import javax.annotation.Nullable;
@@ -27,19 +28,19 @@ public class LinkSenderSwitchBlock extends SwitchBlock
 {
   private final boolean is_analog;
 
-  public LinkSenderSwitchBlock(long config, AbstractBlock.Properties properties, AxisAlignedBB unrotatedBBUnpowered, @Nullable AxisAlignedBB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
+  public LinkSenderSwitchBlock(long config, BlockBehaviour.Properties properties, AABB unrotatedBBUnpowered, @Nullable AABB unrotatedBBPowered, @Nullable ModResources.BlockSoundEvent powerOnSound, @Nullable ModResources.BlockSoundEvent powerOffSound, boolean analog_device)
   { super(config, properties, unrotatedBBUnpowered, unrotatedBBPowered, powerOnSound, powerOffSound); is_analog = analog_device; }
 
   @Override
-  public boolean switchLinkHasAnalogSupport(World world, BlockPos pos)
+  public boolean switchLinkHasAnalogSupport(Level world, BlockPos pos)
   { return is_analog; }
 
   @Override
-  protected int getPower(BlockState state, IBlockReader world, BlockPos pos, Direction side, boolean strong)
+  protected int getPower(BlockState state, BlockGetter world, BlockPos pos, Direction side, boolean strong)
   { return 0; }
 
   @Override
-  public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+  public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
   {
     final SwitchTileEntity te = getTe(world, pos);
     if(te != null) te.reset(world);
@@ -48,7 +49,7 @@ public class LinkSenderSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+  public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
   {
     if(!isAffectedByNeigbour(state, world, pos, fromPos)) return;
     final SwitchTileEntity te = getTe(world, pos);
@@ -92,7 +93,7 @@ public class LinkSenderSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public boolean getWeakChanges(BlockState state, IWorldReader world, BlockPos pos)
+  public boolean getWeakChanges(BlockState state, LevelReader world, BlockPos pos)
   { return true; }
 
 }
