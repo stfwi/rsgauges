@@ -153,8 +153,8 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
             break;
           }
           case 4 -> {
-            on_power(on_power() + direction);
-            if (on_power() < 1) on_power(1);
+            setpower(setpower() + direction);
+            if (setpower() < 1) setpower(1);
             break;
           }
         }
@@ -169,7 +169,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
             .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.detector.entity_filter", ChatFormatting.DARK_GREEN, new Object[]{new TranslatableComponent("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}))
             .append(" | ")
-            .append(Auxiliaries.localizable("switchconfig.detector.output_power", ChatFormatting.RED, new Object[]{on_power()}))
+            .append(Auxiliaries.localizable("switchconfig.detector.output_power", ChatFormatting.RED, new Object[]{setpower()}))
         );
       }
       return true;

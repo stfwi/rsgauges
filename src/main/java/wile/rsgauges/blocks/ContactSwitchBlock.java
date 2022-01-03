@@ -114,7 +114,7 @@ public class ContactSwitchBlock extends SwitchBlock
       power_on_sound.play(world, pos);
       notifyNeighbours(world, pos, state, te, false);
       if((config & SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT)!=0) {
-        if(!te.activateSwitchLinks(te.on_power(), 15, true)) {
+        if(!te.activateSwitchLinks(te.setpower(), 15, true)) {
           ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
         }
       }
@@ -232,7 +232,7 @@ public class ContactSwitchBlock extends SwitchBlock
           case 1 -> high_sensitivity(direction > 0);
           case 2 -> entity_count_threshold(entity_count_threshold() + direction);
           case 3 -> filter(filter() + direction);
-          case 4 -> on_power(Mth.clamp(on_power() + direction, 1, 15));
+          case 4 -> setpower(Mth.clamp(setpower() + direction, 1, 15));
         }
         setChanged();
       }
@@ -247,7 +247,7 @@ public class ContactSwitchBlock extends SwitchBlock
             .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.touchcontactmat.entity_filter", ChatFormatting.DARK_GREEN, new Object[]{new TranslatableComponent("rsgauges.switchconfig.touchcontactmat.entity_filter."+filter_class_names[filter_])}))
             .append(" | ")
-            .append(Auxiliaries.localizable("switchconfig.touchcontactmat.output_power", ChatFormatting.RED, new Object[]{on_power()}))
+            .append(Auxiliaries.localizable("switchconfig.touchcontactmat.output_power", ChatFormatting.RED, new Object[]{setpower()}))
         );
       }
       return true;

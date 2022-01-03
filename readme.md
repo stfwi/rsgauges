@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.18.x.
 ----
 ## Version history
 
+    ~ v1.2.13-b2 [F] Fixed Link Receiver signal modes (issue #48, ty graywaren).
+
     - v1.2.13-b1 [U] Initial 1.18.1 port.
 
     - v1.2.12    [U] Mappings ported, updated to Forge 1.16.5-36.2.0.

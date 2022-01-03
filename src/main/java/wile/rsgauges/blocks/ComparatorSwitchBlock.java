@@ -146,7 +146,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
     public void reset(LevelReader world)
     {
       super.reset(world);
-      on_power(15);
+      setpower(15);
       threshold0_on(1);
       threshold0_off(0);
       debounce(0);
@@ -187,11 +187,11 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
             break;
           }
           case 4 -> {
-            on_power(on_power() + direction);
+            setpower(setpower() + direction);
             break;
           }
         }
-        if(on_power() < 1) on_power(1);
+        if(setpower() < 1) setpower(1);
         setChanged();
       }
       {
@@ -199,9 +199,9 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
         ArrayList<Object> tr = new ArrayList<>();
         tr.add(Auxiliaries.localizable("switchconfig.comparator_switch.threshold_on", ChatFormatting.BLUE, new Object[]{(int)threshold0_on()}));
         tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.threshold_off", ChatFormatting.YELLOW, new Object[]{(int)threshold0_off()})));
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", ChatFormatting.RED, new Object[]{(int)on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", ChatFormatting.RED, new Object[]{(int) setpower()})));
         tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.mode"+((int)acquisition_mode()), ChatFormatting.DARK_GREEN, new Object[]{})));
-        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", ChatFormatting.RED, new Object[]{(int)on_power()})));
+        tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.output_power", ChatFormatting.RED, new Object[]{(int) setpower()})));
         Overlay.show(player, Auxiliaries.localizable("switchconfig.comparator_switch", ChatFormatting.RESET, tr.toArray()));
       }
       return true;

@@ -8,6 +8,7 @@
  */
 package wile.rsgauges.blocks;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -32,6 +33,10 @@ public class LinkReceiverSwitchBlock extends SwitchBlock
   { return is_analog; }
 
   @Override
+  public ImmutableList<SwitchLink.LinkMode> switchLinkGetSupportedTargetModes()
+  { return (!is_analog) ? super.switchLinkGetSupportedTargetModes() : ImmutableList.of(SwitchLink.LinkMode.AS_STATE, SwitchLink.LinkMode.INV_STATE); }
+
+  @Override
   public SwitchLink.RequestResult switchLinkTrigger(SwitchLink link)
   {
     BlockPos pos = link.target_position;
@@ -39,10 +44,11 @@ public class LinkReceiverSwitchBlock extends SwitchBlock
     SwitchTileEntity te = getTe(world, pos);
     BlockState state = world.getBlockState(pos);
     if((te==null) || (!te.verifySwitchLinkTarget(link))) return RequestResult.TARGET_GONE;
-    final int p = is_analog ? link.source_analog_power : link.source_digital_power;
-    te.on_power(p);
-    final boolean powered = (p>0);
+    int p = is_analog ? link.source_analog_power : link.source_digital_power;
     final boolean was_powered = state.getValue(POWERED);
+    if((!is_analog) && (link.mode() != SwitchLink.LinkMode.AS_STATE)) p = was_powered ? 0:15;
+    final boolean powered = (p>0);
+    if(powered) te.setpower(p);
     if(powered != was_powered) {
       if((config & SWITCH_CONFIG_PULSE)==0) {
         world.setBlock(pos, state.setValue(POWERED, powered), 1|2|8|16);
@@ -58,7 +64,7 @@ public class LinkReceiverSwitchBlock extends SwitchBlock
       }
     }
     notifyNeighbours(world, pos, state, te, false);
-    if(!te.activateSwitchLinks(te.on_power(), powered?15:0, powered != was_powered)) {
+    if(!te.activateSwitchLinks(te.setpower(), powered?15:0, powered != was_powered)) {
       ModResources.BlockSoundEvents.SWITCHLINK_LINK_PEAL_USE_FAILED.play(world, pos);
     }
     return SwitchLink.RequestResult.OK;
