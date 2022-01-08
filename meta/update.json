@@ -1,7 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.18.1": {
-    "1.2.13-b2": "[F] Fixed Link Receiver signal modes (issue #48, ty graywaren).",
+    "1.2.13-b2": "[F] Fixed Link Receiver signal modes (issue #48, ty graywaren).\n[F] Updated Forge/gradle.",
     "1.2.13-b1": "[U] Initial 1.18.1 port.",
     "1.2.12": "[U] Mappings ported, updated to Forge 1.16.5-36.2.0.",
     "1.2.11": "[F] Lang file fixes.",
