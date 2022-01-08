@@ -1,6 +1,5 @@
 // @file build.gradle
-// Gauges and Switches mod gradle build relay (mc1.15.1)
-import net.minecraftforge.gradle.common.task.SignJar
+// Gauges and Switches mod gradle build relay (mc1.16.x)
 buildscript {
   repositories {
     maven { url = 'https://files.minecraftforge.net/maven' }
@@ -8,13 +7,13 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+    classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
   }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 //-----------------------------------------------------------------------------
 version = "${version_rsgauges}"
 group = "wile.rsgauges"
@@ -77,6 +76,10 @@ jar {
   }
 }
 
+jar.finalizedBy('reobfJar')
+
+/*
+import net.minecraftforge.gradle.common.task.SignJar
 def reobfFile = file("$buildDir/reobfJar/output.jar")
 def reobfArtifact = artifacts.add('default', reobfFile) { type 'jar'; builtBy 'reobfJar' }
 
@@ -99,3 +102,4 @@ publishing {
   publications { mavenJava(MavenPublication) { artifact reobfArtifact } }
   repositories { maven { url "file:///${project.projectDir}/mcmodsrepo" } }
 }
+*/

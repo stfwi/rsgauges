@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    ~ v1.2.14-b1 [F] Forge/gradle update.
+
     - v1.2.13    [F] Fixed Link Receiver signal modes (issue #48, ty graywaren).
 
     - v1.2.12    [U] Mappings ported, updated to Forge 1.16.5-36.2.0.
