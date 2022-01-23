@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.18.x.
 ----
 ## Version history
 
+    - v1.2.13    [R] Release build.
+
     - v1.2.13-b2 [F] Fixed Link Receiver signal modes (issue #48, ty graywaren).
                  [F] Updated Forge/gradle.
 
