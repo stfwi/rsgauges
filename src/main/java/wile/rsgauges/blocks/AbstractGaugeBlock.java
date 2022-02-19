@@ -143,7 +143,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements EntityBlock, 
 
   @Override
   public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side)
-  { return ((state.getBlock() instanceof GaugeBlock) && (side == state.getValue(FACING).getOpposite())); }
+  { return ((state.getBlock() instanceof AbstractGaugeBlock) && (side == state.getValue(FACING).getOpposite())); }
 
   @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -252,7 +252,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements EntityBlock, 
    */
   public static class GaugeTileEntity extends RsBlock.RsTileEntity
   {
-    private boolean alternation_state_ = false; // client, mainly sound indicators
+    private boolean alternation_state_ = false;
     private long trigger_timer_ = 0;
     private long scd_ = 0;
     private long last_wrench_click_ = 0;
@@ -299,7 +299,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements EntityBlock, 
       } else {
         try {
           final long current_scd = scd_;
-          scd_ = (int) ((((GaugeBlock) (world.getBlockState(getBlockPos()).getBlock())).config));
+          scd_ = (int) ((((AbstractGaugeBlock)(world.getBlockState(getBlockPos()).getBlock())).config));
           if(current_scd != scd_) setChanged();
         } catch(Exception e) {
           scd_ = 0; // ok, the default then
@@ -350,27 +350,12 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements EntityBlock, 
     {
       if(--trigger_timer_ > 0) return;
       trigger_timer_ = ModConfig.gauge_update_interval;
+      BlockState state = getBlockState();
+      if(!(state.getBlock() instanceof final AbstractGaugeBlock block)) return;
       try {
-        BlockState state = getBlockState();
-        final AbstractGaugeBlock block = (AbstractGaugeBlock) state.getBlock();
-        if(level.isClientSide()) {
-          if(((block.config & GAUGE_DATA_BLINKING) != 0) && (block instanceof IndicatorBlock)) {
-            if(state.getValue(IndicatorBlock.POWERED)) {
-              if((block.power_off_sound != null) || (block.power_on_sound != null)) {
-                final boolean alternation = (System.currentTimeMillis() & 1024) < 512;
-                if(alternation != alternation_state_ ) {
-                  alternation_state_ = alternation;
-                  if(alternation && (block.power_on_sound != null)) {
-                    block.power_on_sound.play(level, worldPosition);
-                  } else if(!alternation && (block.power_off_sound != null)) {
-                    block.power_off_sound.play(level, worldPosition);
-                  }
-                }
-              }
-            }
-          }
-        } else {
-          final BlockPos neighbourPos = worldPosition.relative((Direction) state.getValue(GaugeBlock.FACING), -1);
+        // Tick update
+        {
+          final BlockPos neighbourPos = worldPosition.relative((Direction) state.getValue(AbstractGaugeBlock.FACING), -1);
           if(!level.hasChunkAt(neighbourPos)) return;
           final BlockState neighborState = level.getBlockState(neighbourPos);
           int p = 0;
@@ -414,6 +399,24 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements EntityBlock, 
             if(state.getValue(IndicatorBlock.POWERED) != powered) level.setBlock(worldPosition, state.setValue(IndicatorBlock.POWERED, powered), 1|2|16); // |32
           } else if(block instanceof GaugeBlock) {
             if((state.getValue(GaugeBlock.POWER) != p)) level.setBlock(worldPosition, state.setValue(GaugeBlock.POWER, p), 1|2|8|16); // |32
+          }
+        }
+        // Indicator update
+        if((block.power_off_sound != null) || (block.power_on_sound != null)) {
+          if(((block.config & GAUGE_DATA_BLINKING) != 0) && (block instanceof IndicatorBlock)) {
+            if(state.getValue(IndicatorBlock.POWERED)) {
+              final boolean alternation = (level.getGameTime() & 0xf) < 8;
+              if(alternation != alternation_state_ ) {
+                alternation_state_ = alternation;
+                if(alternation && (block.power_on_sound != null)) {
+                  block.power_on_sound.play(level, worldPosition);
+                } else if(!alternation && (block.power_off_sound != null)) {
+                  block.power_off_sound.play(level, worldPosition);
+                }
+              }
+            } else {
+              alternation_state_ = true;
+            }
           }
         }
       } catch(Throwable e) {

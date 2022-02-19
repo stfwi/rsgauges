@@ -61,6 +61,7 @@ public class ModConfig
     public final ForgeConfigSpec.IntValue gauge_update_interval;
     public final ForgeConfigSpec.IntValue autoswitch_volumetric_update_interval;
     public final ForgeConfigSpec.IntValue autoswitch_linear_update_interval;
+    public final ForgeConfigSpec.IntValue comparator_switch_update_interval;
 
     CommonConfig(ForgeConfigSpec.Builder builder)
     {
@@ -145,6 +146,10 @@ public class ModConfig
               "impact on the server performance due to ray tracing. Has much less impact",
             "as the volumetric autoswitch interval.")
           .defineInRange("autoswitch_linear_update_interval", 4, 1, 50);
+        comparator_switch_update_interval = builder
+          .translation(ModRsGauges.MODID + ".config.comparator_switch_update_interval")
+          .comment("Sample interval of the Comparator Switch")
+          .defineInRange("comparator_switch_update_interval", 4, 1, 50);
         builder.pop();
       }
     }
@@ -193,6 +198,7 @@ public class ModConfig
   public static boolean without_rightclick_item_switchconfig = false;
   public static int max_switch_linking_distance = 16;
   public static int autoswitch_linear_update_interval = 2;
+  public static int comparator_switch_update_interval = 2;
   public static int autoswitch_volumetric_update_interval = 2;
   public static int gauge_update_interval = 2;
   public static int config_left_click_timeout = 600;
@@ -277,6 +283,7 @@ public class ModConfig
     without_switch_linking = COMMON.without_switch_linking.get();
     max_switch_linking_distance = COMMON.max_switch_linking_distance.get();
     autoswitch_linear_update_interval = COMMON.autoswitch_linear_update_interval.get();
+    comparator_switch_update_interval = COMMON.comparator_switch_update_interval.get();
     autoswitch_volumetric_update_interval = COMMON.autoswitch_volumetric_update_interval.get();
     gauge_update_interval = COMMON.gauge_update_interval.get();
     without_gauge_weak_power_measurement = COMMON.without_gauge_weak_power_measurement.get();
