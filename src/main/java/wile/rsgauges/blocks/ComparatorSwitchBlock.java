@@ -25,6 +25,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import wile.rsgauges.ModContent;
+import wile.rsgauges.ModConfig;
 import wile.rsgauges.blocks.EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.libmc.detail.Auxiliaries;
@@ -215,8 +216,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
     public void tick()
     {
       if((!hasLevel()) || (getLevel().isClientSide()) || (--update_timer_ > 0)) return;
-      if(update_interval_ < 4) update_interval_ = 4;
-      update_timer_ = update_interval_ + (int)(Math.random()*2); // sensor timing noise using rnd
+      update_timer_ = Mth.clamp(ModConfig.comparator_switch_update_interval, 1, 10);
       BlockState state = getBlockState();
       if((!(state.getBlock() instanceof ComparatorSwitchBlock))) return;
       final boolean last_active = state.getValue(POWERED);
