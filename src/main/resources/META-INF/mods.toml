@@ -12,7 +12,7 @@ displayName="Gauges and Switches"
 description="Adds redstone metering gauges, levers, buttons, pressure plates, and all sorts of other sensors and detector switches to the game."
 authors="wilechaote"
 credits="The Forge smiths, Jannis."
-updateJSONURL="https://raw.githubusercontent.com/stfwi/rsgauges/1.16/meta/update.json"
+updateJSONURL="https://raw.githubusercontent.com/stfwi/rsgauges/versions/1.16.json"
 displayURL="https://github.com/stfwi/rsgauges/"
 logoFile="logo.png"
 
