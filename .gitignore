@@ -21,7 +21,9 @@
 /classes
 /dev
 /dist
+/versions
 /tmp
+/meta/lib
 bin
 build
 classes
