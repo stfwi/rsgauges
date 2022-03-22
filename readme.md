@@ -10,6 +10,9 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    - v1.2.6     [R] Maintenance release
+                 [F] Defaulting gauge tile entity data on first instantiation adapted.
+
                  -------------------------------------------------------------------
     - v1.2.5     [R] Maintenance release:
                     * Minor model and recipe fixes.

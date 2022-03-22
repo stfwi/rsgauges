@@ -239,14 +239,19 @@ public class BlockGauge extends RsBlock implements ModContent.Colors.ColorTintSu
     public void reset(IBlockAccess world)
     {
       trigger_timer_= 0;
-      if(world == null) {
+      if(!(world instanceof World)) {
         scd_ = 0;
       } else {
         try {
           final long current_scd = scd_;
-          scd_ = (int) ((((BlockGauge) (world.getBlockState(getPos()).getBlock())).config));
-          if(current_scd != scd_) markDirty();
-        } catch(Exception e) {
+          final IBlockState state = world.getBlockState(getPos());
+          if(state.getBlock() instanceof BlockGauge) {
+            scd_ = (int) ((((BlockGauge) (state.getBlock())).config));
+            if(current_scd != scd_) markDirty();
+          } else {
+            scd_ = 0;
+          }
+        } catch(Throwable e) {
           scd_ = 0; // ok, the default then
         }
       }
@@ -265,7 +270,7 @@ public class BlockGauge extends RsBlock implements ModContent.Colors.ColorTintSu
 
     @Override
     protected void setWorldCreate(World world)
-    { reset(world); }
+    { super.setWorldCreate(world); reset(world); }
 
     @Override
     public void update()
@@ -273,7 +278,7 @@ public class BlockGauge extends RsBlock implements ModContent.Colors.ColorTintSu
       if(--trigger_timer_ > 0) return;
       try {
         if(world.isRemote) {
-          trigger_timer_ = ModConfig.tweaks.gauge_update_interval * 2;
+          trigger_timer_ = ((long)ModConfig.tweaks.gauge_update_interval) * 2;
           IBlockState state = world.getBlockState(pos);
           state = ((BlockGauge) state.getBlock()).getBlockStateWithPower(state, power());
           if(last_state_ != state) {
