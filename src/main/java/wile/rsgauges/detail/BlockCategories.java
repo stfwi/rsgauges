@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.IPlantable;
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.libmc.detail.Auxiliaries;
 
 import java.util.*;
 
@@ -65,44 +66,44 @@ public class BlockCategories
 
     matchers_.put("plant", (final Level w, final BlockPos p) -> {
       Block b=w.getBlockState(p).getBlock();
-      return (b instanceof GrowingPlantBlock) || (b instanceof IPlantable) || b.getTags().contains(new ResourceLocation(MODID, "plants"));
+      return (b instanceof GrowingPlantBlock) || (b instanceof IPlantable) || Auxiliaries.isInBlockTag(b, new ResourceLocation(MODID, "plants"));
     });
 
     matchers_.put("material_wood", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "wooden"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "wooden"));
     });
 
     matchers_.put("material_stone", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "stone_like"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "stone_like"));
     });
 
     matchers_.put("material_glass", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "glass_like"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "glass_like"));
     });
 
     matchers_.put("material_clay", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "clay_like"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "clay_like"));
     });
 
     matchers_.put("material_water", (final Level w, final BlockPos p) -> {
       BlockState st = w.getBlockState(p);
       Block b = st.getBlock();
-      if(b.getTags().contains(new ResourceLocation(MODID, "water_like"))) return true;
+      if(Auxiliaries.isInBlockTag(b , new ResourceLocation(MODID, "water_like"))) return true;
       if(st.getFluidState().isEmpty()) return false;
       return (st.getFluidState().getType() == Fluids.WATER) || (st.getFluidState().getType() == Fluids.FLOWING_WATER);
     });
 
     matchers_.put("ore", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "ores"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "ores"));
     });
 
     matchers_.put("woodlog", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "logs"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "logs"));
     });
 
     matchers_.put("crop", (final Level w, final BlockPos p) -> {
       Block b = w.getBlockState(p).getBlock();
-      return (b instanceof CropBlock) || b.getTags().contains(new ResourceLocation(MODID, "crops"));
+      return (b instanceof CropBlock) || Auxiliaries.isInBlockTag(b, new ResourceLocation(MODID, "crops"));
     });
 
     matchers_.put("crop_mature", (final Level w, final BlockPos p) -> {
@@ -112,11 +113,11 @@ public class BlockCategories
     });
 
     matchers_.put("sapling", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "saplings"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "saplings"));
     });
 
     matchers_.put("soil", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "soils"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "soils"));
     });
 
     matchers_.put("fertile", (final Level w, final BlockPos p) -> {
@@ -124,11 +125,11 @@ public class BlockCategories
     });
 
     matchers_.put("planks", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "planks"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "planks"));
     });
 
     matchers_.put("slab", (final Level w, final BlockPos p) -> {
-      return w.getBlockState(p).getBlock().getTags().contains(new ResourceLocation(MODID, "slabs"));
+      return Auxiliaries.isInBlockTag(w.getBlockState(p).getBlock(), new ResourceLocation(MODID, "slabs"));
     });
 
     // --------------------------------------------------------------------------------

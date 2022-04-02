@@ -34,6 +34,7 @@ import net.minecraft.world.phys.Vec3;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.detail.RsAuxiliaries;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.libmc.detail.Overlay;
 
@@ -202,7 +203,7 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
           range_bb = new AABB(0,0,0, 1,0,0);
         }
         Direction facing = state.getValue(FACING);
-        AABB bb = Auxiliaries.transform_forward(range_bb, facing).move(getBlockPos()).expandTowards(1,1,1);
+        AABB bb = RsAuxiliaries.transform_forward(range_bb, facing).move(getBlockPos()).expandTowards(1,1,1);
         area_ = new AABB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
       }
       // measurement

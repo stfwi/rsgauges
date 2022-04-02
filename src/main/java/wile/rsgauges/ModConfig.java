@@ -16,9 +16,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.Logger;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.libmc.detail.OptionalRecipeCondition;
+import wile.rsgauges.libmc.detail.Registries;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -27,8 +27,6 @@ import java.util.stream.Collectors;
 
 public class ModConfig
 {
-  private static final Logger LOGGER = ModRsGauges.logger();
-  private static final String MODID = ModRsGauges.MODID;
   public static final CommonConfig COMMON;
   public static final ServerConfig SERVER;
   public static final ForgeConfigSpec COMMON_CONFIG_SPEC;
@@ -114,7 +112,7 @@ public class ModConfig
             "right click (activated) with the item in the main hand.")
           .define("accepted_wrenches", "minecraft:redstone_torch,immersiveengineering:screwdriver,immersiveengineering:hammer");
         with_config_logging = builder
-          .translation(MODID + ".config.with_config_logging")
+          .translation(Auxiliaries.modid() + ".config.with_config_logging")
           .comment("Enable detailed logging of the config values and resulting calculations in each mod feature config.")
           .define("with_config_logging", false);
 
@@ -171,10 +169,10 @@ public class ModConfig
   //--------------------------------------------------------------------------------------------------------------------
 
   public static final boolean isOptedOut(final @Nullable Block block)
-  { return isOptedOut(block.asItem()); }
+  { return (block==null) || isOptedOut(block.asItem()); }
 
   public static final boolean isOptedOut(final @Nullable Item item)
-  { return (item!=null) && optouts_.contains(item.getRegistryName().getPath()); }
+  { return (item==null) || optouts_.contains(item.getRegistryName().getPath()); }
 
   public static boolean withExperimental()
   { return with_experimental_features_; }
@@ -213,7 +211,7 @@ public class ModConfig
     final ArrayList<String> includes = new ArrayList<>();
     final ArrayList<String> excludes = new ArrayList<>();
     {
-      String inc = COMMON.pattern_includes.get().toLowerCase().replaceAll(MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      String inc = COMMON.pattern_includes.get().toLowerCase().replaceAll(Auxiliaries.modid()+":", "").replaceAll("[^*_,a-z0-9]", "");
       if(COMMON.pattern_includes.get() != inc) COMMON.pattern_includes.set(inc);
       String[] incl = inc.split(",");
       for(int i=0; i< incl.length; ++i) {
@@ -222,7 +220,7 @@ public class ModConfig
       }
     }
     {
-      String exc = COMMON.pattern_excludes.get().toLowerCase().replaceAll(MODID+":", "").replaceAll("[^*_,a-z0-9]", "");
+      String exc = COMMON.pattern_excludes.get().toLowerCase().replaceAll(Auxiliaries.modid()+":", "").replaceAll("[^*_,a-z0-9]", "");
       String[] excl = exc.split(",");
       for(int i=0; i< excl.length; ++i) {
         excl[i] = excl[i].replaceAll("[*]", ".*?");
@@ -233,16 +231,8 @@ public class ModConfig
     if(!includes.isEmpty()) log("Config pattern includes: '" + String.join(",", includes) + "'");
     {
       HashSet<String> optouts = new HashSet<>();
-      ModContent.getRegisteredItems().stream().filter(Objects::nonNull).forEach(
-        e -> optouts.add(e.getRegistryName().getPath())
-      );
-      ModContent.getRegisteredBlocks().stream().filter((Block block) -> {
-        if(block==null) return true;
+      Registries.getRegisteredBlocks().stream().filter((Block block) -> {
         try {
-          if(!with_experimental_features_) {
-            if(block instanceof Auxiliaries.IExperimentalFeature) return true;
-            if(ModContent.isExperimentalBlock(block)) return true;
-          }
           // Force-include/exclude pattern matching
           final String rn = block.getRegistryName().getPath();
           try {
@@ -257,12 +247,12 @@ public class ModConfig
               }
             }
           } catch(Throwable ex) {
-            LOGGER.error("optout include pattern failed, disabling.");
+            Auxiliaries.logError("optout include pattern failed, disabling.");
             includes.clear();
             excludes.clear();
           }
         } catch(Exception ex) {
-          LOGGER.error("Exception evaluating the optout config: '"+ex.getMessage()+"'");
+          Auxiliaries.logError("Exception evaluating the optout config: '"+ex.getMessage()+"'");
         }
         return false;
       }).forEach(
@@ -278,7 +268,7 @@ public class ModConfig
     if((COMMON == null) || (!COMMON_CONFIG_SPEC.isLoaded())) return;
     with_config_logging_ = COMMON.with_config_logging.get();
     with_experimental_features_ = COMMON.with_experimental.get();
-    if(with_experimental_features_) LOGGER.info("Config: EXPERIMENTAL FEATURES ENABLED.");
+    if(with_experimental_features_) Auxiliaries.logInfo("Config: EXPERIMENTAL FEATURES ENABLED.");
     updateOptouts();
     without_switch_linking = COMMON.without_switch_linking.get();
     max_switch_linking_distance = COMMON.max_switch_linking_distance.get();
@@ -306,7 +296,7 @@ public class ModConfig
   public static final void log(String config_message)
   {
     if(!with_config_logging_) return;
-    LOGGER.info(config_message);
+    Auxiliaries.logInfo(config_message);
   }
 
   public static final boolean isWrench(final ItemStack stack)

@@ -17,19 +17,23 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
@@ -77,8 +81,6 @@ public class Auxiliaries
   // Sideness, system/environment, tagging interfaces
   // -------------------------------------------------------------------------------------------------------------------
 
-  public interface IExperimentalFeature {}
-
   public static boolean isModLoaded(final String registry_name)
   { return ModList.get().isLoaded(registry_name); }
 
@@ -112,15 +114,12 @@ public class Auxiliaries
   public static void logError(final String msg)
   { logger.error(msg); }
 
-  public static void logDebug(final String msg)
-  { }
-
   // -------------------------------------------------------------------------------------------------------------------
   // Localization, text formatting
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * Text localisation wrapper, implicitly prepends `MODID` to the
+   * Text localization wrapper, implicitly prepends `MODID` to the
    * translation keys. Forces formatting argument, nullable if no special formatting shall be applied..
    */
   public static TranslatableComponent localizable(String modtrkey, Object... args)
@@ -237,6 +236,7 @@ public class Auxiliaries
       tooltip.add(new TextComponent(localize(translation_key).replaceAll("\\s+$","").replaceAll("^\\s+", "")).withStyle(ChatFormatting.GRAY));
       return true;
     }
+
   }
 
   @SuppressWarnings("unused")
@@ -251,6 +251,20 @@ public class Auxiliaries
 
   public static String serializeTextComponent(Component tc)
   { return (tc==null) ? ("") : (Component.Serializer.toJson(tc)); }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Tag Handling
+  // -------------------------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("deprecation")
+  public static boolean isInItemTag(Item item, ResourceLocation tag)
+  {
+    return ForgeRegistries.ITEMS.tags().stream().filter(tg->tg.getKey().location().equals(tag)).anyMatch(tk->tk.contains(item));
+  }
+
+  @SuppressWarnings("deprecation")
+  public static boolean isInBlockTag(Block block, ResourceLocation tag)
+  { return ForgeRegistries.BLOCKS.tags().stream().filter(tg->tg.getKey().location().equals(tag)).anyMatch(tk->tk.contains(block)); }
 
   // -------------------------------------------------------------------------------------------------------------------
   // Item NBT data
@@ -377,7 +391,7 @@ public class Auxiliaries
     return shape;
   }
 
-  public static final AABB[] getMappedAABB(AABB[] bbs, Function<AABB,AABB> mapper) {
+  public static AABB[] getMappedAABB(AABB[] bbs, Function<AABB,AABB> mapper) {
     final AABB[] transformed = new AABB[bbs.length];
     for(int i=0; i<bbs.length; ++i) transformed[i] = mapper.apply(bbs[i]);
     return transformed;
@@ -512,66 +526,4 @@ public class Auxiliaries
       // (void)e; well, then not. Priority is not to get unneeded crashes because of version logging.
     }
   }
-
-  // -------------------------------------------------------------------------------------------------------------------
-  // Coorsys/AABB transformations,
-  // -------------------------------------------------------------------------------------------------------------------
-
-  /**
-   * Rotates an aabb from default facing EASE (direction x+) to another facing.
-   */
-  @SuppressWarnings("all") // suspicious parameter
-  public static AABB transform_forward(final AABB bb, final Direction facing)
-  {
-    switch(facing.get3DDataValue()) {
-      case 0: return new AABB(  bb.minY, -bb.minX,  bb.minZ,  bb.maxY, -bb.maxX,  bb.maxZ); // D
-      case 1: return new AABB( -bb.minY,  bb.minX,  bb.minZ, -bb.maxY,  bb.maxX,  bb.maxZ); // U
-      case 2: return new AABB(  bb.minZ,  bb.minY, -bb.minX,  bb.maxZ,  bb.maxY, -bb.maxX); // N
-      case 3: return new AABB( -bb.minZ,  bb.minY,  bb.minX, -bb.maxZ,  bb.maxY,  bb.maxX); // S
-      case 4: return new AABB( -bb.minX,  bb.minY, -bb.minZ, -bb.maxX,  bb.maxY, -bb.maxZ); // W
-      case 5: return new AABB(  bb.minX,  bb.minY,  bb.minZ,  bb.maxX,  bb.maxY,  bb.maxZ); // E --> bb
-      default: return new AABB(0,0,0, 0.1,0.1,0.1);
-    }
-  }
-
-  /**
-   * Transforms a block position, rotated around the world origin from EAST
-   * to facing.
-   */
-  @SuppressWarnings("unused")
-  public static BlockPos transform_forward(final BlockPos pos, final Direction facing)
-  {
-    return switch (facing.get3DDataValue()) {
-      case 0 -> new BlockPos(pos.getY(), -pos.getX(), pos.getZ()); // D
-      case 1 -> new BlockPos(-pos.getY(), pos.getX(), pos.getZ()); // U
-      case 2 -> new BlockPos(pos.getZ(), pos.getY(), -pos.getX()); // N
-      case 3 -> new BlockPos(-pos.getZ(), pos.getY(), pos.getX()); // S
-      case 4 -> new BlockPos(-pos.getX(), pos.getY(), -pos.getZ()); // W
-      case 5 -> new BlockPos(pos.getX(), pos.getY(), pos.getZ()); // E --> bb
-      default -> pos;
-    };
-  }
-
-  // -------------------------------------------------------------------------------------------------------------------
-
-  /**
-   * Returns a string, where ticks are converted to seconds.
-   */
-  public static String ticksToSecondsString(long t)
-  { return String.format("%.02f", ((double)t)/20.0); }
-
-  /**
-   * Returns a time string in 24:00 hour format.
-   */
-  public static String daytimeToString(long t)
-  {
-    t = (t + 6000) % 24000; // day starts at 06:00 with t==0.
-    // @check: java must have string formatting somehow.
-    String sh = Long.toString((t/1000));
-    String sm = Long.toString((t%1000)*60/1000);
-    if(sh.length() < 2) sh = "0" + sh;
-    if(sm.length() < 2) sm = "0" + sm;
-    return sh + ":" + sm;
-  }
-
 }

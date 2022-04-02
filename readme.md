@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.18.x.
 ----
 ## Version history
 
+    - v1.2.16-b1 [U] Updated to 1.18.2.
+
     - v1.2.15    [A] French translation added (PR#56, dracnis).
 
     - v1.2.14    [M] Added Comparator Switch sample rate config setting.

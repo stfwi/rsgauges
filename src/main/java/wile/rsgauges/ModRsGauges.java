@@ -46,6 +46,8 @@ public class ModRsGauges
   {
     Auxiliaries.init(MODID, LOGGER, ModConfig::getServerConfig);
     Auxiliaries.logGitVersion(MODNAME);
+    Registries.init(MODID, "industrial_small_lever");
+    ModContent.init(MODID);
     OptionalRecipeCondition.init(MODID, LOGGER);
     ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON_CONFIG_SPEC);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ForgeEvents::onSetup);
@@ -55,10 +57,6 @@ public class ModRsGauges
   }
 
   // -------------------------------------------------------------------------------------------------------------------
-
-  public static final Logger logger() { return LOGGER; }
-
-  // -------------------------------------------------------------------------------------------------------------------
   // Events
   // -------------------------------------------------------------------------------------------------------------------
 
@@ -66,16 +64,16 @@ public class ModRsGauges
   public static final class ForgeEvents
   {
     @SubscribeEvent
-    public static final void onBlocksRegistry(final RegistryEvent.Register<Block> event)
-    { ModContent.registerBlocks(event); }
+    public static final void onRegisterBlocks(final RegistryEvent.Register<Block> event)
+    { Registries.onBlockRegistry((rl, block)->event.getRegistry().register(block)); }
 
     @SubscribeEvent
-    public static final void onItemRegistry(final RegistryEvent.Register<Item> event)
-    { ModContent.registerItems(event); ModContent.registerBlockItems(event); }
+    public static final void onRegisterItems(final RegistryEvent.Register<Item> event)
+    { Registries.onItemRegistry((rl, item)->event.getRegistry().register(item)); }
 
     @SubscribeEvent
-    public static final void onTileEntityRegistry(final RegistryEvent.Register<BlockEntityType<?>> event)
-    { ModContent.registerTileEntities(event); }
+    public static final void onRegisterBlockEntityTypes(final RegistryEvent.Register<BlockEntityType<?>> event)
+    { Registries.onBlockEntityRegistry((rl, tet)->event.getRegistry().register(tet)); }
 
     @SubscribeEvent
     public static final void onRegisterSounds(final RegistryEvent.Register<SoundEvent> event)
@@ -83,16 +81,14 @@ public class ModRsGauges
 
     public static void onSetup(final FMLCommonSetupEvent event)
     {
-      LOGGER.info("Registering recipe condition processor ...");
       CraftingHelper.register(OptionalRecipeCondition.Serializer.INSTANCE);
-      Networking.init(MODID);
-      ModContent.processRegisteredContent();
+      wile.rsgauges.libmc.detail.Networking.init(MODID);
       BlockCategories.update();
     }
 
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-      Overlay.register();
+      wile.rsgauges.libmc.detail.Overlay.register();
       ModContent.processContentClientSide(event);
     }
 
@@ -110,17 +106,5 @@ public class ModRsGauges
         Auxiliaries.logger().error("Failed to load changed config: " + e.getMessage());
       }
     }
-
   }
-
-  // -------------------------------------------------------------------------------------------------------------------
-  // Item group / creative tab
-  // -------------------------------------------------------------------------------------------------------------------
-
-  public static final CreativeModeTab ITEMGROUP = (new CreativeModeTab("tab" + MODID) {
-    @OnlyIn(Dist.CLIENT)
-    public ItemStack makeIcon()
-    { return new ItemStack(ModContent.INDUSTRIAL_SMALL_LEVER); }
-  });
-
 }

@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import wile.rsgauges.ModContent;
 import wile.rsgauges.detail.ModResources;
+import wile.rsgauges.detail.RsAuxiliaries;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.libmc.detail.Overlay;
 
@@ -180,8 +181,8 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
         {
           TextComponent separator = (new TextComponent(" | ")); separator.withStyle(ChatFormatting.GRAY);
           ArrayList<Object> tr = new ArrayList<>();
-          tr.add(Auxiliaries.localizable("switchconfig.intervaltimer.t_on", ChatFormatting.BLUE, new Object[]{Auxiliaries.ticksToSecondsString(t_on())}));
-          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.t_off", ChatFormatting.YELLOW, new Object[]{Auxiliaries.ticksToSecondsString(t_off())})));
+          tr.add(Auxiliaries.localizable("switchconfig.intervaltimer.t_on", ChatFormatting.BLUE, new Object[]{RsAuxiliaries.ticksToSecondsString(t_on())}));
+          tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.t_off", ChatFormatting.YELLOW, new Object[]{RsAuxiliaries.ticksToSecondsString(t_off())})));
           tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.output_power", ChatFormatting.RED, new Object[]{p_set()})));
           if(ramp()>0) tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.ramp", ChatFormatting.DARK_GREEN, new Object[]{ramp()})));
           if(!switch_state) tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.standby", ChatFormatting.AQUA)));

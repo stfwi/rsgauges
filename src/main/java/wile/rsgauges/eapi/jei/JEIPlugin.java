@@ -7,7 +7,9 @@
  * JEI plugin (see https://github.com/mezz/JustEnoughItems/wiki/Creating-Plugins)
  */
 package wile.rsgauges.eapi.jei;
-//public class JEIPlugin {}
+/*
+public class JEIPlugin {}
+*/
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.runtime.IJeiRuntime;
@@ -16,10 +18,9 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.ModConfig;
-import wile.rsgauges.ModContent;
 import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.libmc.detail.Registries;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,18 +32,18 @@ public class JEIPlugin implements mezz.jei.api.IModPlugin
 {
   @Override
   public ResourceLocation getPluginUid()
-  { return new ResourceLocation(ModRsGauges.MODID, "jei_plugin_uid"); }
+  { return new ResourceLocation(Auxiliaries.modid(), "jei_plugin_uid"); }
 
   @Override
   public void onRuntimeAvailable(IJeiRuntime jeiRuntime)
   {
     HashSet<Item> blacklisted = new HashSet<>();
-    for(Block e: ModContent.getRegisteredBlocks()) {
+    for(Block e: Registries.getRegisteredBlocks()) {
       if(ModConfig.isOptedOut(e) && (e.asItem().getRegistryName().getPath()).equals((e.getRegistryName().getPath()))) {
         blacklisted.add(e.asItem());
       }
     }
-    for(Item e: ModContent.getRegisteredItems()) {
+    for(Item e: Registries.getRegisteredItems()) {
       if(ModConfig.isOptedOut(e) && (!(e instanceof BlockItem))) {
         blacklisted.add(e);
       }

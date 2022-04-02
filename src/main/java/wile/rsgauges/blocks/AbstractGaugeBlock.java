@@ -44,7 +44,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModContent;
-import wile.rsgauges.ModRsGauges;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.detail.SwitchLink;
 import wile.rsgauges.detail.SwitchLink.LinkMode;
@@ -421,7 +420,7 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements EntityBlock, 
         }
       } catch(Throwable e) {
         trigger_timer_ = 100;
-        ModRsGauges.logger().error("TE update() failed: " + e);
+        Auxiliaries.logger().error("TE update() failed: " + e);
       }
     }
   }
