@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.16.x.
 ----
 ## Version history
 
+    - v1.2.15    [A] French translation added (PR#56, dracnis).
+
     - v1.2.14    [R] Maintenance Release.
                  [U] Forge/gradle update, version tracking adapted.
 
