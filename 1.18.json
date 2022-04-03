@@ -1,6 +1,9 @@
 {
  "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
- "1.18.1": {
+ "1.18.2": {
+  "1.2.16": "[F] Minor formatting adaptions in lang files.\n[F] Fixed `#soils` tag (issue #53, ty pavog).",
+  "1.2.16-b1": "[U] Updated to 1.18.2.",
+  "1.2.15": "[A] French translation added (PR#56, dracnis).",
   "1.2.14": "[M] Added Comparator Switch sample rate config setting.\n[F] Alarm Siren sound emission fixed.",
   "1.2.13": "[R] Release build.",
   "1.2.13-b2": "[F] Fixed Link Receiver signal modes (issue #48, ty graywaren).\n[F] Updated Forge/gradle.",
@@ -31,7 +34,7 @@
   "1.2.4-a1": "[A] Initial port."
  },
  "promos": {
-  "1.18.1-recommended": "1.2.14",
-  "1.18.1-latest": "1.2.14"
+  "1.18.2-recommended": "1.2.16",
+  "1.18.2-latest": "1.2.16"
  }
 }
