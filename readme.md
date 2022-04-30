@@ -10,6 +10,9 @@ Mod sources for Minecraft version 1.18.x.
 ----
 ## Version history
 
+    - v1.2.16    [F] Minor formatting adaptions in lang files.
+                 [F] Fixed `#soils` tag (issue #53, ty pavog).
+
     - v1.2.16-b1 [U] Updated to 1.18.2.
 
     - v1.2.15    [A] French translation added (PR#56, dracnis).

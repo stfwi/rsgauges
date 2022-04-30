@@ -4,7 +4,6 @@
     "minecraft:dirt",
     "minecraft:coarse_dirt",
     "minecraft:podzol",
-    "minecraft:farmland",
-    "minecraft:grass_path"
+    "minecraft:farmland"
   ]
 }

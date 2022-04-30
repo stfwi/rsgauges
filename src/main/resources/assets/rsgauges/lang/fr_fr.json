@@ -11,7 +11,7 @@
   "block.rsgauges.door_sensor_switch": "Capteur de porte",
   "block.rsgauges.door_sensor_switch.help": "Un détecteur de joueur monté\n sur les murs au-dessus des portes.§r",
   "block.rsgauges.elevator_button": "Bouton d'ascenseur",
-  "block.rsgauges.elevator_button.help": "Pointe vers le haut, le bas ou dans les deux sens selon l'endroit où vous cliquez sur le mur lors du placement.\n${rsgauges.switch.feature.typepulse.help}\n${rsgauges.switch.feature.outputconfig.help}\n${rsgauges.switch.feature.linktarget.help}\n${rsgauges.switch.feature.linksource.help}",
+  "block.rsgauges.elevator_button.help": "Pointe vers le haut, le bas ou dans les deux sens\nselon l'endroit où vous cliquez sur le mur\nlors du placement.\n${rsgauges.switch.feature.typepulse.help}\n${rsgauges.switch.feature.outputconfig.help}\n${rsgauges.switch.feature.linktarget.help}\n${rsgauges.switch.feature.linksource.help}",
   "block.rsgauges.glass_button": "Bouton en verre",
   "block.rsgauges.glass_button.help": "${rsgauges.switch.feature.typepulse.help}\n${rsgauges.switch.feature.outputconfig.help}\n${rsgauges.switch.feature.pulseextend.help}\n${rsgauges.switch.feature.pulsetime.help}\n${rsgauges.switch.feature.linktarget.help}\n${rsgauges.switch.feature.linksource.help}\n${rsgauges.switch.feature.colortinting.help}",
   "block.rsgauges.glass_contact_mat": "Plaque de contact en verre",
