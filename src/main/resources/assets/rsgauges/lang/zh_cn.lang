@@ -477,12 +477,12 @@ tile.rsgauges.powerplant_red.name=红色能量植物
 #
 # Power plant help
 #
-tile.rsgauges.powerplant_yellow.help=§6人造的黄色化，看上去非常像蒲公英。\
+tile.rsgauges.powerplant_yellow.help=§6人造的黄色花，看上去非常像蒲公英。\
                                      当被实体触碰时会向上方方块和底部方块发出红石信号。\
                                      §r\n\
                                      ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
                                      ${rsgauges.switch.feature.linksource.help}
-tile.rsgauges.powerplant_red.help=§6人造的红色化，看上去非常像虞美人。\
+tile.rsgauges.powerplant_red.help=§6人造的红色花，看上去非常像虞美人。\
                                      当被实体触碰时会向上方方块和底部方块发出红石信号。\
                                      §r\n\
                                      ${rsgauges.switch.feature.outputconfig.help} ${rsgauges.switch.feature.contactmat.offdelay.help} \
