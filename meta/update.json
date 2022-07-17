@@ -1,6 +1,7 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
   "1.12.2": {
+    "1.2.7": "[R] Maintenance release:\n[F] Made light levels for indicators constant.\n[F] Lang file zh_cn updated (PR#59, MCTF-Alpha-27).",
     "1.2.6": "[R] Maintenance release\n[F] Defaulting gauge tile entity data on first instantiation adapted.",
     "1.2.5": "[R] Maintenance release: * Minor model and recipe fixes.\n[F] Fixed red LED Indicator model (issue #35, thx ExDomino).\n[F] Fixed Light Switch recipe.",
     "1.2.4": "[R] Maintenance release build v1.2.4. Changes: * Compatibility fixes. * Texture fixes.\n[F] Fixed startup compatibility bug (issue #25, thx gotterdamerung).",
@@ -75,7 +76,7 @@
     "1.0.0-rc1": "[A] Initial feature complete version."
   },
   "promos": {
-    "1.12.2-recommended": "1.2.6",
-    "1.12.2-latest": "1.2.6"
+    "1.12.2-recommended": "1.2.7",
+    "1.12.2-latest": "1.2.7"
   }
 }

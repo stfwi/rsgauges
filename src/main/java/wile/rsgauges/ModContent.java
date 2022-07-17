@@ -467,7 +467,7 @@ public class ModContent
     // alarm lamp
     new BlockIndicator("indicator4",
       ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 4),
-      (8<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
+      (5<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
     // Alarm siren
     new BlockIndicator("soundindicator1",
@@ -478,35 +478,35 @@ public class ModContent
     ),
     new BlockIndicator("indicator1",
       ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5),
-      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|(13<<BlockGauge.GAUGE_DATA_COLOR_SHIFT) // green
+      (4<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|(13<<BlockGauge.GAUGE_DATA_COLOR_SHIFT) // green
     ),
     new BlockIndicator("indicator1blink1",
       ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5),
-      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
+      (4<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
     new BlockIndicator("indicator2",
       ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5),
-      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|(5<<BlockGauge.GAUGE_DATA_COLOR_SHIFT) // yellow
+      (4<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|(5<<BlockGauge.GAUGE_DATA_COLOR_SHIFT) // yellow
     ),
     new BlockIndicator("indicator2blink1",
       ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5),
-      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
+      (4<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
     new BlockIndicator("indicator3",
       ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5),
-      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT) // red
+      (4<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT) // red
     ),
     new BlockIndicator("indicator3blink1",
       ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5),
-      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
+      (4<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)
     ),
     new BlockIndicator("indicator_led_white",
       ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5),
-      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
+      (4<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
     ),
     new BlockIndicator("indicator_led_white_blink",
       ModAuxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5),
-      (2<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
+      (4<<BlockGauge.GAUGE_DATA_LIGHT_SHIFT)|BlockGauge.GAUGE_CONFIG_COLOR_TINT_SUPPORT // default white
     ),
 
     // -----------------------------------------------------------------------------------------------------------------

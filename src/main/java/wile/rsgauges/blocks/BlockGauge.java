@@ -181,7 +181,7 @@ public class BlockGauge extends RsBlock implements ModContent.Colors.ColorTintSu
   @Override
   @SuppressWarnings("deprecation")
   public int getLightValue(IBlockState state)
-  { return (light_value() < 1) ? 0 : ((!ModAuxiliaries.isClientSide()) || (getBlockStatePower(state)>0)) ? (light_value()) : (0); }
+  { return light_value(); }
 
   @Override
   public boolean getWeakChanges(IBlockAccess world, BlockPos pos)
