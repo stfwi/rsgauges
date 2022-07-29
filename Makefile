@@ -8,7 +8,8 @@
 #
 MOD_JAR_PREFIX=rsgauges-
 MOD_JAR=$(filter-out %-sources.jar,$(wildcard build/libs/${MOD_JAR_PREFIX}*.jar))
-
+export JDK_HOME=$(JDK_HOME_1_8)
+export JAVA_HOME=$(JDK_HOME_1_8)
 ifeq ($(OS),Windows_NT)
 GRADLE=gradlew.bat --no-daemon
 GRADLE_STOP=gradlew.bat --stop
@@ -33,6 +34,7 @@ all: clean clean-all mod | install
 
 mod:
 	@echo "[1.12] Building mod using gradle ..."
+	@echo "Using JDK_HOME=$(JDK_HOME)"
 	@$(GRADLE) build $(GRADLE_OPTS)
 
 clean:

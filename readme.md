@@ -10,6 +10,9 @@ Mod sources for Minecraft version 1.12.2.
 ----
 ## Version history
 
+    - v1.2.8     [R] Maintenance release:
+                 [F] Rendering translucency removed for indicators.
+
     - v1.2.7     [R] Maintenance release:
                  [F] Made light levels for indicators constant.
                  [F] Lang file zh_cn updated (PR#59, MCTF-Alpha-27).

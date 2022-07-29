@@ -136,7 +136,7 @@ public class BlockGauge extends RsBlock implements ModContent.Colors.ColorTintSu
   @Override
   @SideOnly(Side.CLIENT)
   public BlockRenderLayer getRenderLayer()
-  { return (((config & GAUGE_CONFIG_TRANSLUCENT)!=0) || (light_value() > 0)) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
+  { return ((config & GAUGE_CONFIG_TRANSLUCENT)!=0) ? (BlockRenderLayer.TRANSLUCENT) : (BlockRenderLayer.CUTOUT); }
 
   @Override
   public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
