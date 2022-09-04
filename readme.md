@@ -10,6 +10,8 @@ Mod sources for Minecraft version 1.18.x.
 ----
 ## Version history
 
+    - v1.2.17    [F] Removed Analog Link Receiver output inversion.
+
     - v1.2.16    [F] Minor formatting adaptions in lang files.
                  [F] Fixed `#soils` tag (issue #53, ty pavog).
 

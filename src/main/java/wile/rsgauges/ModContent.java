@@ -459,7 +459,7 @@ public class ModContent
     // Industrial analog link receiver
     Registries.addBlock("industrial_switchlink_receiver_analog", ()->new LinkReceiverSwitchBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT|SwitchBlock.SWITCH_CONFIG_WALLMOUNT|SwitchBlock.SWITCH_CONFIG_BISTABLE|
-        SwitchBlock.SWITCH_CONFIG_WEAKABLE|SwitchBlock.SWITCH_CONFIG_INVERTABLE|
+        SwitchBlock.SWITCH_CONFIG_WEAKABLE|
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
