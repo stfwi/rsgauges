@@ -13,7 +13,7 @@ description="Adds redstone metering gauges, levers, buttons, pressure plates, an
 authors="wilechaote"
 credits="The Forge smiths, Jannis."
 updateJSONURL="https://raw.githubusercontent.com/stfwi/rsgauges/versions/1.16.json"
-displayURL="https://github.com/stfwi/rsgauges/"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches"
 logoFile="logo.png"
 
 [[dependencies.rsgauges]]

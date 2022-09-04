@@ -36,6 +36,14 @@ public class LinkReceiverSwitchBlock extends SwitchBlock
   { return (!is_analog) ? super.switchLinkGetSupportedTargetModes() : ImmutableList.of(SwitchLink.LinkMode.AS_STATE, SwitchLink.LinkMode.INV_STATE); }
 
   @Override
+  public void switchLinkInit(SwitchLink link)
+  {
+    if(!is_analog) {
+      super.switchLinkInit(link);
+    }
+  }
+
+  @Override
   public SwitchLink.RequestResult switchLinkTrigger(SwitchLink link)
   {
     BlockPos pos = link.target_position;
