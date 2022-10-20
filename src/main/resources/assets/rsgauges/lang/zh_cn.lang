@@ -10,8 +10,8 @@
 #PARSE_ESCAPES
 #
 #-----------------------------------------------------------------------------------------------------------
-itemGroup.tabrsgauges=红石测量与开关
-rsgauges.config.title=红石测量与开关 设置
+itemGroup.tabrsgauges=仪表与开关
+rsgauges.config.title=仪表与开关 设置
 rsgauges.subtitle.soundindicator1=警报器
 rsgauges.tooltip.hint.extended=§8[§o按SHIFT§8查看更多信息]§r
 rsgauges.tooltip.hint.help=§8[§o按CTRL+SHIFT§8查看帮助]§r
@@ -28,7 +28,7 @@ tile.rsgauges.flatgauge6.name=红石测量仪 (小型模拟电压表)
 tile.rsgauges.gauge_rustic2.name=红石测量仪 (乡村式圆形墙挂表)
 # tooltip help
 tile.rsgauges.flatgauge1.help=§6一个显示设备，能显示所接\
-                              触的固体方块的红石充能等级。§r\n\
+                              触的固体方块的红石信号等级。§r\n\
                               如果该方块是红石电源，测量器\
                               会显示其输出，否则会间接测量\
                               该方块从邻接方块收到的信号。\
@@ -556,10 +556,10 @@ tile.rsgauges.qube.help=It's a developer block that is not supposed to be crafta
 #-----------------------------------------------------------------------------------------------------------
 item.rsgauges.switchlink_pearl.name=开关连接珍珠
 item.rsgauges.switchlink_pearl.help=§6可用末影珍珠左键一个开关来创建开关连接珍珠。该开关会作为连接的目标，\
-                                    会在连接珍珠被使用或连接珍珠被插入的连接起始开关激活时激活。§r\n\
+                                    珍珠会在被使用或被插入的连接起始开关激活时激活。§r\n\
                                     手持连接珍珠左键目标开关会循环切换连接选项。\
                                     可以在一个开关中插入多个连接珍珠。\
-                                    连接珍珠会在过度紧张或找不到目标时抱怨，你可以听到这声音。\
+                                    连接珍珠会在过度紧张或找不到目标时抱怨，你可以听到它。\
                                     如果开关不适于作为起始或目标，珍珠也会抱怨。\
                                     不同种类的开关对于被连接触发时的反应也不同。
 
