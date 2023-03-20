@@ -13,8 +13,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -142,15 +142,15 @@ public class EnvironmentalSensorSwitchBlock extends AutoSwitchBlock
         }
         {
           ArrayList<Object> tr = new ArrayList<>();
-          final TranslatableComponent trunit = Auxiliaries.localizable("switchconfig.lightsensor.lightunit");
-          TextComponent separator = (new TextComponent(" | ")); separator.withStyle(ChatFormatting.GRAY);
+          final MutableComponent trunit = Auxiliaries.localizable("switchconfig.lightsensor.lightunit");
+          MutableComponent separator = (Component.literal(" | ")); separator.withStyle(ChatFormatting.GRAY);
           tr.add(Auxiliaries.localizable("switchconfig.lightsensor.threshold_on", ChatFormatting.BLUE, new Object[]{(int)threshold0_on(), trunit}));
           tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.threshold_off", ChatFormatting.YELLOW, new Object[]{(int)threshold0_off(), trunit})));
           tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.output_power", ChatFormatting.RED, new Object[]{setpower()})));
           if(debounce()>0) {
             tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", ChatFormatting.DARK_GREEN, new Object[]{debounce()})));
           } else {
-            tr.add(new TextComponent(""));
+            tr.add(Component.literal(""));
           }
           Overlay.show(player, Auxiliaries.localizable("switchconfig.lightsensor", ChatFormatting.RESET, tr.toArray()));
         }

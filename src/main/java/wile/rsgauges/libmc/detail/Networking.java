@@ -12,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -20,8 +19,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
@@ -274,7 +273,7 @@ public class Networking
     }
 
     public OverlayTextMessage()
-    { data_ = new TranslatableComponent("[unset]"); }
+    { data_ = Component.translatable("[unset]"); }
 
     public OverlayTextMessage(final Component tct, int delay)
     { data_ = tct.copy(); delay_ = delay; }
@@ -284,7 +283,7 @@ public class Networking
       try {
         return new OverlayTextMessage(buf.readComponent(), DISPLAY_TIME_MS);
       } catch(Throwable e) {
-        return new OverlayTextMessage(new TranslatableComponent("[incorrect translation]"), DISPLAY_TIME_MS);
+        return new OverlayTextMessage(Component.translatable("[incorrect translation]"), DISPLAY_TIME_MS);
       }
     }
 

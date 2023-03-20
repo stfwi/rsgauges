@@ -18,6 +18,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.libmc.detail.Registries;
@@ -39,7 +40,7 @@ public class JEIPlugin implements mezz.jei.api.IModPlugin
   {
     HashSet<Item> blacklisted = new HashSet<>();
     for(Block e: Registries.getRegisteredBlocks()) {
-      if(ModConfig.isOptedOut(e) && (e.asItem().getRegistryName().getPath()).equals((e.getRegistryName().getPath()))) {
+      if(ModConfig.isOptedOut(e) && (ForgeRegistries.ITEMS.getKey(e.asItem()).getPath()).equals((ForgeRegistries.BLOCKS.getKey(e).getPath()))) {
         blacklisted.add(e.asItem());
       }
     }
@@ -51,7 +52,7 @@ public class JEIPlugin implements mezz.jei.api.IModPlugin
     if(!blacklisted.isEmpty()) {
       List<ItemStack> blacklist = blacklisted.stream().map(ItemStack::new).collect(Collectors.toList());
       try {
-        jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM, blacklist);
+        jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, blacklist);
       } catch(Exception e) {
         Auxiliaries.logger().warn("Exception in JEI opt-out processing: '" + e.getMessage() + "', skipping further JEI optout processing.");
       }

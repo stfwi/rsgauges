@@ -11,6 +11,7 @@ package wile.rsgauges.blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.AABB;
 import wile.rsgauges.detail.ModResources;
+
 import javax.annotation.Nullable;
 
 public class ContactMatBlock extends ContactSwitchBlock

@@ -15,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.libmc.detail.OptionalRecipeCondition;
@@ -172,7 +173,11 @@ public class ModConfig
   { return (block==null) || isOptedOut(block.asItem()); }
 
   public static final boolean isOptedOut(final @Nullable Item item)
-  { return (item==null) || optouts_.contains(item.getRegistryName().getPath()); }
+  {
+    if (item == null) return true;
+    ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
+    return (key==null) || optouts_.contains(key.getPath());
+  }
 
   public static boolean withExperimental()
   { return with_experimental_features_; }
@@ -234,7 +239,7 @@ public class ModConfig
       Registries.getRegisteredBlocks().stream().filter((Block block) -> {
         try {
           // Force-include/exclude pattern matching
-          final String rn = block.getRegistryName().getPath();
+          final String rn = ForgeRegistries.BLOCKS.getKey(block).getPath();
           try {
             for(String e : includes) {
               if(rn.matches(e)) {
@@ -256,7 +261,7 @@ public class ModConfig
         }
         return false;
       }).forEach(
-        e -> optouts.add(e.getRegistryName().getPath())
+        e -> optouts.add(ForgeRegistries.BLOCKS.getKey(e).getPath())
       );
       optouts_ = optouts;
     }
@@ -300,6 +305,5 @@ public class ModConfig
   }
 
   public static final boolean isWrench(final ItemStack stack)
-  { return accepted_wrenches.contains(stack.getItem().getRegistryName()); }
-
+  { return accepted_wrenches.contains(ForgeRegistries.ITEMS.getKey(stack.getItem())); }
 }

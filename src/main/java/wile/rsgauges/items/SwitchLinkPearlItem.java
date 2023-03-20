@@ -6,8 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -79,7 +77,7 @@ public class SwitchLinkPearlItem extends RsItem
       tooltip.add(Auxiliaries.localizable(
         "switchlinking.switchlink_pearl.tooltip.linkedblock",
         ChatFormatting.GRAY,
-        new Object[]{ (new TranslatableComponent(targetBlock.getDescriptionId()))
+        new Object[]{ (Component.translatable(targetBlock.getDescriptionId()))
           .withStyle(ChatFormatting.YELLOW)
           .withStyle(ChatFormatting.ITALIC)
         }
@@ -88,7 +86,7 @@ public class SwitchLinkPearlItem extends RsItem
     if(Minecraft.getInstance().player!=null) {
       final int distance = link.distance(Minecraft.getInstance().player.blockPosition());
       if(distance >= 0) {
-        tooltip.add(new TextComponent(Auxiliaries.localizable(
+        tooltip.add(Component.literal(Auxiliaries.localizable(
           "switchlinking.switchlink_pearl.tooltip.linkeddistance",
           ChatFormatting.GRAY, new Object[]{distance}).getString() + (
             (((distance <= ModConfig.max_switch_linking_distance) || (ModConfig.max_switch_linking_distance<=0))) ? ("")

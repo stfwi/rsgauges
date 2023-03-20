@@ -11,7 +11,8 @@ package wile.rsgauges.blocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -24,8 +25,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import wile.rsgauges.ModContent;
 import wile.rsgauges.ModConfig;
+import wile.rsgauges.ModContent;
 import wile.rsgauges.blocks.EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity;
 import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.libmc.detail.Auxiliaries;
@@ -196,7 +197,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
         setChanged();
       }
       {
-        TextComponent separator = (new TextComponent(" | ")); separator.withStyle(ChatFormatting.GRAY);
+        MutableComponent separator = (Component.literal(" | ")); separator.withStyle(ChatFormatting.GRAY);
         ArrayList<Object> tr = new ArrayList<>();
         tr.add(Auxiliaries.localizable("switchconfig.comparator_switch.threshold_on", ChatFormatting.BLUE, new Object[]{(int)threshold0_on()}));
         tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.comparator_switch.threshold_off", ChatFormatting.YELLOW, new Object[]{(int)threshold0_off()})));

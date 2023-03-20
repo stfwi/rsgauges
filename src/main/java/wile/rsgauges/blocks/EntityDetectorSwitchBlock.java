@@ -12,8 +12,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
@@ -163,12 +162,12 @@ public class EntityDetectorSwitchBlock extends AutoSwitchBlock
       }
       {
         Overlay.show(player,
-          (new TextComponent(""))
+          (Component.literal(""))
             .append(Auxiliaries.localizable("switchconfig.detector.sensor_range", ChatFormatting.BLUE, new Object[]{sensor_range()}))
             .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.detector.entity_threshold", ChatFormatting.YELLOW, new Object[]{sensor_entity_threshold()}))
             .append(" | ")
-            .append(Auxiliaries.localizable("switchconfig.detector.entity_filter", ChatFormatting.DARK_GREEN, new Object[]{new TranslatableComponent("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}))
+            .append(Auxiliaries.localizable("switchconfig.detector.entity_filter", ChatFormatting.DARK_GREEN, new Object[]{Component.translatable("rsgauges.switchconfig.detector.entity_filter."+filter_class_names[filter()])}))
             .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.detector.output_power", ChatFormatting.RED, new Object[]{setpower()}))
         );

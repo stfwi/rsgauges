@@ -13,6 +13,7 @@ package wile.rsgauges.blocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -30,7 +31,6 @@ import wile.rsgauges.libmc.detail.Auxiliaries;
 import wile.rsgauges.libmc.detail.Overlay;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 
 public class DimmerSwitchBlock extends SwitchBlock
@@ -47,7 +47,7 @@ public class DimmerSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random)
   {}
 
   @Override

@@ -12,7 +12,8 @@ package wile.rsgauges.blocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -179,14 +180,14 @@ public class IntervalTimerSwitchBlock extends AutoSwitchBlock
         if(!selected) switch_state = !switch_state; // will be switched in turn.
         updateSwitchState(state, (AutoSwitchBlock) state.getBlock(), switch_state, 0);
         {
-          TextComponent separator = (new TextComponent(" | ")); separator.withStyle(ChatFormatting.GRAY);
+          MutableComponent separator = (Component.literal(" | ")); separator.withStyle(ChatFormatting.GRAY);
           ArrayList<Object> tr = new ArrayList<>();
           tr.add(Auxiliaries.localizable("switchconfig.intervaltimer.t_on", ChatFormatting.BLUE, new Object[]{RsAuxiliaries.ticksToSecondsString(t_on())}));
           tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.t_off", ChatFormatting.YELLOW, new Object[]{RsAuxiliaries.ticksToSecondsString(t_off())})));
           tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.output_power", ChatFormatting.RED, new Object[]{p_set()})));
           if(ramp()>0) tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.ramp", ChatFormatting.DARK_GREEN, new Object[]{ramp()})));
           if(!switch_state) tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.intervaltimer.standby", ChatFormatting.AQUA)));
-          while(tr.size() < 5) tr.add(new TextComponent("")); // const lang file formatting arg count.
+          while(tr.size() < 5) tr.add(Component.literal("")); // const lang file formatting arg count.
           Overlay.show(player, Auxiliaries.localizable("switchconfig.intervaltimer", ChatFormatting.RESET, tr.toArray()));
         }
       }

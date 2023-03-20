@@ -17,8 +17,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -190,18 +190,18 @@ public class ObserverSwitchBlock extends SwitchBlock
       }
       {
         ArrayList<Object> tr = new ArrayList<>();
-        TextComponent separator = (new TextComponent(" | ")); separator.withStyle(ChatFormatting.GRAY);
+        MutableComponent separator = (Component.literal(" | ")); separator.withStyle(ChatFormatting.GRAY);
         tr.add(Auxiliaries.localizable("switchconfig.blocksensor.range", ChatFormatting.BLUE, new Object[]{range()}));
         tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.threshold", ChatFormatting.YELLOW, new Object[]{threshold()})));
         if(debounce()>0) {
           tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.lightsensor.debounce", ChatFormatting.AQUA, new Object[]{debounce()})));
         } else {
-          tr.add(new TextComponent(""));
+          tr.add(Component.literal(""));
         }
         tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.output_power", ChatFormatting.RED, new Object[]{setpower()})));
         tr.add(separator.copy().append(Auxiliaries.localizable("switchconfig.blocksensor.filter",
           ChatFormatting.DARK_GREEN,
-          new Object[]{new TranslatableComponent("rsgauges.switchconfig.blocksensor.filter."+filter_name())})
+          new Object[]{Component.translatable("rsgauges.switchconfig.blocksensor.filter."+filter_name())})
         ));
         Overlay.show(player, Auxiliaries.localizable("switchconfig.blocksensor", ChatFormatting.RESET, tr.toArray()));
       }
