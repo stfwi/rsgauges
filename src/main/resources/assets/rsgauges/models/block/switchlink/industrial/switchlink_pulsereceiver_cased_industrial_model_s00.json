@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
 	"parent": "block/block",
 	"textures": {
     "side": "rsgauges:block/switchlink/switchlink_pulsereceiver_cased_industrial_texture_s00",

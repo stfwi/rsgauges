@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import wile.rsgauges.ModConfig;
 import wile.rsgauges.ModContent;
@@ -100,7 +100,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
           for(int i=0; i<size; ++i) n += inventory.getItem(i).isEmpty() ? 0 : 1;
           return (int)Math.round(((double)n*15)/(double)size);
         } else {
-          final IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
+          final IItemHandler handler = te.getCapability(ForgeCapabilities.ITEM_HANDLER, null).orElse(null);
           if(handler == null) return -1;
           final int size = handler.getSlots();
           if(size == 0) return 0;
@@ -120,7 +120,7 @@ public class ComparatorSwitchBlock extends AutoSwitchBlock
           for(int i = 0; i < size; ++i) n += inventory.getItem(i).isEmpty() ? 1 : 0;
           return (int)Math.round(((double)n*15)/(double)size);
         } else {
-          final IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElse(null);
+          final IItemHandler handler = te.getCapability(ForgeCapabilities.ITEM_HANDLER, null).orElse(null);
           if(handler == null) return -1;
           final int size = handler.getSlots();
           if(size == 0) return 0;

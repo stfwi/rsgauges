@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
   "parent": "block/block",
 	"textures": {
 		"side": "rsgauges:block/knockswitch/industrial_knock_switch_texture_s00",

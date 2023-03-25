@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
 	"parent": "block/block",
 	"textures": {
 		"particle": "rsgauges:block/common/industrial_base_8x8",

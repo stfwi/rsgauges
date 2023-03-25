@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
 	"parent": "block/block",
 	"textures": {
 		"1": "rsgauges:block/indicator/indicator_fg_green_on_texture",

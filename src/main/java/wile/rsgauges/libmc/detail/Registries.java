@@ -143,7 +143,7 @@ public class Registries
     }
 
     RegistryObject<BlockEntityType<?>> blockEntityType = block_entity_deferred_register.register(registry_name,
-            () -> BlockEntityType.Builder.of(ctor, blocks.stream().map(RegistryObject::get).collect(Collectors.toList()).toArray(new Block[]{})).build(null));
+            () -> BlockEntityType.Builder.of(ctor, blocks.stream().map(RegistryObject::get).toList().toArray(new Block[]{})).build(null));
     registered_block_entity_types.put(registry_name, blockEntityType);
   }
 
@@ -156,7 +156,7 @@ public class Registries
     }
 
     RegistryObject<BlockEntityType<?>> blockEntityType = block_entity_deferred_register.register(registry_name,
-            () -> BlockEntityType.Builder.of(ctor, blocks.stream().map(RegistryObject::get).collect(Collectors.toList()).toArray(new Block[]{})).build(null));
+            () -> BlockEntityType.Builder.of(ctor, blocks.stream().map(RegistryObject::get).toList().toArray(new Block[]{})).build(null));
     registered_block_entity_types.put(registry_name, blockEntityType);
   }
 
@@ -195,7 +195,7 @@ public class Registries
 
   public static void addOptionalBlockTag(String tag_name, String... default_blocks)
   {
-    addOptionalBlockTag(tag_name, Arrays.stream(default_blocks).map(ResourceLocation::new).collect(Collectors.toList()).toArray(new ResourceLocation[]{}));
+    addOptionalBlockTag(tag_name, Arrays.stream(default_blocks).map(ResourceLocation::new).toList().toArray(new ResourceLocation[]{}));
   }
 
   public static void addOptionaItemTag(String tag_name, ResourceLocation... default_items)

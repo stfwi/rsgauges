@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
   "parent": "block/block",
   "gui_light": "front",
   "ambientocclusion": true,

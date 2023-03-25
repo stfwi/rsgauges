@@ -16,7 +16,7 @@ else
 GRADLE=./gradlew --no-daemon
 GRADLE_STOP=./gradlew --stop
 endif
-TASK=djs ../../zmeta/lib/tasks.js
+TASK=djs -s ../../zmeta/lib/tasks.js
 
 wildcardr=$(foreach d,$(wildcard $1*),$(call wildcardr,$d/,$2) $(filter $(subst *,%,$2),$d))
 
@@ -30,26 +30,26 @@ default: mod
 all: clean clean-all mod | install
 
 mod:
-	@echo "[1.18] Building mod using gradle ..."
+	@echo "[1.19] Building mod using gradle ..."
 	@$(GRADLE) build $(GRADLE_OPTS)
 
 assets:
-	@echo "[1.18] Running asset generators ..."
+	@echo "[1.19] Running asset generators ..."
 	@$(TASK) assets
 
 data:
-	@echo "[1.18] Running data generators ..."
+	@echo "[1.19] Running data generators ..."
 	@$(TASK) datagen
 
 clean:
-	@echo "[1.18] Cleaning ..."
+	@echo "[1.19] Cleaning ..."
 	@rm -rf src/generated
 	@rm -rf mcmodsrepo
 	@rm -f build/libs/*
 	@$(GRADLE) clean
 
 clean-all:
-	@echo "[1.18] Cleaning using gradle ..."
+	@echo "[1.19] Cleaning using gradle ..."
 	@rm -rf mcmodsrepo
 	@rm -f dist/*
 	@rm -rf run/logs/
@@ -64,12 +64,12 @@ mrproper: clean-all
 	@rm -f .classpath
 
 init:
-	@echo "[1.18] Initialising eclipse workspace using gradle ..."
+	@echo "[1.19] Initialising eclipse workspace using gradle ..."
 	@$(GRADLE) eclipse
 	-@$(GRADLE) hideOfficialWarningUntilChanged
 
 sanitize:
-	@echo "[1.18] Running sanitising tasks ..."
+	@echo "[1.19] Running sanitising tasks ..."
 	@$(TASK) sanitize
 	@$(TASK) sync-languages
 	@$(TASK) version-check
@@ -83,11 +83,11 @@ start-server: install
 	@$(TASK) start-server
 
 dist-check:
-	@echo "[1.18] Running dist checks ..."
+	@echo "[1.19] Running dist checks ..."
 	@$(TASK) dist-check
 
 dist-files: clean-all init mod
-	@echo "[1.18] Distribution files ..."
+	@echo "[1.19] Distribution files ..."
 	@mkdir -p dist
 	@cp build/libs/$(MOD_JAR_PREFIX)* dist/
 	@$(TASK) dist

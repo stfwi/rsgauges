@@ -1,4 +1,5 @@
 {
+  "render_type": "translucent",
 	"parent": "rsgauges:block/sensitiveglass/sensitiveglass_stained_base_model",
 	"textures": {
     "side": "rsgauges:block/sensitiveglass/sensitiveglass_stained_s00"

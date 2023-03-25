@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
 	"parent": "rsgauges:block/gauge/industrial/gauge1/gauge1_model_s00",
   "textures": { "front": "rsgauges:block/gauge/flatgauge1texture_s13" }
 }

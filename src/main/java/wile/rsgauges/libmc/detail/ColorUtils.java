@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 
 public final class ColorUtils
@@ -64,8 +63,7 @@ public final class ColorUtils
       event.getBlockColors().register(
         (state, world, pos, tintIndex) -> (((IBlockColorTintSupport)state.getBlock()).getColor(state, world, pos, tintIndex)), // handler
         (blocks_supplier_.get().stream()
-          .filter(b -> ((b instanceof IBlockColorTintSupport) && (((IBlockColorTintSupport)b).hasColorTint())))
-          .collect(Collectors.toList())).toArray(new Block[]{}) // supporting blocks
+                .filter(b->((b instanceof IBlockColorTintSupport) && (((IBlockColorTintSupport)b).hasColorTint()))).toList()).toArray(new Block[]{}) // supporting blocks
       );
     }
   }
@@ -77,8 +75,7 @@ public final class ColorUtils
       event.getItemColors().register(
         (ItemStack stack, int tintIndex) -> (((IItemColorTintSupport)(stack.getItem())).getColor(stack, tintIndex)),
         items_supplier_.get().stream()
-          .filter(e -> ((e instanceof IItemColorTintSupport) && (((IItemColorTintSupport)e).hasColorTint())))
-          .collect(Collectors.toList()).toArray(new ItemLike[]{})
+                .filter(e->((e instanceof IItemColorTintSupport) && (((IItemColorTintSupport)e).hasColorTint()))).toList().toArray(new ItemLike[]{})
       );
     }
   }

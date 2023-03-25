@@ -86,6 +86,7 @@ public class Auxiliaries
   { return SharedConstants.IS_RUNNING_IN_IDE; }
 
   @OnlyIn(Dist.CLIENT)
+  @SuppressWarnings("all")
   public static boolean isShiftDown()
   {
     return (InputConstants.isKeyDown(SidedProxy.mc().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) ||
@@ -93,6 +94,7 @@ public class Auxiliaries
   }
 
   @OnlyIn(Dist.CLIENT)
+  @SuppressWarnings("all")
   public static boolean isCtrlDown()
   {
     return (InputConstants.isKeyDown(SidedProxy.mc().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_CONTROL) ||

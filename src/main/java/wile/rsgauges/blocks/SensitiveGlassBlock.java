@@ -118,7 +118,7 @@ public class SensitiveGlassBlock extends RsBlock
   {
     final ItemStack stack = player.getItemInHand(hand);
     Optional<DyeColor> dye = ColorUtils.getColorFromDyeItem(stack);
-    if(!dye.isPresent()) return InteractionResult.PASS;
+    if(dye.isEmpty()) return InteractionResult.PASS;
     world.setBlock(pos, state.setValue(COLOR, dye.get()), 1|2);
     return world.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
   }

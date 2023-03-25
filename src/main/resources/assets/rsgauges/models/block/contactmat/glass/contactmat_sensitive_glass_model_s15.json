@@ -1,4 +1,5 @@
 {
+  "render_type": "translucent",
 	"parent": "rsgauges:block/contactmat/glass/contactmat_glassxblock_thin",
 	"textures": {
     "front": "rsgauges:block/sensitiveglass/clearwhiteglass40",

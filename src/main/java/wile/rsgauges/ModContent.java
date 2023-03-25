@@ -12,8 +12,6 @@
  */
 package wile.rsgauges;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -1217,11 +1215,9 @@ public class ModContent
   public static BlockEntityType<?> getBlockEntityTypeOfBlock(String block_name)
   { return Registries.getBlockEntityTypeOfBlock(block_name); }
 
-
   //--------------------------------------------------------------------------------------------------------------------
   // Tile entities bound exclusively to the blocks above
   //--------------------------------------------------------------------------------------------------------------------
-
 
   @ObjectHolder(registryName = "block_entity_type", value = "rsgauges:te_gauge")
   public static final BlockEntityType<AbstractGaugeBlock.GaugeTileEntity> TET_GAUGE = null;
@@ -1243,7 +1239,7 @@ public class ModContent
   public static final BlockEntityType<ObserverSwitchBlock.ObserverSwitchTileEntity> TET_OBSERVER_SWITCH = null;
   @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_doorsensor_switch")
   public static final BlockEntityType<DoorSensorSwitchBlock.DoorSensorSwitchTileEntity> TET_DOORSENSOR_SWITCH = null;
-  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:switchlink_pearl")
+  @ObjectHolder(registryName = "item", value =  "rsgauges:switchlink_pearl")
   public static final SwitchLinkPearlItem SWITCH_LINK_PEARL = null;
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -1252,18 +1248,6 @@ public class ModContent
 
   @OnlyIn(Dist.CLIENT)
   public static void processContentClientSide(final FMLClientSetupEvent event)
-  {
-    // Block renderer selection
-    for(Block block: Registries.getRegisteredBlocks()) {
-      if(block instanceof RsBlock) {
-        switch(((RsBlock)block).getRenderTypeHint()) {
-          case CUTOUT: ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout()); break;
-          case CUTOUT_MIPPED: ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()); break;
-          case TRANSLUCENT: ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent()); break;
-          case SOLID: break;
-        }
-      }
-    }
-  }
+  {}
 
 }

@@ -1,7 +1,7 @@
 
-## Gauges and Switches (MC1.18.x)
+## Gauges and Switches (MC1.19.x)
 
-Mod sources for Minecraft version 1.18.x.
+Mod sources for Minecraft version 1.19.x.
 
 - Description, credits, and features: Please see the readme in the repository root.
 
@@ -9,6 +9,8 @@ Mod sources for Minecraft version 1.18.x.
 
 ----
 ## Version history
+
+    - v1.2.18    [U] Initial 1.19.2 port (PR#71, by Damian).
 
     - v1.2.17    [F] Removed Analog Link Receiver output inversion.
 

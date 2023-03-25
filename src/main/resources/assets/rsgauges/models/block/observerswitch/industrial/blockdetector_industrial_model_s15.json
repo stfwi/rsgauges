@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
 	"parent": "rsgauges:block/observerswitch/industrial/blockdetector_industrial_model_s00",
 	"textures": {
     "back": "rsgauges:block/observerswitch/observerswitch_industrial_blockdetector_back_s15",
