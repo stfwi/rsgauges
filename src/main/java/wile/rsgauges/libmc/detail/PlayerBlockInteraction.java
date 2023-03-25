@@ -38,7 +38,7 @@ public class PlayerBlockInteraction
 
   public static void onPlayerInteract(PlayerInteractEvent event)
   {
-    final Level world = event.getWorld();
+    final Level world = event.getLevel();
     if(world.isClientSide()) return;
     final boolean is_rclick = (event instanceof RightClickBlock) && (event.getHand()==InteractionHand.MAIN_HAND);
     final boolean is_lclick = (event instanceof LeftClickBlock) && (event.getHand()==InteractionHand.MAIN_HAND) && (event.getFace()!= Direction.DOWN); // last one temporary workaround for double trigger on mouse release
@@ -47,9 +47,9 @@ public class PlayerBlockInteraction
     for(Direction facing: Direction.values()) {
       if(event.getFace() == facing) continue;
       final BlockPos pos = fromPos.relative(facing);
-      final BlockState state = event.getWorld().getBlockState(pos);
+      final BlockState state = event.getLevel().getBlockState(pos);
       if(!((state.getBlock()) instanceof INeighbourBlockInteractionSensitive)) continue;
-      if(((INeighbourBlockInteractionSensitive)state.getBlock()).onNeighborBlockPlayerInteraction(world, pos, state, fromPos, event.getEntityLiving(), event.getHand(), is_lclick)) {
+      if(((INeighbourBlockInteractionSensitive)state.getBlock()).onNeighborBlockPlayerInteraction(world, pos, state, fromPos, event.getEntity(), event.getHand(), is_lclick)) {
         event.setCancellationResult(InteractionResult.CONSUME);
       }
     }

@@ -90,7 +90,7 @@ public class OptionalRecipeCondition implements ICondition
   }
 
   @Override
-  public boolean test()
+  public boolean test(IContext context)
   {
     if(without_recipes) return false;
     if((experimental) && (!with_experimental)) return false;

@@ -22,11 +22,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -55,7 +58,7 @@ public final class ColorUtils
   { blocks_supplier_ = registeredBlocksSuplier; items_supplier_  = registeredItemsSuplier; }
 
   @OnlyIn(Dist.CLIENT)
-  public static void registerBlockColourHandlers(final ColorHandlerEvent.Block event)
+  public static void registerBlockColourHandlers(final RegisterColorHandlersEvent.Block event)
   {
     if(!blocks_supplier_.get().isEmpty()) {
       event.getBlockColors().register(
@@ -68,7 +71,7 @@ public final class ColorUtils
   }
 
   @OnlyIn(Dist.CLIENT)
-  public static void registerItemColourHandlers(final ColorHandlerEvent.Item event)
+  public static void registerItemColourHandlers(final RegisterColorHandlersEvent.Item event)
   {
     if(!items_supplier_.get().isEmpty()) {
       event.getItemColors().register(

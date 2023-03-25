@@ -13,10 +13,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
@@ -40,7 +40,6 @@ import wile.rsgauges.libmc.detail.Overlay;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public class ContactSwitchBlock extends SwitchBlock
 {
@@ -80,7 +79,7 @@ public class ContactSwitchBlock extends SwitchBlock
   }
 
   @Override
-  public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random)
   { if(((config & SWITCH_CONFIG_SHOCK_SENSITIVE)!=0) || (!onEntityCollided(world, pos, state))) super.tick(state, world, pos, random); }
 
   protected boolean onEntityCollided(Level world, BlockPos pos, BlockState state)
@@ -238,14 +237,14 @@ public class ContactSwitchBlock extends SwitchBlock
       }
       {
         Overlay.show(player,
-          (new TextComponent(""))
+          (Component.literal(""))
             .append(Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity", ChatFormatting.BLUE, new Object[]{
                 Auxiliaries.localizable("switchconfig.touchcontactmat.sensitivity." + (high_sensitivity() ? "high":"normal"))
               }))
             .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.touchcontactmat.entity_threshold", ChatFormatting.YELLOW, new Object[]{entity_count_threshold()}))
             .append(" | ")
-            .append(Auxiliaries.localizable("switchconfig.touchcontactmat.entity_filter", ChatFormatting.DARK_GREEN, new Object[]{new TranslatableComponent("rsgauges.switchconfig.touchcontactmat.entity_filter."+filter_class_names[filter_])}))
+            .append(Auxiliaries.localizable("switchconfig.touchcontactmat.entity_filter", ChatFormatting.DARK_GREEN, new Object[]{Component.translatable("rsgauges.switchconfig.touchcontactmat.entity_filter."+filter_class_names[filter_])}))
             .append(" | ")
             .append(Auxiliaries.localizable("switchconfig.touchcontactmat.output_power", ChatFormatting.RED, new Object[]{setpower()}))
         );

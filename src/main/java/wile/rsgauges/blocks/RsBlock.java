@@ -18,6 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -57,7 +58,6 @@ import wile.rsgauges.libmc.detail.Networking;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 
 public abstract class RsBlock extends Block implements EntityBlock
@@ -95,7 +95,7 @@ public abstract class RsBlock extends Block implements EntityBlock
 
   @Override
   @Nullable
-  public <T extends BlockEntity> GameEventListener getListener(Level world, T te)
+  public <T extends BlockEntity> GameEventListener getListener(ServerLevel p_221121_, T te)
   { return null; }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -207,7 +207,7 @@ public abstract class RsBlock extends Block implements EntityBlock
 
   @Override
   @SuppressWarnings("deprecation")
-  public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rnd)
+  public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource rnd)
   {}
 
   // -------------------------------------------------------------------------------------------------------------------

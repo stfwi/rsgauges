@@ -15,8 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -45,7 +44,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -122,26 +120,26 @@ public class Auxiliaries
    * Text localization wrapper, implicitly prepends `MODID` to the
    * translation keys. Forces formatting argument, nullable if no special formatting shall be applied..
    */
-  public static TranslatableComponent localizable(String modtrkey, Object... args)
-  { return new TranslatableComponent((modtrkey.startsWith("block.") || (modtrkey.startsWith("item."))) ? (modtrkey) : (modid+"."+modtrkey), args); }
+  public static MutableComponent localizable(String modtrkey, Object... args)
+  { return Component.translatable((modtrkey.startsWith("block.") || (modtrkey.startsWith("item."))) ? (modtrkey) : (modid+"."+modtrkey), args); }
 
-  public static TranslatableComponent localizable(String modtrkey, @Nullable ChatFormatting color, Object... args)
+  public static MutableComponent localizable(String modtrkey, @Nullable ChatFormatting color, Object... args)
   {
-    TranslatableComponent tr = new TranslatableComponent(modid+"."+modtrkey, args);
+    MutableComponent tr = Component.translatable(modid+"."+modtrkey, args);
     if(color!=null) tr.withStyle(color);
     return tr;
   }
 
-  public static TranslatableComponent localizable(String modtrkey)
+  public static MutableComponent localizable(String modtrkey)
   { return localizable(modtrkey, new Object[]{}); }
 
-  public static TranslatableComponent localizable_block_key(String blocksubkey)
-  { return new TranslatableComponent("block."+modid+"."+blocksubkey); }
+  public static MutableComponent localizable_block_key(String blocksubkey)
+  { return Component.translatable("block."+modid+"."+blocksubkey); }
 
   @OnlyIn(Dist.CLIENT)
   public static String localize(String translationKey, Object... args)
   {
-    TranslatableComponent tr = new TranslatableComponent(translationKey, args);
+    MutableComponent tr = Component.translatable(translationKey, args);
     tr.withStyle(ChatFormatting.RESET);
     final String ft = tr.getString();
     if(ft.contains("${")) {
@@ -165,7 +163,7 @@ public class Auxiliaries
             if(!r) m = "";
           }
         }
-        mt.appendReplacement(sb, Matcher.quoteReplacement((new TranslatableComponent(m)).getString().trim()));
+        mt.appendReplacement(sb, Matcher.quoteReplacement((Component.translatable(m)).getString().trim()));
       }
       mt.appendTail(sb);
       return sb.toString();
@@ -215,7 +213,7 @@ public class Auxiliaries
       if(tip_text.isEmpty()) return false;
       String[] tip_list = tip_text.split("\\r?\\n");
       for(String tip:tip_list) {
-        tooltip.add(new TextComponent(tip.replaceAll("\\s+$","").replaceAll("^\\s+", "")).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.literal(tip.replaceAll("\\s+$","").replaceAll("^\\s+", "")).withStyle(ChatFormatting.GRAY));
       }
       return true;
     }
@@ -233,7 +231,7 @@ public class Auxiliaries
     public static boolean addInformation(String translation_key, List<Component> tooltip)
     {
       if(!Auxiliaries.hasTranslation(translation_key)) return false;
-      tooltip.add(new TextComponent(localize(translation_key).replaceAll("\\s+$","").replaceAll("^\\s+", "")).withStyle(ChatFormatting.GRAY));
+      tooltip.add(Component.literal(localize(translation_key).replaceAll("\\s+$","").replaceAll("^\\s+", "")).withStyle(ChatFormatting.GRAY));
       return true;
     }
 
@@ -243,7 +241,7 @@ public class Auxiliaries
   public static void playerChatMessage(final Player player, final String message)
   {
     String s = message.trim();
-    if(!s.isEmpty()) player.sendMessage(new TranslatableComponent(s), new UUID(0,0));
+    if(!s.isEmpty()) player.sendSystemMessage(Component.translatable(s));
   }
 
   public static @Nullable Component unserializeTextComponent(String serialized)

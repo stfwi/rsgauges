@@ -19,8 +19,9 @@ group = "wile.rsgauges"
 archivesBaseName = "rsgauges-${version_minecraft}"
 
 repositories {
-  maven { name = "Progwml6 maven"; url = "https://dvs1.progwml6.com/files/maven/" } // JEI files
-  maven { name = "ModMaven"; url = "https://modmaven.k-4u.nl" } // JEI files, fallback
+  maven { name = "Progwml6 maven"; url = "https://dvs1.progwml6.com/files/maven/" } // JEI files before January 2023
+  maven { name = "Jared's maven"; url = "https://maven.blamejared.com/" } // JEI files since January 2023
+  maven { name = "ModMaven"; url = "https://modmaven.dev" } // JEI files, fallback
   flatDir { dir 'libs' } // Mod jar dependencies in ./libs
 }
 
@@ -43,8 +44,9 @@ minecraft {
 
 dependencies {
   minecraft "net.minecraftforge:forge:${version_forge_minecraft}"
-  compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
-  runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
+  compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}-common-api:${version_jei}")
+  compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}-forge-api:${version_jei}")
+  runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}-forge:${version_jei}")
 }
 
 processResources {

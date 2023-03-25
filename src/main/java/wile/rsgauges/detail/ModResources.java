@@ -17,33 +17,22 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.RegistryObject;
 import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.libmc.detail.Registries;
 import wile.rsgauges.libmc.detail.SidedProxy;
-
-import java.util.LinkedList;
 
 public class ModResources
 {
-  private static final LinkedList<SoundEvent> created_sounds_ = new LinkedList<>();
-
-  private static SoundEvent createSoundEvent(String name)
+  public static RegistryObject<SoundEvent> createSoundEvent(String name)
   {
-    final ResourceLocation rl = new ResourceLocation(ModRsGauges.MODID, name);
-    SoundEvent se = new SoundEvent(rl).setRegistryName(rl);
-    created_sounds_.push(se);
-    return se;
-  }
-
-  public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event)
-  {
-    for(SoundEvent se:created_sounds_) {event.getRegistry().register(se);}
+    return Registries.sound_deferred_register.register(name, () -> new SoundEvent(new ResourceLocation(ModRsGauges.MODID, name)));
   }
 
   /**
    * Sounds
    */
-  public static final SoundEvent ALARM_SIREN_SOUND = createSoundEvent("alarm_siren_sound");
+  public static RegistryObject<SoundEvent> ALARM_SIREN_SOUND;
 
   /**
    * Block sound player class used in the code, additionally specifying

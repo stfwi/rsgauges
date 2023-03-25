@@ -11,6 +11,7 @@ package wile.rsgauges.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -23,7 +24,6 @@ import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.detail.SwitchLink;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 
 public abstract class AutoSwitchBlock extends SwitchBlock
@@ -39,7 +39,7 @@ public abstract class AutoSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random)
   {}
 
   // -------------------------------------------------------------------------------------------------------------------

@@ -9,8 +9,8 @@
 package wile.rsgauges.libmc.detail;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
@@ -20,11 +20,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.tuple.Pair;
+import wile.rsgauges.ModRsGauges;
+import wile.rsgauges.detail.ModResources;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -34,20 +40,21 @@ public class Registries
   private static String creative_tab_icon = "";
   private static CreativeModeTab creative_tab = null;
 
-  private static final List<Tuple<String, Supplier<? extends Block>>> block_suppliers = new ArrayList<>();
-  private static final List<Tuple<String, Supplier<? extends Item>>> item_suppliers = new ArrayList<>();
-  private static final List<Tuple<String, Supplier<? extends BlockEntityType<?>>>> block_entity_type_suppliers = new ArrayList<>();
-  private static final List<Tuple<String, Supplier<? extends EntityType<?>>>> entity_type_suppliers = new ArrayList<>();
-  private static final List<Tuple<String, Supplier<? extends MenuType<?>>>> menu_type_suppliers = new ArrayList<>();
-  private static final List<String> block_item_order = new ArrayList<>();
+  private static final DeferredRegister<Block> block_deferred_register = DeferredRegister.create(ForgeRegistries.BLOCKS, ModRsGauges.MODID);
+  private static final DeferredRegister<Item> item_deferred_register = DeferredRegister.create(ForgeRegistries.ITEMS, ModRsGauges.MODID);
+  private static final DeferredRegister<BlockEntityType<?>> block_entity_deferred_register = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ModRsGauges.MODID);
+  private static final DeferredRegister<EntityType<?>> entity_deferred_register = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, ModRsGauges.MODID);
+  private static final DeferredRegister<MenuType<?>> menu_deferred_register = DeferredRegister.create(ForgeRegistries.MENU_TYPES, ModRsGauges.MODID);
+  public static final DeferredRegister<SoundEvent> sound_deferred_register = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ModRsGauges.MODID);
 
-  private static final Map<String, Block> registered_blocks = new HashMap<>();
-  private static final Map<String, Item> registered_items = new HashMap<>();
-  private static final Map<String, BlockEntityType<?>> registered_block_entity_types = new HashMap<>();
-  private static final Map<String, EntityType<?>> registered_entity_types = new HashMap<>();
-  private static final Map<String, MenuType<?>> registered_menu_types = new HashMap<>();
+  private static final Map<String, RegistryObject<Block>> registered_blocks = new HashMap<>();
+  private static final Map<String, RegistryObject<Item>> registered_items = new HashMap<>();
+  private static final Map<String, RegistryObject<BlockEntityType<?>>> registered_block_entity_types = new HashMap<>();
+  private static final Map<String, RegistryObject<EntityType<?>>> registered_entity_types = new HashMap<>();
+  private static final Map<String, RegistryObject<MenuType<?>>> registered_menu_types = new HashMap<>();
   private static final Map<String, TagKey<Block>> registered_block_tag_keys = new HashMap<>();
   private static final Map<String, TagKey<Item>> registered_item_tag_keys = new HashMap<>();
+  private static final ArrayList<Pair<Class<?>, RegistryObject<Block>>> registered_block_classes = new ArrayList<>();
 
   public static void init(String mod_id, String creative_tab_icon_item_name)
   { modid = mod_id; creative_tab_icon=creative_tab_icon_item_name; }
@@ -56,7 +63,7 @@ public class Registries
   {
     if(creative_tab==null) {
       creative_tab = (new CreativeModeTab("tab" + modid) {
-        public ItemStack makeIcon() { return new ItemStack(registered_items.get(creative_tab_icon)); }
+        public ItemStack makeIcon() { return new ItemStack(registered_items.get(creative_tab_icon).get()); }
       });
     }
     return creative_tab;
@@ -65,19 +72,19 @@ public class Registries
   // -------------------------------------------------------------------------------------------------------------
 
   public static Block getBlock(String block_name)
-  { return registered_blocks.get(block_name); }
+  { return registered_blocks.get(block_name).get(); }
 
   public static Item getItem(String name)
-  { return registered_items.get(name); }
+  { return registered_items.get(name).get(); }
 
   public static EntityType<?> getEntityType(String name)
-  { return registered_entity_types.get(name); }
+  { return registered_entity_types.get(name).get(); }
 
   public static BlockEntityType<?> getBlockEntityType(String block_name)
-  { return registered_block_entity_types.get(block_name); }
+  { return registered_block_entity_types.get(block_name).get(); }
 
   public static MenuType<?> getMenuType(String name)
-  { return registered_menu_types.get(name); }
+  { return registered_menu_types.get(name).get(); }
 
   public static BlockEntityType<?> getBlockEntityTypeOfBlock(String block_name)
   { return getBlockEntityType("tet_"+block_name); }
@@ -95,93 +102,85 @@ public class Registries
 
   @Nonnull
   public static List<Block> getRegisteredBlocks()
-  { return Collections.unmodifiableList(registered_blocks.values().stream().toList()); }
+  { return registered_blocks.values().stream().map(RegistryObject::get).collect(Collectors.toList()); }
 
   @Nonnull
   public static List<Item> getRegisteredItems()
-  { return Collections.unmodifiableList(registered_items.values().stream().toList()); }
+  { return registered_items.values().stream().map(RegistryObject::get).collect(Collectors.toList()); }
 
   @Nonnull
   public static List<BlockEntityType<?>> getRegisteredBlockEntityTypes()
-  { return Collections.unmodifiableList(registered_block_entity_types.values().stream().toList()); }
+  { return registered_block_entity_types.values().stream().map(RegistryObject::get).collect(Collectors.toList()); }
 
   @Nonnull
   public static List<EntityType<?>> getRegisteredEntityTypes()
-  { return Collections.unmodifiableList(registered_entity_types.values().stream().toList()); }
+  { return registered_entity_types.values().stream().map(RegistryObject::get).collect(Collectors.toList()); }
 
   // -------------------------------------------------------------------------------------------------------------
 
-  @SuppressWarnings("unchecked")
   public static <T extends Item> void addItem(String registry_name, Supplier<T> supplier)
   {
-    item_suppliers.add(new Tuple<>(registry_name, ()->{
-      final T instance = supplier.get();
-      instance.setRegistryName(new ResourceLocation(modid, registry_name));
-      return instance;
-    }));
+    RegistryObject<Item> item = item_deferred_register.register(registry_name, supplier);
+    registered_items.put(registry_name, item);
   }
 
-  @SuppressWarnings("unchecked")
-  public static <T extends Block> void addBlock(String registry_name, Supplier<T> block_supplier)
+  public static <T extends Block> void addBlock(String registry_name, Supplier<T> block_supplier, Class<?> clazz)
   {
-    block_suppliers.add(new Tuple<>(registry_name, ()->{
-      final T instance = block_supplier.get();
-      instance.setRegistryName(new ResourceLocation(modid, registry_name));
-      return instance;
-    }));
+    RegistryObject<Block> block = block_deferred_register.register(registry_name, block_supplier);
+    RegistryObject<Item> blockItem = item_deferred_register.register(registry_name,
+            () -> new BlockItem(block.get(), (new Item.Properties().tab(getCreativeModeTab()))));
+    registered_blocks.put(registry_name, block);
+    registered_items.put(registry_name, blockItem);
+    registered_block_classes.add(Pair.of(clazz, block));
   }
 
-  @SuppressWarnings("unchecked")
   public static <T extends BlockEntity> void addBlockEntityType(String registry_name, BlockEntityType.BlockEntitySupplier<T> ctor, String... block_names)
   {
-    block_entity_type_suppliers.add(new Tuple<>(registry_name, ()->{
-      final Block[] blocks = Arrays.stream(block_names).map(s->{
-        Block b = registered_blocks.get(s);
-        if(b==null) Auxiliaries.logError("registered_blocks does not encompass '" + s + "'");
-        return b;
-      }).filter(Objects::nonNull).collect(Collectors.toList()).toArray(new Block[]{});
-      final BlockEntityType<T> instance =  BlockEntityType.Builder.of(ctor, blocks).build(null);
-      instance.setRegistryName(modid, registry_name);
-      return instance;
-    }));
+    ArrayList<RegistryObject<Block>> blocks = new ArrayList<>();
+    for (String str : block_names)
+    {
+      blocks.add(registered_blocks.get(str));
+    }
+
+    RegistryObject<BlockEntityType<?>> blockEntityType = block_entity_deferred_register.register(registry_name,
+            () -> BlockEntityType.Builder.of(ctor, blocks.stream().map(RegistryObject::get).collect(Collectors.toList()).toArray(new Block[]{})).build(null));
+    registered_block_entity_types.put(registry_name, blockEntityType);
   }
 
-  @SuppressWarnings("unchecked")
   public static <T extends BlockEntity> void addBlockEntityType(String registry_name, BlockEntityType.BlockEntitySupplier<T> ctor, Class<? extends Block> block_clazz)
   {
-    block_entity_type_suppliers.add(new Tuple<>(registry_name, ()->{
-      final Block[] blocks = registered_blocks.values().stream().filter(block_clazz::isInstance).collect(Collectors.toList()).toArray(new Block[]{});
-      final BlockEntityType<T> instance =  BlockEntityType.Builder.of(ctor, blocks).build(null);
-      instance.setRegistryName(modid, registry_name);
-      return instance;
-    }));
+    ArrayList<RegistryObject<Block>> blocks = new ArrayList<>();
+    for (Pair<Class<?>, RegistryObject<Block>> block : registered_block_classes)
+    {
+      if (block_clazz.isAssignableFrom(block.getLeft())) blocks.add(block.getRight());
+    }
+
+    RegistryObject<BlockEntityType<?>> blockEntityType = block_entity_deferred_register.register(registry_name,
+            () -> BlockEntityType.Builder.of(ctor, blocks.stream().map(RegistryObject::get).collect(Collectors.toList()).toArray(new Block[]{})).build(null));
+    registered_block_entity_types.put(registry_name, blockEntityType);
   }
 
-  @SuppressWarnings("unchecked")
-  public static <T extends EntityType<?>> void addEntityType(String registry_name, Supplier<EntityType<?>> supplier)
-  { entity_type_suppliers.add(new Tuple<>(registry_name, supplier)); }
-
-  @SuppressWarnings("unchecked")
-  public static <T extends MenuType<?>> void addMenuType(String registry_name, MenuType.MenuSupplier<?> supplier)
+  public static void addEntityType(String registry_name, Supplier<EntityType<?>> supplier)
   {
-    menu_type_suppliers.add(new Tuple<>(registry_name, ()->{
-      final MenuType<?> instance = new MenuType<>(supplier);
-      instance.setRegistryName(modid, registry_name);
-      return instance;
-    }));
+    RegistryObject<EntityType<?>> entityType = entity_deferred_register.register(registry_name, supplier);
+    registered_entity_types.put(registry_name, entityType);
   }
 
-  @SuppressWarnings("unchecked")
-  public static void addBlock(String registry_name, Supplier<? extends Block> block_supplier, BlockEntityType.BlockEntitySupplier<?> block_entity_ctor)
+  public static void addMenuType(String registry_name, MenuType.MenuSupplier<?> supplier)
   {
-    addBlock(registry_name, block_supplier);
+    RegistryObject<MenuType<?>> menuType = menu_deferred_register.register(registry_name, () -> new MenuType<>(supplier));
+    registered_menu_types.put(registry_name, menuType);
+  }
+
+  public static void addBlock(String registry_name, Supplier<? extends Block> block_supplier, BlockEntityType.BlockEntitySupplier<?> block_entity_ctor, Class<?> clazz)
+  {
+    addBlock(registry_name, block_supplier, clazz);
     addBlockEntityType("tet_"+registry_name, block_entity_ctor, registry_name);
   }
 
-  @SuppressWarnings("unchecked")
-  public static void addBlock(String registry_name, Supplier<? extends Block> block_supplier, BlockEntityType.BlockEntitySupplier<?> block_entity_ctor, MenuType.MenuSupplier<?> menu_type_supplier)
+  public static void addBlock(String registry_name, Supplier<? extends Block> block_supplier, BlockEntityType.BlockEntitySupplier<?> block_entity_ctor, MenuType.MenuSupplier<?> menu_type_supplier, Class<?> clazz)
   {
-    addBlock(registry_name, block_supplier);
+    addBlock(registry_name, block_supplier, clazz);
     addBlockEntityType("tet_"+registry_name, block_entity_ctor, registry_name);
     addMenuType("ct_"+registry_name, menu_type_supplier);
   }
@@ -195,7 +194,9 @@ public class Registries
   }
 
   public static void addOptionalBlockTag(String tag_name, String... default_blocks)
-  { addOptionalBlockTag(tag_name, Arrays.stream(default_blocks).map(ResourceLocation::new).collect(Collectors.toList()).toArray(new ResourceLocation[]{})); }
+  {
+    addOptionalBlockTag(tag_name, Arrays.stream(default_blocks).map(ResourceLocation::new).collect(Collectors.toList()).toArray(new ResourceLocation[]{}));
+  }
 
   public static void addOptionaItemTag(String tag_name, ResourceLocation... default_items)
   {
@@ -205,73 +206,17 @@ public class Registries
     registered_item_tag_keys.put(tag_name, key);
   }
 
-  // -------------------------------------------------------------------------------------------------------------
-
-  public static void onBlockRegistry(BiConsumer<ResourceLocation, Block> registration)
+  public static void registerAll()
   {
-    block_suppliers.forEach(e->{
-      final Block block = e.getB().get();
-      final ResourceLocation rl = new ResourceLocation(modid, e.getA());
-      registration.accept(rl, block);
-      registered_blocks.put(e.getA(), block);
-      block_item_order.add(e.getA());
-    });
-    block_suppliers.clear();
-  }
+    ModResources.ALARM_SIREN_SOUND = ModResources.createSoundEvent("alarm_siren_sound");
 
-  public static void onItemRegistry(BiConsumer<ResourceLocation, Item> registration)
-  {
-    block_item_order.forEach(regname->{
-      Block block = registered_blocks.get(regname);
-      final ResourceLocation rl = block.getRegistryName();
-      Item item;
-      // if(block instanceof StandardBlocks.IBlockItemFactory) { item = ((StandardBlocks.IBlockItemFactory)block).getBlockItem(block, (new Item.Properties().tab(getCreativeModeTab())));
-      //} else {
-        item = new BlockItem(block, (new Item.Properties().tab(getCreativeModeTab())));
-      //}
-      item.setRegistryName(rl);
-      registration.accept(rl, item);
-      registered_items.put(rl.getPath(), item);
-    });
-    item_suppliers.forEach(e->{
-      final Item item = e.getB().get();
-      registration.accept(new ResourceLocation(modid, e.getA()), item);
-      registered_items.put(e.getA(), item);
-    });
-    item_suppliers.clear();
-    block_item_order.clear();
-  }
+    IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-  public static void onBlockEntityRegistry(BiConsumer<ResourceLocation, BlockEntityType<?>> registration)
-  {
-    block_entity_type_suppliers.forEach(e->{
-      final BlockEntityType<?> tet = e.getB().get();
-      registration.accept(new ResourceLocation(modid, e.getA()), tet);
-      registered_block_entity_types.put(e.getA(), tet);
-    });
-    block_entity_type_suppliers.clear();
+    block_deferred_register.register(eventBus);
+    item_deferred_register.register(eventBus);
+    block_entity_deferred_register.register(eventBus);
+    entity_deferred_register.register(eventBus);
+    menu_deferred_register.register(eventBus);
+    sound_deferred_register.register(eventBus);
   }
-
-  public static void onMenuTypeRegistry(BiConsumer<ResourceLocation, MenuType<?>> registration)
-  {
-    menu_type_suppliers.forEach(e->{
-      final MenuType<?> ct = e.getB().get();
-      registration.accept(new ResourceLocation(modid, e.getA()), ct);
-      registered_menu_types.put(e.getA(), ct);
-    });
-    menu_type_suppliers.clear();
-  }
-
-  public static void onEntityRegistry(BiConsumer<ResourceLocation, EntityType<?>> registration)
-  {
-    entity_type_suppliers.forEach(e->{
-      final ResourceLocation rl = new ResourceLocation(modid, e.getA());
-      final EntityType<?> et = e.getB().get();
-      et.setRegistryName(rl);
-      registration.accept(rl, et);
-      registered_entity_types.put(e.getA(), et);
-    });
-    entity_type_suppliers.clear();
-  }
-
 }

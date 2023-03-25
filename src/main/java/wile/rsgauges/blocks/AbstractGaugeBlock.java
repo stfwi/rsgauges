@@ -21,8 +21,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -330,8 +330,8 @@ public class AbstractGaugeBlock extends RsDirectedBlock implements EntityBlock, 
         }
       }
       last_wrench_click_ = t;
-      final TranslatableComponent tr = Auxiliaries.localizable("gaugeconfig.options."+(inverted()?"inverted":"notinverted"), ChatFormatting.DARK_AQUA);
-      if(comparator_mode()) tr.append(new TextComponent(" | ")).append(Auxiliaries.localizable("gaugeconfig.options.comparator", ChatFormatting.DARK_AQUA));
+      final MutableComponent tr = Auxiliaries.localizable("gaugeconfig.options."+(inverted()?"inverted":"notinverted"), ChatFormatting.DARK_AQUA);
+      if(comparator_mode()) tr.append(Component.literal(" | ")).append(Auxiliaries.localizable("gaugeconfig.options.comparator", ChatFormatting.DARK_AQUA));
       Overlay.show(player, tr);
     }
 

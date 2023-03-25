@@ -82,6 +82,7 @@ public class ModContent
     initTags();
     initBlocks();
     initItems();
+    Registries.registerAll();
   }
 
   private static void initTags()
@@ -111,7 +112,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,4,0,12,15,4),
       Auxiliaries.getPixeledAABB(4,1,0,12,12,4)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Mechanical lever
     Registries.addBlock("industrial_lever", ()->new BistableSwitchBlock(
@@ -122,7 +123,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(5,4,0,11,15,5),
       Auxiliaries.getPixeledAABB(5,1,0,11,12,5)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Mechanical rotary lever
     Registries.addBlock("industrial_rotary_lever", ()->new BistableSwitchBlock(
@@ -133,7 +134,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(1,4,0,12,12,6),
       Auxiliaries.getPixeledAABB(1,1,0,12,12,6)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Rotary machine switch
     Registries.addBlock("industrial_rotary_machine_switch", ()->new BistableSwitchBlock(
@@ -143,7 +144,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null
-    ));
+    ), BistableSwitchBlock.class);
 
     // Two-button machine switch
     Registries.addBlock("industrial_machine_switch", ()->new BistableSwitchBlock(
@@ -153,7 +154,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null
-    ));
+    ), BistableSwitchBlock.class);
 
     // ESTOP button
     Registries.addBlock("industrial_estop_switch", ()->new BistableSwitchBlock(
@@ -165,7 +166,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(5,5,0, 11, 11, 2.5),
       Auxiliaries.getPixeledAABB(5,5,0, 11, 11, 3.5)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Hopper blocking switch
     Registries.addBlock("industrial_hopper_switch", ()->new BistableSwitchBlock(
@@ -177,7 +178,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(3,10,0, 13, 12, 6.7),
       Auxiliaries.getPixeledAABB(3,10,0, 13, 12, 3.7)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Square machine pulse switch
     Registries.addBlock("industrial_button", ()->new PulseSwitchBlock(
@@ -189,7 +190,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(5,5,0, 11, 11, 2), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Fenced round machine pulse switch
     Registries.addBlock("industrial_fenced_button", ()->new PulseSwitchBlock(
@@ -201,7 +202,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(5,5,0, 11, 11, 2), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Retro double pole switch
     Registries.addBlock("industrial_double_pole_button", ()->new PulseSwitchBlock(
@@ -214,7 +215,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 3),
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 2)
-    ));
+    ), PulseSwitchBlock.class);
 
     // Mechanical spring reset push button
     Registries.addBlock("industrial_foot_button", ()->new PulseSwitchBlock(
@@ -226,7 +227,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(5,3,0, 11, 7, 4), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Mechanical spring reset pull handle
     Registries.addBlock("industrial_pull_handle", ()->new PulseSwitchBlock(
@@ -239,7 +240,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 2),
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 2)
-    ));
+    ), PulseSwitchBlock.class);
 
     // Manual dimmer
     Registries.addBlock("industrial_dimmer", ()->new DimmerSwitchBlock(
@@ -251,7 +252,7 @@ public class ModContent
       null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.7f)
-    ));
+    ), DimmerSwitchBlock.class);
 
     // Door contact mat
     Registries.addBlock("industrial_door_contact_mat", ()->new ContactMatBlock(
@@ -264,7 +265,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(1,0,0, 15, 1, 13), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), ContactMatBlock.class);
 
     // Sensitive full size contact mat
     Registries.addBlock("industrial_contact_mat", ()->new ContactMatBlock(
@@ -276,7 +277,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0,0,0, 16, 1, 16), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), ContactMatBlock.class);
 
     // Industrial shock sensor contact mat
     Registries.addBlock("industrial_shock_sensitive_contact_mat", ()->new ContactMatBlock(
@@ -288,7 +289,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0,0,0, 16, 1, 16), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), ContactMatBlock.class);
 
     // Industrial trap door switch (shock vibration sensitive)
     Registries.addBlock("industrial_shock_sensitive_trapdoor", ()->new TrapdoorSwitchBlock(
@@ -302,7 +303,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0,2,0, 16, 1, 0.1),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 3.0f),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.5f)
-    ));
+    ), TrapdoorSwitchBlock.class);
 
     // Industrial trap door switch (high sensitive shock vibration sensitive)
     Registries.addBlock("industrial_high_sensitive_trapdoor", ()->new TrapdoorSwitchBlock(
@@ -318,7 +319,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.0f)
       // Auxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
-    ));
+    ), TrapdoorSwitchBlock.class);
 
     // Industrial trap door switch (item trap door)
     Registries.addBlock("industrial_fallthrough_detector", ()->new TrapdoorSwitchBlock(
@@ -331,7 +332,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0.1,12.6,0.1, 15.9,13, 15.9),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.05f, 2.5f),
       null
-    ));
+    ), TrapdoorSwitchBlock.class);
 
     // Day time switch
     Registries.addBlock("industrial_day_timer", ()->new DayTimerSwitchBlock(
@@ -344,7 +345,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), DayTimerSwitchBlock.class);
 
     // Interval signal timer
     Registries.addBlock("industrial_interval_timer", ()->new IntervalTimerSwitchBlock(
@@ -357,7 +358,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), IntervalTimerSwitchBlock.class);
 
     // Infrared motion_sensor
     Registries.addBlock("industrial_entity_detector", ()->new EntityDetectorSwitchBlock(
@@ -370,7 +371,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 1), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), EntityDetectorSwitchBlock.class);
 
     // Linear laser motion sensor
     Registries.addBlock("industrial_linear_entity_detector", ()->new EntityDetectorSwitchBlock(
@@ -383,7 +384,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 1), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), EntityDetectorSwitchBlock.class);
 
     // Local light sensor
     Registries.addBlock("industrial_light_sensor", ()->new EnvironmentalSensorSwitchBlock(
@@ -394,7 +395,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), EnvironmentalSensorSwitchBlock.class);
 
     // Rain sensor switch
     Registries.addBlock("industrial_rain_sensor", ()->new EnvironmentalSensorSwitchBlock(
@@ -405,7 +406,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), EnvironmentalSensorSwitchBlock.class);
 
     // Lightning sensor switch
     Registries.addBlock("industrial_lightning_sensor", ()->new EnvironmentalSensorSwitchBlock(
@@ -416,7 +417,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1.5), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), EnvironmentalSensorSwitchBlock.class);
 
     // Comparator output level observing switch
     Registries.addBlock("industrial_comparator_switch", ()->new ComparatorSwitchBlock(
@@ -427,7 +428,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(4,10,0, 12, 15, 1.5), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.1f, 1.2f)
-    ));
+    ), ComparatorSwitchBlock.class);
 
     // Uni-directional block detector switch
     Registries.addBlock("industrial_block_detector", ()->new ObserverSwitchBlock(
@@ -442,7 +443,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0.5,0.5,0.5, 15.5, 15.5, 15.5), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.2f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.2f, 1.2f)
-    ));
+    ), ObserverSwitchBlock.class);
 
     // Industrial bistable link receiver switch
     Registries.addBlock("industrial_switchlink_receiver", ()->new LinkReceiverSwitchBlock(
@@ -454,7 +455,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.7f),
       false
-    ));
+    ), LinkReceiverSwitchBlock.class);
 
     // Industrial analog link receiver
     Registries.addBlock("industrial_switchlink_receiver_analog", ()->new LinkReceiverSwitchBlock(
@@ -466,7 +467,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.7f),
       true
-    ));
+    ), LinkReceiverSwitchBlock.class);
 
     // Industrial full block bistable link receiver switch
     Registries.addBlock("industrial_switchlink_cased_receiver", ()->new LinkReceiverSwitchBlock(
@@ -479,7 +480,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.7f),
       false
-    ));
+    ), LinkReceiverSwitchBlock.class);
 
     // Industrial pulse link receiver switch
     Registries.addBlock("industrial_switchlink_pulse_receiver", ()->new LinkReceiverSwitchBlock(
@@ -492,7 +493,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.7f),
       false
-    ));
+    ), LinkReceiverSwitchBlock.class);
 
     // Industrial full block pulse link receiver switch
     Registries.addBlock("industrial_switchlink_cased_pulse_receiver", ()->new LinkReceiverSwitchBlock(
@@ -506,7 +507,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.7f),
       false
-    ));
+    ), LinkReceiverSwitchBlock.class);
 
     // Industrial bistable link relay
     Registries.addBlock("industrial_switchlink_relay", ()->new LinkSenderSwitchBlock(
@@ -519,7 +520,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.7f),
       false
-    ));
+    ), LinkSenderSwitchBlock.class);
 
     // Industrial analog link relay
     Registries.addBlock("industrial_switchlink_relay_analog", ()->new LinkSenderSwitchBlock(
@@ -532,7 +533,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.7f),
       true
-    ));
+    ), LinkSenderSwitchBlock.class);
 
     // Industrial pulse link relay
     Registries.addBlock("industrial_switchlink_pulse_relay", ()->new LinkSenderSwitchBlock(
@@ -546,7 +547,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.9f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.01f, 1.7f),
       false
-    ));
+    ), LinkSenderSwitchBlock.class);
 
     // Bistable industrial knock surge detctor
     Registries.addBlock("industrial_knock_switch", ()->new BistableKnockSwitchBlock(
@@ -559,7 +560,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0.5,0.5,0.5, 15.5, 15.5, 15.5), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.2f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.2f, 1.2f)
-    ));
+    ), BistableKnockSwitchBlock.class);
 
     // Pulse industrial knock surge detctor
     Registries.addBlock("industrial_knock_button", ()->new PulseKnockSwitchBlock(
@@ -574,100 +575,100 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0.5,0.5,0.5, 15.5, 15.5, 15.5), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.2f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.2f, 1.2f)
-    ));
+    ), PulseKnockSwitchBlock.class);
 
     Registries.addBlock("industrial_analog_angular_gauge", ()->new GaugeBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.gauge_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(2,2,0, 14,14,1)
-    ));
+    ), GaugeBlock.class);
 
     Registries.addBlock("industrial_analog_horizontal_gauge", ()->new GaugeBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.gauge_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(2,4,0, 14, 12, 1)
-    ));
+    ), GaugeBlock.class);
 
     Registries.addBlock("industrial_vertical_bar_gauge", ()->new GaugeBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.gauge_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,2,0, 12, 14, 1)
-    ));
+    ), GaugeBlock.class);
 
     Registries.addBlock("industrial_small_digital_gauge", ()->new GaugeBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.gauge_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,5,0, 12, 11, 1)
-    ));
+    ), GaugeBlock.class);
 
     Registries.addBlock("industrial_tube_gauge", ()->new GaugeBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.gauge_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(7,4,0, 9, 12, 3)
-    ));
+    ), GaugeBlock.class);
 
     Registries.addBlock("industrial_alarm_lamp", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
       detail.alarm_lamp_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 4)
-    ));
+    ), IndicatorBlock.class);
 
     Registries.addBlock("industrial_alarm_siren", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
       detail.indicator_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,6.5,0, 11.5, 9.5, 4),
-      new ModResources.BlockSoundEvent(ModResources.ALARM_SIREN_SOUND, 2f),
+      new ModResources.BlockSoundEvent(ModResources.ALARM_SIREN_SOUND.get(), 2f),
       null
-    ));
+    ), IndicatorBlock.class);
 
     // square LED
     Registries.addBlock("industrial_green_led", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.indicator_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
-    ));
+    ), IndicatorBlock.class);
 
     Registries.addBlock("industrial_yellow_led", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.indicator_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
-    ));
+    ), IndicatorBlock.class);
 
     Registries.addBlock("industrial_red_led", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.indicator_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
-    ));
+    ), IndicatorBlock.class);
 
     Registries.addBlock("industrial_white_led", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.indicator_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
-    ));
+    ), IndicatorBlock.class);
 
     Registries.addBlock("industrial_green_blinking_led", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
       detail.indicator_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
-    ));
+    ), IndicatorBlock.class);
 
     Registries.addBlock("industrial_yellow_blinking_led", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
       detail.indicator_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
-    ));
+    ), IndicatorBlock.class);
 
     Registries.addBlock("industrial_red_blinking_led", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT|GaugeBlock.GAUGE_DATA_BLINKING,
       detail.indicator_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
-    ));
+    ), IndicatorBlock.class);
 
     Registries.addBlock("industrial_white_blinking_led", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.indicator_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0, 10, 10, 0.5)
-    ));
+    ), IndicatorBlock.class);
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- Rustic
@@ -682,7 +683,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,5,0, 10.3, 15, 4.5),
       Auxiliaries.getPixeledAABB(6,2,0, 10.3, 11, 4.5)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Rustic lever 2 (bolted)
     Registries.addBlock("rustic_two_hinge_lever", ()->new BistableSwitchBlock(
@@ -693,7 +694,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(2,6,0, 14,13,4.5),
       Auxiliaries.getPixeledAABB(2,4,0, 14,10,4.5)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Rustic lever 3 (big angular)
     Registries.addBlock("rustic_angular_lever", ()->new BistableSwitchBlock(
@@ -704,7 +705,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(0,10,0, 14,15,4.5),
       Auxiliaries.getPixeledAABB(6, 2,0, 14,15,4.5)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Rustic lever 7 (The Nail)
     Registries.addBlock("rustic_nail_lever", ()->new BistableSwitchBlock(
@@ -714,7 +715,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,7,0, 9,10,3), null
-    ));
+    ), BistableSwitchBlock.class);
 
     // Rustic button 1
     Registries.addBlock("rustic_button", ()->new PulseSwitchBlock(
@@ -726,7 +727,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(5,5,0,11,11,2.5), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Rustic button 2 (bolted)
     Registries.addBlock("rustic_small_button", ()->new PulseSwitchBlock(
@@ -738,7 +739,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0,10,10,2.5), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Rustic button 3 (pull chain)
     Registries.addBlock("rustic_spring_reset_chain", ()->new PulseSwitchBlock(
@@ -750,7 +751,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(5,3.5,0,11,15,4), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Rustic button 7 (pull nail)
     Registries.addBlock("rustic_nail_button", ()->new PulseSwitchBlock(
@@ -762,7 +763,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,7,0, 9,10,3), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Rustic door contact mat
     Registries.addBlock("rustic_door_contact_plate", ()->new ContactMatBlock(
@@ -776,7 +777,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(1,0,0, 15,0.5,12),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    ));
+    ), ContactMatBlock.class);
 
     // Rustic full-size contact plate
     Registries.addBlock("rustic_contact_plate", ()->new ContactMatBlock(
@@ -789,7 +790,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0,0,0, 16,0.5,16),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    ));
+    ), ContactMatBlock.class);
 
     // Rustic shock sensor plate
     Registries.addBlock("rustic_shock_sensitive_plate", ()->new ContactMatBlock(
@@ -802,7 +803,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0,0,0, 16,0.5,16),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    ));
+    ), ContactMatBlock.class);
 
     // Rustic trap door switch (shock vibration sensitive)
     Registries.addBlock("rustic_shock_sensitive_trapdoor", ()->new TrapdoorSwitchBlock(
@@ -816,7 +817,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0, 2.0,0, 16,16, 0.1),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.0f)
-    ));
+    ), TrapdoorSwitchBlock.class);
 
     // Rustic trap door switch (high sensitive shock vibration sensitive)
     Registries.addBlock("rustic_high_sensitive_trapdoor", ()->new TrapdoorSwitchBlock(
@@ -832,7 +833,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.5f),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.0f)
       //Auxiliaries.RsMaterials.MATERIAL_TRAPDOORSWITCH
-    ));
+    ), TrapdoorSwitchBlock.class);
 
     // Rustic trap door switch (item trap door)
     Registries.addBlock("rustic_fallthrough_detector", ()->new TrapdoorSwitchBlock(
@@ -845,7 +846,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0,12.6,0, 16,13,16),
       new ModResources.BlockSoundEvent(SoundEvents.IRON_DOOR_CLOSE, 0.05f, 2.5f),
       null
-    ));
+    ), TrapdoorSwitchBlock.class);
 
     Registries.addBlock("rustic_semaphore", ()->new IndicatorBlock(
       SwitchBlock.RSBLOCK_CONFIG_CUTOUT,
@@ -853,7 +854,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(3,4,0, 13,11,1),
       null,
       null
-    ));
+    ), IndicatorBlock.class);
 
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -868,7 +869,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_faint_light_block_properties(),
       Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
-    ));
+    ), BistableSwitchBlock.class);
 
     // Bistable glass touch switch
     Registries.addBlock("glass_touch_switch", ()->new BistableSwitchBlock(
@@ -878,7 +879,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_faint_light_block_properties(),
       Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
-    ));
+    ), BistableSwitchBlock.class);
 
     // Thin star shaped glass button
     Registries.addBlock("glass_button", ()->new PulseSwitchBlock(
@@ -891,7 +892,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_faint_light_block_properties(),
       Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Thin small star shaped glass button
     Registries.addBlock("glass_small_button", ()->new PulseSwitchBlock(
@@ -903,7 +904,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_faint_light_block_properties(),
       Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Glass touch button
     Registries.addBlock("glass_touch_button", ()->new PulseSwitchBlock(
@@ -915,7 +916,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_faint_light_block_properties(),
       Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.5), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Glass door plate
     Registries.addBlock("glass_door_contact_mat", ()->new ContactMatBlock(
@@ -928,7 +929,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0,0,0, 16,0.25,16), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.2f)
-    ));
+    ), ContactMatBlock.class);
 
     // Glass plate
     Registries.addBlock("glass_contact_mat", ()->new ContactMatBlock(
@@ -941,7 +942,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(0,0,0, 16,0.25,16), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.2f)
-    ));
+    ), ContactMatBlock.class);
 
     // Glass Day time switch
     Registries.addBlock("glass_day_timer", ()->new DayTimerSwitchBlock(
@@ -954,7 +955,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.2f)
-    ));
+    ), DayTimerSwitchBlock.class);
 
     // Glass interval signal timer
     Registries.addBlock("glass_interval_timer", ()->new IntervalTimerSwitchBlock(
@@ -966,7 +967,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.2f)
-    ));
+    ), IntervalTimerSwitchBlock.class);
 
     // Glass infrared motion sensor
     Registries.addBlock("glass_entity_detector", ()->new EntityDetectorSwitchBlock(
@@ -979,7 +980,7 @@ public class ModContent
       Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.2f)
-    ));
+    ), EntityDetectorSwitchBlock.class);
 
     // Glass laser motion sensor
     Registries.addBlock("glass_linear_entity_detector", ()->new EntityDetectorSwitchBlock(
@@ -992,13 +993,13 @@ public class ModContent
       Auxiliaries.getPixeledAABB(5.5,5.5,0,10.5,10.5,0.1), null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.3f),
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.0f, 1.2f)
-    ));
+    ), EntityDetectorSwitchBlock.class);
 
     Registries.addBlock("glass_vertical_bar_gauge", ()->new GaugeBlock(
       RsBlock.RSBLOCK_CONFIG_CUTOUT,
       detail.gauge_glass_block_properties(),
       Auxiliaries.getPixeledAABB(7,3.7,0, 10,12,0.4)
-    ));
+    ), GaugeBlock.class);
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- Old Fancy
@@ -1013,7 +1014,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6.5,0, 10.3,13.5,4.5),
       Auxiliaries.getPixeledAABB(6,3.5,0, 10.3,10.0,4.5)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Old fancy angular lever
     Registries.addBlock("oldfancy_bistableswitch2", ()->new BistableSwitchBlock(
@@ -1024,7 +1025,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(2.5,6.0,0, 9.7,10,4.5),
       Auxiliaries.getPixeledAABB(4.5,3.5,0, 9.2,10,4.5)
-    ));
+    ), BistableSwitchBlock.class);
 
     // Old fancy (golden decorated) button
     Registries.addBlock("oldfancy_button", ()->new PulseSwitchBlock(
@@ -1036,7 +1037,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6,6,0,10,10,1.5), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Old fancy (golden decorated) chain pulse switch
     Registries.addBlock("oldfancy_spring_reset_chain", ()->new PulseSwitchBlock(
@@ -1049,7 +1050,7 @@ public class ModContent
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(6.5,4.8,0,9.5,13,4),
       Auxiliaries.getPixeledAABB(6.5,3.8,0,9.5,12,4)
-    ));
+    ), PulseSwitchBlock.class);
 
     // Old fancy (golden decorated) tiny button
     Registries.addBlock("oldfancy_small_button", ()->new PulseSwitchBlock(
@@ -1061,7 +1062,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(7,7,0,9,9,1.5), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- Other
@@ -1078,7 +1079,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.GRASS_BREAK, 0.09f, 3.6f),
       new ModResources.BlockSoundEvent(SoundEvents.GRASS_BREAK, 0.04f, 3.0f)
       // Auxiliaries.RsMaterials.MATERIAL_PLANT
-    ));
+    ), PowerPlantBlock.class);
 
     // Red power plant
     Registries.addBlock("red_power_plant", ()->new PowerPlantBlock(
@@ -1091,7 +1092,7 @@ public class ModContent
       new ModResources.BlockSoundEvent(SoundEvents.GRASS_BREAK, 0.09f, 3.6f),
       new ModResources.BlockSoundEvent(SoundEvents.GRASS_BREAK, 0.04f, 3.0f)
       // Auxiliaries.RsMaterials.MATERIAL_PLANT
-    ));
+    ), PowerPlantBlock.class);
 
     // Light flip switch
     Registries.addBlock("light_switch", ()->new BistableSwitchBlock(
@@ -1101,7 +1102,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(7,6,0,9,10,1.5), null
-    ));
+    ), BistableSwitchBlock.class);
 
     // Arrow target
     Registries.addBlock("arrow_target", ()->new PulseSwitchBlock(
@@ -1113,7 +1114,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(5,5,0,11,11,1), null
-    ));
+    ), PulseSwitchBlock.class);
 
     // Valve Wheel
     Registries.addBlock("valve_wheel_switch", ()->new BistableSwitchBlock(
@@ -1123,7 +1124,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_block_properties(),
       Auxiliaries.getPixeledAABB(4,4,0,12,12,3.5), null
-    ));
+    ), BistableSwitchBlock.class);
 
     // Elevator button
     Registries.addBlock("elevator_button", ()->new ElevatorSwitchBlock(
@@ -1135,7 +1136,7 @@ public class ModContent
         SwitchBlock.SWITCH_CONFIG_LINK_TARGET_SUPPORT|SwitchBlock.SWITCH_CONFIG_LINK_SOURCE_SUPPORT,
       detail.switch_metallic_faint_light_block_properties(),
       Auxiliaries.getPixeledAABB(4,4,0, 12, 12, 1), null
-    ));
+    ), ElevatorSwitchBlock.class);
 
     // Door sensor
     Registries.addBlock("door_sensor_switch", ()->new DoorSensorSwitchBlock(
@@ -1147,7 +1148,7 @@ public class ModContent
       null,
       new ModResources.BlockSoundEvent(SoundEvents.LEVER_CLICK, 0.05f, 2.5f),
       null
-    ));
+    ), DoorSensorSwitchBlock.class);
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- Sensitive glass
@@ -1155,11 +1156,11 @@ public class ModContent
 
     Registries.addBlock("sensitive_glass_block", ()->new SensitiveGlassBlock(
       detail.light_emitting_sensitive_glass_block_properties()
-    ));
+    ), SensitiveGlassBlock.class);
 
     Registries.addBlock("stained_sensitiveglass", ()->new SensitiveGlassBlock(
       detail.colored_sensitive_glass_block_properties()
-    ));
+    ), SensitiveGlassBlock.class);
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- Related block entities
@@ -1221,27 +1222,28 @@ public class ModContent
   // Tile entities bound exclusively to the blocks above
   //--------------------------------------------------------------------------------------------------------------------
 
-  @ObjectHolder("rsgauges:te_gauge")
+
+  @ObjectHolder(registryName = "block_entity_type", value = "rsgauges:te_gauge")
   public static final BlockEntityType<AbstractGaugeBlock.GaugeTileEntity> TET_GAUGE = null;
-  @ObjectHolder("rsgauges:te_switch")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_switch")
   public static final BlockEntityType<SwitchBlock.SwitchTileEntity> TET_SWITCH = null;
-  @ObjectHolder("rsgauges:te_contact_switch")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_contact_switch")
   public static final BlockEntityType<ContactSwitchBlock.ContactSwitchTileEntity> TET_CONTACT_SWITCH = null;
-  @ObjectHolder("rsgauges:te_detector_switch")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_detector_switch")
   public static final BlockEntityType<EntityDetectorSwitchBlock.DetectorSwitchTileEntity> TET_DETECTOR_SWITCH = null;
-  @ObjectHolder("rsgauges:te_envsensor_switch")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_envsensor_switch")
   public static final BlockEntityType<EnvironmentalSensorSwitchBlock.EnvironmentalSensorSwitchTileEntity> TET_ENVSENSOR_SWITCH = null;
-  @ObjectHolder("rsgauges:te_daytimer_switch")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_daytimer_switch")
   public static final BlockEntityType<DayTimerSwitchBlock.DayTimerSwitchTileEntity> TET_DAYTIMER_SWITCH = null;
-  @ObjectHolder("rsgauges:te_intervaltimer_switch")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_intervaltimer_switch")
   public static final BlockEntityType<IntervalTimerSwitchBlock.IntervalTimerSwitchTileEntity> TET_TIMER_SWITCH = null;
-  @ObjectHolder("rsgauges:te_comparator_switch")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_comparator_switch")
   public static final BlockEntityType<ComparatorSwitchBlock.ComparatorSwitchTileEntity> TET_COMPARATOR_SWITCH = null;
-  @ObjectHolder("rsgauges:te_observer_switch")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_observer_switch")
   public static final BlockEntityType<ObserverSwitchBlock.ObserverSwitchTileEntity> TET_OBSERVER_SWITCH = null;
-  @ObjectHolder("rsgauges:te_doorsensor_switch")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:te_doorsensor_switch")
   public static final BlockEntityType<DoorSensorSwitchBlock.DoorSensorSwitchTileEntity> TET_DOORSENSOR_SWITCH = null;
-  @ObjectHolder("rsgauges:switchlink_pearl")
+  @ObjectHolder(registryName = "block_entity_type", value =  "rsgauges:switchlink_pearl")
   public static final SwitchLinkPearlItem SWITCH_LINK_PEARL = null;
 
   //--------------------------------------------------------------------------------------------------------------------

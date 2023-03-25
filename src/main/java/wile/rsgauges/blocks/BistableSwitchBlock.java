@@ -11,6 +11,7 @@ package wile.rsgauges.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -20,7 +21,6 @@ import wile.rsgauges.detail.ModResources;
 import wile.rsgauges.detail.SwitchLink;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 
 public class BistableSwitchBlock extends SwitchBlock
@@ -39,7 +39,7 @@ public class BistableSwitchBlock extends SwitchBlock
   // -------------------------------------------------------------------------------------------------------------------
 
   @Override
-  public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random)
   {}
 
   @Override

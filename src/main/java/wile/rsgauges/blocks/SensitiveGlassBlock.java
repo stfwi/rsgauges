@@ -14,6 +14,7 @@ package wile.rsgauges.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -37,7 +38,6 @@ import wile.rsgauges.libmc.detail.ColorUtils;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
-import java.util.Random;
 
 
 public class SensitiveGlassBlock extends RsBlock
@@ -94,7 +94,7 @@ public class SensitiveGlassBlock extends RsBlock
   { super.createBlockStateDefinition(builder); builder.add(POWERED, COLOR); }
 
   @Override
-  public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
+  public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random)
   {
     if(world.isClientSide()) return;
     if(state.getValue(POWERED) && (!(world.hasNeighborSignal(pos)))) {
@@ -118,7 +118,7 @@ public class SensitiveGlassBlock extends RsBlock
   {
     final ItemStack stack = player.getItemInHand(hand);
     Optional<DyeColor> dye = ColorUtils.getColorFromDyeItem(stack);
-    if(dye.isEmpty()) return InteractionResult.PASS;
+    if(!dye.isPresent()) return InteractionResult.PASS;
     world.setBlock(pos, state.setValue(COLOR, dye.get()), 1|2);
     return world.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
   }

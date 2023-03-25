@@ -8,28 +8,22 @@
  */
 package wile.rsgauges;
 
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import wile.rsgauges.libmc.detail.*;
-import wile.rsgauges.detail.*;
+import wile.rsgauges.detail.BlockCategories;
+import wile.rsgauges.libmc.detail.Auxiliaries;
+import wile.rsgauges.libmc.detail.OptionalRecipeCondition;
+import wile.rsgauges.libmc.detail.PlayerBlockInteraction;
+import wile.rsgauges.libmc.detail.Registries;
 
 
 @Mod("rsgauges")
@@ -63,22 +57,6 @@ public class ModRsGauges
   @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
   public static final class ForgeEvents
   {
-    @SubscribeEvent
-    public static final void onRegisterBlocks(final RegistryEvent.Register<Block> event)
-    { Registries.onBlockRegistry((rl, block)->event.getRegistry().register(block)); }
-
-    @SubscribeEvent
-    public static final void onRegisterItems(final RegistryEvent.Register<Item> event)
-    { Registries.onItemRegistry((rl, item)->event.getRegistry().register(item)); }
-
-    @SubscribeEvent
-    public static final void onRegisterBlockEntityTypes(final RegistryEvent.Register<BlockEntityType<?>> event)
-    { Registries.onBlockEntityRegistry((rl, tet)->event.getRegistry().register(tet)); }
-
-    @SubscribeEvent
-    public static final void onRegisterSounds(final RegistryEvent.Register<SoundEvent> event)
-    { ModResources.registerSoundEvents(event); }
-
     public static void onSetup(final FMLCommonSetupEvent event)
     {
       CraftingHelper.register(OptionalRecipeCondition.Serializer.INSTANCE);
