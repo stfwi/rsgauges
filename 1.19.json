@@ -1,6 +1,8 @@
 {
  "homepage": "https://www.curseforge.com/minecraft/mc-mods/redstone-gauges-and-switches/",
  "1.19.2": {
+  "1.2.20": "[F] Added rotate/mirror handling for directed blocks.",
+  "1.2.19": "[R] Release build 1.19.2\n[F] Version source location corrected.",
   "1.2.18": "[U] Initial 1.19.2 port (PR#71, by Damian).",
   "1.2.17": "[F] Removed Analog Link Receiver output inversion.",
   "1.2.16": "[F] Minor formatting adaptions in lang files.\n[F] Fixed `#soils` tag (issue #53, ty pavog).",
@@ -36,7 +38,7 @@
   "1.2.4-a1": "[A] Initial port."
  },
  "promos": {
-  "1.19.2-recommended": "1.2.18",
-  "1.19.2-latest": "1.2.18"
+  "1.19.2-recommended": "1.2.20",
+  "1.19.2-latest": "1.2.20"
  }
 }
