@@ -6,6 +6,10 @@ levers, pressure plates, timers, and other devices to measure or "produce" redst
 
 ***Note for coders/modders: Please take a look into the MC version branches to view/clone the source code.***
 
+***Note for players and packers***: I am retiring, so only major bugs (like crashes) may be fixed for only the currently implemented mod versions; No feature/porting requests will be worked on. (*The time for this hobby has unfortunately become too short, but it was a major fun factor. Cheer's Ladies & Guys, WilE*).
+
+---
+
 ![brief](documentation/rsgauges-brief.png)
 
 [Screenshots in documentation readme here](documentation/readme.md).
